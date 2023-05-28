@@ -1,12 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Practice from './components/Practice';
+import Detail from './pages/detail';
 
 function App() {
   return (
     <div>
-      <Practice />
+      <Detail />
     </div>
   );
 }
