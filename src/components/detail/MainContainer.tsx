@@ -16,5 +16,7 @@ export default function MainContainer() {
 const Main = styled.div`
   display: flex;
   position: relative;
-  height: 300px;
+  justify-content: space-between;
+  height: 2000px;
+  margin-top: 48px;
 `;

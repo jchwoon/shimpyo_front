@@ -1,16 +1,9 @@
 import axios, { Axios } from 'axios';
 import { useEffect } from 'react';
+import { AiOutlineDown } from 'react-icons/ai';
 import styled from 'styled-components';
 
 export default function SideBox() {
-  useEffect(() => {
-    const result = async () => {
-      const aa = axios.get('13.125.50.85:8081/test');
-      console.log(aa);
-    };
-    result();
-  }, []);
-
   return (
     <Main>
       <Text>
@@ -30,16 +23,23 @@ export default function SideBox() {
         </div>
         <People>
           <PeopleTitle>인원</PeopleTitle>
-          <PeopleDetail>게스트 1명</PeopleDetail>
+          <PeopleDetail>
+            <div>게스트 1명</div>
+            <div>
+              <AiOutlineDown />
+            </div>
+          </PeopleDetail>
         </People>
       </CheckContainer>
+      <BookingBtn>예약 가능 여부 보기</BookingBtn>
     </Main>
   );
 }
 
 const Main = styled.div`
   position: sticky;
-  width: calc(40%);
+  width: calc(30%);
+  height: 310px;
   top: 48px;
   border: 1px solid black;
   border-radius: 12px;
@@ -92,7 +92,6 @@ const CheckDate = styled.div`
 const People = styled.div`
   position: relative;
   width: 100%;
-  height: 100px;
 `;
 const PeopleTitle = styled.div`
   position: absolute;
@@ -103,4 +102,19 @@ const PeopleTitle = styled.div`
 
 const PeopleDetail = styled.div`
   display: flex;
+  padding: 26px 12px 10px 12px;
+  border-top: 1px solid black;
+  justify-content: space-between;
+`;
+
+const BookingBtn = styled.div`
+  background-color: red;
+  width: 320px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  color: white;
+  margin: 20px auto;
 `;
