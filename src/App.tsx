@@ -1,13 +1,12 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Practice from './components/Practice';
+import Main from "./components/Main/Main";
+import "./fonts.css"
+import "./reset.css"
 
 function App() {
   return (
-    <div>
-      <Practice />
-    </div>
+    <>
+    <Main/>
+    </>
   );
 }
 
