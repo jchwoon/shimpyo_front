@@ -1,6 +1,6 @@
-import { CustomizedAppBar, CustomizedAvatar, CustomizedDivider, CustomizedLoginButton, CustomizedMenuIcon, CustomizedSearchButton, CustomizedSearchIcon, CustomizedToolBar, CustomizedTypography, LogoButton } from "./Navbar.styled"
+import { CustomizedAppBar, CustomizedLogoTypography, CustomizedAvatar, CustomizedDivider, CustomizedLoginButton, CustomizedMenuIcon, CustomizedSearchButton, CustomizedSearchIcon, CustomizedToolBar, CustomizedTypography, LogoButton } from "./Navbar.styled"
 import Typography from '@mui/material/Typography';
-import logo from "../../logo.svg"
+import logo2 from "../../logo2.svg"
 import { Divider } from '@mui/material';
 import CustomizedMenus from "../LoginModal/LoginModal";
 
@@ -10,10 +10,13 @@ export default function Navbar() {
     <CustomizedAppBar position="sticky" elevation={0}>
       <CustomizedToolBar>
         <LogoButton disableRipple >
-          <img src={logo} alt="website logo" style={{ height: 13, marginBottom: 5 }} />
-          <Typography variant="h5" color="black" noWrap fontFamily="sunflower">
+          <img src={logo2} alt="website logo" style={{ height: 13, marginBottom: 5 }} />
+          {/* <Typography variant="h5" color="black" noWrap fontFamily="sunflower">
             쉼표
-          </Typography>
+          </Typography> */}
+          <CustomizedLogoTypography>
+            쉼표
+          </CustomizedLogoTypography>
         </LogoButton>
         <CustomizedSearchButton variant="contained" disableRipple>
           <Typography fontFamily='Noto Sans KR' fontWeight="500">

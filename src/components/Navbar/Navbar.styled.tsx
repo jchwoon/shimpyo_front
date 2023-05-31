@@ -66,8 +66,14 @@ padding-left: 15px;
 padding-right: 15px;
 `
 
+export const CustomizedLogoTypography = styled(Typography)`
+color: #00ADB5;
+font-family: sunflower;
+font-size: 25px;
+`
+
 export const CustomizedAvatar = styled(Avatar)`
-background-color: #000000;
+background-color: #00ADB5;
 height:32px;
 width:32px;
 `

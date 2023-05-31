@@ -18,6 +18,11 @@ boxShadow: none;
 position: relative;
 `
 
+export const CustomizedLogoTypography = styled(Typography)`
+font-size: 15px;
+font-weight: 500;
+`
+
 export const CustomizedTitleTypography = styled(Typography)`
 font-size: 15px;
 font-weight: 500;
