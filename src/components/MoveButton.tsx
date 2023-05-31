@@ -52,6 +52,17 @@ const StyledBtn =
           text-decoration: underline;
         `;
 
+      case 'FIN':
+        return `
+          width: 5.8em;
+          background-color: #f02a2a;
+          color: white;
+          &:hover {
+            cursor: pointer;
+            background-color: rgba(253, 1, 1, 0.4);
+          }
+        `
+
       default:
         return `
           width: 5.8em;
