@@ -11,9 +11,9 @@ interface StepProps {
 export default function StepBar() {
   const test = [3, 2, 5];
 
-  const [stepOne, setStepOne] = useState(0);
-  const [stepTwo, setStepTwo] = useState(0);
-  const [stepThree, setStepThree] = useState(0);
+  const [stepOne, setStepOne] = useState<number>(0);
+  const [stepTwo, setStepTwo] = useState<number>(0);
+  const [stepThree, setStepThree] = useState<number>(0);
 
   const progress = Math.floor((test[1] / test[2]) * 100);
 
@@ -60,17 +60,14 @@ const Step = styled.div`
   overflow-x: hidden;
 `;
 
-const Progress =
-  styled.div <
-  StepProps >
-  `
+const Progress = styled.div<StepProps>`
   width: 100%;
   position: relative;
   left: -100%;
   height: 10px;
   background-color: black;
   transition: transform 600ms linear 0s;
-  
+
   ${props => {
     if (props.stepOne) {
       return `

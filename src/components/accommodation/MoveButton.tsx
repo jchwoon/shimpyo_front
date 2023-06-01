@@ -1,20 +1,21 @@
 import styled from 'styled-components';
-import { buttonConstants } from '../constants/buttonContent';
-import buttonContent from '../constants/buttonContent';
+import { buttonConstants } from '../../constants/buttonContent';
+import buttonContent from '../../constants/buttonContent';
 
 interface buttonProps {
   step: keyof buttonConstants;
   isDisabled?: boolean;
 }
 
-export default function MoveButton({step,isDisabled}: buttonProps) {
-  return <StyledBtn disabled={isDisabled} step={step}>{buttonContent[step]}</StyledBtn>;
+export default function MoveButton({ step, isDisabled }: buttonProps) {
+  return (
+    <StyledBtn disabled={isDisabled} step={step}>
+      {buttonContent[step]}
+    </StyledBtn>
+  );
 }
 
-const StyledBtn =
-  styled.button <
-  buttonProps >
-  `
+const StyledBtn = styled.button<buttonProps>`
   font-size: 16px;
   border-radius: 0.625em;
   border: 0;
@@ -25,11 +26,11 @@ const StyledBtn =
 
   &:hover {
     cursor: pointer;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
   }
-  
+
   &:disabled {
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0, 0, 0, 0.2);
     cursor: not-allowed;
   }
 
@@ -61,7 +62,7 @@ const StyledBtn =
             cursor: pointer;
             background-color: rgba(253, 1, 1, 0.4);
           }
-        `
+        `;
 
       default:
         return `
