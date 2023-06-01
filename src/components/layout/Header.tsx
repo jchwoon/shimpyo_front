@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Container from '../Container';
+import Container from '../shared/Container';
 
 interface HeaderProps {
   children: React.ReactNode;

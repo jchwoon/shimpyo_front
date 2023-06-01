@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import Menu from '../Menu';
 import UserMenuItem from './MenuItem';
-import { StyleMenuList } from '../style/menu';
+import { StyleMenuList } from '../../style/menu';
 import { useRef } from 'react';
-import UseMenuBar from '../../hooks/UseMenuBar';
+import UseMenuBar from '../../../hooks/UseMenuBar';
 import { BiChevronDown } from 'react-icons/bi';
 
 export default function MotelManageMenu() {

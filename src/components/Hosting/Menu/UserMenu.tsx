@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import UserMenuItem from './MenuItem';
-import Avatar from '../Avatar';
+import Avatar from '../../shared/Avatar';
 import { BiMenu } from 'react-icons/bi';
 import { RiMailOpenLine, RiGlobalLine } from 'react-icons/ri';
 import { MdCalendarToday, MdClose } from 'react-icons/md';
@@ -11,9 +11,9 @@ import { CgProfile } from 'react-icons/cg';
 import { useState, useEffect, useRef } from 'react';
 import MenuBlock from './MenuBlock';
 import Menu from '../Menu';
-import { StyleMenuList } from '../style/menu';
-import Button from '../UI/Button';
-import UseMenuBar from '../../hooks/UseMenuBar';
+import { StyleMenuList } from '../../style/menu';
+import Button from '../../shared/UI/Button';
+import UseMenuBar from '../../../hooks/UseMenuBar';
 
 export default function UserMenu() {
   const menuRef = useRef(null);

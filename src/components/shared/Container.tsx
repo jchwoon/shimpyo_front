@@ -20,6 +20,6 @@ const ContainerBox = styled.div`
     margin: 0 2rem;
   }
   @media only screen and (min-width: 1280px) {
-    margin: 0 3.5rem;
+    margin: 0 5rem;
   }
 `;
