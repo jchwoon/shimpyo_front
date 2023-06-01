@@ -3,6 +3,7 @@ import MotelManageMenu from '../components/Menu/MotelManageMenu';
 import Header from '../components/layout/Header';
 import Logo from '../components/Logo';
 import UserMenu from '../components/Menu/UserMenu';
+import Main from '../components/layout/Main';
 
 export default function Hosting() {
   return (
@@ -16,6 +17,7 @@ export default function Hosting() {
           <UserMenu />
         </FlexBox>
       </Header>
+      <Main></Main>
     </>
   );
 }

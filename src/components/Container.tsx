@@ -14,12 +14,12 @@ const ContainerBox = styled.div`
   margin: 0 1rem;
 
   @media only screen and (min-width: 640px) {
-    margin: 0 5rem;
+    margin: 0 1rem;
   }
   @media only screen and (min-width: 768px) {
-    margin: 0 3rem;
+    margin: 0 2rem;
   }
   @media only screen and (min-width: 1280px) {
-    margin: 0 2rem;
+    margin: 0 3.5rem;
   }
 `;
