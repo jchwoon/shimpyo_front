@@ -1,0 +1,59 @@
+import type { SyntheticEvent } from 'react';
+import { useState } from 'react';
+import styled from 'styled-components';
+import { AccommodationIconMap, AccommodationNameMap, AccommodationType } from '../../../constants/accommodationType';
+
+interface AccommodationTypeItemProps {
+  type: keyof AccommodationType;
+}
+
+export default function AccommodationTypeItem({ type }: AccommodationTypeItemProps) {
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const onClick = (e: SyntheticEvent) => {
+    setIsClicked(preState => !preState);
+  };
+
+  return (
+    <>
+      <StyledItemButton value={type} type="button" role="checkbox" aria-checked={isClicked} onClick={onClick}>
+        {AccommodationIconMap[type]}
+        <StyledItemName>{AccommodationNameMap[type]}</StyledItemName>
+      </StyledItemButton>
+    </>
+  );
+}
+
+const StyledItemButton = styled.button`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 200px;
+  height: 110px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding-left: 10px;
+  background-color: white;
+
+  &:hover {
+    border: 3px solid black;
+    cursor: pointer;
+  }
+
+  &:active {
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+  }
+
+  ${props => {
+    if (props['aria-checked'] === true)
+      return `
+    background-color: rgba(0,0,0,0.05);
+    border: 3px solid black;
+    `;
+  }}
+`;
+
+const StyledItemName = styled.span`
+  font-size: 15px;
+  margin: 10px 0 0 10px;
+`;
