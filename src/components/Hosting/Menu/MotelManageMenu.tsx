@@ -1,22 +1,26 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Menu from '../Menu';
 import UserMenuItem from './MenuItem';
 import { StyleMenuList } from '../../style/menu';
 import { useRef } from 'react';
 import UseMenuBar from '../../../hooks/UseMenuBar';
 import { BiChevronDown } from 'react-icons/bi';
+import { useLocation } from 'react-router-dom';
 
 export default function MotelManageMenu() {
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
+
   const { isOpen } = UseMenuBar({ initialState: false, menuRef, buttonRef });
+
+  const { pathname } = useLocation();
   return (
     <Menu>
       <StyleMenu>
-        <StyleMenuItem>
+        <StyleMenuItem $target={pathname === '/hosting'}>
           <div>투데이</div>
         </StyleMenuItem>
-        <StyleMenuItem ref={buttonRef}>
+        <StyleMenuItem className="menu" $target={isOpen} ref={buttonRef}>
           <div>메뉴</div>
           <BiChevronDown size={25} />
         </StyleMenuItem>
@@ -34,6 +38,20 @@ export default function MotelManageMenu() {
   );
 }
 
+const smallAndBack = keyframes`
+  0% {
+    transform: scale(1) color;
+  }
+
+  50%{
+    transform: scale(0.85);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+`;
+
 const StyleManageMenuList = styled(StyleMenuList)`
   top: 50px;
   left: 80px;
@@ -47,20 +65,43 @@ const StyleFlexMenuList = styled.div`
 const StyleMenu = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   font-weight: bold;
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: rgb(115 115 115);
 `;
 
-const StyleMenuItem = styled.div`
+const StyleMenuItem = styled.div<{ $target?: boolean }>`
   padding: 0.5rem 1rem;
   display: flex;
   flex-direction: row;
+  border-radius: 0.75rem;
   :hover {
-    border-radius: 0.75rem;
     background-color: rgb(245, 245, 245);
     cursor: pointer;
     color: black;
+    text-decoration: none;
+  }
+  color: ${props => (props.$target ? 'black' : null)};
+  &:not(.menu) {
+    ::before {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      top: 35px;
+      left: 27px;
+      height: 1.5px;
+      background-color: black;
+      width: 20px;
+    }
+  }
+
+  &.menu {
+    :active {
+      animation: ${smallAndBack} 1s linear;
+    }
+    border: ${props => (props.$target ? '1px solid black' : null)};
   }
 `;

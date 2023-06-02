@@ -8,39 +8,28 @@ import { SlHandbag } from 'react-icons/sl';
 import { IoMdSettings } from 'react-icons/io';
 import { BsHouseAdd, BsCreditCard2Back, BsHouseDoor } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import MenuBlock from './MenuBlock';
 import Menu from '../Menu';
 import { StyleMenuList } from '../../style/menu';
 import Button from '../../shared/UI/Button';
 import UseMenuBar from '../../../hooks/UseMenuBar';
+import UseResponseToViewPort from '../../../hooks/UseResponseToViewPort';
 
 export default function UserMenu() {
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
   const { isOpen } = UseMenuBar({ initialState: false, menuRef, buttonRef });
-  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    function handleResize() {
-      setViewportWidth(window.innerWidth);
-    }
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  const { viewPortWidth } = UseResponseToViewPort();
 
   return (
     <Menu>
       <StyleFlexBox>
         <StyleMenuButton ref={buttonRef}>
-          {viewportWidth > 1024 ? <Avatar /> : isOpen ? <MdClose size={20} /> : <BiMenu size={20} />}
+          {viewPortWidth > 1024 ? <Avatar /> : isOpen ? <MdClose size={20} /> : <BiMenu size={20} />}
         </StyleMenuButton>
       </StyleFlexBox>
-      {isOpen && viewportWidth > 1024 && (
+      {isOpen && viewPortWidth > 1024 && (
         <StyleUserMenuList ref={menuRef}>
           <StyleFlexMenuList>
             <UserMenuItem bold label="프로필" />
@@ -54,7 +43,7 @@ export default function UserMenu() {
           </StyleFlexMenuList>
         </StyleUserMenuList>
       )}
-      {isOpen && viewportWidth <= 1024 && (
+      {isOpen && viewPortWidth <= 1024 && (
         <StyleTotalContainer showMenu={isOpen}>
           <StyleTotalMenuBox>
             <MenuBlock label="메뉴">
@@ -115,12 +104,14 @@ const StyleFlexMenuList = styled.div`
 `;
 
 const StyleTotalContainer = styled.div<{ showMenu: boolean }>`
+  border-top: 1px solid rgb(200, 200, 200);
+  background-color: white;
   width: 100%;
   height: 100%;
   overflow-y: auto;
   position: fixed;
   left: 0;
-  top: 90px;
+  top: 75px;
   opacity: ${props => (props.showMenu ? '1' : '0')};
   animation: ${props => (props.showMenu ? slideIn : 'none')} 0.5s;
 `;

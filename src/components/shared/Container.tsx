@@ -11,15 +11,15 @@ export default function Container({ children }: ContainerProps): JSX.Element {
 
 const ContainerBox = styled.div`
   width: auto;
-  margin: 0 1rem;
+  padding: 0 1rem;
 
   @media only screen and (min-width: 640px) {
-    margin: 0 1rem;
+    padding: 0 1rem;
   }
   @media only screen and (min-width: 768px) {
-    margin: 0 2rem;
+    padding: 0 2rem;
   }
   @media only screen and (min-width: 1280px) {
-    margin: 0 5rem;
+    padding: 0 5rem;
   }
 `;
