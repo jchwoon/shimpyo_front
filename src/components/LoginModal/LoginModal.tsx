@@ -3,8 +3,9 @@ import { styled, alpha } from '@mui/material/styles';
 import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
-import { CustomizedLoginButton, CustomizedMenuIcon, CustomizedAccountCircleIcon } from '../Navbar/Navbar.styled';
+import { CustomizedLoginButton, CustomizedMenuIcon, CustomizedAccountCircleIcon } from './LoginModal.styled';
 import Typography from '@mui/material/Typography';
+import zIndex from '@mui/material/styles/zIndex';
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
@@ -98,6 +99,6 @@ export default function CustomizedMenus() {
                     </Typography>
                 </MenuItem>
             </StyledMenu>
-        </div>
+        </div >
     );
 }

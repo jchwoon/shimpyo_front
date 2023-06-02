@@ -15,7 +15,7 @@ const defaultTheme = createTheme({
                     border: '1px solid #dbdcdd',
                 },
             },
-        }
+        },
     },
 });
 

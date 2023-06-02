@@ -1,11 +1,10 @@
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import styled from '@emotion/styled';
-
-import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
-
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { Box } from '@mui/material';
 
 export const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -45,12 +44,17 @@ font-size: 15px;
 font-weight: 500;
 `
 
-export const CustomizedThumbsUpDownIcon = styled(ThumbsUpDownIcon)`
-color: #000000;
+export const CustomizedThumbUpIcon = styled(ThumbUpIcon)`
+color: #00adb5;
 height: 20px
 `
 
 export const CustomizedFavoriteBorderIcon = styled(FavoriteBorderIcon)`
+color: rgba(255,255,255, 0.5);
+height: 30px;
+`
+
+export const CustomizedFavoriteIcon = styled(FavoriteIcon)`
 color: rgba(255,255,255, 0.5);
 height: 30px;
 `
@@ -64,6 +68,9 @@ width: 35px;
 :hover {
     background-color: unset;
   }
+.MuiTouchRipple-child {
+  background-color: rgba(255,255,255, 0.5);
+}
 `
 
 export const CustomizedPercentageTypography = styled(Typography)`
@@ -82,4 +89,18 @@ export const CustomizedPercentageRowBox = styled(Box)`
 display: flex;
 flex-direction: row;
 justify-content: space-between;
+`
+export const CustomizedWrapperDiv = styled.div`
+position:relative;
+`
+
+export const CustomizedDarkDiv = styled.div < { customDisplay: boolean }> `
+height: 100%;
+width: 100%;
+background-color: #000000b3;
+position: fixed;
+top:0px;
+left:0px;
+visibility:${({ customDisplay }) => (customDisplay ? "visible" : "hidden")};
+transition: 0.2s ease;
 `

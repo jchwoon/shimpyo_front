@@ -3,15 +3,14 @@ import { ThemeProvider } from '@mui/material/styles';
 import Navbar from '../Navbar/Navbar';
 import Cards from '../Cards/Cards';
 import defaultTheme from '../DefaultTheme/DefaultTheme';
+import { ClickAwayListener } from "@mui/material";
 
 export default function Main() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Navbar />
-      <main>
-        <Cards />
-      </main >
+      <Cards />
     </ThemeProvider >
   );
 }
