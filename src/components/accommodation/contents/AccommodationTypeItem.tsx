@@ -1,21 +1,20 @@
-import type { SyntheticEvent } from 'react';
-import { useState } from 'react';
 import styled from 'styled-components';
 import { AccommodationIconMap, AccommodationNameMap, AccommodationType } from '../../../constants/accommodationType';
 
 interface AccommodationTypeItemProps {
   type: keyof AccommodationType;
+  isSelected: boolean;
+  onClick: (type: keyof AccommodationType) => void;
 }
 
-export default function AccommodationTypeItem({ type }: AccommodationTypeItemProps) {
-  const [isClicked, setIsClicked] = useState<boolean>(false);
-  const onClick = (e: SyntheticEvent) => {
-    setIsClicked(preState => !preState);
+export default function AccommodationTypeItem({ type, isSelected, onClick }: AccommodationTypeItemProps) {
+  const handleClick = () => {
+    onClick(type);
   };
 
   return (
     <>
-      <StyledItemButton value={type} type="button" role="checkbox" aria-checked={isClicked} onClick={onClick}>
+      <StyledItemButton value={type} type="button" role="checkbox" aria-checked={isSelected} onClick={handleClick}>
         {AccommodationIconMap[type]}
         <StyledItemName>{AccommodationNameMap[type]}</StyledItemName>
       </StyledItemButton>
