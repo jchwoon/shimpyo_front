@@ -6,6 +6,7 @@
   "trailingComma": "all",
   "parser": "typescript",
   "printWidth": 120,
+  "parser": "typescript",
   "bracketSpacing": true,
   "arrowParens": "avoid"
 }
