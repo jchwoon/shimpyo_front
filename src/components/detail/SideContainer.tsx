@@ -157,4 +157,5 @@ const ShowAllBtn = styled.div`
   width: 180px;
   display: flex;
   justify-content: center;
+  cursor: pointer;
 `;

@@ -1,9 +1,35 @@
 import axios, { Axios } from 'axios';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { AiOutlineDown } from 'react-icons/ai';
 import styled from 'styled-components';
 
 export default function SideBox() {
+  const [guest, setGuest] = useState(false);
+  const [adultCount, setAdultCount] = useState(0);
+  const [kidCount, setKidCount] = useState(0);
+  const [babyCount, setBabyCount] = useState(0);
+  const toggleGuest = () => {
+    setGuest(prev => !prev);
+    console.log(guest);
+  };
+  const upAdult = () => {
+    setAdultCount(adultCount + 1);
+  };
+  const downAdult = () => {
+    if (adultCount > 0) setAdultCount(adultCount - 1);
+  };
+  const upKid = () => {
+    setKidCount(kidCount + 1);
+  };
+  const downKid = () => {
+    if (kidCount > 0) setKidCount(kidCount - 1);
+  };
+  const upBaby = () => {
+    setBabyCount(babyCount + 1);
+  };
+  const downBaby = () => {
+    if (babyCount > 0) setBabyCount(babyCount - 1);
+  };
   return (
     <Main>
       <Text>
@@ -21,7 +47,7 @@ export default function SideBox() {
             <CheckDate>2023.06.30</CheckDate>
           </CheckInOutBox>
         </div>
-        <People>
+        <People onClick={toggleGuest}>
           <PeopleTitle>인원</PeopleTitle>
           <PeopleDetail>
             <div>게스트 1명</div>
@@ -30,7 +56,46 @@ export default function SideBox() {
             </div>
           </PeopleDetail>
         </People>
+        {guest && (
+          <GuestCountContainer>
+            <GuestEach>
+              <GuestType>
+                <GuestTitle>성인</GuestTitle>
+                <GuestDetail>만 13세 이상</GuestDetail>
+              </GuestType>
+              <GuestCounting>
+                <GuestSet onClick={downAdult}> - </GuestSet>
+                <GuestCount> {adultCount} </GuestCount>
+                <GuestSet onClick={upAdult}> + </GuestSet>
+              </GuestCounting>
+            </GuestEach>
+            <GuestEach>
+              <GuestType>
+                <GuestTitle>어린이</GuestTitle>
+                <GuestDetail>만 2세 ~ 12세 </GuestDetail>
+              </GuestType>
+              <GuestCounting>
+                <GuestSet onClick={downKid}> - </GuestSet>
+                <GuestCount> {kidCount} </GuestCount>
+                <GuestSet onClick={upKid}> + </GuestSet>
+              </GuestCounting>
+            </GuestEach>
+            <GuestEach>
+              <GuestType>
+                <GuestTitle>유아</GuestTitle>
+                <GuestDetail>만 2세 미만 </GuestDetail>
+              </GuestType>
+              <GuestCounting>
+                <GuestSet onClick={downBaby}> - </GuestSet>
+                <GuestCount> {babyCount} </GuestCount>
+                <GuestSet onClick={upBaby}> + </GuestSet>
+              </GuestCounting>
+            </GuestEach>
+            <GuestCLose onClick={toggleGuest}>닫기</GuestCLose>
+          </GuestCountContainer>
+        )}
       </CheckContainer>
+
       <BookingBtn>예약 가능 여부 보기</BookingBtn>
     </Main>
   );
@@ -41,7 +106,8 @@ const Main = styled.div`
   width: calc(30%);
   height: 310px;
   top: 48px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 42px;
@@ -115,5 +181,55 @@ const BookingBtn = styled.div`
   border-radius: 15px;
   color: white;
   margin: 20px auto;
+  cursor: pointer;
+`;
+
+const GuestCountContainer = styled.div`
+  position: absolute;
+  left: -10px;
+  padding: 16px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 6px, rgba(0, 0, 0, 0.07) 0px 0px 0px 1px;
+  width: 95%;
+`;
+const GuestEach = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+`;
+const GuestType = styled.div``;
+const GuestTitle = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+`;
+const GuestDetail = styled.div`
+  font-size: 14px;
+`;
+const GuestCounting = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const GuestSet = styled.div`
+  border: 1px solid black;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: large;
+  font-weight: 700;
+  cursor: pointer;
+`;
+const GuestCount = styled.div`
+  margin: 0 12px;
+`;
+
+const GuestCLose = styled.div`
+  text-decoration: underline;
+  font-size: 18px;
+  text-align: end;
+  font-weight: 700;
   cursor: pointer;
 `;
