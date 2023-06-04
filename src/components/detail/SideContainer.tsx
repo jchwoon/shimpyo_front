@@ -8,7 +8,7 @@ export default function SideContainer() {
     <Container>
       <HotelTitle>Onda 님이 호스팅하는 펜션</HotelTitle>
       <HotelDetail>최대 인원 4명 · 침실 2개 · 침대 2개 · 욕실 1개</HotelDetail>
-      <HostImg></HostImg>
+      <HostImg src="https://m.mrsmodel.co.kr/web/product/big/202304/a1c21c86eb99f7cb55985b9070d9e436.jpg" />
       <HotelDescription>
         안녕하세요. 저희는 다양한 휴식 공간을 연구하고 제공하는 Onda입니다. 이 곳에서 머무르실 모든 분들께서 편안하고
         행복한 시간을 보내시길 바랍니다. [숙소 소개] 넓고 푸른 바다를 바라보며 수영을 즐기고 온전한 휴식을 취할 수 있는
@@ -43,42 +43,15 @@ export default function SideContainer() {
       </RoomIconContainer>
       <MainTitle>숙소 편의시설</MainTitle>
       <FacilityContainer>
-        <FacilityText>
-          <BsSunset style={{ fontSize: '24px', marginRight: '10px' }} /> 해변과 밀접
-        </FacilityText>
-        <FacilityText>
-          <BsSunset style={{ fontSize: '24px', marginRight: '10px' }} /> 해변과 밀접
-        </FacilityText>
-        <FacilityText>
-          <BsSunset style={{ fontSize: '24px', marginRight: '10px' }} /> 해변과 밀접
-        </FacilityText>
-        <FacilityText>
-          <BsSunset style={{ fontSize: '24px', marginRight: '10px' }} /> 해변과 밀접
-        </FacilityText>
-        <FacilityText>
-          <BsSunset style={{ fontSize: '24px', marginRight: '10px' }} /> 해변과 밀접
-        </FacilityText>
+        {[1, 2, 3, 4, 5].map(i => {
+          return (
+            <FacilityText key={i}>
+              <BsSunset style={{ fontSize: '24px', marginRight: '10px' }} /> 해변과 밀접
+            </FacilityText>
+          );
+        })}
       </FacilityContainer>
       <ShowAllBtn>편의시설 22개 모두 보기</ShowAllBtn>
-      <MainTitle>★ 4.88 · 후기 112개</MainTitle>
-      <CommentCardContainer>
-        <CommentCard>
-          <CommentTop>
-            <UserImg />
-            <UserRight>
-              <UserName>Kyung Rok</UserName>
-              <CommentDate>2023. 05</CommentDate>
-            </UserRight>
-          </CommentTop>
-          <CommentBottom>
-            부모님께서 이모님들 가족과 총 10명 방문했었습니다. 아버지께서 예약을 부탁하셨는데 약간 호들갑이셔서 사전
-            답사도 해야한다고 미리 방문을 해봐도 될지 요청드렸는데 흔쾌히 허락해주셔서 너무 죄송하면서도 감사했습니다.
-            추가로 경관도 좋고 주차도 용이하며, 내부에 즐길거리가 많아서 정말 좋습니다. 이모님들 일부는 신나게
-            음주가무를 즐기시고 이모부님들은 당구를 치면서 시간 가는줄 모르셨다고 합니다 ㅎㅎ 단양쪽 단체로 어른신들
-            같이 있을 곳 찾으신다면 이 곳 강추합니다!!
-          </CommentBottom>
-        </CommentCard>
-      </CommentCardContainer>
     </Container>
   );
 }
@@ -87,7 +60,6 @@ const Container = styled.div`
   position: relative;
   width: 60%;
   height: auto;
-  background-color: beige;
 `;
 
 const HotelTitle = styled.div`
@@ -100,14 +72,14 @@ const HotelDetail = styled.div`
   border-bottom: 1px solid #666;
   padding-bottom: 24px;
 `;
-const HostImg = styled.div`
+const HostImg = styled.img`
   position: absolute;
   top: 0;
   right: 0;
-  width: 56px;
-  height: 56px;
+  width: 50px;
+  height: 50px;
   border-radius: 100%;
-  background-color: magenta;
+  object-fit: cover;
 `;
 
 const HotelDescription = styled.div`
@@ -186,23 +158,3 @@ const ShowAllBtn = styled.div`
   display: flex;
   justify-content: center;
 `;
-
-const CommentCardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
-const CommentCard = styled.div`
-  display: flex;
-  width: 50%;
-`;
-const CommentTop = styled.div``;
-const CommentBottom = styled.div`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-`;
-const UserRight = styled.div``;
-const CommentDate = styled.div``;
-const UserName = styled.div``;
-const UserImg = styled.div``;

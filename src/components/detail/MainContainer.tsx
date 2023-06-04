@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import SideContainer from './SideContainer';
 import SideBox from './SideBox';
+import BottomContainer from './BottomContainer';
 
 export default function MainContainer() {
   return (
@@ -9,6 +10,7 @@ export default function MainContainer() {
         <SideContainer />
         <SideBox />
       </Main>
+      <BottomContainer />
     </>
   );
 }
@@ -17,6 +19,5 @@ const Main = styled.div`
   display: flex;
   position: relative;
   justify-content: space-between;
-  height: 2000px;
   margin-top: 48px;
 `;

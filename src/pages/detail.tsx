@@ -14,7 +14,7 @@ export default function Detail() {
         <Description>
           <Description_location>Seo-myeon, Namhae, 경상남도, 한국</Description_location>
           <Description_like>
-            <AiFillHeart />
+            <AiFillHeart /> 저장
           </Description_like>
         </Description>
         <ImageContainer />
@@ -31,8 +31,9 @@ const TempTopBar = styled.div`
 `;
 
 const Container = styled.div`
-  height: 2000px;
   padding: 0 160px;
+  max-width: 1120px;
+  margin: 0 auto;
 `;
 
 const Title = styled.div`
@@ -45,6 +46,7 @@ const Description = styled.div`
   font-size: 14px;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 24px;
 `;
 
 const Description_location = styled.div`
@@ -52,5 +54,5 @@ const Description_location = styled.div`
   text-decoration: underline;
 `;
 const Description_like = styled.div`
-  width: auto;
+  font-weight: bold;
 `;

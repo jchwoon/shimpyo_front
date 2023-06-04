@@ -44,6 +44,7 @@ const Main = styled.div`
   border: 1px solid black;
   border-radius: 12px;
   padding: 24px;
+  margin-bottom: 42px;
 `;
 const Text = styled.div`
   margin-bottom: 24px;
@@ -70,10 +71,7 @@ interface ICheckInOutBox {
   borderRight?: string;
 }
 
-const CheckInOutBox =
-  styled.div <
-  ICheckInOutBox >
-  `
+const CheckInOutBox = styled.div<ICheckInOutBox>`
   width: 50%;
   border-right: ${p => p.borderRight ?? ''};
   position: relative;
@@ -109,7 +107,7 @@ const PeopleDetail = styled.div`
 
 const BookingBtn = styled.div`
   background-color: red;
-  width: 320px;
+  width: 100%;
   height: 50px;
   display: flex;
   align-items: center;
@@ -117,4 +115,5 @@ const BookingBtn = styled.div`
   border-radius: 15px;
   color: white;
   margin: 20px auto;
+  cursor: pointer;
 `;
