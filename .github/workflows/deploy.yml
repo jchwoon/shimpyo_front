@@ -12,12 +12,6 @@ jobs:
       - name: Checkout Frontend Repo
         uses: actions/checkout@v3
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
       - name: executing remote ssh commands using key
         uses: appleboy/ssh-action@master
         with:
@@ -26,5 +20,6 @@ jobs:
           key: ${{ secrets.KEY }} #ec2 서버의 key
           port: ${{ secrets.PORT }} #일반적으로 SSH는 포트 22번 사용.
           script: |
-            mkdir -p ~/git/front
-            scp -rf ./build/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/git/front/
+            cd ~/git/front
+            npm install
+            npm build
