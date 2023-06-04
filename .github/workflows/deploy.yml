@@ -29,6 +29,6 @@ jobs:
           host: ${{secrets.HOST}} #ec2 서버의 ip주소
           username: ${{ secrets.USERNAME }} #ec2 서버의 username
           key: ${{ secrets.KEY }} #ec2 서버의 key
-          port: ${{ secrets.PORT }} #일반적으로 SSH는 포트 22번 사용
+          port: ${{ secrets.PORT }} #일반적으로 SSH는 포트 22번 사용.
           script: |
             ./deploy.sh
