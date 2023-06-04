@@ -27,4 +27,4 @@ jobs:
           port: ${{ secrets.PORT }} #일반적으로 SSH는 포트 22번 사용.
           script: |
             mkdir -p ~/git/front
-            
+            cp -rf dist/* ~/git/front
