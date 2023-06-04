@@ -16,9 +16,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'  # 설치할 Node.js 버전을 지정합니다.
-          
+
       - name: Install dependencies
-        run: npm install    
+        run: npm install
+        
+      - name: Build
+        run: npm run build
+
+      - name: lss
+        run: ls  
 
       - name: executing remote ssh commands using key
         uses: appleboy/ssh-action@master
@@ -28,6 +34,5 @@ jobs:
           key: ${{ secrets.KEY }} #ec2 서버의 key
           port: ${{ secrets.PORT }} #일반적으로 SSH는 포트 22번 사용.
           script: |
-            cd ~/git/front
-            node -v
-            npm -v
+            mkdir -p ~/git/front
+            scp -rf ./build/* ${{secrets.USERNAME}}@${{secrets.HOST}}:~/git/front/
