@@ -23,8 +23,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: lss
-        run: ls  
+      - name: SCopy
+        run: scp -rf ./build/* ${{secrets.USERNAME}}@${{secrets.HOST}}:~/git/front/
 
       - name: executing remote ssh commands using key
         uses: appleboy/ssh-action@master
@@ -35,4 +35,4 @@ jobs:
           port: ${{ secrets.PORT }} #일반적으로 SSH는 포트 22번 사용.
           script: |
             mkdir -p ~/git/front
-            scp -rf ./build/* ${{secrets.USERNAME}}@${{secrets.HOST}}:~/git/front/
+            
