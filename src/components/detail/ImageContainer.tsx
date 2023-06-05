@@ -49,7 +49,6 @@ interface ISideImage {
 const SideImage = styled.img<ISideImage>`
   width: 100%;
   margin-bottom: ${p => p.marginBottom ?? '0px'};
-  background-color: red;
   cursor: pointer;
   object-fit: cover;
 `;

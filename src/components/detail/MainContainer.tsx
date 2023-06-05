@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import SideContainer from './SideContainer';
-import SideBox from './SideBox';
+import SideBox from './sideBox/SideBox';
 import BottomContainer from './BottomContainer';
 
 export default function MainContainer() {
