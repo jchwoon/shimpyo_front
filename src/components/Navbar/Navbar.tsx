@@ -38,9 +38,10 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
 
-import { CheckInOutCalendar } from "./Calendar";
-
-import Calendar from "./RangePicker"
+import {
+  DatePickerProvider,
+} from '@bcad1591/react-date-picker';
+import  {CheckInOutCalendar}  from "./Calendar";
 
 export default function Navbar() {
 
@@ -170,7 +171,9 @@ export default function Navbar() {
                 onClose={checkInOutClose}
                 elevation={1}
               >
-                <CheckInOutCalendar />
+                <DatePickerProvider>
+                  <CheckInOutCalendar />
+                </DatePickerProvider>
               </CustomizedMenu>
 
               <CustomizedAdditionalDivider orientation="vertical" flexItem change={change} />
