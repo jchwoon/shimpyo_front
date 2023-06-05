@@ -23,16 +23,14 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: SCopy
-        run: scp -rf ./build/* ${{secrets.USERNAME}}@${{secrets.HOST}}:~/git/front/
+      - name: Setup SSH keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa ${{ secrets.HOST }} >> ~/.ssh/known_hosts
 
-      - name: executing remote ssh commands using key
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{secrets.HOST}} #ec2 서버의 ip주소
-          username: ${{ secrets.USERNAME }} #ec2 서버의 username
-          key: ${{ secrets.KEY }} #ec2 서버의 key
-          port: ${{ secrets.PORT }} #일반적으로 SSH는 포트 22번 사용.
-          script: |
-            mkdir -p ~/git/front
+      - name: Copy build folder to EC2
+        run: |
+          rsync -e "ssh -o StrictHostKeyChecking=no" -r $GITHUB_WORKSPACE/build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/git/front
             
