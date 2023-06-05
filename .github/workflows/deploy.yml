@@ -28,9 +28,10 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa ${{ secrets.HOST }} >> ~/.ssh/known_hosts
-
+  
+      - name: Install SSH client
+        run: sudo apt-get install -y openssh-client
+  
       - name: Copy build folder to EC2
         run: |
-          rsync -e "ssh -o StrictHostKeyChecking=no" -r $GITHUB_WORKSPACE/build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/git/front
-            
+          scp -o StrictHostKeyChecking=no -r $GITHUB_WORKSPACE/build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/git/front
