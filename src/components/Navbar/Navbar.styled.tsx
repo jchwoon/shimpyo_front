@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import styled from '@emotion/styled';
 
-import { Divider, TextField } from '@mui/material';
+import { Divider, IconButton, Menu, MenuItem, TextField } from '@mui/material';
 
 import Avatar from '@mui/material/Avatar';
 import SearchIcon from '@mui/icons-material/Search';
@@ -226,3 +226,25 @@ export const CustomizedTextfield = styled(TextField)<{ change: boolean }>(({ cha
   display: change ? 'block' : 'none',
 }));
 
+export const CustomizedMenu = styled(Menu)`
+margin-top:10px;
+`
+
+export const CustomizedGuestCountMenuItem = styled(MenuItem)`
+:hover {
+  background-color: transparent
+}
+justify-content: space-between;
+`
+
+export const CustomizedCalendarMenuItem = styled(MenuItem)`
+:hover {
+  background-color: transparent
+}
+`
+
+export const CustomizedIconButton = styled(IconButton)`
+:hover {
+  background-color: transparent
+}
+`

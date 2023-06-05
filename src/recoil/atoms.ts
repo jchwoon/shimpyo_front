@@ -14,3 +14,18 @@ export const Change = atom<boolean>({
   key: 'Change',
   default: false,
 })
+
+export const AdultGuest = atom<number>({
+  key: 'AdultGuest',
+  default: 0,
+})
+
+export const ChildGuest = atom<number>({
+  key: 'ChildGuest',
+  default: 0,
+})
+
+export const InfantGuest = atom<number>({
+  key: 'InfantGuest',
+  default: 0,
+})
