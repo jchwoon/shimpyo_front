@@ -5,7 +5,7 @@ interface AvatarProps {
 }
 
 export default function Avatar({ src }: AvatarProps) {
-  return <StyleAvatar hidden alt="avatar" src={src || '/images/basicProfile.jpg'} />;
+  return <StyleAvatar hidden alt="avatar" src={src || '/images/dd.jpg'} />;
 }
 
 const StyleAvatar = styled.img`
