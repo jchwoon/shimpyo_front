@@ -1,23 +1,28 @@
 import styled from "styled-components";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import 'moment/locale/ko';
-import Calendar from 'react-calendar'
-import 'react-calendar/dist/Calendar.css';
+import {
+  DatePicker,
+  useDatePickGetter,
+  useDatePickReset,
+} from '@bcad1591/react-date-picker';
 
-export default function SideCalendar(){
-  const [startDate,setStartDate] = useState(moment())
-  const [endDate, setEndDate] = useState(moment().add(1,'days'))
-  const handleStart = (newValue:moment.Moment) => {
-    if(startDate<endDate) setStartDate(newValue)
-    // else alert('체크인 기간은 체크아웃 기간보다 앞에 위치해야 합니다.')
-  }
-  const handleEnd = (newValue:moment.Moment) => {
-    if(startDate<endDate) setEndDate(newValue)
-    // else alert('체크아웃 기간은 체크인 기간보다 뒤에 위치해야 합니다.')
-  }
+export default function SideCalendar(props:any){
+  const { toggleCalendar, startDateChange, endDateChange, getDateGap } = props;
+  const { pickedDates } = useDatePickGetter()
+
+  const resetFunc = useDatePickReset();
+  const startDate = moment(pickedDates.firstPickedDate)
+  const endDate = moment(pickedDates.secondPickedDate)
+
+  useEffect(()=>{
+    startDateChange(pickedDates.firstPickedDate ===null ? '날짜 추가' : startDate.format('ll') )
+    endDateChange(pickedDates.secondPickedDate ===null ? '날짜 추가' :endDate.format('ll'))
+    getDateGap(endDate.diff(startDate,'days'))
+  },[startDate.format('ll'), endDate.format('ll')])
 
 
   return (
@@ -25,17 +30,16 @@ export default function SideCalendar(){
       <CalendarContainer>
         <CalendarTop>
           <CalendarLeft>
-            <StayDate>{endDate.diff(startDate,'days')} 박</StayDate>
-            <StayPeriod>{startDate.format('ll')} ~ {endDate.format('ll')}</StayPeriod>
+            <StayDate>{isNaN(endDate.diff(startDate,'days')) ? '-' : endDate.diff(startDate,'days') } 박</StayDate>
+            <StayPeriod>{ pickedDates.firstPickedDate ===null ? '날짜 추가' : startDate.format('ll')  } ~ {pickedDates.secondPickedDate ===null ? '날짜 추가' :endDate.format('ll')}</StayPeriod>
           </CalendarLeft>
           <CalendarRight>
-            <CloseCalendar>닫기</CloseCalendar>
+            <CloseCalendar onClick={toggleCalendar}>닫기</CloseCalendar>
           </CalendarRight>
         </CalendarTop>
         <CalendarBottom>
-        <DateCalendar value={startDate} onChange={(newValue)=>handleStart(newValue ?? moment())}/>
-        <DateCalendar value={endDate} onChange={(newValue1) => handleEnd(newValue1 ?? moment())}/>
-        {/* <Calendar /> */}
+          <DatePicker disablePreviousDays />
+        <ResetBtn onClick={resetFunc}>날짜 지우기</ResetBtn>
         </CalendarBottom>
       </CalendarContainer>
     </LocalizationProvider>
@@ -51,7 +55,9 @@ const CalendarContainer = styled.div`
   top:-24px;
   right: -32px;
   z-index: 1;
-  width: 900px;
+  @media screen and (max-width: 900px){
+    left:-10px;
+  };
 `
 
 const CalendarTop = styled.div`
@@ -87,4 +93,14 @@ const CloseCalendar = styled.div`
 const CalendarBottom = styled.div`
   display: flex;
   justify-content: space-between;
+`
+
+const ResetBtn = styled.div`
+  position:absolute;
+  top:24px;
+  right:100px;
+  padding: 8px 16px;
+  text-decoration: underline;
+  font-weight: 700;
+  cursor: pointer;
 `

@@ -60,6 +60,10 @@ const Container = styled.div`
   position: relative;
   width: 60%;
   height: auto;
+  @media screen and (max-width: 900px){
+    width: calc(100% - 40px);
+    padding: 0 20px;
+  };
 `;
 
 const HotelTitle = styled.div`
@@ -80,6 +84,9 @@ const HostImg = styled.img`
   height: 50px;
   border-radius: 100%;
   object-fit: cover;
+  @media screen and (max-width: 900px){
+    display: none;
+  };
 `;
 
 const HotelDescription = styled.div`

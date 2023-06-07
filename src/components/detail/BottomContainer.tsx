@@ -49,6 +49,9 @@ const MainTitle = styled.div`
   padding: 48px 0 24px 0;
   font-size: 22px;
   font-weight: 600;
+  @media screen and (max-width: 900px){
+    padding-left : 20px;
+  };
 `;
 const SeeMore = styled.div`
   text-decoration: underline;
@@ -59,11 +62,17 @@ const SeeMore = styled.div`
   margin-top: 12px;
   padding-bottom: 30px;
   cursor: pointer;
+  @media screen and (max-width: 900px){
+    padding-left : 20px;
+  };
 `;
 const CommentCardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   padding-top: 20px;
+    @media screen and (max-width: 900px){
+    padding-left : 20px;
+  };
 `;
 const CommentCard = styled.div`
   margin-bottom: 30px;
@@ -106,6 +115,9 @@ const HostingMap = styled.div`
 const HostingLocation = styled.div`
   font-size: 16px;
   font-weight: bold;
+    @media screen and (max-width: 900px){
+    padding-left : 20px;
+  };
 `;
 
 const HostingLocationDetail = styled.div`
@@ -114,4 +126,7 @@ const HostingLocationDetail = styled.div`
   -webkit-line-clamp: 3;
   overflow: hidden;
   font-size: 16px;
+  @media screen and (max-width: 900px){
+    padding : 0 20px;
+  };
 `;

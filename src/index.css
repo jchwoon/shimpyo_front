@@ -4,3 +4,11 @@ body {
   text-decoration: none;
   box-sizing: border-box;
 }
+.dQobkJ{
+  display: none;
+}
+@media screen and (max-width: 900px){
+  .dQobkJ{
+    display: block !important
+  }
+};

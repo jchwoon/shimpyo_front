@@ -20,4 +20,7 @@ const Main = styled.div`
   position: relative;
   justify-content: space-between;
   margin-top: 48px;
+  @media screen and (max-width: 900px){
+    flex-direction: column;
+  };
 `;
