@@ -29,3 +29,13 @@ export const InfantGuest = atom<number>({
   key: 'InfantGuest',
   default: 0,
 })
+
+export const FirstPickedDate = atom<string | null>({
+  key: 'FirstPickedDate',
+  default: '',
+})
+
+export const SecondPickedDate = atom<string | null>({
+  key: 'SecondPickedDate',
+  default: '',
+})

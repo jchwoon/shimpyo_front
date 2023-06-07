@@ -23,6 +23,8 @@ import {
   CustomizedActiveSearchButton,
   CustomizedAdditionalActiveSearchButton,
   CustomizedMenu,
+  CustomizedDeleteIconButton,
+  CustomziedClearIcon
 } from "./Navbar.styled"
 import GuestCount from "../GuestCount/GuestCount";
 import Typography from '@mui/material/Typography';
@@ -30,24 +32,30 @@ import logo2 from "../../logo2.svg"
 import { Divider, ClickAwayListener, IconButton } from '@mui/material';
 import CustomizedMenus from "../LoginModal/LoginModal";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { Height, Display, Change, AdultGuest, ChildGuest, InfantGuest } from "../../recoil/atoms";
+import { Height, Display, Change, AdultGuest, ChildGuest, InfantGuest, FirstPickedDate, SecondPickedDate } from "../../recoil/atoms";
 import { useState, ReactNode } from "react";
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem'
 
-import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
-
 import {
   DatePickerProvider,
+  useDatePickReset
 } from '@bcad1591/react-date-picker';
-import  {CheckInOutCalendar}  from "./Calendar";
+import { Calendar } from "./Calendar";
+
+import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
+
+import ClearIcon from '@mui/icons-material/Clear';
 
 export default function Navbar() {
 
   const [appBarHeight, setAppBarHeight] = useRecoilState(Height)
   const [customDisplay, setCustomDisplay] = useRecoilState(Display);
   const [change, setChange] = useRecoilState(Change);
+  const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
+  const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
+
   const handleClick = () => {
     setAppBarHeight("160px");
     setCustomDisplay(true);
@@ -92,6 +100,14 @@ export default function Navbar() {
     setAdultGuestNumber(prevValue => prevValue + 1)
   }
   const TotalGuestNumberCount = InfantGuestNumber === 0 ? `게스트 ${TotalGuestNumber}명` : `게스트 ${TotalGuestNumber} 명, 유아 ${InfantGuestNumber}명 `
+
+  const reset = useDatePickReset();
+  const resetFunction = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // e.stopPropagation();
+    reset();
+    setFirstPickedDate(null);
+    setSecondPickedDate(null)
+  }
 
   return (
     <CustomizedAppBar elevation={0} appBarHeight={appBarHeight}>
@@ -141,15 +157,20 @@ export default function Navbar() {
                 </div>
                 :
                 activeButton === "button2" ?
-                  <CustomizedActiveSearchButton variant="contained" disableRipple sx={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={handleCheckInOutClick}>
+                  <CustomizedActiveSearchButton variant="contained" disableRipple sx={{ paddingLeft: "20px", paddingRight: firstPickedDate ? "5px" : "20px" }} onClick={handleCheckInOutClick}>
                     <CustomizedWhenVerticalWrapperDiv change={change}>
                       <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500">
                         {change ? "체크인" : "언제든지"}
                       </CustomizedTypography>
                       <CustomizedChangeTypography change={change}>
-                        날짜 추가
+                        {!firstPickedDate ? "날짜 추가" : firstPickedDate}
                       </CustomizedChangeTypography>
                     </CustomizedWhenVerticalWrapperDiv>
+                    {firstPickedDate ?
+                      <CustomizedDeleteIconButton onClick={resetFunction}>
+                        <CustomziedClearIcon />
+                      </CustomizedDeleteIconButton>
+                      : null}
                   </CustomizedActiveSearchButton>
                   :
                   <CustomizedSearchInsideButton change={change} disableRipple sx={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={() => handleButtonClick('button2')}>
@@ -158,35 +179,38 @@ export default function Navbar() {
                         체크인
                       </CustomizedTypography>
                       <CustomizedChangeTypography change={change}>
-                        날짜 추가
+                        {!firstPickedDate ? "날짜 추가" : firstPickedDate}
                       </CustomizedChangeTypography>
                     </CustomizedWhenVerticalWrapperDiv>
                   </CustomizedSearchInsideButton>
               }
-
               <CustomizedMenu
                 id="basic-menu"
                 anchorEl={checkInOutAnchorEl}
                 open={checkInOutOpen}
                 onClose={checkInOutClose}
                 elevation={1}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'center' }}
               >
-                <DatePickerProvider>
-                  <CheckInOutCalendar />
-                </DatePickerProvider>
+                <Calendar />
               </CustomizedMenu>
+
 
               <CustomizedAdditionalDivider orientation="vertical" flexItem change={change} />
               {activeButton === "button3" ?
-                <CustomizedAdditionalActiveSearchButton variant="contained" disableRipple sx={{ paddingLeft: "20px", paddingRight: "20px" }} change={change}>
+                <CustomizedAdditionalActiveSearchButton variant="contained" disableRipple sx={{ paddingLeft: "20px", paddingRight: secondPickedDate ? "5px" : "20px" }} change={change}>
                   <CustomizedAddtionalWhenVerticalWrapperDiv change={change}>
                     <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500">
                       {change ? "체크아웃" : ""}
                     </CustomizedTypography>
                     <CustomizedChangeTypography change={change}>
-                      날짜 추가
+                      {!secondPickedDate ? "날짜 추가" : secondPickedDate}
                     </CustomizedChangeTypography>
                   </CustomizedAddtionalWhenVerticalWrapperDiv>
+                  {secondPickedDate ? <CustomizedDeleteIconButton onClick={resetFunction}>
+                    <CustomziedClearIcon />
+                  </CustomizedDeleteIconButton> : null}
                 </CustomizedAdditionalActiveSearchButton>
                 :
                 <CustomizedAdditionalSearchInsideButton change={change} disableRipple sx={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={() => handleButtonClick('button3')}>
@@ -195,7 +219,7 @@ export default function Navbar() {
                       {change ? "체크아웃" : ""}
                     </CustomizedTypography>
                     <CustomizedChangeTypography change={change}>
-                      날짜 추가
+                      {!secondPickedDate ? "날짜 추가" : secondPickedDate}
                     </CustomizedChangeTypography>
                   </CustomizedAddtionalWhenVerticalWrapperDiv>
                 </CustomizedAdditionalSearchInsideButton>

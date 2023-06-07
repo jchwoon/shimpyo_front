@@ -12,6 +12,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 
+import ClearIcon from '@mui/icons-material/Clear';
+
 export const CustomizedAppBar = styled(AppBar) <{ appBarHeight: string }>`
 background-color: #fff;
 padding-left : 40px;
@@ -226,8 +228,14 @@ export const CustomizedTextfield = styled(TextField)<{ change: boolean }>(({ cha
   display: change ? 'block' : 'none',
 }));
 
+export const CustomizedWrapperDiv = styled.div`
+display:flex;
+
+`
+
 export const CustomizedMenu = styled(Menu)`
 margin-top:10px;
+
 `
 
 export const CustomizedGuestCountMenuItem = styled(MenuItem)`
@@ -247,4 +255,18 @@ export const CustomizedIconButton = styled(IconButton)`
 :hover {
   background-color: transparent
 }
+`
+
+export const CustomizedDeleteIconButton = styled(IconButton)`
+background-color : #ebebeb;
+width: 30px;
+height: 30px;
+:hover {
+  background-color: #dedede;
+}
+`
+
+export const CustomziedClearIcon = styled(ClearIcon)`
+width: 15px;
+height: 15px;
 `
