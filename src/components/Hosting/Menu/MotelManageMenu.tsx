@@ -3,7 +3,7 @@ import Menu from '../Menu';
 import UserMenuItem from './MenuItem';
 import { StyleMenuList } from '../../style/menu';
 import { useRef } from 'react';
-import UseMenuBar from '../../../hooks/useMenuBar';
+import useMenuBar from '../../../hooks/useMenuBar';
 import { BiChevronDown } from 'react-icons/bi';
 import { useLocation } from 'react-router-dom';
 
@@ -11,7 +11,7 @@ export default function MotelManageMenu() {
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
 
-  const { isOpen } = UseMenuBar({ initialState: false, menuRef, buttonRef });
+  const { isOpen } = useMenuBar({ initialState: false, menuRef, buttonRef });
 
   const { pathname } = useLocation();
   return (
