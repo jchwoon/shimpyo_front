@@ -19,7 +19,7 @@ export default function AddressSearchBar() {
   useEffect(() => {
     const script = document.createElement('script');
     script.async = true;
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDP_9R2ZQ5g1bGQZuKQCZKYPGkuTikoj6k&libraries=places&callback=initAutocomplete`;
+    script.src = `https://maps.googleapis.com/maps/api/js?${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places&callback=initAutocomplete`;
     document.head.appendChild(script);
 
     window.initAutocomplete = () => {
