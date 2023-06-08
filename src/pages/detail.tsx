@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import { AiFillHeart } from 'react-icons/ai';
 import ImageContainer from '../components/detail/ImageContainer';
-import SideBox from '../components/detail/sideBox/SideBox';
-import SideContainer from '../components/detail/SideContainer';
 import MainContainer from '../components/detail/MainContainer';
 
 export default function Detail() {

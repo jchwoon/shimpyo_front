@@ -1,13 +1,9 @@
-import axios, { Axios } from 'axios';
 import { useState } from 'react';
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 import styled from 'styled-components';
 import Guest from './Guest';
 import SideCalender from './Calender';
-import {
-  DatePickerProvider,
-} from '@bcad1591/react-date-picker';
-import moment from "moment";
+import { DatePickerProvider } from '@bcad1591/react-date-picker';
 import 'moment/locale/ko';
 
 export default function SideBox() {
