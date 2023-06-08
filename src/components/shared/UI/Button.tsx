@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface ButtonProps {
@@ -7,23 +6,27 @@ interface ButtonProps {
 }
 
 export default function Button({ label, onClick }: ButtonProps) {
-  return (
-    <StyleButton>
-      <Link to={''}>{label}</Link>
-    </StyleButton>
-  );
+  return <StyleButton>{label}</StyleButton>;
 }
 
 const StyleButton = styled.div`
-  border-radius: 0.5rem;
-  border: 1px solid black;
+  position: relative;
+  cursor: pointer;
+  border-radius: 12px;
+  border: 2px solid black;
+  font-weight: bold;
+  font-size: 14px;
   text-align: center;
   width: auto;
   margin-bottom: 1rem;
-  pointer-events: auto;
-  padding: 0.5rem 0;
-  a {
-    display: block;
-    width: 100%;
+  padding: 0.75rem 0;
+  svg {
+    position: absolute;
+    left: 20px;
+    top: 10px;
+  }
+
+  :hover {
+    background-color: rgb(230, 230, 230);
   }
 `;
