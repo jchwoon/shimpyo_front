@@ -12,6 +12,9 @@ jobs:
       - name: Checkout Frontend Repo
         uses: actions/checkout@v3
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+
       - name: Set CI environment variable
         run: echo "CI=false" >> $GITHUB_ENV
 
