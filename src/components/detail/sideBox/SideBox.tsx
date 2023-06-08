@@ -11,7 +11,6 @@ export default function SideBox() {
   const [guestCount, setGuestCount] = useState([0,0,0])
   const [startDate, setStartDate] = useState('날짜 추가')
   const [endDate, setEndDate] = useState('날짜 추가')
-  const [dateGap, setDateGap] = useState(0)
   const [calendar, setCalendar] = useState(false)
   const [booking, setBooking] = useState(true)
 
@@ -75,9 +74,6 @@ export default function SideBox() {
   const endDateChange = (date:string) => {
     setEndDate(date)
   }
-  const getDateGap = (gap:number) => {
-    setDateGap(gap)
-  }
   const toggleCalendar = () => {
     setCalendar(prev => !prev)
   }
@@ -122,7 +118,7 @@ export default function SideBox() {
           />
         }
         <DatePickerProvider>
-          {calendar && <SideCalender toggleCalendar={toggleCalendar} startDateChange={startDateChange} endDateChange={endDateChange} getDateGap={getDateGap}/>}
+          {calendar && <SideCalender toggleCalendar={toggleCalendar} startDateChange={startDateChange} endDateChange={endDateChange}/>}
         </DatePickerProvider>
       </CheckContainer>
       <BookingBtn onClick={toggleBooking}>예약 가능 여부 보기</BookingBtn>

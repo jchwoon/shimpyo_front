@@ -11,7 +11,7 @@ import {
 } from '@bcad1591/react-date-picker';
 
 export default function SideCalendar(props:any){
-  const { toggleCalendar, startDateChange, endDateChange, getDateGap } = props;
+  const { toggleCalendar, startDateChange, endDateChange } = props;
   const { pickedDates } = useDatePickGetter()
 
   const resetFunc = useDatePickReset();
@@ -21,7 +21,6 @@ export default function SideCalendar(props:any){
   useEffect(()=>{
     startDateChange(pickedDates.firstPickedDate ===null ? '날짜 추가' : startDate.format('ll') )
     endDateChange(pickedDates.secondPickedDate ===null ? '날짜 추가' :endDate.format('ll'))
-    getDateGap(endDate.diff(startDate,'days'))
   },[startDate.format('ll'), endDate.format('ll')])
 
 

@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { AiFillHeart } from 'react-icons/ai';
 import ImageContainer from '../components/detail/ImageContainer';
 import MainContainer from '../components/detail/MainContainer';
-
 export default function Detail() {
   return (
     <>
