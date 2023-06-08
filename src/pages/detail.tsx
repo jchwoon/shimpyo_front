@@ -3,6 +3,7 @@ import { AiFillHeart } from 'react-icons/ai';
 import ImageContainer from '../components/detail/ImageContainer';
 import MainContainer from '../components/detail/MainContainer';
 export default function Detail() {
+  //ll
   return (
     <>
       <TempTopBar />
@@ -32,20 +33,20 @@ const Container = styled.div`
   max-width: 1120px;
   min-width: 800px;
   margin: 0 auto;
-  @media screen and (max-width: 900px){
+  @media screen and (max-width: 900px) {
     padding: 0px;
     width: 100%;
     min-width: 0;
-  };
+  }
 `;
 
 const Title = styled.div`
   font-size: 26px;
   font-weight: bold;
   margin-top: 24px;
-  @media screen and (max-width: 900px){
+  @media screen and (max-width: 900px) {
     padding: 0 20px;
-  };
+  }
 `;
 
 const Description = styled.div`
@@ -53,9 +54,9 @@ const Description = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 24px;
-  @media screen and (max-width: 900px){
+  @media screen and (max-width: 900px) {
     padding: 0 20px;
-  };
+  }
 `;
 
 const Description_location = styled.div`
