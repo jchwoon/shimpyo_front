@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
 import { MdLocationPin } from 'react-icons/md';
 
@@ -17,21 +16,35 @@ export default function AddressSearchBar() {
     inputRef.current?.focus();
   };
 
-  const fetchAddressData = async () => {
-    axios.defaults.withCredentials = false;
-    axios.defaults.headers.common['Authorization'] = `KakaoAK ${'7f1558f4d3769fd396465bb676afe75c'}`;
-    axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-
-    try {
-      const response = await axios.get(`https://dapi.kakao.com/v2/local/search/address.json?query=${searchWord}`);
-      console.log(response.data.documents);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   useEffect(() => {
-    fetchAddressData();
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDP_9R2ZQ5g1bGQZuKQCZKYPGkuTikoj6k&libraries=places&callback=initAutocomplete`;
+    document.head.appendChild(script);
+
+    window.initAutocomplete = () => {
+      const searchbar = document.getElementById('searchbar') as HTMLInputElement;
+      const option = {
+        types: ['establishment'],
+        componentRestrictions: {
+          country: ['KR'],
+        },
+        fields: ['address_components', 'adr_address', 'formatted_address'],
+      };
+      const autocomplete = new window.google.maps.places.Autocomplete(searchbar, option);
+
+      autocomplete.addListener('place_changed', onPlaceChanged);
+
+      function onPlaceChanged() {
+        let place = autocomplete.getPlace();
+        console.log(place);
+      }
+    };
+
+    return () => {
+      delete window.initAutocomplete;
+      document.head.removeChild(script);
+    };
   }, [searchWord]);
 
   return (
@@ -39,6 +52,8 @@ export default function AddressSearchBar() {
       <StyledFlexDiv>
         <MdLocationPin size="25px" />
         <StyledInput
+          id="searchbar"
+          type="text"
           ref={inputRef}
           value={searchWord}
           onChange={handleChange}
@@ -79,7 +94,7 @@ const StyledInput = styled.input`
   border: none;
   padding: none;
   margin-left: 10px;
-  width: 100%;
+  width: 390px;
   border-radius: 10px;
   &:focus {
     outline: none;
