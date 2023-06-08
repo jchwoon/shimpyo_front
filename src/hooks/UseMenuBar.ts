@@ -13,7 +13,7 @@ interface UseMenuBarProps {
  * @param {React.RefObject} buttonRef - 버튼 요소의 참조
  * @returns {object} - isOpen: 메뉴 열림 여부를 나타내는 상태값
  */
-export default function UseMenuBar({ initialState, menuRef, buttonRef }: UseMenuBarProps) {
+export default function useMenuBar({ initialState, menuRef, buttonRef }: UseMenuBarProps) {
   const [isOpen, setIsOpen] = useState(initialState);
 
   const onClick = useCallback(

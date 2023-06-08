@@ -3,7 +3,7 @@ import Menu from '../Menu';
 import UserMenuItem from './MenuItem';
 import { StyleMenuList } from '../../style/menu';
 import { useRef } from 'react';
-import UseMenuBar from '../../../hooks/UseMenuBar';
+import UseMenuBar from '../../../hooks/useMenuBar';
 import { BiChevronDown } from 'react-icons/bi';
 import { useLocation } from 'react-router-dom';
 
