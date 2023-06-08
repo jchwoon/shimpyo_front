@@ -13,13 +13,13 @@ import MenuBlock from './MenuBlock';
 import Menu from '../Menu';
 import { StyleMenuList } from '../../style/menu';
 import Button from '../../shared/UI/Button';
-import UseMenuBar from '../../../hooks/useMenuBar';
+import useMenuBar from '../../../hooks/useMenuBar';
 import useResponseToViewPort from '../../../hooks/useResponseToViewPort';
 
 export default function UserMenu() {
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
-  const { isOpen } = UseMenuBar({ initialState: false, menuRef, buttonRef });
+  const { isOpen } = useMenuBar({ initialState: false, menuRef, buttonRef });
   const { viewPortWidth } = useResponseToViewPort();
 
   return (
