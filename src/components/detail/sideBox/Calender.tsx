@@ -1,3 +1,5 @@
+// eslint-disable-next-line react-hooks/exhaustive-deps
+
 import styled from "styled-components";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
@@ -17,7 +19,6 @@ export default function SideCalendar(props:any){
   const resetFunc = useDatePickReset();
   const startDate = moment(pickedDates.firstPickedDate)
   const endDate = moment(pickedDates.secondPickedDate)
-
   useEffect(()=>{
     startDateChange(pickedDates.firstPickedDate ===null ? '날짜 추가' : startDate.format('ll') )
     endDateChange(pickedDates.secondPickedDate ===null ? '날짜 추가' :endDate.format('ll'))
