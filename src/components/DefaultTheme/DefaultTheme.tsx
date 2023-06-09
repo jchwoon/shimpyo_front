@@ -16,12 +16,6 @@ const defaultTheme = createTheme({
                 },
             },
         },
-        MuiMenu: {
-            styleOverrides: {
-                paper: {
-                },
-            },
-        },
     },
 });
 

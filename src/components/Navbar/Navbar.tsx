@@ -26,27 +26,22 @@ import {
   CustomizedDeleteIconButton,
   CustomziedClearIcon
 } from "./Navbar.styled"
-import GuestCount from "../GuestCount/GuestCount";
-import Typography from '@mui/material/Typography';
 import logo2 from "../../logo2.svg"
-import { Divider, ClickAwayListener, IconButton } from '@mui/material';
+import { Divider, ClickAwayListener } from '@mui/material';
 import CustomizedMenus from "../LoginModal/LoginModal";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Height, Display, Change, AdultGuest, ChildGuest, InfantGuest, FirstPickedDate, SecondPickedDate } from "../../recoil/atoms";
-import { useState, ReactNode } from "react";
-
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem'
+import { useState, useEffect } from "react";
 
 import {
-  DatePickerProvider,
   useDatePickReset
 } from '@bcad1591/react-date-picker';
 import { Calendar } from "./Calendar";
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
 
-import ClearIcon from '@mui/icons-material/Clear';
+import GoogleMaps from "./MuiSearchField";
+import Combobox from "./SearchField";
 
 export default function Navbar() {
 
@@ -66,6 +61,7 @@ export default function Navbar() {
   const handleButtonClick = (buttonId: string) => {
     setActiveButton(buttonId);
   }
+
   const clickAwayHandler = () => {
     if (activeButton !== "") {
       setActiveButton("")
@@ -73,10 +69,13 @@ export default function Navbar() {
   }
 
   //checkInOut menu
+
+  const customizedSearchButton = document.getElementById('customizedSearchButton')
+
   const [checkInOutAnchorEl, setCheckInOutAnchorEl] = useState<null | HTMLElement>(null);
   const checkInOutOpen = Boolean(checkInOutAnchorEl);
-  const handleCheckInOutClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setCheckInOutAnchorEl(event.currentTarget);
+  const handleCheckInOutClick = () => {
+    setCheckInOutAnchorEl(customizedSearchButton);
   };
   const checkInOutClose = () => {
     setCheckInOutAnchorEl(null);
@@ -101,12 +100,74 @@ export default function Navbar() {
   }
   const TotalGuestNumberCount = InfantGuestNumber === 0 ? `게스트 ${TotalGuestNumber}명` : `게스트 ${TotalGuestNumber} 명, 유아 ${InfantGuestNumber}명 `
 
+  //calendar delete button
+  const [deleteButtonExist, setDeleteButtonExist] = useState(false)
   const reset = useDatePickReset();
-  const resetFunction = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // e.stopPropagation();
+  const resetFunction = () => {
     reset();
     setFirstPickedDate(null);
     setSecondPickedDate(null)
+    setDeleteButtonExist(false)
+    if (firstPickedFirst) {
+      handleButtonClick('button2')
+    }
+    if (!firstPickedFirst) {
+      handleButtonClick('button3')
+    }
+  }
+
+  const [buttonPosition, setButtonPostion] = useState({ top: 0, left: 0 })
+
+  const firstDivider = document.getElementById('firstDivider')
+  const secondDivider = document.getElementById('secondDivider')
+
+  const targetDiv = document.querySelector('.jshaaC, .iNDSBv');
+
+
+  useEffect(() => {
+    if (targetDiv) {
+      const targetDivDoubleCheck = document.querySelector('.jshaaC, .iNDSBv');
+      if (targetDivDoubleCheck) { setDeleteButtonExist(true); }
+    }
+    const updateButtonPosition = () => {
+      if (activeButton === "button2") {
+        if (firstDivider) {
+          const { top, left, } = firstDivider.getBoundingClientRect();
+          setButtonPostion({ top: top - 10, left: left - 10 });
+        }
+      }
+      if (activeButton === "button3") {
+        if (secondDivider) {
+          const { top, left, } = secondDivider.getBoundingClientRect();
+          setButtonPostion({ top: top - 10, left: left - 10 });
+        }
+      }
+    }
+    updateButtonPosition();
+    window.addEventListener('resize', updateButtonPosition);
+  }, [activeButton, targetDiv, checkInOutOpen])
+
+  //calendar date order
+  const [firstPickedFirst, setFirstPickedFirst] = useState(true)
+
+  useEffect(() => {
+    if (activeButton === "button3" && firstPickedFirst === true && targetDiv === null) {
+      setFirstPickedFirst(false)
+    }
+  }, [activeButton, firstPickedFirst, targetDiv])
+
+  useEffect(() => {
+    if (activeButton === "button2" && firstPickedFirst === false && targetDiv === null) {
+      setFirstPickedFirst(true)
+    }
+  }, [activeButton, firstPickedFirst, targetDiv])
+
+  if (activeButton === "button3" && firstPickedFirst === false && firstPickedDate && !secondPickedDate) {
+    handleButtonClick('button2');
+  }
+
+  if (activeButton === "button2" && firstPickedFirst === true && firstPickedDate && !secondPickedDate) {
+    handleButtonClick('button3');
   }
 
   return (
@@ -121,7 +182,7 @@ export default function Navbar() {
         <CustomizedSearchButtonWrapperDiv change={change}>
           <ClickAwayListener onClickAway={clickAwayHandler}>
 
-            <CustomizedSearchButton variant="contained" disableRipple onClick={handleClick} change={change} disableElevation={change ? true : false} activeButton={activeButton}>
+            <CustomizedSearchButton id="customizedSearchButton" variant="contained" disableRipple onClick={handleClick} change={change} disableElevation={change ? true : false} activeButton={activeButton}>
               {!change ?
                 <div onClick={() => handleButtonClick('button1')} style={{ height: "50px", display: "flex", alignItems: "center" }}>
                   <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" textAlign="left" sx={{ paddingLeft: "20px", paddingRight: "15px" }}>
@@ -135,7 +196,12 @@ export default function Navbar() {
                       <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" textAlign="left" >
                         여행지
                       </CustomizedTypography>
-                      <CustomizedTextfield placeholder="여행지 검색" variant="outlined" change={change} sx={{ width: "200px" }} />
+
+                      {/* <Combobox /> */}
+                      {/* <CustomizedTextfield placeholder="여행지 검색" variant="outlined" sx={{ width: "200px" }} /> */}
+                      <GoogleMaps />
+
+
                     </CustomizedWhereVerticalWrapperDiv>
                   </CustomizedActiveSearchButton>
                   :
@@ -144,42 +210,52 @@ export default function Navbar() {
                       <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" textAlign="left" >
                         여행지
                       </CustomizedTypography>
-                      <CustomizedTextfield placeholder="여행지 검색" variant="outlined" change={change} sx={{ width: "200px" }} />
+
+                      {/* <Combobox /> */}
+                      {/* <CustomizedTextfield placeholder="여행지 검색" variant="outlined" sx={{ width: "200px" }} /> */}
+                      <GoogleMaps />
+
+
                     </CustomizedWhereVerticalWrapperDiv>
                   </CustomizedSearchInsideButton>
               }
-              <CustomizedDivider orientation="vertical" flexItem change={change} />
+              <CustomizedDivider id="firstDivider" orientation="vertical" flexItem change={change} />
               {!change ?
-                <div onClick={() => handleButtonClick('button2')} style={{ height: "50px", display: "flex", alignItems: "center" }}>
+                <div onClick={() => { handleButtonClick('button2') }} style={{ height: "50px", display: "flex", alignItems: "center" }}>
                   <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" sx={{ paddingLeft: "15px", paddingRight: "15px" }}>
                     언제든지
                   </CustomizedTypography>
                 </div>
                 :
                 activeButton === "button2" ?
-                  <CustomizedActiveSearchButton variant="contained" disableRipple sx={{ paddingLeft: "20px", paddingRight: firstPickedDate ? "5px" : "20px" }} onClick={handleCheckInOutClick}>
+                  <CustomizedActiveSearchButton id="activeCheckInButton" variant="contained" disableRipple sx={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={handleCheckInOutClick}>
                     <CustomizedWhenVerticalWrapperDiv change={change}>
                       <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500">
                         {change ? "체크인" : "언제든지"}
                       </CustomizedTypography>
                       <CustomizedChangeTypography change={change}>
-                        {!firstPickedDate ? "날짜 추가" : firstPickedDate}
+                        {firstPickedFirst ?
+                          firstPickedDate ? firstPickedDate : "날짜 추가"
+                          :
+                          firstPickedDate ? secondPickedDate ? firstPickedDate : "날짜 추가"
+                            :
+                            "날짜 추가"}
                       </CustomizedChangeTypography>
                     </CustomizedWhenVerticalWrapperDiv>
-                    {firstPickedDate ?
-                      <CustomizedDeleteIconButton onClick={resetFunction}>
-                        <CustomziedClearIcon />
-                      </CustomizedDeleteIconButton>
-                      : null}
                   </CustomizedActiveSearchButton>
                   :
-                  <CustomizedSearchInsideButton change={change} disableRipple sx={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={() => handleButtonClick('button2')}>
+                  <CustomizedSearchInsideButton id="inactiveCheckInButton" change={change} disableRipple sx={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={() => handleButtonClick('button2')}>
                     <CustomizedWhenVerticalWrapperDiv change={change}>
                       <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500">
                         체크인
                       </CustomizedTypography>
                       <CustomizedChangeTypography change={change}>
-                        {!firstPickedDate ? "날짜 추가" : firstPickedDate}
+                        {firstPickedFirst ?
+                          firstPickedDate ? firstPickedDate : "날짜 추가"
+                          :
+                          firstPickedDate ? secondPickedDate ? firstPickedDate : "날짜 추가"
+                            :
+                            "날짜 추가"}
                       </CustomizedChangeTypography>
                     </CustomizedWhenVerticalWrapperDiv>
                   </CustomizedSearchInsideButton>
@@ -193,38 +269,48 @@ export default function Navbar() {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
               >
+                <CustomizedDeleteIconButton onClick={resetFunction} top={buttonPosition.top} left={buttonPosition.left} deleteButtonExist={deleteButtonExist}>
+                  <CustomziedClearIcon />
+                </CustomizedDeleteIconButton>
                 <Calendar />
               </CustomizedMenu>
 
 
-              <CustomizedAdditionalDivider orientation="vertical" flexItem change={change} />
+              <CustomizedAdditionalDivider id="secondDivider" orientation="vertical" flexItem change={change} />
               {activeButton === "button3" ?
-                <CustomizedAdditionalActiveSearchButton variant="contained" disableRipple sx={{ paddingLeft: "20px", paddingRight: secondPickedDate ? "5px" : "20px" }} change={change}>
+                <CustomizedAdditionalActiveSearchButton id="activeCheckOutButton" variant="contained" disableRipple sx={{ paddingLeft: "20px", paddingRight: "20px" }} change={change} onClick={handleCheckInOutClick}>
                   <CustomizedAddtionalWhenVerticalWrapperDiv change={change}>
                     <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500">
                       {change ? "체크아웃" : ""}
                     </CustomizedTypography>
                     <CustomizedChangeTypography change={change}>
-                      {!secondPickedDate ? "날짜 추가" : secondPickedDate}
+                      {firstPickedFirst ?
+                        secondPickedDate ? secondPickedDate : "날짜 추가"
+                        :
+                        firstPickedDate ? secondPickedDate ? secondPickedDate : firstPickedDate
+                          :
+                          "날짜 추가"}
                     </CustomizedChangeTypography>
                   </CustomizedAddtionalWhenVerticalWrapperDiv>
-                  {secondPickedDate ? <CustomizedDeleteIconButton onClick={resetFunction}>
-                    <CustomziedClearIcon />
-                  </CustomizedDeleteIconButton> : null}
                 </CustomizedAdditionalActiveSearchButton>
                 :
-                <CustomizedAdditionalSearchInsideButton change={change} disableRipple sx={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={() => handleButtonClick('button3')}>
+                <CustomizedAdditionalSearchInsideButton id="inactiveCheckOutButton" change={change} disableRipple sx={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={() => handleButtonClick('button3')}>
                   <CustomizedAddtionalWhenVerticalWrapperDiv change={change}>
                     <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500">
                       {change ? "체크아웃" : ""}
                     </CustomizedTypography>
                     <CustomizedChangeTypography change={change}>
-                      {!secondPickedDate ? "날짜 추가" : secondPickedDate}
+                      {firstPickedFirst ?
+                        secondPickedDate ? secondPickedDate : "날짜 추가"
+                        :
+                        firstPickedDate ? secondPickedDate ? secondPickedDate : firstPickedDate
+                          :
+                          "날짜 추가"}
                     </CustomizedChangeTypography>
                   </CustomizedAddtionalWhenVerticalWrapperDiv>
                 </CustomizedAdditionalSearchInsideButton>
               }
-              <CustomizedDivider orientation="vertical" flexItem change={change} />
+              <CustomizedDivider id="thirdDivider" orientation="vertical" flexItem change={change} />
               <CustomizedGuestVerticalWrapperDiv change={change}>
                 {!change ?
                   <div onClick={() => handleButtonClick('button4')} style={{ height: "50px", display: "flex", alignItems: "center" }}>

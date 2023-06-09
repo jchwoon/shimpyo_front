@@ -3,3 +3,39 @@
     padding: 0px !important;
     min-width: auto !important;
 }
+
+.custom-calendar .eTvjeY {
+    :hover {
+        border-color: #00adb580
+    }
+}
+
+.custom-calendar .dGYNXH {
+    background-color: #00adb5;
+}
+
+.custom-calendar .kNnvYN {
+    :hover {
+        border-color: #00adb580
+    }
+}
+
+.custom-calendar .iNDSBv {
+    :hover {
+        border-color: #00adb580
+    }
+}
+
+.custom-calendar .hSFEkj {
+    :hover {
+        border-color: #00adb580
+    }
+}
+
+.MuiAutocomplete-popper {
+    padding-top: 10px;
+}
+
+.MuiOutlinedInput-root {
+    padding: 0px !important;
+}

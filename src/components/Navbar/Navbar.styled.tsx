@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import styled from '@emotion/styled';
 
-import { Divider, IconButton, Menu, MenuItem, TextField } from '@mui/material';
+import { Autocomplete, Divider, IconButton, Menu, MenuItem, TextField } from '@mui/material';
 
 import Avatar from '@mui/material/Avatar';
 import SearchIcon from '@mui/icons-material/Search';
@@ -205,7 +205,7 @@ export const CustomizedAccountCircleIcon = styled(AccountCircleIcon)`
 color: #717171;
 `
 
-export const CustomizedTextfield = styled(TextField)<{ change: boolean }>(({ change }) => ({
+export const CustomizedTextfield = styled(TextField)(() => ({
   '& .MuiOutlinedInput-root': {
     '& .MuiOutlinedInput-input': {
       padding: '0px',
@@ -225,7 +225,29 @@ export const CustomizedTextfield = styled(TextField)<{ change: boolean }>(({ cha
     fontWeight: 400,
     fontSize: "15px",
   },
-  display: change ? 'block' : 'none',
+}));
+
+export const CustomizedAutocomplete = styled(Autocomplete)(() => ({
+  '& .MuiOutlinedInput-root': {
+    padding: "0px",
+    '& .MuiOutlinedInput-input': {
+      padding: '0px',
+    },
+    '& fieldset': {
+      borderColor: 'transparent',
+    },
+    '&:hover fieldset': {
+      borderColor: 'transparent',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: 'transparent',
+    },
+  },
+  '& .MuiInputBase-input::placeholder': {
+    fontFamily: "Noto Sans KR",
+    fontWeight: 400,
+    fontSize: "15px",
+  },
 }));
 
 export const CustomizedWrapperDiv = styled.div`
@@ -235,7 +257,6 @@ display:flex;
 
 export const CustomizedMenu = styled(Menu)`
 margin-top:10px;
-
 `
 
 export const CustomizedGuestCountMenuItem = styled(MenuItem)`
@@ -257,16 +278,23 @@ export const CustomizedIconButton = styled(IconButton)`
 }
 `
 
-export const CustomizedDeleteIconButton = styled(IconButton)`
-background-color : #ebebeb;
+export const CustomizedDeleteIconButton = styled(IconButton) <{ top: number, left: number, deleteButtonExist: boolean }>`
+// background-color : #ebebeb;
+background-color : #00adb5;
 width: 30px;
 height: 30px;
 :hover {
-  background-color: #dedede;
+  // background-color: #dedede;
+  background-color: #00c5cf;
 }
+position: fixed;
+top: ${props => props.top}px;
+left: ${props => props.left}px;
+visibility:${({ deleteButtonExist }) => (deleteButtonExist ? "visible" : "hidden")};
 `
 
 export const CustomziedClearIcon = styled(ClearIcon)`
 width: 15px;
 height: 15px;
+color:white;
 `
