@@ -45,12 +45,13 @@ const StyledItemButton = styled.button`
     transition: transform 0.2s ease;
   }
 
-  ${props => {
-    if (props['aria-checked'] === true)
+  ${({ 'aria-checked': ariaChecked }) => {
+    if (ariaChecked === true) {
       return `
-    background-color: rgba(0,0,0,0.05);
-    border: 3px solid black;
+      background-color: rgba(0, 0, 0, 0.05);
+      border: 3px solid black;
     `;
+    }
   }}
 `;
 
