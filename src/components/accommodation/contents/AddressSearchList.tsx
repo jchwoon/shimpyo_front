@@ -24,8 +24,8 @@ export default function AddressSearchList({ searchResult, focus, searchWord }: A
   if (searchResult.predictions) {
     return (
       <StyledListContainer focus={focus}>
-        {searchResult.predictions.map((element: any) => {
-          return <AddressSearchItem element={element} />;
+        {searchResult.predictions.map((element: any, idx) => {
+          return <AddressSearchItem key={idx} element={element} />;
         })}
         <StyledItem>
           <StyledFlexContainer>
@@ -58,9 +58,12 @@ const StyledListContainer = styled.ul<focusProps>`
 
   ${props => {
     if (props.focus === false) {
-      return `display: none`;
+      return `
+        visibility: hidden;
+        transition: visibility 0.1s ease-in-out;
+      `;
     } else {
-      return `display: block`;
+      return `visibility: visible`;
     }
   }}
 `;
