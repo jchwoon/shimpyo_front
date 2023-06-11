@@ -32,8 +32,8 @@
     }
 }
 
-.MuiAutocomplete-popper {
-    padding-top: 10px;
+.css-1q60rmi-MuiAutocomplete-endAdornment  {
+    display: none;
 }
 
 .MuiOutlinedInput-root {

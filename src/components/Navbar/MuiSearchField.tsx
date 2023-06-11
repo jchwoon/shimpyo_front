@@ -7,9 +7,13 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import parse from 'autosuggest-highlight/parse';
 import { debounce } from '@mui/material/utils';
+import { Popper, Paper, PaperProps } from '@mui/material';
 
-import { CustomizedTextfield } from './Navbar.styled';
+import { CustomizedTextfield, CustomizedAutocomplete } from './Navbar.styled';
 
+const CustomPaper = (props: PaperProps) => {
+    return <Paper {...props} sx={{marginTop:"20px"}} />
+}
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyA5ADsk4mK_A2hZuC2dSIHLpHGKFbixz88';
 
@@ -45,6 +49,7 @@ export default function GoogleMaps() {
     const [value, setValue] = React.useState<PlaceType | null>(null);
     const [inputValue, setInputValue] = React.useState('');
     const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
+    const [open, setOpen] = React.useState<boolean>(false)
     const loaded = React.useRef(false);
 
     if (typeof window !== 'undefined' && !loaded.current) {
@@ -132,15 +137,31 @@ export default function GoogleMaps() {
             filterSelectedOptions
             value={value}
             noOptionsText="여행지가 없습니다."
+
+            PaperComponent={CustomPaper}
+
             onChange={(event: any, newValue: PlaceType | null) => {
                 setOptions(newValue ? [newValue, ...options] : options);
                 setValue(newValue);
             }}
-            onInputChange={(event, newInputValue) => {
-                setInputValue(newInputValue);
+            // onInputChange={(event, newInputValue) => {
+            //     setInputValue(newInputValue);
+            // }}
+
+            open={open}
+            onInputChange={(event, value) => {
+                if (value.length === 0) {
+                    if (open) setOpen(false);
+                  } else {
+                    if (!open) setOpen(true);
+                  }
+
+                setInputValue(value);
             }}
+            onClose={() => setOpen(false)}
+
             renderInput={(params) => (
-                <CustomizedTextfield {...params} variant="outlined" fullWidth placeholder='여행지 검색' />
+                <CustomizedTextfield {...params} variant="outlined" fullWidth placeholder={"여행지 검색"} />
             )}
             renderOption={(props, option) => {
                 const matches =
@@ -152,7 +173,7 @@ export default function GoogleMaps() {
                 );
 
                 return (
-                    <li {...props}>
+                    <li {...props} >
                         <Grid container alignItems="center" >
                             <Grid item sx={{ display: 'flex', width: 44 }}>
                                 <LocationOnIcon sx={{ color: 'text.secondary' }} />

@@ -227,28 +227,34 @@ export const CustomizedTextfield = styled(TextField)(() => ({
   },
 }));
 
-export const CustomizedAutocomplete = styled(Autocomplete)(() => ({
-  '& .MuiOutlinedInput-root': {
-    padding: "0px",
-    '& .MuiOutlinedInput-input': {
-      padding: '0px',
-    },
-    '& fieldset': {
-      borderColor: 'transparent',
-    },
-    '&:hover fieldset': {
-      borderColor: 'transparent',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: 'transparent',
-    },
-  },
-  '& .MuiInputBase-input::placeholder': {
-    fontFamily: "Noto Sans KR",
-    fontWeight: 400,
-    fontSize: "15px",
-  },
-}));
+// export const CustomizedAutocomplete = styled(Autocomplete)(() => ({
+//   '& .MuiOutlinedInput-root': {
+//     padding: "0px",
+//     '& .MuiOutlinedInput-input': {
+//       padding: '0px',
+//     },
+//     '& fieldset': {
+//       borderColor: 'transparent',
+//     },
+//     '&:hover fieldset': {
+//       borderColor: 'transparent',
+//     },
+//     '&.Mui-focused fieldset': {
+//       borderColor: 'transparent',
+//     },
+//   },
+//   '& .MuiInputBase-input::placeholder': {
+//     fontFamily: "Noto Sans KR",
+//     fontWeight: 400,
+//     fontSize: "15px",
+//   },
+// }));
+
+export const CustomizedAutocomplete = styled(Autocomplete)`
+autoCompleteResults: {
+  paddingTop: '10px',
+},
+`
 
 export const CustomizedWrapperDiv = styled.div`
 display:flex;
