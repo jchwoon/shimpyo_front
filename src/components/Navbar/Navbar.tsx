@@ -24,7 +24,9 @@ import {
   CustomizedAdditionalActiveSearchButton,
   CustomizedMenu,
   CustomizedDeleteIconButton,
-  CustomziedClearIcon
+  CustomziedClearIcon,
+  CustomizedDeleteIconButtonInSearchField,
+  CustomizedDeleteIconButtonInGuestCount
 } from "./Navbar.styled"
 import logo2 from "../../logo2.svg"
 import { Divider, ClickAwayListener } from '@mui/material';
@@ -41,7 +43,7 @@ import { Calendar } from "./Calendar";
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
 
 import GoogleMaps from "./MuiSearchField";
-import Combobox from "./SearchField";
+import { relative } from "path";
 
 export default function Navbar() {
 
@@ -50,6 +52,8 @@ export default function Navbar() {
   const [change, setChange] = useRecoilState(Change);
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
   const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
+
+  const [GoogleMapsPlaceholder, setGoogleMapsPlaceholder] = useState('')
 
   const handleClick = () => {
     setAppBarHeight("160px");
@@ -92,13 +96,19 @@ export default function Navbar() {
   };
 
   const [AdultGuestNumber, setAdultGuestNumber] = useRecoilState(AdultGuest);
-  const ChildGuestNumber = useRecoilValue(ChildGuest);
-  const InfantGuestNumber = useRecoilValue(InfantGuest);
+  const [ChildGuestNumber, setChildGuestNumber] = useRecoilState(ChildGuest);
+  const [InfantGuestNumber, setInfantGuestNumber] = useRecoilState(InfantGuest);
   const TotalGuestNumber = AdultGuestNumber + ChildGuestNumber
   if (InfantGuestNumber > 0 && AdultGuestNumber === 0) {
     setAdultGuestNumber(prevValue => prevValue + 1)
   }
   const TotalGuestNumberCount = InfantGuestNumber === 0 ? `게스트 ${TotalGuestNumber}명` : `게스트 ${TotalGuestNumber} 명, 유아 ${InfantGuestNumber}명 `
+
+  const guestCountReset = () => {
+    setAdultGuestNumber(0);
+    setChildGuestNumber(0);
+    setInfantGuestNumber(0);
+  }
 
   //calendar delete button
   const [deleteButtonExist, setDeleteButtonExist] = useState(false)
@@ -120,8 +130,17 @@ export default function Navbar() {
 
   const firstDivider = document.getElementById('firstDivider')
   const secondDivider = document.getElementById('secondDivider')
-
+  const thirdDivider = document.getElementById('thirdDivider')
   const targetDiv = document.querySelector('.jshaaC, .iNDSBv');
+
+  //searchfield delete button
+
+  const [placeholderChanged, setPlaceholderChanged] = useState(false)
+
+  const resetFunctionInSearchField = () => {
+    setGoogleMapsPlaceholder('')
+    setPlaceholderChanged(false)
+  }
 
 
   useEffect(() => {
@@ -182,7 +201,15 @@ export default function Navbar() {
         <CustomizedSearchButtonWrapperDiv change={change}>
           <ClickAwayListener onClickAway={clickAwayHandler}>
 
-            <CustomizedSearchButton id="customizedSearchButton" variant="contained" disableRipple onClick={handleClick} change={change} disableElevation={change ? true : false} activeButton={activeButton}>
+            <CustomizedSearchButton
+              id="customizedSearchButton"
+              variant="contained"
+              disableRipple
+              onClick={handleClick}
+              change={change}
+              disableElevation={change ? true : false}
+              activeButton={activeButton}
+            >
               {!change ?
                 <div onClick={() => handleButtonClick('button1')} style={{ height: "50px", display: "flex", alignItems: "center" }}>
                   <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" textAlign="left" sx={{ paddingLeft: "20px", paddingRight: "15px" }}>
@@ -191,31 +218,29 @@ export default function Navbar() {
                 </div>
                 :
                 activeButton === "button1" ?
-                  <CustomizedActiveSearchButton variant="contained" disableRipple sx={{ paddingLeft: "20px" }}>
-                    <CustomizedWhereVerticalWrapperDiv change={change}>
-                      <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" textAlign="left" >
-                        여행지
-                      </CustomizedTypography>
-
-                      {/* <Combobox /> */}
-                      {/* <CustomizedTextfield placeholder="여행지 검색" variant="outlined" sx={{ width: "200px" }} /> */}
-                      <GoogleMaps />
-
-
-                    </CustomizedWhereVerticalWrapperDiv>
-                  </CustomizedActiveSearchButton>
+                  <>
+                    {placeholderChanged ?
+                      <CustomizedDeleteIconButtonInSearchField onClick={resetFunctionInSearchField} top={0} left={-10} >
+                        <CustomziedClearIcon />
+                      </CustomizedDeleteIconButtonInSearchField>
+                      :
+                      null}
+                    <CustomizedActiveSearchButton variant="contained" disableRipple sx={{ paddingLeft: "20px" }} >
+                      <CustomizedWhereVerticalWrapperDiv change={change}>
+                        <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" textAlign="left" >
+                          여행지
+                        </CustomizedTypography>
+                        <GoogleMaps placeholder={GoogleMapsPlaceholder} setPlaceholder={setGoogleMapsPlaceholder} setPlaceholderChanged={setPlaceholderChanged} />
+                      </CustomizedWhereVerticalWrapperDiv>
+                    </CustomizedActiveSearchButton>
+                  </>
                   :
                   <CustomizedSearchInsideButton change={change} disableRipple sx={{ paddingLeft: "20px" }} onClick={() => handleButtonClick('button1')} >
                     <CustomizedWhereVerticalWrapperDiv change={change}>
                       <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" textAlign="left" >
                         여행지
                       </CustomizedTypography>
-
-                      {/* <Combobox /> */}
-                      {/* <CustomizedTextfield placeholder="여행지 검색" variant="outlined" sx={{ width: "200px" }} /> */}
-                      <GoogleMaps />
-
-
+                      <GoogleMaps placeholder={GoogleMapsPlaceholder} setPlaceholder={setGoogleMapsPlaceholder} setPlaceholderChanged={setPlaceholderChanged} />
                     </CustomizedWhereVerticalWrapperDiv>
                   </CustomizedSearchInsideButton>
               }
@@ -354,6 +379,15 @@ export default function Navbar() {
                   <GuestCountChild />
                   <Divider variant="middle" />
                   <GuestCountInfant />
+                  {TotalGuestNumber > 0 ?
+                    <CustomizedDeleteIconButtonInGuestCount
+                      onClick={guestCountReset}
+                      top={thirdDivider ? thirdDivider.getBoundingClientRect().top - 5 : 0}
+                      left={thirdDivider ? thirdDivider.getBoundingClientRect().left - 10 : 0} >
+                      <CustomziedClearIcon />
+                    </CustomizedDeleteIconButtonInGuestCount>
+                    :
+                    null}
                 </CustomizedMenu>
 
               </CustomizedGuestVerticalWrapperDiv>

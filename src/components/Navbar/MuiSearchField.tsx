@@ -12,7 +12,7 @@ import { Popper, Paper, PaperProps } from '@mui/material';
 import { CustomizedTextfield, CustomizedAutocomplete } from './Navbar.styled';
 
 const CustomPaper = (props: PaperProps) => {
-    return <Paper {...props} sx={{marginTop:"20px"}} />
+    return <Paper {...props} sx={{ marginTop: "20px" }} />
 }
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyA5ADsk4mK_A2hZuC2dSIHLpHGKFbixz88';
@@ -45,7 +45,13 @@ interface PlaceType {
     structured_formatting: StructuredFormatting;
 }
 
-export default function GoogleMaps() {
+interface GoogleMapsProps {
+    placeholder: string;
+    setPlaceholder: (value: string) => void;
+    setPlaceholderChanged: (value: boolean) => void;
+}
+
+const GoogleMaps: React.FC<GoogleMapsProps> = ({ placeholder, setPlaceholder, setPlaceholderChanged }) => {
     const [value, setValue] = React.useState<PlaceType | null>(null);
     const [inputValue, setInputValue] = React.useState('');
     const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
@@ -143,25 +149,24 @@ export default function GoogleMaps() {
             onChange={(event: any, newValue: PlaceType | null) => {
                 setOptions(newValue ? [newValue, ...options] : options);
                 setValue(newValue);
+                setPlaceholderChanged(true);
             }}
-            // onInputChange={(event, newInputValue) => {
-            //     setInputValue(newInputValue);
-            // }}
 
             open={open}
             onInputChange={(event, value) => {
                 if (value.length === 0) {
                     if (open) setOpen(false);
-                  } else {
+                } else {
                     if (!open) setOpen(true);
-                  }
+                }
 
                 setInputValue(value);
+                setPlaceholder(value);
             }}
             onClose={() => setOpen(false)}
 
             renderInput={(params) => (
-                <CustomizedTextfield {...params} variant="outlined" fullWidth placeholder={"여행지 검색"} />
+                <CustomizedTextfield {...params} variant="outlined" fullWidth placeholder={placeholder ? placeholder : "여행지 검색"} />
             )}
             renderOption={(props, option) => {
                 const matches =
@@ -199,3 +204,5 @@ export default function GoogleMaps() {
         />
     );
 }
+
+export default GoogleMaps

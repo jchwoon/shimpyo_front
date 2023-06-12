@@ -284,13 +284,17 @@ export const CustomizedIconButton = styled(IconButton)`
 }
 `
 
+export const CustomziedClearIcon = styled(ClearIcon)`
+width: 15px;
+height: 15px;
+color:white;
+`
+
 export const CustomizedDeleteIconButton = styled(IconButton) <{ top: number, left: number, deleteButtonExist: boolean }>`
-// background-color : #ebebeb;
 background-color : #00adb5;
 width: 30px;
 height: 30px;
 :hover {
-  // background-color: #dedede;
   background-color: #00c5cf;
 }
 position: fixed;
@@ -299,8 +303,29 @@ left: ${props => props.left}px;
 visibility:${({ deleteButtonExist }) => (deleteButtonExist ? "visible" : "hidden")};
 `
 
-export const CustomziedClearIcon = styled(ClearIcon)`
-width: 15px;
-height: 15px;
-color:white;
+export const CustomizedDeleteIconButtonInSearchField = styled(IconButton) <{ top: number, left: number }>`
+background-color : #00adb5;
+width: 30px;
+height: 30px;
+:hover {
+  background-color: #00c5cf;
+}
+position: absolute;
+top: ${props => props.top}px;
+left: ${props => props.left}px;
+z-index:1;
+`
+
+export const CustomizedDeleteIconButtonInGuestCount = styled(IconButton) <{ top: number, left: number }>`
+background-color : #00adb5;
+width: 30px;
+height: 30px;
+:hover {
+  background-color: #00c5cf;
+}
+position:  fixed;
+// display: fixed
+top: ${props => props.top}px;
+left: ${props => props.left}px;
+// z-index:10;
 `

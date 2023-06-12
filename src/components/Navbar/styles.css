@@ -32,8 +32,12 @@
     }
 }
 
-.css-1q60rmi-MuiAutocomplete-endAdornment  {
-    display: none;
+.css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator {
+    display: none !important;
+}
+
+.css-1glvl0p-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-clearIndicator {
+    display: none !important;
 }
 
 .MuiOutlinedInput-root {
