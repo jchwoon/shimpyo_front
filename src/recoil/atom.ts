@@ -1,13 +1,23 @@
 import { atom } from 'recoil';
 
-export const loginModalAtom = atom<boolean>({
-  key: 'LoginState',
+export const joinModalAtom = atom<boolean>({
+  key: 'joinModalAtom',
+  default: true,
+});
+
+export const additionalInfoModalAtom = atom<boolean>({
+  key: 'additionalInfoModalAtom',
   default: false,
 });
 
-export const joinModalAtom = atom<boolean>({
-  key: 'JoinState',
-  default: true,
+export const accountInfoFindModalAtom = atom<boolean>({
+  key: 'accountInfoFindModalAtom',
+  default: false,
+});
+
+export const loginModalAtom = atom<boolean>({
+  key: 'loginModalAtom',
+  default: false,
 });
 
 export const passwordValueAtom = atom<string>({
@@ -20,11 +30,6 @@ export const confirmPasswordValueAtom = atom<string>({
   default: '',
 });
 
-export const additionalInfoModalAtom = atom<boolean>({
-  key: 'additionalInfoModalAtom',
-  default: false,
-});
-
 export const nicknameValueAtom = atom<string>({
   key: 'nicknameValueAtom',
   default: '',
@@ -32,5 +37,15 @@ export const nicknameValueAtom = atom<string>({
 
 export const emailValueAtom = atom<string>({
   key: 'emailValueAtom',
+  default: '',
+});
+
+export const phoneValueAtom = atom<string>({
+  key: 'phoneValueAtom',
+  default: '',
+});
+
+export const accessTokenAtom = atom<string>({
+  key: 'accessTokenAtom',
   default: '',
 });
