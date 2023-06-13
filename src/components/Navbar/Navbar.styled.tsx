@@ -23,7 +23,7 @@ position: fixed;
 transition: height 0.3s ease;
 `
 
-export const CustomizedToolBar = styled(Toolbar) <{ change: boolean }>`
+export const CustomizedToolBar = styled(Toolbar)`
 height: 80px;
 justify-content: space-between;
 `
@@ -35,23 +35,9 @@ border-color: #ffffff;
 }
 `
 
-// export const CustomizedSearchButtonWrapperDiv = styled.div<{ change: boolean }>`
-// position:fixed;
-// display:flex;
-// justify-content:center;
-// align-items:${({ change }) => (change ? "flex-end" : "center")};
-// top:${({ change }) => (change ? "80px" : "0px")};
-// left:0px;
-// height: 80px;
-// width: 100%;
-// transition: 0.3s ease;
-// padding-bottom:${({ change }) => (change ? "10px" : "0px")};
-// `
 
 export const CustomizedSearchButtonWrapperDiv = styled.div<{ change: boolean }>`
 display:flex;
-// justify-content:center;
-// align-items:${({ change }) => (change ? "flex-end" : "center")};
 align-items: flex-end;
 height: ${({ change }) => (change ? "240px" : "50px")};
 transition: 0.3s ease;
@@ -90,11 +76,9 @@ height: ${({ change }) => (change ? "70px" : "50px")};
 display: flex;
 justify-content: center; 
 color: #000000;
-// background-color: #ffffff;
 background-color: ${({ activeButton }) => (activeButton === "" ? "#ffffff" : "#ebebeb")};
 border-radius: 50px;
 :hover {
-  // background-color: #ffffff;
   background-color:${({ activeButton }) => (activeButton === "" ? "#ffffff" : "#ebebeb")};
 }
 padding-left: 0px;
@@ -227,29 +211,6 @@ export const CustomizedTextfield = styled(TextField)(() => ({
   },
 }));
 
-// export const CustomizedAutocomplete = styled(Autocomplete)(() => ({
-//   '& .MuiOutlinedInput-root': {
-//     padding: "0px",
-//     '& .MuiOutlinedInput-input': {
-//       padding: '0px',
-//     },
-//     '& fieldset': {
-//       borderColor: 'transparent',
-//     },
-//     '&:hover fieldset': {
-//       borderColor: 'transparent',
-//     },
-//     '&.Mui-focused fieldset': {
-//       borderColor: 'transparent',
-//     },
-//   },
-//   '& .MuiInputBase-input::placeholder': {
-//     fontFamily: "Noto Sans KR",
-//     fontWeight: 400,
-//     fontSize: "15px",
-//   },
-// }));
-
 export const CustomizedAutocomplete = styled(Autocomplete)`
 autoCompleteResults: {
   paddingTop: '10px',
@@ -324,8 +285,6 @@ height: 30px;
   background-color: #00c5cf;
 }
 position:  fixed;
-// display: fixed
 top: ${props => props.top}px;
 left: ${props => props.left}px;
-// z-index:10;
 `

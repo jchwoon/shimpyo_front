@@ -1,41 +1,37 @@
-.custom-calendar .jjxnOy {
+.custom-calendar2 .jjxnOy {
     box-shadow: none;
     padding: 0px !important;
     min-width: auto !important;
 }
 
-.custom-calendar .eTvjeY {
-    :hover {
-        border-color: #00adb580
-    }
-}
-
-.custom-calendar .dGYNXH {
-    background-color: #00adb5;
-}
-
-.custom-calendar .kNnvYN {
-    :hover {
-        border-color: #00adb580
-    }
-}
-
-.custom-calendar .iNDSBv {
-    :hover {
-        border-color: #00adb580
-    }
-}
-
-.custom-calendar .hSFEkj {
-    :hover {
-        border-color: #00adb580
-    }
-}
-
-.css-1q60rmi-MuiAutocomplete-endAdornment {
+.custom-calendar2 .jjxnOy .eCkURD:last-of-type {
     display: none !important;
 }
 
-.MuiOutlinedInput-root {
-    padding: 0px !important;
+.custom-calendar2 .eTvjeY {
+    :hover {
+        border-color: #00adb580
+    }
+}
+
+.custom-calendar2 .dGYNXH {
+    background-color: #00adb5;
+}
+
+.custom-calendar2 .kNnvYN {
+    :hover {
+        border-color: #00adb580
+    }
+}
+
+.custom-calendar2 .iNDSBv {
+    :hover {
+        border-color: #00adb580
+    }
+}
+
+.custom-calendar2 .hSFEkj {
+    :hover {
+        border-color: #00adb580
+    }
 }

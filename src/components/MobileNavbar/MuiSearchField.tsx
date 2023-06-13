@@ -8,10 +8,12 @@ import parse from 'autosuggest-highlight/parse';
 import { debounce } from '@mui/material/utils';
 import { Paper, PaperProps } from '@mui/material';
 
-import { CustomizedTextfield } from './Navbar.styled';
+import { CustomizedTextfield } from './MobileNavbar.style';
+
+import "./styles.css"
 
 const CustomPaper = (props: PaperProps) => {
-    return <Paper {...props} sx={{ marginTop: "20px" }} />
+    return <Paper {...props} elevation={0} sx={{}} />
 }
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyA5ADsk4mK_A2hZuC2dSIHLpHGKFbixz88';
@@ -131,7 +133,9 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({ placeholder, setPlaceholder, se
     return (
         <Autocomplete
             id="google-map-demo"
-            sx={{ width: 200, borderColor: "white" }}
+            sx={{
+                width: "100%", borderColor: "white"
+            }}
             getOptionLabel={(option) =>
                 typeof option === 'string' ? option : option.description
             }
@@ -141,7 +145,9 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({ placeholder, setPlaceholder, se
             includeInputInList
             filterSelectedOptions
             value={value}
-            noOptionsText={<Typography sx={{ fontFamily: "Noto Sans KR" }}>여행지가 없습니다.</Typography>}
+            noOptionsText={
+                < Typography sx={{ fontFamily: "Noto Sans KR" }}> 여행지가 없습니다.</Typography >
+            }
 
             PaperComponent={CustomPaper}
 
@@ -165,7 +171,7 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({ placeholder, setPlaceholder, se
             onClose={() => setOpen(false)}
 
             renderInput={(params) => (
-                <CustomizedTextfield {...params} variant="outlined" fullWidth placeholder={placeholder ? placeholder : "여행지 검색"} />
+                <CustomizedTextfield {...params} variant="outlined" fullWidth placeholder={placeholder ? placeholder : "여행지 검색"} sx={{ paddingLeft: "0px" }} />
             )}
             renderOption={(props, option) => {
                 const matches =
@@ -177,7 +183,7 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({ placeholder, setPlaceholder, se
                 );
 
                 return (
-                    <li {...props} >
+                    <li {...props} style={{ paddingLeft: "0px" }} >
                         <Grid container alignItems="center" >
                             <Grid item sx={{ display: 'flex', width: 44 }}>
                                 <LocationOnIcon sx={{ color: 'text.secondary' }} />

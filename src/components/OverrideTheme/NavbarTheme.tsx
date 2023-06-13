@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
-const defaultTheme = createTheme({
+const NavbarTheme = createTheme({
     components: {
         MuiAppBar: {
             styleOverrides: {
@@ -16,7 +16,14 @@ const defaultTheme = createTheme({
                 },
             },
         },
+        MuiPopover: {
+            styleOverrides: {
+                paper: {
+                    borderRadius: "20px"
+                },
+            },
+        },
     },
 });
 
-export default defaultTheme
+export default NavbarTheme

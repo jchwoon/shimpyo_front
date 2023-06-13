@@ -36,14 +36,13 @@ import { Height, Display, Change, AdultGuest, ChildGuest, InfantGuest, FirstPick
 import { useState, useEffect } from "react";
 
 import {
-  useDatePickReset
+  useDatePickReset,
 } from '@bcad1591/react-date-picker';
 import { Calendar } from "./Calendar";
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
 
 import GoogleMaps from "./MuiSearchField";
-import { relative } from "path";
 
 export default function Navbar() {
 
@@ -191,7 +190,7 @@ export default function Navbar() {
 
   return (
     <CustomizedAppBar elevation={0} appBarHeight={appBarHeight}>
-      <CustomizedToolBar change={change}>
+      <CustomizedToolBar>
         <LogoButton disableRipple >
           <img src={logo2} alt="website logo" style={{ height: 13, marginBottom: 5 }} />
           <CustomizedLogoTypography>
