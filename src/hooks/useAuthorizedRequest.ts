@@ -1,0 +1,64 @@
+import axios, { AxiosError, AxiosResponse, Method } from 'axios';
+import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { accessTokenAtom } from '../recoil/atom';
+
+const API_URL = process.env.REACT_APP_API_URL;
+
+interface useAuthorizedHookProps {
+  onUnauthorized?: (error: AxiosError) => void;
+}
+
+interface IResponseData<T> {
+  isSuccess: boolean;
+  code: number;
+  message: string;
+  result: T;
+}
+
+interface useAuthorizedRequestProps {
+  url: string;
+  method?: Method;
+  withCredentials?: boolean;
+  body?: any;
+}
+
+export default function useAuthorizedRequest<T>({ onUnauthorized }: useAuthorizedHookProps) {
+  const accessToken = useRecoilValue(accessTokenAtom);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [responseData, setResponseData] = useState<IResponseData<T> | null>(null);
+
+  const axiosInstance = axios.create({
+    baseURL: API_URL,
+    timeout: 5000,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  const sendRequest = async ({ url, method = 'GET', body, withCredentials }: useAuthorizedRequestProps) => {
+    setIsLoading(true);
+    setError(false);
+    setResponseData(null);
+
+    try {
+      const response: AxiosResponse = await axiosInstance({ url, method, data: body, withCredentials });
+      setResponseData(response.data);
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response?.status === 401 && onUnauthorized) {
+          onUnauthorized(error);
+        }
+      } else {
+        setError(true);
+        console.error(error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { isLoading, error, responseData, sendRequest };
+}
