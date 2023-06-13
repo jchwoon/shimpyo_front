@@ -1,16 +1,16 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import Modal from '../../shared/Modal';
-import { additionalInfoModalAtom, confirmPasswordValueAtom, joinModalAtom } from '../../../recoil/atom';
+import { additionalInfoModalAtom, confirmPasswordValueAtom, joinModalAtom, loginModalAtom } from '../../../recoil/atom';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ColorButton from '../../shared/UI/ColorButton';
 import { SiNaver } from 'react-icons/si';
 import { ImBubble } from 'react-icons/im';
 import { FcGoogle } from 'react-icons/fc';
 import SocialButton from './SocialButton';
-import EmailInput from '../EmailInput';
-import PasswordInput from '../PasswordInput';
-import ConfirmPasswordInput from '../ConfirmPasswordInput';
+import EmailInput from '../Input/EmailInput';
+import PasswordInput from '../Input/PasswordInput';
+import ConfirmPasswordInput from '../Input/ConfirmPasswordInput';
 
 export default function JoinModal() {
   const [isEmailValid, setIsEmailValid] = useState(false);
@@ -18,8 +18,7 @@ export default function JoinModal() {
   const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
   const setConfirmPasswordValue = useSetRecoilState(confirmPasswordValueAtom);
 
-  const [isLoading, setIsLoading] = useState(false);
-
+  const setIsLoginModalOpen = useSetRecoilState(loginModalAtom);
   const setIsAdditionalInfoModalOpen = useSetRecoilState(additionalInfoModalAtom);
   const [isJoinModalOpen, setIsJoinModalOpen] = useRecoilState(joinModalAtom);
 
@@ -43,17 +42,6 @@ export default function JoinModal() {
     setIsConfirmPasswordValid(valid);
   };
 
-  useEffect(() => {
-    const signUpSubmitHandler = async () => {
-      try {
-        setIsLoading(true);
-      } catch (error) {
-      } finally {
-        setIsLoading(false);
-      }
-    };
-  }, [isEmailValid, isPasswordValid, isConfirmPasswordValid]);
-
   const title = (
     <div>
       <img width={50} height={20} alt="logo" src="images/logo.png" />
@@ -68,7 +56,6 @@ export default function JoinModal() {
         <PasswordInput getValid={handleGetPasswordValid} />
         <ConfirmPasswordInput getValid={handleGetConfirmPasswordValid} />
         <ColorButton onClick={handleNextButtonClick} disabled={!isValid} label="계속" />
-        <div style={{ height: '100px' }}></div>
       </StyleBody>
       <hr />
     </>
@@ -79,20 +66,48 @@ export default function JoinModal() {
       <SocialButton iconColor="#000000" containerColor="#FEE500" icon={ImBubble} label="카카오 로그인" />
       <SocialButton iconColor="#FFFFFF" containerColor="#17B75E" icon={SiNaver} label="네이버 로그인" />
       <SocialButton containerColor="#F4F4F4" icon={FcGoogle} label="구글 로그인" />
+      <StyleSwitchToLoginButton
+        onClick={() => {
+          setIsJoinModalOpen(false);
+          setIsLoginModalOpen(true);
+        }}
+      >
+        이미 계정이 있으신가요? &rarr;
+      </StyleSwitchToLoginButton>
     </StyleFooter>
   );
-  return <Modal isOpen={isJoinModalOpen} label="회원가입" title={title} body={body} footer={footer} />;
+  return (
+    <Modal
+      onClose={() => setIsJoinModalOpen(false)}
+      isOpen={isJoinModalOpen}
+      label="회원가입"
+      title={title}
+      body={body}
+      footer={footer}
+    />
+  );
 }
 
-const StyleBody = styled.div`
+export const StyleBody = styled.div`
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
 `;
 
-const StyleFooter = styled.div`
+export const StyleFooter = styled.div`
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+`;
+
+export const StyleSwitchToLoginButton = styled.span`
+  font-size: 12px;
+  text-align: center;
+  margin-top: 1rem;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
