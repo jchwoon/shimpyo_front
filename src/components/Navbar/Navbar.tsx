@@ -32,7 +32,18 @@ import logo2 from "../../logo2.svg"
 import { Divider, ClickAwayListener } from '@mui/material';
 import CustomizedMenus from "../LoginModal/LoginModal";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { Height, Display, Change, AdultGuest, ChildGuest, InfantGuest, FirstPickedDate, SecondPickedDate } from "../../recoil/atoms";
+import {
+  Height,
+  Display,
+  Change,
+  AdultGuest,
+  ChildGuest,
+  InfantGuest,
+  FirstPickedDate,
+  SecondPickedDate,
+  googleMapsPlaceholder,
+  PlaceholderChanged
+} from "../../recoil/atoms";
 import { useState, useEffect } from "react";
 
 import {
@@ -51,8 +62,7 @@ export default function Navbar() {
   const [change, setChange] = useRecoilState(Change);
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
   const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
-
-  const [GoogleMapsPlaceholder, setGoogleMapsPlaceholder] = useState('')
+  const [GoogleMapsPlaceholder, setGoogleMapsPlaceholder] = useRecoilState(googleMapsPlaceholder)
 
   const handleClick = () => {
     setAppBarHeight("160px");
@@ -134,7 +144,7 @@ export default function Navbar() {
 
   //searchfield delete button
 
-  const [placeholderChanged, setPlaceholderChanged] = useState(false)
+  const [placeholderChanged, setPlaceholderChanged] = useRecoilState(PlaceholderChanged)
 
   const resetFunctionInSearchField = () => {
     setGoogleMapsPlaceholder('')
@@ -169,22 +179,28 @@ export default function Navbar() {
   const [firstPickedFirst, setFirstPickedFirst] = useState(true)
 
   useEffect(() => {
-    if (activeButton === "button3" && firstPickedFirst === true && targetDiv === null) {
+    // if (activeButton === "button3" && firstPickedFirst === true && targetDiv === null) {
+    if (activeButton === "button3" && firstPickedFirst === true && checkInOutOpen === false) {
+      //정상 순서에서 calendar가 나오기 전 button2에서 button3로 변경할 때 반대 순서로 변경
       setFirstPickedFirst(false)
     }
   }, [activeButton, firstPickedFirst, targetDiv])
 
   useEffect(() => {
-    if (activeButton === "button2" && firstPickedFirst === false && targetDiv === null) {
+    // if (activeButton === "button2" && firstPickedFirst === false && targetDiv === null) {
+    if (activeButton === "button2" && firstPickedFirst === false && checkInOutOpen === false) {
+      //반대 순서에서 calendar가 나오기 전 button3에서 button2로 변경할 때 정상 순서로 변경
       setFirstPickedFirst(true)
     }
   }, [activeButton, firstPickedFirst, targetDiv])
 
-  if (activeButton === "button3" && firstPickedFirst === false && firstPickedDate && !secondPickedDate) {
+  if (activeButton === "button3" && firstPickedFirst === false && firstPickedDate && !secondPickedDate && checkInOutOpen === true) {
+    //반대 순서에서 calendar가 나온 이후 button3에서 button2로 active 변경
     handleButtonClick('button2');
   }
 
-  if (activeButton === "button2" && firstPickedFirst === true && firstPickedDate && !secondPickedDate) {
+  if (activeButton === "button2" && firstPickedFirst === true && firstPickedDate && !secondPickedDate && checkInOutOpen === true) {
+    //정상 순서에서 calendar가 나온 이후 button2에서 button3으로 active 변경
     handleButtonClick('button3');
   }
 

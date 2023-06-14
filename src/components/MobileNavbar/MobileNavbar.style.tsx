@@ -8,12 +8,12 @@ import Avatar from '@mui/material/Avatar';
 import SearchIcon from '@mui/icons-material/Search';
 import Card from '@mui/material/Card';
 import ClearIcon from '@mui/icons-material/Clear';
-import { IconButton, TextField, MenuItem } from '@mui/material';
+import { IconButton, TextField, MenuItem, Fab } from '@mui/material';
 
 export const CustomizedAppBar = styled(AppBar)`
 background-color: #fff;
-padding-left : 40px;
-padding-right : 40px;
+// padding-left : 40px;
+// padding-right : 40px;
 height:80px;
 position: fixed;
 display:flex;
@@ -64,31 +64,47 @@ height:20px;
 width:20px;
 `
 
-export const CustomizedCard = styled(Card)`
+export const CustomizedCard1 = styled(Card) <{ activeCard: string }>`
+margin: 10px 10px 0px 10px;
+padding: 15px;
+border-radius: 15px;
+// height: ${({ activeCard }) => (activeCard === "card1" ? "220px" : "75px")}
+`
+
+export const CustomizedCard2 = styled(Card)`
 margin: 10px 10px 0px 10px;
 padding: 15px;
 border-radius: 15px;
 `
 
-export const CustomizedLastCard = styled(Card)`
+export const CustomizedCard3 = styled(Card)`
 margin: 10px 10px 10px 10px;
 padding: 15px;
 border-radius: 15px;
 `
 
-export const CustomziedClearIcon = styled(ClearIcon)`
+export const CustomizedClearIcon = styled(ClearIcon)`
 width: 15px;
 height: 15px;
 color:white;
 `
 
-export const CustomizedDeleteIconButton = styled(IconButton)`
-background-color : #00adb5;
+// export const CustomizedDeleteIconButton = styled(IconButton)`
+// background-color : #00adb5;
+// width: 30px;
+// height: 30px;
+// :hover {
+//   background-color: #00c5cf;
+// `
+
+export const CustomizedModbileNavbarDeleteIconButton = styled(IconButton)`
+background-color : #dedede;
 width: 30px;
 height: 30px;
 :hover {
-  background-color: #00c5cf;
+  background-color: #d1d1d1;
 `
+
 export const CustomizedBeforeClickDiv = styled.div`
 display:flex;
 flex-direction: column;
@@ -102,7 +118,7 @@ justify-content: space-between;
 export const CustomizedAfterClickDiv = styled.div`
 display:flex;
 flex-direction: column;
-height:300px;
+height:190px;
 `
 
 export const CustomizedCheckInOutAfterClickDiv = styled.div`
@@ -144,4 +160,27 @@ export const CustomizedGuestCountDiv = styled(MenuItem)`
 }
 justify-content: space-between;
 padding-left: 0px;
+`
+
+export const CustomizedDeleteIconButton = styled(IconButton) <{ top: number, left: number }>`
+background-color : #00adb5;
+width: 30px;
+height: 30px;
+:hover {
+  background-color: #00c5cf;
+}
+position: absolute;
+top: ${props => props.top}px;
+left: ${props => props.left}px;
+z-index:10;
+`
+
+export const CustomizedFab = styled(Fab)`
+position: fixed;
+bottom:10px;
+right:10px;
+background-color:#00adb5;
+:hover {
+  background-color: #00c5cf;
+}
 `

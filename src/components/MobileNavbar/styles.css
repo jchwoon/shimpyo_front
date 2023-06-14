@@ -8,19 +8,31 @@
     display: none !important;
 }
 
+.custom-calendar2 .jjxnOy .prevbtn-prevbtn {
+    left: 40px !important;
+}
+
+.custom-calendar2 .jjxnOy .nextbtn-nextbtn {
+    right: 40px !important;
+}
+
 .custom-calendar2 .eTvjeY {
     :hover {
-        border-color: #00adb580
+        border-color: #00adb580;
+        border-radius: 0%;
     }
 }
 
 .custom-calendar2 .dGYNXH {
     background-color: #00adb5;
+    border-radius: 0%;
+    border: 0px;
 }
 
 .custom-calendar2 .kNnvYN {
     :hover {
-        border-color: #00adb580
+        border-color: #00adb580;
+        border-radius: 0%;
     }
 }
 

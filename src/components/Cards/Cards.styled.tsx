@@ -55,7 +55,8 @@ height: 30px;
 `
 
 export const CustomizedFavoriteIcon = styled(FavoriteIcon)`
-color: rgba(255,255,255, 0.5);
+// color: rgba(255,255,255, 0.5);
+color: #00adb580;
 height: 30px;
 `
 
@@ -69,7 +70,8 @@ width: 35px;
     background-color: unset;
   }
 .MuiTouchRipple-child {
-  background-color: rgba(255,255,255, 0.5);
+  // background-color: rgba(255,255,255, 0.5);
+  background-color:#00adb5;
 }
 `
 

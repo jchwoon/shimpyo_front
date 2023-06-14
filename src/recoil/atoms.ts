@@ -39,3 +39,14 @@ export const SecondPickedDate = atom<string | null>({
   key: 'SecondPickedDate',
   default: '',
 })
+
+export const googleMapsPlaceholder = atom<string>({
+  key: 'googleMapsPlaceholder',
+  default: '',
+})
+
+export const PlaceholderChanged = atom<boolean>({
+  key: 'PlaceholderChanged',
+  default: false,
+})
+
