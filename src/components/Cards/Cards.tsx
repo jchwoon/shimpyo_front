@@ -12,7 +12,7 @@ import { Height, Display, Change } from '../../recoil/atoms';
 
 export default function Cards() {
 
-    const [appBarHeight, setAppBarHeight] = useRecoilState(Height);
+    const [appbarheight, setAppBarHeight] = useRecoilState(Height);
     const [customDisplay, setCustomDisplay] = useRecoilState(Display);
     const [change, setChange] = useRecoilState(Change);
     const handleClick = () => {

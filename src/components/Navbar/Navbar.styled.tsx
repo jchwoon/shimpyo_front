@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import styled from '@emotion/styled';
 
-import { Autocomplete, Divider, IconButton, Menu, MenuItem, TextField } from '@mui/material';
+import { Autocomplete, Card, Divider, IconButton, Menu, MenuItem, TextField } from '@mui/material';
 
 import Avatar from '@mui/material/Avatar';
 import SearchIcon from '@mui/icons-material/Search';
@@ -14,11 +14,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import ClearIcon from '@mui/icons-material/Clear';
 
-export const CustomizedAppBar = styled(AppBar) <{ appBarHeight: string }>`
+export const CustomizedAppBar = styled(AppBar) <{ appbarheight: string }>`
 background-color: #fff;
 padding-left : 40px;
 padding-right : 40px;
-height: ${({ appBarHeight }) => appBarHeight};
+height: ${({ appbarheight }) => appbarheight};
 position: fixed;
 transition: height 0.3s ease;
 `
@@ -71,15 +71,30 @@ flex-direction: column;
 justify-content: flex-end;
 `
 
-export const CustomizedSearchButton = styled(Button) <{ change: boolean, activeButton: string }>`
+// export const CustomizedSearchButton = styled(Button) <{ change: boolean, activeButton: string }>`
+// height: ${({ change }) => (change ? "70px" : "50px")};
+// display: flex;
+// justify-content: center; 
+// color: #000000;
+// background-color: ${({ activeButton }) => (activeButton === "" ? "#ffffff" : "#ebebeb")};
+// border-radius: 50px;
+// :hover {
+//   background-color:${({ activeButton }) => (activeButton === "" ? "#ffffff" : "#ebebeb")};
+// }
+// padding-left: 0px;
+// padding-right: 10px;
+// transition: 0.2s ease;
+// `
+
+export const CustomizedSearchButton = styled(Card) <{ change: boolean | undefined, activebutton: string }>`
 height: ${({ change }) => (change ? "70px" : "50px")};
 display: flex;
 justify-content: center; 
 color: #000000;
-background-color: ${({ activeButton }) => (activeButton === "" ? "#ffffff" : "#ebebeb")};
+background-color: ${({ activebutton }) => (activebutton === "" ? "#ffffff" : "#ebebeb")};
 border-radius: 50px;
 :hover {
-  background-color:${({ activeButton }) => (activeButton === "" ? "#ffffff" : "#ebebeb")};
+  background-color:${({ activebutton }) => (activebutton === "" ? "#ffffff" : "#ebebeb")};
 }
 padding-left: 0px;
 padding-right: 10px;
@@ -96,7 +111,7 @@ border-radius: 50px;
 height: 70px;
 `
 
-export const CustomizedSearchInsideButton = styled(Button) <{ change: boolean }>`
+export const CustomizedSearchInsideButton = styled(Button) <{ change: boolean | undefined }>`
 color: #000000;
 border-radius: 50px;
 :hover {
@@ -106,7 +121,7 @@ border: 0px;
 height: 70px;
 `
 
-export const CustomizedAdditionalActiveSearchButton = styled(Button) <{ change: boolean }>`
+export const CustomizedAdditionalActiveSearchButton = styled(Button) <{ change: boolean | undefined }>`
 display:${({ change }) => (change ? "flex" : "none")};
 color: #000000;
 background-color: #ffffff;
@@ -117,7 +132,7 @@ border-radius: 50px;
 height: 70px;
 `
 
-export const CustomizedAdditionalSearchInsideButton = styled(Button) <{ change: boolean }>`
+export const CustomizedAdditionalSearchInsideButton = styled(Button) <{ change: boolean | undefined }>`
 display:${({ change }) => (change ? "flex" : "none")};
 color: #000000;
 border-radius: 50px;
@@ -171,15 +186,26 @@ font-family: sunflower;
 font-size: 25px;
 `
 
-export const CustomizedAvatar = styled(Avatar) <{ change: boolean }>`
+// export const CustomizedAvatar = styled(Avatar) <{ change: boolean }>`
+// background-color: #00ADB5;
+// height:${({ change }) => (change ? "50px" : "32px")};
+// width:${({ change }) => (change ? "50px" : "32px")};
+// `
+
+export const CustomizedAvatar = styled(IconButton) <{ change: boolean | undefined }>`
 background-color: #00ADB5;
 height:${({ change }) => (change ? "50px" : "32px")};
 width:${({ change }) => (change ? "50px" : "32px")};
+:hover {
+  background-color: #00c5cf;
+}
 `
 
-export const CustomizedSearchIcon = styled(SearchIcon) <{ change: boolean }>`
+
+export const CustomizedSearchIcon = styled(SearchIcon) <{ change: boolean | undefined }>`
 height:${({ change }) => (change ? "30px" : "20px")};
 width:${({ change }) => (change ? "30px" : "20px")};
+color: white;
 `
 export const CustomizedMenuIcon = styled(MenuIcon)`
 color: #717171;
