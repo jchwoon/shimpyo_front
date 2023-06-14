@@ -64,11 +64,11 @@ height:20px;
 width:20px;
 `
 
-export const CustomizedCard1 = styled(Card) <{ activeCard: string }>`
+export const CustomizedCard1 = styled(Card) <{ activecard: string }>`
 margin: 10px 10px 0px 10px;
 padding: 15px;
 border-radius: 15px;
-// height: ${({ activeCard }) => (activeCard === "card1" ? "220px" : "75px")}
+// height: ${({ activecard }) => (activecard === "card1" ? "220px" : "75px")}
 `
 
 export const CustomizedCard2 = styled(Card)`

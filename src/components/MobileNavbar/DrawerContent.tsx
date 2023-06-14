@@ -40,12 +40,12 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 
 interface DrawerContentProps {
-    activeCard: string,
+    activecard: string,
     setActiveCard: (value: string) => void;
     open: boolean;
 }
 
-export const DrawerContent: React.FC<DrawerContentProps> = ({ activeCard, setActiveCard, open }) => {
+export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setActiveCard, open }) => {
 
     const [GoogleMapsPlaceholder, setGoogleMapsPlaceholder] = useRecoilState(googleMapsPlaceholder)
     const [placeholderChanged, setPlaceholderChanged] = useRecoilState(PlaceholderChanged)
@@ -88,9 +88,9 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activeCard, setAct
 
     return (
         <>
-            <Collapse in={activeCard === "card1"} collapsedSize={"90px"}>
+            <Collapse in={activecard === "card1"} collapsedSize={"90px"}>
                 <div style={{ position: "relative" }}>
-                    {activeCard === "card1" ?
+                    {activecard === "card1" ?
                         placeholderChanged ?
                             <CustomizedDeleteIconButton top={-10} left={0} onClick={resetFunctionInSearchField} >
                                 <CustomizedClearIcon />
@@ -100,8 +100,8 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activeCard, setAct
                         :
                         null
                     }
-                    <CustomizedCard1 onClick={() => handleCardClick('card1')} className="card1" activeCard={activeCard} >
-                        {activeCard === "card1" ?
+                    <CustomizedCard1 onClick={() => handleCardClick('card1')} className="card1" activecard={activecard} >
+                        {activecard === "card1" ?
                             <CustomizedAfterClickDiv style={{ position: "relative" }}>
                                 <CustomizedTypography fontWeight="500">
                                     여행지
@@ -119,9 +119,9 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activeCard, setAct
                     </CustomizedCard1>
                 </div>
             </Collapse>
-            <Collapse in={activeCard === "card2"} collapsedSize={"90px"}>
+            <Collapse in={activecard === "card2"} collapsedSize={"90px"}>
                 <div style={{ position: "relative" }}>
-                    {activeCard === "card2" ?
+                    {activecard === "card2" ?
                         firstPickedDate ?
                             <CustomizedDeleteIconButton top={-10} left={0} onClick={resetFunction}>
                                 <CustomizedClearIcon />
@@ -132,7 +132,7 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activeCard, setAct
                         null
                     }
                     <CustomizedCard2 onClick={() => handleCardClick('card2')} className="card2">
-                        {activeCard === "card2" ?
+                        {activecard === "card2" ?
                             <CustomizedAfterWhenClickDiv>
                                 <CustomizedCheckInOutAfterClickDiv>
                                     <CustomizedTypography fontWeight="500">
@@ -166,9 +166,9 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activeCard, setAct
                     </CustomizedCard2>
                 </div>
             </Collapse>
-            <Collapse in={activeCard === "card3"} collapsedSize={"90px"}>
+            <Collapse in={activecard === "card3"} collapsedSize={"90px"}>
                 <div style={{ position: "relative" }}>
-                    {activeCard === "card3" ?
+                    {activecard === "card3" ?
                         TotalGuestNumber > 0 ?
                             <CustomizedDeleteIconButton top={-10} left={0} onClick={guestCountReset}>
                                 <CustomizedClearIcon />
@@ -179,7 +179,7 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activeCard, setAct
                         null
                     }
                     <CustomizedCard3 onClick={() => handleCardClick('card3')} className="card3">
-                        {activeCard === "card3" ?
+                        {activecard === "card3" ?
                             <CustomizedBeforeClickDiv>
                                 <CustomizedTypography fontWeight="500">
                                     여행자

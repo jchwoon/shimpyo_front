@@ -21,7 +21,7 @@ export default function MobileNavbar() {
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
     };
-    const [activeCard, setActiveCard] = useState('')
+    const [activecard, setActiveCard] = useState('')
 
     const paperProps = {
         style: { backgroundColor: "#F7F7F7" },
@@ -40,7 +40,7 @@ export default function MobileNavbar() {
                     <CustomizedClearIcon />
                 </CustomizedModbileNavbarDeleteIconButton>
             </div>
-            <DrawerContent activeCard={activeCard} setActiveCard={setActiveCard} open={open} />
+            <DrawerContent activecard={activecard} setActiveCard={setActiveCard} open={open} />
         </SwipeableDrawer>
         <CustomizedAppBar elevation={0}>
             <CustomizedToolBar>
