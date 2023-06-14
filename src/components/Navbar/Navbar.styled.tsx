@@ -99,6 +99,8 @@ border-radius: 50px;
 padding-left: 0px;
 padding-right: 10px;
 transition: 0.2s ease;
+position:relative;
+overflow: visible;
 `
 
 export const CustomizedActiveSearchButton = styled(Button)`

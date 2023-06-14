@@ -179,7 +179,6 @@ export default function Navbar() {
   const [firstPickedFirst, setFirstPickedFirst] = useState(true)
 
   useEffect(() => {
-    // if (activeButton === "button3" && firstPickedFirst === true && targetDiv === null) {
     if (activebutton === "button3" && firstPickedFirst === true && checkInOutOpen === false) {
       //정상 순서에서 calendar가 나오기 전 button2에서 button3로 변경할 때 반대 순서로 변경
       setFirstPickedFirst(false)
@@ -187,7 +186,6 @@ export default function Navbar() {
   }, [activebutton, firstPickedFirst, targetDiv])
 
   useEffect(() => {
-    // if (activeButton === "button2" && firstPickedFirst === false && targetDiv === null) {
     if (activebutton === "button2" && firstPickedFirst === false && checkInOutOpen === false) {
       //반대 순서에서 calendar가 나오기 전 button3에서 button2로 변경할 때 정상 순서로 변경
       setFirstPickedFirst(true)
@@ -218,11 +216,8 @@ export default function Navbar() {
 
             <CustomizedSearchButton
               id="customizedSearchButton"
-              // variant="contained"
-              // disableRipple
               onClick={handleClick}
               change={change ? change : undefined}
-              // disableElevation={change ? true : false}
               activebutton={activebutton}
               elevation={3}
             >
