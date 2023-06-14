@@ -259,7 +259,7 @@ export default function Navbar() {
                     </CustomizedWhereVerticalWrapperDiv>
                   </CustomizedSearchInsideButton>
               }
-              <CustomizedDivider id="firstDivider" orientation="vertical" flexItem change={change} />
+              <CustomizedDivider id="firstDivider" orientation="vertical" flexItem />
               {!change ?
                 <div onClick={() => { handleButtonClick('button2') }} style={{ height: "50px", display: "flex", alignItems: "center" }}>
                   <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" sx={{ paddingLeft: "15px", paddingRight: "15px" }}>
@@ -316,14 +316,14 @@ export default function Navbar() {
               </CustomizedMenu>
 
 
-              <CustomizedAdditionalDivider id="secondDivider" orientation="vertical" flexItem change={change} />
+              <CustomizedAdditionalDivider id="secondDivider" orientation="vertical" flexItem change={change ? change : undefined} />
               {activeButton === "button3" ?
                 <CustomizedAdditionalActiveSearchButton id="activeCheckOutButton" variant="contained" disableRipple sx={{ paddingLeft: "20px", paddingRight: "20px" }} change={change} onClick={handleCheckInOutClick}>
                   <CustomizedAddtionalWhenVerticalWrapperDiv change={change}>
                     <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500">
                       {change ? "체크아웃" : ""}
                     </CustomizedTypography>
-                    <CustomizedChangeTypography change={change}>
+                    <CustomizedChangeTypography change={change ? change : undefined}>
                       {firstPickedFirst ?
                         secondPickedDate ? secondPickedDate : "날짜 추가"
                         :
@@ -339,7 +339,7 @@ export default function Navbar() {
                     <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500">
                       {change ? "체크아웃" : ""}
                     </CustomizedTypography>
-                    <CustomizedChangeTypography change={change}>
+                    <CustomizedChangeTypography change={change ? change : undefined}>
                       {firstPickedFirst ?
                         secondPickedDate ? secondPickedDate : "날짜 추가"
                         :
@@ -350,7 +350,7 @@ export default function Navbar() {
                   </CustomizedAddtionalWhenVerticalWrapperDiv>
                 </CustomizedAdditionalSearchInsideButton>
               }
-              <CustomizedDivider id="thirdDivider" orientation="vertical" flexItem change={change} />
+              <CustomizedDivider id="thirdDivider" orientation="vertical" flexItem />
               <CustomizedGuestVerticalWrapperDiv change={change}>
                 {!change ?
                   <div onClick={() => handleButtonClick('button4')} style={{ height: "50px", display: "flex", alignItems: "center" }}>

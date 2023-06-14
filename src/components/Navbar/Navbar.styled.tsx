@@ -143,10 +143,10 @@ justify-content: space-between;
 box-shadow: unset;
 `
 
-export const CustomizedDivider = styled(Divider) <{ change: boolean }>`
+export const CustomizedDivider = styled(Divider)`
 `
 
-export const CustomizedAdditionalDivider = styled(Divider) <{ change: boolean }>`
+export const CustomizedAdditionalDivider = styled(Divider) <{ change: boolean | undefined }>`
 display:${({ change }) => (change ? "flex" : "none")};
 `
 
@@ -154,7 +154,7 @@ export const CustomizedTypography = styled(Typography)`
 `
 
 interface CustomizedChangeTypographyProps {
-  change: boolean;
+  change: boolean | undefined;
 }
 
 export const CustomizedChangeTypography = styled(Typography) <CustomizedChangeTypographyProps>`
