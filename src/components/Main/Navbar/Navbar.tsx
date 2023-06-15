@@ -3,8 +3,6 @@ import {
   CustomizedAvatar,
   CustomizedDivider,
   CustomizedAdditionalDivider,
-  CustomizedLoginButton,
-  CustomizedMenuIcon,
   CustomizedSearchButton,
   CustomizedSearchInsideButton,
   CustomizedAdditionalSearchInsideButton,
@@ -31,7 +29,7 @@ import {
 import logo2 from "../../../logo2.svg"
 import { Divider, ClickAwayListener } from '@mui/material';
 import CustomizedMenus from "../../LoginModal/LoginModal";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import {
   Height,
   Display,
