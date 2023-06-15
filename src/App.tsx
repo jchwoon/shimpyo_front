@@ -1,12 +1,12 @@
-import Main from "./components/Main/Main";
 import "./fonts.css"
 import "./reset.css"
 import { RecoilRoot } from "recoil";
+import { Outlet } from "react-router-dom"
 
 function App() {
   return (
     <RecoilRoot>
-      <Main />
+      <Outlet />
     </RecoilRoot>
   );
 }

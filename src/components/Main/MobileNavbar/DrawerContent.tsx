@@ -28,7 +28,7 @@ import {
     SecondPickedDate,
     googleMapsPlaceholder,
     PlaceholderChanged
-} from "../../recoil/atoms";
+} from "../../../recoil/atoms";
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
 import { Divider, Collapse } from "@mui/material";
@@ -49,9 +49,11 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
 
     const [GoogleMapsPlaceholder, setGoogleMapsPlaceholder] = useRecoilState(googleMapsPlaceholder)
     const [placeholderChanged, setPlaceholderChanged] = useRecoilState(PlaceholderChanged)
+    const [textfieldInputValue, setTextfieldInputValue] = useState(false)
     const resetFunctionInSearchField = () => {
         setGoogleMapsPlaceholder('')
         setPlaceholderChanged(false)
+        setTextfieldInputValue(false)
     }
     // const [activeCard, setActiveCard] = useState('')
     const handleCardClick = (cardId: string) => {
@@ -106,14 +108,25 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
                                 <CustomizedTypography fontWeight="500">
                                     여행지
                                 </CustomizedTypography>
-                                <GoogleMaps placeholder={GoogleMapsPlaceholder} setPlaceholder={setGoogleMapsPlaceholder} setPlaceholderChanged={setPlaceholderChanged} />
+                                <GoogleMaps
+                                    placeholder={GoogleMapsPlaceholder}
+                                    setPlaceholder={setGoogleMapsPlaceholder}
+                                    setPlaceholderChanged={setPlaceholderChanged}
+                                    textfieldInputValue={textfieldInputValue}
+                                    setTextfieldInputValue={setTextfieldInputValue}
+                                />
                             </CustomizedAfterClickDiv>
                             :
                             <CustomizedBeforeClickDiv>
                                 <CustomizedTypography fontWeight="500">
                                     여행지
                                 </CustomizedTypography>
-                                <GoogleMaps placeholder={GoogleMapsPlaceholder} setPlaceholder={setGoogleMapsPlaceholder} setPlaceholderChanged={setPlaceholderChanged} />
+                                <GoogleMaps
+                                    placeholder={GoogleMapsPlaceholder}
+                                    setPlaceholder={setGoogleMapsPlaceholder}
+                                    setPlaceholderChanged={setPlaceholderChanged}
+                                    textfieldInputValue={textfieldInputValue}
+                                    setTextfieldInputValue={setTextfieldInputValue} />
                             </CustomizedBeforeClickDiv>
                         }
                     </CustomizedCard1>

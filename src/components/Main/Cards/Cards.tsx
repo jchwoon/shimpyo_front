@@ -8,7 +8,7 @@ import {
 } from "./Cards.styled"
 import ToggleFavorite from './ToggleFavorite';
 import { useRecoilState } from "recoil";
-import { Height, Display, Change } from '../../recoil/atoms';
+import { Height, Display, Change } from '../../../recoil/atoms';
 
 export default function Cards() {
 

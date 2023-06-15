@@ -36,7 +36,7 @@ border-color: #ffffff;
 `
 
 
-export const CustomizedSearchButtonWrapperDiv = styled.div<{ change: boolean }>`
+export const CustomizedSearchButtonWrapperDiv = styled.div<{ change: boolean | undefined }>`
 display:flex;
 align-items: flex-end;
 height: ${({ change }) => (change ? "240px" : "50px")};
@@ -44,19 +44,21 @@ transition: 0.3s ease;
 padding-bottom:${({ change }) => (change ? "10px" : "0px")};
 `
 
-export const CustomizedWhereVerticalWrapperDiv = styled.div<{ change: boolean }>`
+export const CustomizedWhereVerticalWrapperDiv = styled.div<{ change: boolean | undefined }>`
 display:flex;
 flex-direction: column;
-justify-content: flex-end;
+justify-content: center;
+align-items: flex-start;
+width: 200px;
 `
 
-export const CustomizedWhenVerticalWrapperDiv = styled.div<{ change: boolean }>`
+export const CustomizedWhenVerticalWrapperDiv = styled.div<{ change: boolean | undefined }>`
 display:flex;
 flex-direction: column;
 justify-content: flex-end;
 `
 interface CustomizedAddtionalWhenVerticalWrapperDivProps {
-  change: boolean;
+  change: boolean | undefined;
 }
 
 export const CustomizedAddtionalWhenVerticalWrapperDiv = styled.div<CustomizedAddtionalWhenVerticalWrapperDivProps>`
@@ -65,7 +67,7 @@ flex-direction: column;
 justify-content: flex-end;
 `
 
-export const CustomizedGuestVerticalWrapperDiv = styled.div<{ change: boolean }>`
+export const CustomizedGuestVerticalWrapperDiv = styled.div<{ change: boolean | undefined }>`
 display:flex;
 flex-direction: column;
 justify-content: flex-end;
@@ -95,12 +97,37 @@ background-color: ${({ activebutton }) => (activebutton === "" ? "#ffffff" : "#e
 border-radius: 50px;
 :hover {
   background-color:${({ activebutton }) => (activebutton === "" ? "#ffffff" : "#ebebeb")};
+   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 padding-left: 0px;
 padding-right: 10px;
 transition: 0.2s ease;
 position:relative;
 overflow: visible;
+`
+
+export const CustomizedWhereActiveSearchButton = styled(Card)`
+color: #000000;
+background-color: #ffffff;
+border-radius: 50px;
+:hover {
+  background-color: #ffffff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+height: 70px;
+padding: 6px 20px 6px 20px;
+display:flex;
+align-items: center;
+`
+
+export const CustomizedWhereSearchInsideButton = styled(Card)`
+color: #000000;
+border-radius: 50px;
+:hover {
+  background-color: #ebebeb;
+}
+border: 0px;
+height: 70px;
 `
 
 export const CustomizedActiveSearchButton = styled(Button)`

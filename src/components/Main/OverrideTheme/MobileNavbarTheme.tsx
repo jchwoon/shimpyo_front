@@ -19,6 +19,15 @@ const MobileNavbarTheme = createTheme({
                 }
             },
         },
+        // MuiBottomNavigation: {
+        //     styleOverrides: {
+        //         root: {
+        //             '&.Mui-selected': {
+        //                 color: 'red', // 선택된 아이템의 색을 변경합니다.
+        //             },
+        //         }
+        //     }
+        // }
     },
 });
 

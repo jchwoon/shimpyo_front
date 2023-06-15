@@ -1,10 +1,10 @@
-import { CustomizedGuestCountDiv } from "./MobileNavbar.style"
+import { CustomizedGuestCountMenuItem } from "./Navbar.styled"
 import { IconButton, Typography } from "@mui/material"
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { AdultGuest, ChildGuest, InfantGuest } from "../../recoil/atoms";
+import { AdultGuest, ChildGuest, InfantGuest } from "../../../recoil/atoms";
 
 export function GuestCountAdult() {
     const [adultGuest, setAdultGuest] = useRecoilState(AdultGuest)
@@ -17,7 +17,7 @@ export function GuestCountAdult() {
     };
 
     return (
-        <CustomizedGuestCountDiv disableRipple>
+        <CustomizedGuestCountMenuItem disableRipple>
             <Typography fontFamily='Noto Sans KR'>
                 성인
             </Typography>
@@ -30,7 +30,7 @@ export function GuestCountAdult() {
                     <AddIcon />
                 </IconButton>
             </div>
-        </CustomizedGuestCountDiv>
+        </CustomizedGuestCountMenuItem>
     )
 }
 
@@ -46,7 +46,7 @@ export function GuestCountChild() {
     };
 
     return (
-        <CustomizedGuestCountDiv disableRipple>
+        <CustomizedGuestCountMenuItem disableRipple>
             <Typography fontFamily='Noto Sans KR'>
                 어린이
             </Typography>
@@ -59,7 +59,7 @@ export function GuestCountChild() {
                     <AddIcon />
                 </IconButton>
             </div>
-        </CustomizedGuestCountDiv>
+        </CustomizedGuestCountMenuItem>
     )
 }
 
@@ -75,7 +75,7 @@ export function GuestCountInfant() {
     };
 
     return (
-        <CustomizedGuestCountDiv disableRipple>
+        <CustomizedGuestCountMenuItem disableRipple>
             <Typography fontFamily='Noto Sans KR'>
                 유아
             </Typography>
@@ -88,6 +88,6 @@ export function GuestCountInfant() {
                     <AddIcon />
                 </IconButton>
             </div>
-        </CustomizedGuestCountDiv>
+        </CustomizedGuestCountMenuItem>
     )
 }

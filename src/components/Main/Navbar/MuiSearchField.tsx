@@ -8,12 +8,10 @@ import parse from 'autosuggest-highlight/parse';
 import { debounce } from '@mui/material/utils';
 import { Paper, PaperProps } from '@mui/material';
 
-import { CustomizedTextfield } from './MobileNavbar.style';
-
-import "./styles.css"
+import { CustomizedTextfield } from './Navbar.styled';
 
 const CustomPaper = (props: PaperProps) => {
-    return <Paper {...props} elevation={0} sx={{}} />
+    return <Paper {...props} sx={{ marginTop: "20px" }} />
 }
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyA5ADsk4mK_A2hZuC2dSIHLpHGKFbixz88';
@@ -50,14 +48,29 @@ interface GoogleMapsProps {
     placeholder: string;
     setPlaceholder: (value: string) => void;
     setPlaceholderChanged: (value: boolean) => void;
+    textfieldInputValue: boolean
+    setTextfieldInputValue: (value: boolean) => void;
 }
 
-const GoogleMaps: React.FC<GoogleMapsProps> = ({ placeholder, setPlaceholder, setPlaceholderChanged }) => {
+const GoogleMaps: React.FC<GoogleMapsProps> = ({
+    placeholder,
+    setPlaceholder,
+    setPlaceholderChanged,
+    textfieldInputValue,
+    setTextfieldInputValue
+}) => {
     const [value, setValue] = React.useState<PlaceType | null>(null);
     const [inputValue, setInputValue] = React.useState('');
     const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
     const [open, setOpen] = React.useState<boolean>(false)
     const loaded = React.useRef(false);
+
+    if (value) {
+        setTextfieldInputValue(true)
+    }
+    if (textfieldInputValue === false && value && placeholder === "") {
+        setValue(null)
+    }
 
     if (typeof window !== 'undefined' && !loaded.current) {
         if (!document.querySelector('#google-maps')) {
@@ -133,9 +146,7 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({ placeholder, setPlaceholder, se
     return (
         <Autocomplete
             id="google-map-demo"
-            sx={{
-                width: "100%", borderColor: "white"
-            }}
+            sx={{ width: 200, borderColor: "white" }}
             getOptionLabel={(option) =>
                 typeof option === 'string' ? option : option.description
             }
@@ -145,9 +156,7 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({ placeholder, setPlaceholder, se
             includeInputInList
             filterSelectedOptions
             value={value}
-            noOptionsText={
-                < Typography sx={{ fontFamily: "Noto Sans KR" }}> 여행지가 없습니다.</Typography >
-            }
+            noOptionsText={<Typography sx={{ fontFamily: "Noto Sans KR" }}>여행지가 없습니다.</Typography>}
 
             PaperComponent={CustomPaper}
 
@@ -171,7 +180,12 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({ placeholder, setPlaceholder, se
             onClose={() => setOpen(false)}
 
             renderInput={(params) => (
-                <CustomizedTextfield {...params} variant="outlined" fullWidth placeholder={placeholder ? placeholder : "여행지 검색"} sx={{ paddingLeft: "0px" }} />
+                <CustomizedTextfield
+                    {...params}
+                    variant="outlined"
+                    fullWidth
+                    placeholder={placeholder ? placeholder : "여행지 검색"}
+                />
             )}
             renderOption={(props, option) => {
                 const matches =
@@ -183,7 +197,7 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({ placeholder, setPlaceholder, se
                 );
 
                 return (
-                    <li {...props} style={{ paddingLeft: "0px" }} >
+                    <li {...props} >
                         <Grid container alignItems="center" >
                             <Grid item sx={{ display: 'flex', width: 44 }}>
                                 <LocationOnIcon sx={{ color: 'text.secondary' }} />

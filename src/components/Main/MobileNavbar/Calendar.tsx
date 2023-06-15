@@ -6,7 +6,7 @@ import {
 import "./styles.css"
 
 import { useRecoilState, useRecoilValue } from "recoil";
-import { FirstPickedDate, SecondPickedDate } from "../../recoil/atoms";
+import { FirstPickedDate, SecondPickedDate } from "../../../recoil/atoms";
 import { useEffect } from "react"
 import moment from "moment"
 import 'moment/locale/ko'
@@ -32,7 +32,7 @@ export function Calendar() {
     }, [momentizedSecondPickedMoment])
 
     return (
-        <div className="custom-calendar">
+        <div className="custom-calendar2">
             <DatePicker disablePreviousDays />
         </div>
     );
