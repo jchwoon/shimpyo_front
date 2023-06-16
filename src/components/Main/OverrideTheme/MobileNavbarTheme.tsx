@@ -16,6 +16,11 @@ const MobileNavbarTheme = createTheme({
                 },
                 listbox: {
                     maxHeight: "150px"
+                },
+                inputRoot : {
+                    paddingLeft: "0px",
+                    paddingTop:"0px",
+                    paddingBottom:"0px"
                 }
             },
         },

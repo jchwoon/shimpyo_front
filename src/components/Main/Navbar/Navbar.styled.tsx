@@ -306,7 +306,7 @@ height: 15px;
 color:white;
 `
 
-export const CustomizedDeleteIconButton = styled(IconButton) <{ top: number, left: number, deleteButtonExist: boolean }>`
+export const CustomizedDeleteIconButton = styled(IconButton) <{ top: number, left: number }>`
 background-color : #00adb5;
 width: 30px;
 height: 30px;
@@ -316,7 +316,6 @@ height: 30px;
 position: fixed;
 top: ${props => props.top}px;
 left: ${props => props.left}px;
-visibility:${({ deleteButtonExist }) => (deleteButtonExist ? "visible" : "hidden")};
 `
 
 export const CustomizedDeleteIconButtonInSearchField = styled(IconButton) <{ top: number, left: number }>`

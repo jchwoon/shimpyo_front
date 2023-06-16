@@ -2,19 +2,37 @@ import * as React from 'react';
 import { useState } from 'react'
 import moment from "moment";
 import 'moment/locale/ko'
-import Button from '@mui/material/Button';
+import styled from '@emotion/styled';
 
-import { Header } from './Header';
+import { HeaderLeft } from './HeaderLeft';
+import { HeaderRight } from './HeaderRight';
+import { Days } from './Days';
+import { Cells } from './Cells';
+import { CellsRight } from './CellsRight';
+
+const StyledCalendarDiv = styled.div`
+padding:10px;
+`
 
 export const Calendar = () => {
-    const [currentMonth, setCurrentMonth] = useState(moment(new Date()).format("YYYY년 MMMM"));
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [currentDate, setCurrentDate] = useState(moment().format());
+    const [selectedDate, setSelectedDate] = useState(moment().format());
+
 
     return (
-        <div className='calendar'>
-
-            <Header currentMonth={currentMonth} setcurrentMonth={setCurrentMonth} />
-
-        </div>
+        <StyledCalendarDiv>
+                <div style={{display:'flex', flexDirection:'row'}}>
+                        <div style={{display:'flex', flexDirection:'column', padding: "30px 15px 30px 30px"}}>
+                            <HeaderLeft currentDate={currentDate} setCurrentDate={setCurrentDate} />
+                            <Days/>
+                            <Cells currentDate={currentDate}/>
+                        </div>
+                        <div style={{display:'flex', flexDirection:'column', padding: "30px 30px 30px 15px"}}>
+                            <HeaderRight currentDate={currentDate} setCurrentDate={setCurrentDate} />
+                            <Days/>
+                            <CellsRight currentDate={currentDate}/>
+                        </div>
+                    </div>
+        </StyledCalendarDiv>
     )
 }

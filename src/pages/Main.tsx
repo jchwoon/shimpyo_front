@@ -6,7 +6,6 @@ import Cards from '../components/Main/Cards/Cards';
 import NavbarTheme from '../components/Main/OverrideTheme/NavbarTheme';
 import MobileNavbarTheme from '../components/Main/OverrideTheme/MobileNavbarTheme';
 import MobileFooter from '../components/Main/MobileFooter/MobileFooter';
-import { DatePickerProvider } from '@bcad1591/react-date-picker';
 import { useState, useEffect } from "react";
 
 export default function Main() {
@@ -28,17 +27,13 @@ export default function Main() {
     <CssBaseline />
     {
       isLargeScreen ?
-        <DatePickerProvider>
           <ThemeProvider theme={NavbarTheme}>
             <Navbar />
           </ThemeProvider>
-        </DatePickerProvider>
         :
-        <DatePickerProvider>
           <ThemeProvider theme={MobileNavbarTheme}>
             <MobileNavbar />
           </ThemeProvider>
-        </DatePickerProvider>
     }
     <Cards />
     {isLargeScreen ?

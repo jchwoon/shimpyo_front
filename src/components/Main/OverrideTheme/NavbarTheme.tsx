@@ -23,6 +23,15 @@ const NavbarTheme = createTheme({
                 },
             },
         },
+        MuiAutocomplete: {
+            styleOverrides: {
+                inputRoot : {
+                    paddingLeft: "0px",
+                    paddingTop:"0px",
+                    paddingBottom:"0px"
+                }
+            },
+        }
     },
 });
 

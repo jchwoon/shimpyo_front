@@ -148,9 +148,11 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({
     return (
         <Autocomplete
             id="google-map-demo"
-            sx={{
-                width: "100%", borderColor: "white"
-            }}
+            sx={{ width: "100%", borderColor: "white" , "& .MuiAutocomplete-clearIndicator": {
+                display: "none", '& .MuiAutocomplete-endAdornment': {
+                    display: 'none',
+                  },
+              },}}
             getOptionLabel={(option) =>
                 typeof option === 'string' ? option : option.description
             }
@@ -186,7 +188,13 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({
             onClose={() => setOpen(false)}
 
             renderInput={(params) => (
-                <CustomizedTextfield {...params} variant="outlined" fullWidth placeholder={placeholder ? placeholder : "여행지 검색"} sx={{ paddingLeft: "0px" }} />
+                <CustomizedTextfield
+                    {...params}
+                    variant="outlined"
+                    fullWidth
+                    placeholder={placeholder ? placeholder : "여행지 검색"}
+                    sx={{padding:"0px"}}
+                />
             )}
             renderOption={(props, option) => {
                 const matches =

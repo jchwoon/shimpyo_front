@@ -27,7 +27,7 @@ import {
   CustomizedWhereActiveSearchButton,
 } from "./Navbar.styled"
 import logo2 from "../../../logo2.svg"
-import { Divider, ClickAwayListener } from '@mui/material';
+import { Divider, ClickAwayListener,Collapse } from '@mui/material';
 import CustomizedMenus from "../../LoginModal/LoginModal";
 import { useRecoilState } from "recoil";
 import {
@@ -43,13 +43,9 @@ import {
   PlaceholderChanged
 } from "../../../recoil/atoms";
 import { useState, useEffect } from "react";
+import moment from "moment";
+import 'moment/locale/ko'
 
-import {
-  useDatePickReset,
-} from '@bcad1591/react-date-picker';
-
-// import { Calendar } from "./Calendar";
-// import { MuiCalendar } from "./MuiCalendar"
 import { Calendar } from "../Calendar/Calendar";
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
@@ -121,13 +117,9 @@ export default function Navbar() {
   }
 
   //calendar delete button
-  const [deleteButtonExist, setDeleteButtonExist] = useState(false)
-  const reset = useDatePickReset();
   const resetFunction = () => {
-    reset();
-    setFirstPickedDate(null);
-    setSecondPickedDate(null)
-    setDeleteButtonExist(false)
+    setFirstPickedDate('');
+    setSecondPickedDate('')
     if (firstPickedFirst) {
       handleButtonClick('button2')
     }
@@ -141,7 +133,6 @@ export default function Navbar() {
   const firstDivider = document.getElementById('firstDivider')
   const secondDivider = document.getElementById('secondDivider')
   const thirdDivider = document.getElementById('thirdDivider')
-  const targetDiv = document.querySelector('.jshaaC, .iNDSBv');
 
   //searchfield delete button
 
@@ -156,10 +147,6 @@ export default function Navbar() {
 
 
   useEffect(() => {
-    if (targetDiv) {
-      const targetDivDoubleCheck = document.querySelector('.jshaaC, .iNDSBv');
-      if (targetDivDoubleCheck) { setDeleteButtonExist(true); }
-    }
     const updateButtonPosition = () => {
       if (activebutton === "button2") {
         if (firstDivider) {
@@ -167,7 +154,7 @@ export default function Navbar() {
           setButtonPostion({ top: top - 10, left: left - 10 });
         }
       }
-      if (activebutton === "button3") {
+      if (activebutton === "button3" ) {
         if (secondDivider) {
           const { top, left, } = secondDivider.getBoundingClientRect();
           setButtonPostion({ top: top - 10, left: left - 10 });
@@ -176,7 +163,7 @@ export default function Navbar() {
     }
     updateButtonPosition();
     window.addEventListener('resize', updateButtonPosition);
-  }, [activebutton, targetDiv, checkInOutOpen])
+  }, [activebutton, checkInOutOpen])
 
   //calendar date order
   const [firstPickedFirst, setFirstPickedFirst] = useState(true)
@@ -186,14 +173,14 @@ export default function Navbar() {
       //정상 순서에서 calendar가 나오기 전 button2에서 button3로 변경할 때 반대 순서로 변경
       setFirstPickedFirst(false)
     }
-  }, [activebutton, firstPickedFirst, targetDiv])
+  }, [activebutton, firstPickedFirst])
 
   useEffect(() => {
     if (activebutton === "button2" && firstPickedFirst === false && checkInOutOpen === false) {
       //반대 순서에서 calendar가 나오기 전 button3에서 button2로 변경할 때 정상 순서로 변경
       setFirstPickedFirst(true)
     }
-  }, [activebutton, firstPickedFirst, targetDiv])
+  }, [activebutton, firstPickedFirst])
 
   if (activebutton === "button3" && firstPickedFirst === false && firstPickedDate && !secondPickedDate && checkInOutOpen === true) {
     //반대 순서에서 calendar가 나온 이후 button3에서 button2로 active 변경
@@ -239,7 +226,6 @@ export default function Navbar() {
                       </CustomizedDeleteIconButtonInSearchField>
                       :
                       null}
-                    {/* <CustomizedActiveSearchButton variant="contained" disableRipple sx={{ paddingLeft: "20px" }} > */}
                     <CustomizedWhereActiveSearchButton elevation={2}>
                       <CustomizedWhereVerticalWrapperDiv change={change ? change : undefined}>
                         <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" textAlign="left" >
@@ -254,7 +240,6 @@ export default function Navbar() {
                         />
                       </CustomizedWhereVerticalWrapperDiv>
                     </CustomizedWhereActiveSearchButton>
-                    {/* </CustomizedActiveSearchButton> */}
                   </>
                   :
                   <CustomizedSearchInsideButton
@@ -262,7 +247,6 @@ export default function Navbar() {
                     disableRipple sx={{ paddingLeft: "20px" }}
                     onClick={() => handleButtonClick('button1')}
                   >
-                    {/*  <CustomizedWhereSearchInsideButton> */}
                     <CustomizedWhereVerticalWrapperDiv change={change ? change : undefined}>
                       <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" textAlign="left" >
                         여행지
@@ -270,15 +254,7 @@ export default function Navbar() {
                       <CustomizedTypography fontFamily='Noto Sans KR' color="#a2a2a2" fontSize="15px" fontWeight="300" >
                         {GoogleMapsPlaceholder ? GoogleMapsPlaceholder : "여행지 검색"}
                       </CustomizedTypography>
-                      {/* <GoogleMaps
-                        placeholder={GoogleMapsPlaceholder}
-                        setPlaceholder={setGoogleMapsPlaceholder}
-                        setPlaceholderChanged={setPlaceholderChanged}
-                        textfieldInputValue={textfieldInputValue}
-                        setTextfieldInputValue={setTextfieldInputValue}
-                      /> */}
                     </CustomizedWhereVerticalWrapperDiv>
-                    {/* </CustomizedWhereSearchInsideButton> */}
                   </CustomizedSearchInsideButton>
               }
               <CustomizedDivider id="firstDivider" orientation="vertical" flexItem variant="middle" />
@@ -297,9 +273,9 @@ export default function Navbar() {
                       </CustomizedTypography>
                       <CustomizedChangeTypography change={change ? change : undefined}>
                         {firstPickedFirst ?
-                          firstPickedDate ? firstPickedDate : "날짜 추가"
+                          firstPickedDate ? moment(firstPickedDate).format('M월 D일') : "날짜 추가"
                           :
-                          firstPickedDate ? secondPickedDate ? firstPickedDate : "날짜 추가"
+                          firstPickedDate ? moment(secondPickedDate).format('M월 D일') ? moment(firstPickedDate).format('M월 D일') : "날짜 추가"
                             :
                             "날짜 추가"}
                       </CustomizedChangeTypography>
@@ -313,9 +289,9 @@ export default function Navbar() {
                       </CustomizedTypography>
                       <CustomizedChangeTypography change={change ? change : undefined}>
                         {firstPickedFirst ?
-                          firstPickedDate ? firstPickedDate : "날짜 추가"
+                          firstPickedDate ? moment(firstPickedDate).format('M월 D일') : "날짜 추가"
                           :
-                          firstPickedDate ? secondPickedDate ? firstPickedDate : "날짜 추가"
+                          firstPickedDate ? moment(secondPickedDate).format('M월 D일') ? moment(firstPickedDate).format('M월 D일') : "날짜 추가"
                             :
                             "날짜 추가"}
                       </CustomizedChangeTypography>
@@ -331,9 +307,11 @@ export default function Navbar() {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
               >
-                {/* <CustomizedDeleteIconButton onClick={resetFunction} top={buttonPosition.top} left={buttonPosition.left} deleteButtonExist={deleteButtonExist}>
+                {firstPickedDate && 
+                <CustomizedDeleteIconButton onClick={resetFunction} top={buttonPosition.top} left={buttonPosition.left} >
                   <CustomziedClearIcon />
-                </CustomizedDeleteIconButton> */}
+                </CustomizedDeleteIconButton>
+}
                 <Calendar />
               </CustomizedMenu>
 
@@ -347,9 +325,9 @@ export default function Navbar() {
                     </CustomizedTypography>
                     <CustomizedChangeTypography change={change ? change : undefined}>
                       {firstPickedFirst ?
-                        secondPickedDate ? secondPickedDate : "날짜 추가"
+                        secondPickedDate ? moment(secondPickedDate).format('M월 D일') : "날짜 추가"
                         :
-                        firstPickedDate ? secondPickedDate ? secondPickedDate : firstPickedDate
+                        firstPickedDate ? secondPickedDate ? moment(secondPickedDate).format('M월 D일') : moment(firstPickedDate).format('M월 D일')
                           :
                           "날짜 추가"}
                     </CustomizedChangeTypography>
@@ -363,9 +341,9 @@ export default function Navbar() {
                     </CustomizedTypography>
                     <CustomizedChangeTypography change={change ? change : undefined}>
                       {firstPickedFirst ?
-                        secondPickedDate ? secondPickedDate : "날짜 추가"
+                        secondPickedDate ? moment(secondPickedDate).format('M월 D일') : "날짜 추가"
                         :
-                        firstPickedDate ? secondPickedDate ? secondPickedDate : firstPickedDate
+                        firstPickedDate ? secondPickedDate ? moment(secondPickedDate).format('M월 D일') :"날짜 추가"
                           :
                           "날짜 추가"}
                     </CustomizedChangeTypography>

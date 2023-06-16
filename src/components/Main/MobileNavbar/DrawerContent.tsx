@@ -13,8 +13,10 @@ import {
 } from "./MobileNavbar.style"
 import { useState } from "react"
 import GoogleMaps from "./MuiSearchField";
-import { Calendar } from "./Calendar";
 import React from "react";
+import { Calendar } from "../MobileCalendar/Calendar";
+import moment from "moment";
+import 'moment/locale/ko'
 
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
@@ -32,11 +34,6 @@ import {
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
 import { Divider, Collapse } from "@mui/material";
-import {
-    useDatePickReset,
-} from '@bcad1591/react-date-picker';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 
 interface DrawerContentProps {
@@ -63,11 +60,9 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
     const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
     const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
 
-    const reset = useDatePickReset();
     const resetFunction = () => {
-        reset();
-        setFirstPickedDate(null);
-        setSecondPickedDate(null)
+        setFirstPickedDate('');
+        setSecondPickedDate('')
     }
 
 
@@ -90,7 +85,7 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
 
     return (
         <>
-            <Collapse in={activecard === "card1"} collapsedSize={"90px"}>
+            <Collapse in={activecard === "card1"} collapsedSize={"110px"}>
                 <div style={{ position: "relative" }}>
                     {activecard === "card1" ?
                         placeholderChanged ?
@@ -152,13 +147,14 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
                                         체크인
                                     </CustomizedTypography>
                                     <CustomizedTypography fontWeight="300" color="#a2a2a2" sx={{ minWidth: "60px", marginBottom: "10px" }}>
-                                        {firstPickedDate ? firstPickedDate : "날짜 추가"}
+                                        {firstPickedDate ? 
+                                        moment(firstPickedDate).format("M월 D일"): "날짜 추가"}
                                     </CustomizedTypography>
                                     <CustomizedTypography fontWeight="500">
                                         체크아웃
                                     </CustomizedTypography>
                                     <CustomizedTypography fontWeight="300" color="#a2a2a2" sx={{ minWidth: "60px" }}>
-                                        {secondPickedDate ? secondPickedDate : "날짜 추가"}
+                                        {secondPickedDate ? moment(secondPickedDate).format("M월 D일") : "날짜 추가"}
                                     </CustomizedTypography>
                                 </CustomizedCheckInOutAfterClickDiv>
                                 <Calendar />
