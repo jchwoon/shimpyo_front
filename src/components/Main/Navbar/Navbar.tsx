@@ -47,7 +47,10 @@ import { useState, useEffect } from "react";
 import {
   useDatePickReset,
 } from '@bcad1591/react-date-picker';
-import { Calendar } from "./Calendar";
+
+// import { Calendar } from "./Calendar";
+// import { MuiCalendar } from "./MuiCalendar"
+import { Calendar } from "../Calendar/Calendar";
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
 
@@ -328,9 +331,9 @@ export default function Navbar() {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
               >
-                <CustomizedDeleteIconButton onClick={resetFunction} top={buttonPosition.top} left={buttonPosition.left} deleteButtonExist={deleteButtonExist}>
+                {/* <CustomizedDeleteIconButton onClick={resetFunction} top={buttonPosition.top} left={buttonPosition.left} deleteButtonExist={deleteButtonExist}>
                   <CustomziedClearIcon />
-                </CustomizedDeleteIconButton>
+                </CustomizedDeleteIconButton> */}
                 <Calendar />
               </CustomizedMenu>
 
