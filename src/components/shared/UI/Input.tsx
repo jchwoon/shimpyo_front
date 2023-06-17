@@ -63,7 +63,7 @@ const StyleLabel = styled.label<{ $error?: boolean }>`
   :focus-within {
     border: 2px solid black;
     div {
-      transform: translateY(-13px) translateX(-5px) scale(0.8);
+      transform: translateY(-17px) translateX(-8px) scale(0.8);
     }
   }
 `;
@@ -81,7 +81,7 @@ const StyleInput = styled(StyleNumberTypeInput)`
   font-size: 15px;
 
   &:not(:placeholder-shown) + div {
-    transform: translateY(-13px) translateX(-8px) scale(0.8);
+    transform: translateY(-17px) translateX(-8px) scale(0.8);
   }
 `;
 

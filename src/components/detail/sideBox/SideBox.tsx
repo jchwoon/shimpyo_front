@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 import styled from 'styled-components';
 import Guest from './Guest';
-import SideCalender from './Calender';
-import { DatePickerProvider } from '@bcad1591/react-date-picker';
 import 'moment/locale/ko';
 
 export default function SideBox() {
@@ -109,15 +107,6 @@ export default function SideBox() {
           </PeopleDetail>
         </People>
         {guest && <Guest guestCount={guestCount} guestChange={guestChange} toggleGuest={toggleGuest} />}
-        <DatePickerProvider>
-          {calendar && (
-            <SideCalender
-              toggleCalendar={toggleCalendar}
-              startDateChange={startDateChange}
-              endDateChange={endDateChange}
-            />
-          )}
-        </DatePickerProvider>
       </CheckContainer>
       <BookingBtn onClick={toggleBooking}>예약 가능 여부 보기</BookingBtn>
       {booking && (

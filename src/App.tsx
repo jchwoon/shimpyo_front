@@ -1,7 +1,8 @@
-import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil';
 import './App.css';
+import './fonts.css';
+import { RecoilRoot, useRecoilState } from 'recoil';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { accessTokenAtom } from './recoil/atom';
+import { accessTokenAtom } from './recoil/atoms';
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import useAuthorizedRequest from './hooks/useAuthorizedRequest';
@@ -25,7 +26,6 @@ function App() {
     onUnauthorized: handleUnAutorization,
   });
 
-  console.log(accessToken);
   useEffect(() => {
     const sendRefreshToken = async () => {
       if (!localStorage.getItem('isLoggedIn')) return;
@@ -38,8 +38,7 @@ function App() {
     };
 
     sendRefreshToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [responseData, setAccessToken]);
+  }, []);
   return (
     <>
       <RecoilRoot>

@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse, Method } from 'axios';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { accessTokenAtom } from '../recoil/atom';
+import { accessTokenAtom } from '../recoil/atoms';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
