@@ -1,10 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Hosting from '../pages/Hosting';
+import { lazy } from 'react';
 import App from '../App';
-import Main from '../pages/Main';
-import Detail from '../pages/detail';
-import NotFound from '../pages/404';
 
+const Hosting = lazy(() => import('../pages/Hosting'));
+const Main = lazy(() => import('../pages/Main'));
+const Detail = lazy(() => import('../pages/detail'));
+const NotFound = lazy(() => import('../pages/404'));
 const router = createBrowserRouter([
   {
     path: '/',
