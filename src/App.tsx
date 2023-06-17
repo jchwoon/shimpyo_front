@@ -1,5 +1,6 @@
-import { RecoilRoot } from 'recoil';
 import './App.css';
+import "./fonts.css"
+import { RecoilRoot } from 'recoil';
 import { Outlet } from 'react-router-dom';
 
 function App() {

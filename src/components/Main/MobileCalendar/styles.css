@@ -1,0 +1,15 @@
+ .firstClicked {
+    background: linear-gradient(
+        to right,
+        #ffffff 50%,
+        #eeeeee 50%
+      )
+}
+
+.secondClicked {
+    background: linear-gradient(
+        to left,
+        #ffffff 50%,
+        #eeeeee 50%
+      )
+}
