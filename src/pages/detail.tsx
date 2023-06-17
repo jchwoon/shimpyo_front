@@ -3,17 +3,16 @@ import { AiFillHeart } from 'react-icons/ai';
 import ImageContainer from '../components/detail/ImageContainer';
 import MainContainer from '../components/detail/MainContainer';
 export default function Detail() {
-  //ll
   return (
     <>
       <TempTopBar />
       <Container>
         <Title>넓고 푸른 바다를 바라보며 수영을 즐기고 온전한 휴식을 취할 수 있는 숙소의 풀빌라B</Title>
         <Description>
-          <Description_location>Seo-myeon, Namhae, 경상남도, 한국</Description_location>
-          <Description_like>
+          <DescriptionLocation>Seo-myeon, Namhae, 경상남도, 한국</DescriptionLocation>
+          <DescriptionLike>
             <AiFillHeart /> 저장
-          </Description_like>
+          </DescriptionLike>
         </Description>
         <ImageContainer />
         <MainContainer />
@@ -59,10 +58,10 @@ const Description = styled.div`
   }
 `;
 
-const Description_location = styled.div`
+const DescriptionLocation = styled.div`
   width: auto;
   text-decoration: underline;
 `;
-const Description_like = styled.div`
+const DescriptionLike = styled.div`
   font-weight: bold;
 `;

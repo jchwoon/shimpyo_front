@@ -10,7 +10,7 @@ interface EmailInputProps {
 }
 
 export default function EmailInput({ getValid }: EmailInputProps) {
-  const { error, responseData, sendRequest } = useHttpRequest();
+  const { errorMessage, responseData, sendRequest } = useHttpRequest();
 
   const [emailValue, setEmailValue] = useRecoilState(emailValueAtom);
   const [emailError, setEmailError] = useState(false);
@@ -23,9 +23,9 @@ export default function EmailInput({ getValid }: EmailInputProps) {
     if (!validationCheck) {
       setEmailError(true);
       setEmailErrorMessage('이메일 주소가 올바르지 않습니다.');
-    } else if (error) {
+    } else if (errorMessage) {
       setEmailError(true);
-      setEmailErrorMessage('요청을 처리하는 동안 문제가 발생했습니다.');
+      setEmailErrorMessage(errorMessage);
     } else if (responseData && !responseData.isSuccess) {
       setEmailError(true);
       setEmailErrorMessage('이미 가입된 이메일 주소입니다.');
@@ -33,7 +33,7 @@ export default function EmailInput({ getValid }: EmailInputProps) {
       setEmailError(false);
       setEmailErrorMessage('');
     }
-  }, [validationCheck, error, responseData]);
+  }, [validationCheck, errorMessage, responseData]);
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -42,7 +42,7 @@ export default function EmailInput({ getValid }: EmailInputProps) {
 
   const handleCheckEmail = async () => {
     if (emailValue && validationCheck) {
-      await sendRequest({ url: `/api/check-email?email=${emailValue}`, method: 'POST' });
+      await sendRequest({ url: `/public/check-email`, method: 'POST', body: { email: emailValue } });
     }
   };
 

@@ -26,7 +26,7 @@ interface useAuthorizedRequestProps {
 export default function useAuthorizedRequest<T>({ onUnauthorized }: useAuthorizedHookProps) {
   const accessToken = useRecoilValue(accessTokenAtom);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [responseData, setResponseData] = useState<IResponseData<T> | null>(null);
 
   const axiosInstance = axios.create({
@@ -40,7 +40,7 @@ export default function useAuthorizedRequest<T>({ onUnauthorized }: useAuthorize
 
   const sendRequest = async ({ url, method = 'GET', body, withCredentials }: useAuthorizedRequestProps) => {
     setIsLoading(true);
-    setError(false);
+    setErrorMessage('');
     setResponseData(null);
 
     try {
@@ -48,11 +48,13 @@ export default function useAuthorizedRequest<T>({ onUnauthorized }: useAuthorize
       setResponseData(response.data);
     } catch (error: any) {
       if (error.response) {
+        console.log(error);
         if (error.response?.status === 401 && onUnauthorized) {
           onUnauthorized(error);
+          setErrorMessage(error.message);
         }
       } else {
-        setError(true);
+        setErrorMessage(error.message);
         console.error(error.message);
       }
     } finally {
@@ -60,5 +62,5 @@ export default function useAuthorizedRequest<T>({ onUnauthorized }: useAuthorize
     }
   };
 
-  return { isLoading, error, responseData, sendRequest };
+  return { isLoading, errorMessage, responseData, sendRequest };
 }

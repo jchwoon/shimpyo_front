@@ -10,13 +10,13 @@ interface nickNameInputProps {
 }
 
 export default function NicknameInput({ getValid }: nickNameInputProps) {
-  const { error, responseData, sendRequest } = useHttpRequest();
+  const { errorMessage, responseData, sendRequest } = useHttpRequest();
 
   const [nicknameValue, setNicknameValue] = useRecoilState(nicknameValueAtom);
   const [nicknameError, setNicknameError] = useState(false);
   const [nicknameErrorMessage, setNicknameErrorMessage] = useState('');
 
-  const isValid = nicknameValue !== '' && nicknameError;
+  const isValid = nicknameValue !== '' && !nicknameError;
   const validationCheck = nicknameRule.test(nicknameValue);
 
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +26,7 @@ export default function NicknameInput({ getValid }: nickNameInputProps) {
 
   const handleCheckNickname = async () => {
     if (nicknameValue && validationCheck) {
-      await sendRequest({ url: `/api/check-nickname?nickname=${nicknameValue}`, method: 'POST' });
+      await sendRequest({ url: `/public/check-nickname?nickname=${nicknameValue}`, method: 'POST' });
     }
   };
 
@@ -34,7 +34,7 @@ export default function NicknameInput({ getValid }: nickNameInputProps) {
     if (!validationCheck) {
       setNicknameError(true);
       setNicknameErrorMessage('닉네임이 올바르지 않습니다.');
-    } else if (error) {
+    } else if (errorMessage) {
       setNicknameError(true);
       setNicknameErrorMessage('요청을 처리하는 동안 문제가 발생했습니다.');
     } else if (responseData && !responseData.isSuccess) {
@@ -44,7 +44,7 @@ export default function NicknameInput({ getValid }: nickNameInputProps) {
       setNicknameError(false);
       setNicknameErrorMessage('');
     }
-  }, [error, responseData, validationCheck]);
+  }, [errorMessage, responseData, validationCheck]);
 
   useEffect(() => {
     const overlapTest = setTimeout(() => {

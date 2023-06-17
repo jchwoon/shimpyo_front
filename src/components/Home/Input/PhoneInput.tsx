@@ -13,18 +13,17 @@ interface PhoneInputProps {
   getValid: (valid: boolean) => void;
 }
 
+interface IResultData {
+  codeNumber: string;
+}
+
 export default function PhoneInput({ getValid }: PhoneInputProps) {
-  const { error, responseData, sendRequest } = useHttpRequest();
+  const { errorMessage, responseData, sendRequest } = useHttpRequest();
   const {
     responseData: toUserNumberResponseData,
     isLoading: toUserNumberIsLoading,
     sendRequest: toUserNumberSendRequest,
-  } = useHttpRequest();
-  const {
-    responseData: confirmResponseData,
-    isLoading: confirmIsLoading,
-    sendRequest: confirmSendRequest,
-  } = useHttpRequest();
+  } = useHttpRequest<IResultData>();
 
   const confirmNumberInputRef = useRef<HTMLInputElement>(null);
   const [phoneValue, setPhoneValue] = useRecoilState(phoneValueAtom);
@@ -38,8 +37,10 @@ export default function PhoneInput({ getValid }: PhoneInputProps) {
   const [confirmButton, setConfirmButton] = useState(false);
   const [confirmNumberButtonText, setConfirmNumberButtonText] = useState('인증번호 발송');
 
+  const [receiveNumber, setRecieveNumber] = useState<string>();
+
   const phoneInputIsValid = phoneValue !== '' && !phoneError;
-  const isValid = phoneValue !== '' && phoneError && !confirmNumberError;
+  const isValid = phoneValue !== '' && !phoneError && !confirmNumberError;
   const validationCheck = phoneRule.test(phoneValue);
 
   const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +51,7 @@ export default function PhoneInput({ getValid }: PhoneInputProps) {
   //폰 중복검사
   const handleCheckPhone = async () => {
     if (phoneValue && validationCheck) {
-      await sendRequest({ url: `/api/check-phone`, method: 'POST', body: { phone: phoneValue } });
+      await sendRequest({ url: `/public/check-phone`, method: 'POST', body: { phoneNumber: phoneValue } });
     }
   };
 
@@ -60,7 +61,7 @@ export default function PhoneInput({ getValid }: PhoneInputProps) {
       return;
     }
     await toUserNumberSendRequest({
-      url: '/api/send-verification-code',
+      url: '/public/certification',
       body: { phoneNumber: phoneValue },
       method: 'POST',
     });
@@ -71,18 +72,20 @@ export default function PhoneInput({ getValid }: PhoneInputProps) {
   const handleSubmitConfirmNumber = async () => {
     const value = confirmNumberInputRef.current?.value;
     if (!value) return;
-    await confirmSendRequest({
-      url: '/api/verify-code',
-      body: { verificationCode: value },
-      method: 'POST',
-    });
+
+    if (receiveNumber === value) {
+      setConfirmNumberError(false);
+    } else {
+      setConfirmNumberError(true);
+      setConfirmNumberErrorMessage('인증번호를 다시 한번 확인해주세요.');
+    }
   };
 
   const handleValidityPhone = useCallback(() => {
     if (!validationCheck) {
       setPhoneError(true);
       setPhoneErrorMessage('휴대폰 형식이 올바르지 않습니다.');
-    } else if (error) {
+    } else if (errorMessage) {
       setPhoneError(true);
       setPhoneErrorMessage('요청을 처리하는 동안 문제가 발생했습니다.');
     } else if (responseData && !responseData.isSuccess) {
@@ -92,7 +95,7 @@ export default function PhoneInput({ getValid }: PhoneInputProps) {
       setPhoneError(false);
       setPhoneErrorMessage('');
     }
-  }, [error, responseData, validationCheck]);
+  }, [errorMessage, responseData, validationCheck]);
 
   //휴대폰 중복 검사
   useEffect(() => {
@@ -111,7 +114,7 @@ export default function PhoneInput({ getValid }: PhoneInputProps) {
       return;
     }
     if (confirmNumberButtonText === '인증번호 발송') {
-      setConfirmNumberButtonText('인증번호 발송');
+      setConfirmNumberButtonText('인증번호 재발송');
     }
 
     getValid(isValid);
@@ -123,21 +126,20 @@ export default function PhoneInput({ getValid }: PhoneInputProps) {
     if (!toUserNumberResponseData) return;
 
     if (toUserNumberResponseData?.isSuccess) {
+      setRecieveNumber(toUserNumberResponseData.result.codeNumber);
       setConfirmButton(true);
     }
   }, [toUserNumberResponseData]);
 
   //인증번호 확인 후 처리
   useEffect(() => {
-    if (!confirmResponseData) return;
-
-    if (confirmResponseData?.isSuccess) {
+    if (receiveNumber === confirmNumberInputRef.current?.value) {
       setConfirmNumberError(false);
     } else {
       setConfirmNumberError(true);
       setConfirmNumberErrorMessage('인증번호를 다시 한번 확인해주세요.');
     }
-  }, [confirmResponseData]);
+  }, [receiveNumber]);
   return (
     <>
       <Input
@@ -177,12 +179,7 @@ export default function PhoneInput({ getValid }: PhoneInputProps) {
               onClick={handleSendConfirmNumber}
               label={confirmNumberButtonText}
             />
-            <Button
-              disabled={!confirmButton || confirmIsLoading}
-              small
-              label="확인"
-              onClick={handleSubmitConfirmNumber}
-            />
+            <Button disabled={!confirmButton} small label="확인" onClick={handleSubmitConfirmNumber} />
           </div>
         </StylePhoneConfirmRequest>
       </div>

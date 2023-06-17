@@ -10,8 +10,13 @@ export const additionalInfoModalAtom = atom<boolean>({
   default: false,
 });
 
-export const accountInfoFindModalAtom = atom<boolean>({
-  key: 'accountInfoFindModalAtom',
+export const idFindModalAtom = atom<boolean>({
+  key: 'idFindModalAtom',
+  default: false,
+});
+
+export const passwordFindModalAtom = atom<boolean>({
+  key: 'passwordFindModalAtom',
   default: false,
 });
 

@@ -33,6 +33,7 @@ export default function AdditionalInfoModal() {
 
   const isValid = isNicknameValid && isPhoneValid;
 
+  console.log(isNicknameValid, isPhoneValid);
   const getNicknameValid = (valid: boolean) => {
     setIsNicknameValid(valid);
   };
@@ -44,7 +45,7 @@ export default function AdditionalInfoModal() {
   const handleSubmitUserInfo = async () => {
     try {
       await sendRequest({
-        url: '/api/join',
+        url: '/public/join',
         body: { email: emailValue, password: passwordValue, nickname: nicknameValue, phoneNumber: phoneValue },
         method: 'POST',
       });

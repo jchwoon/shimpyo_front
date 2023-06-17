@@ -11,7 +11,7 @@ import { CgProfile } from 'react-icons/cg';
 import { useRef } from 'react';
 import MenuBlock from './MenuBlock';
 import Menu from '../Menu';
-import { StyleMenuList } from '../../style/menu';
+import { StyleMenuList } from '../../style/shareStyle';
 import Button from '../../shared/UI/Button';
 import useMenuBar from '../../../hooks/useMenuBar';
 import useResponseToViewPort from '../../../hooks/useResponseToViewPort';

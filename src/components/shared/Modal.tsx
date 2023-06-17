@@ -8,9 +8,10 @@ interface ModalProps {
   footer?: ReactElement;
   label?: string;
   title?: string | ReactElement;
+  onClose: () => void;
 }
 
-export default function Modal({ isOpen, label, title, body, footer }: ModalProps) {
+export default function Modal({ isOpen, label, title, body, footer, onClose }: ModalProps) {
   if (!isOpen) {
     return null;
   }
@@ -18,7 +19,7 @@ export default function Modal({ isOpen, label, title, body, footer }: ModalProps
     <StyleModalOverlay>
       <StyleModalBox>
         <StyleModalHead>
-          <MdClose style={{ position: 'absolute', left: 20 }} size={20} />
+          <MdClose onClick={onClose} style={{ position: 'absolute', left: 20, cursor: 'pointer' }} size={20} />
           <div>{label}</div>
         </StyleModalHead>
         <ParentContainer>
@@ -66,7 +67,8 @@ const StyleModalBox = styled.div`
 
   @media only screen and (min-width: 640px) {
     background-color: white;
-    height: 600px;
+    height: auto;
+    max-height: 600px;
     width: 500px;
   }
 `;

@@ -1,4 +1,4 @@
-import { RecoilRoot, useSetRecoilState } from 'recoil';
+import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil';
 import './App.css';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { accessTokenAtom } from './recoil/atom';
@@ -12,7 +12,7 @@ interface ResultData {
 
 function App() {
   const navigation = useNavigate();
-  const setAccessToken = useSetRecoilState(accessTokenAtom);
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
 
   //권한 없을때 발생하는 함수
   const handleUnAutorization = (error: AxiosError) => {
@@ -25,9 +25,11 @@ function App() {
     onUnauthorized: handleUnAutorization,
   });
 
+  console.log(accessToken);
   useEffect(() => {
     const sendRefreshToken = async () => {
       if (!localStorage.getItem('isLoggedIn')) return;
+      console.log('refresh');
       await sendRequest({ url: '/api/refresh', withCredentials: true });
 
       if (responseData && responseData.result) {
@@ -36,7 +38,8 @@ function App() {
     };
 
     sendRefreshToken();
-  }, [responseData, sendRequest, setAccessToken]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [responseData, setAccessToken]);
   return (
     <>
       <RecoilRoot>

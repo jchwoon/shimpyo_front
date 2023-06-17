@@ -1,8 +1,9 @@
 import { forwardRef, useCallback, useState, ChangeEvent, FocusEvent, ReactElement } from 'react';
 import styled from 'styled-components';
 import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
+import { StyleNumberTypeInput } from '../../style/shareStyle';
 
-interface InputProps {
+interface InputProps extends React.HTMLProps<HTMLInputElement> {
   type: string;
   placeholder: string;
   error?: boolean;
@@ -74,11 +75,9 @@ const StylePlaceholder = styled.div`
   transition: transform 0.2s ease-in-out;
 `;
 
-const StyleInput = styled.input`
+const StyleInput = styled(StyleNumberTypeInput)`
   width: 100%;
   height: 1.5rem;
-  outline: none;
-  border: 0;
   font-size: 15px;
 
   &:not(:placeholder-shown) + div {
@@ -87,6 +86,8 @@ const StyleInput = styled.input`
 `;
 
 const StyleErrorMessage = styled.span`
+  margin-top: 5px;
+  padding-left: 10px;
   color: red;
   font-weight: 200;
   font-size: 12px;

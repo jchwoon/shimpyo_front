@@ -1,7 +1,13 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import Modal from '../../shared/Modal';
 import { useRef, useEffect, useState } from 'react';
-import { accessTokenAtom, accountInfoFindModalAtom, joinModalAtom, loginModalAtom } from '../../../recoil/atom';
+import {
+  accessTokenAtom,
+  idFindModalAtom,
+  joinModalAtom,
+  loginModalAtom,
+  passwordFindModalAtom,
+} from '../../../recoil/atom';
 import styled from 'styled-components';
 import { StyleBody, StyleFooter, StyleSwitchToLoginButton } from './JoinModal';
 import SocialButton from './SocialButton';
@@ -26,16 +32,17 @@ export default function LoginModal() {
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useRecoilState(loginModalAtom);
-  const setIsAccountInfoModalOpen = useSetRecoilState(accountInfoFindModalAtom);
+  const setIsIdFindModalOpen = useSetRecoilState(idFindModalAtom);
+  const setIsPasswordFindModalOpen = useSetRecoilState(passwordFindModalAtom);
   const setIsJoinModalOpen = useSetRecoilState(joinModalAtom);
   const setAccessToken = useSetRecoilState(accessTokenAtom);
 
   const handleLoginButtonClick = async () => {
     const emailValue = emailRef.current?.value;
-    const passwordValue = emailRef.current?.value;
+    const passwordValue = passwordRef.current?.value;
     await sendRequest({
-      url: '/api/login',
-      body: { email: emailValue, password: passwordValue },
+      url: '/public/login',
+      body: { username: emailValue, password: passwordValue },
       method: 'POST',
     });
   };
@@ -65,14 +72,25 @@ export default function LoginModal() {
       <StyleLoginBody>
         <Input ref={emailRef} placeholder="이메일" type="text" />
         <Input ref={passwordRef} placeholder="비밀번호" type="password" />
-        {isLoginError && <span>{loginErrorMessage}</span>}
-        <StyleAccountInfoFind
-          onClick={() => {
-            setIsAccountInfoModalOpen(true);
-            setIsLoginModalOpen(false);
-          }}
-        >
-          <span>아이디 비밀번호 찾기 &rarr;</span>
+        {isLoginError && <StyleError>{loginErrorMessage}</StyleError>}
+        <StyleAccountInfoFind>
+          <span
+            onClick={() => {
+              setIsIdFindModalOpen(true);
+              setIsLoginModalOpen(false);
+            }}
+          >
+            아이디 찾기 &rarr;
+          </span>{' '}
+          /{' '}
+          <span
+            onClick={() => {
+              setIsPasswordFindModalOpen(true);
+              setIsLoginModalOpen(false);
+            }}
+          >
+            비밀번호 찾기 &rarr;
+          </span>
         </StyleAccountInfoFind>
         <ColorButton disabled={isLoading} onClick={handleLoginButtonClick} label="로그인" />
       </StyleLoginBody>
@@ -122,4 +140,10 @@ const StyleAccountInfoFind = styled.div`
       color: #009ca6;
     }
   }
+`;
+
+const StyleError = styled.span`
+  margin-top: 1rem;
+  font-size: 13px;
+  color: red;
 `;
