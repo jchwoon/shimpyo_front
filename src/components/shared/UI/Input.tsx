@@ -1,8 +1,9 @@
 import { forwardRef, useCallback, useState, ChangeEvent, FocusEvent, ReactElement } from 'react';
 import styled from 'styled-components';
 import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
+import { StyleNumberTypeInput } from '../../style/shareStyle';
 
-interface InputProps {
+interface InputProps extends React.HTMLProps<HTMLInputElement> {
   type: string;
   placeholder: string;
   error?: boolean;
@@ -62,7 +63,7 @@ const StyleLabel = styled.label<{ $error?: boolean }>`
   :focus-within {
     border: 2px solid black;
     div {
-      transform: translateY(-13px) translateX(-5px) scale(0.8);
+      transform: translateY(-17px) translateX(-8px) scale(0.8);
     }
   }
 `;
@@ -74,19 +75,19 @@ const StylePlaceholder = styled.div`
   transition: transform 0.2s ease-in-out;
 `;
 
-const StyleInput = styled.input`
+const StyleInput = styled(StyleNumberTypeInput)`
   width: 100%;
   height: 1.5rem;
-  outline: none;
-  border: 0;
   font-size: 15px;
 
   &:not(:placeholder-shown) + div {
-    transform: translateY(-13px) translateX(-8px) scale(0.8);
+    transform: translateY(-17px) translateX(-8px) scale(0.8);
   }
 `;
 
 const StyleErrorMessage = styled.span`
+  margin-top: 5px;
+  padding-left: 10px;
   color: red;
   font-weight: 200;
   font-size: 12px;

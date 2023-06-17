@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, MouseEvent } from 'react';
 import { MdClose } from 'react-icons/md';
 import styled, { keyframes } from 'styled-components';
 
@@ -8,17 +8,22 @@ interface ModalProps {
   footer?: ReactElement;
   label?: string;
   title?: string | ReactElement;
+  onClose: () => void;
 }
 
-export default function Modal({ isOpen, label, title, body, footer }: ModalProps) {
+export default function Modal({ isOpen, label, title, body, footer, onClose }: ModalProps) {
   if (!isOpen) {
     return null;
   }
+
+  const closeModalHandler = () => {
+    onClose();
+  };
   return (
-    <StyleModalOverlay>
-      <StyleModalBox>
+    <StyleModalOverlay onMouseDown={closeModalHandler}>
+      <StyleModalBox onMouseDown={(e: MouseEvent) => e.stopPropagation()}>
         <StyleModalHead>
-          <MdClose style={{ position: 'absolute', left: 20 }} size={20} />
+          <MdClose onClick={onClose} style={{ position: 'absolute', left: 20, cursor: 'pointer' }} size={20} />
           <div>{label}</div>
         </StyleModalHead>
         <ParentContainer>
@@ -43,6 +48,7 @@ const moveUp = keyframes`
 `;
 
 const StyleModalOverlay = styled.div`
+  z-index: 9999;
   position: fixed;
   top: 0;
   left: 0;
@@ -66,7 +72,8 @@ const StyleModalBox = styled.div`
 
   @media only screen and (min-width: 640px) {
     background-color: white;
-    height: 600px;
+    height: auto;
+    max-height: 600px;
     width: 500px;
   }
 `;

@@ -1,7 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 import Menu from '../Menu';
 import UserMenuItem from './MenuItem';
-import { StyleMenuList } from '../../style/menu';
+import { StyleMenuList } from '../../style/shareStyle';
 import { useRef } from 'react';
 import useMenuBar from '../../../hooks/useMenuBar';
 import { BiChevronDown } from 'react-icons/bi';

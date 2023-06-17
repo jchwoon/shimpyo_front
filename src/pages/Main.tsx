@@ -6,10 +6,14 @@ import Cards from '../components/Main/Cards/Cards';
 import NavbarTheme from '../components/Main/OverrideTheme/NavbarTheme';
 import MobileNavbarTheme from '../components/Main/OverrideTheme/MobileNavbarTheme';
 import MobileFooter from '../components/Main/MobileFooter/MobileFooter';
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
+import AdditionalInfoModal from '../components/Main/Modal/AdditionalInfoModal';
+import JoinModal from '../components/Main/Modal/JoinModal';
+import LoginModal from '../components/Main/Modal/LoginModal';
+import IdFindModal from '../components/Main/Modal/IdFindModal';
+import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
 
 export default function Main() {
-
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -23,24 +27,29 @@ export default function Main() {
     };
   }, []);
 
-  return <>
-    <CssBaseline />
-    {
-      isLargeScreen ?
-          <ThemeProvider theme={NavbarTheme}>
-            <Navbar />
-          </ThemeProvider>
-        :
-          <ThemeProvider theme={MobileNavbarTheme}>
-            <MobileNavbar />
-          </ThemeProvider>
-    }
-    <Cards />
-    {isLargeScreen ?
-      null :
-      <ThemeProvider theme={MobileNavbarTheme}>
-        <MobileFooter />
-      </ThemeProvider >
-    }
-  </>
+  return (
+    <>
+      <CssBaseline />
+      {isLargeScreen ? (
+        <ThemeProvider theme={NavbarTheme}>
+          <Navbar />
+        </ThemeProvider>
+      ) : (
+        <ThemeProvider theme={MobileNavbarTheme}>
+          <MobileNavbar />
+        </ThemeProvider>
+      )}
+      <Cards />
+      {isLargeScreen ? null : (
+        <ThemeProvider theme={MobileNavbarTheme}>
+          <MobileFooter />
+        </ThemeProvider>
+      )}
+      <LoginModal />
+      <JoinModal />
+      <AdditionalInfoModal />
+      <IdFindModal />
+      <PasswordFindModal />
+    </>
+  );
 }

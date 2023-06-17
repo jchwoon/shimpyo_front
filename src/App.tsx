@@ -1,9 +1,44 @@
 import './App.css';
-import "./fonts.css"
-import { RecoilRoot } from 'recoil';
-import { Outlet } from 'react-router-dom';
+import './fonts.css';
+import { RecoilRoot, useRecoilState } from 'recoil';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { accessTokenAtom } from './recoil/atoms';
+import { useEffect } from 'react';
+import { AxiosError } from 'axios';
+import useAuthorizedRequest from './hooks/useAuthorizedRequest';
+
+interface ResultData {
+  accessToken: string;
+}
 
 function App() {
+  const navigation = useNavigate();
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
+
+  //권한 없을때 발생하는 함수
+  const handleUnAutorization = (error: AxiosError) => {
+    localStorage.setItem('isLoggedIn', JSON.stringify(false));
+    navigation('/');
+    console.error(error.message);
+  };
+
+  const { responseData, sendRequest } = useAuthorizedRequest<ResultData>({
+    onUnauthorized: handleUnAutorization,
+  });
+
+  useEffect(() => {
+    const sendRefreshToken = async () => {
+      if (!localStorage.getItem('isLoggedIn')) return;
+      console.log('refresh');
+      await sendRequest({ url: '/api/refresh', withCredentials: true });
+
+      if (responseData && responseData.result) {
+        setAccessToken(responseData.result.accessToken);
+      }
+    };
+
+    sendRefreshToken();
+  }, []);
   return (
     <>
       <RecoilRoot>
