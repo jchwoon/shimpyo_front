@@ -8,6 +8,9 @@ import RoomTypeContents from '../components/accommodation/contents/RoomTypeConte
 import LocationMap from '../components/accommodation/contents/LocationMap';
 import AccommodationTypeContents from '../components/accommodation/contents/AccommodationTypeContents';
 import StepBar from '../components/accommodation/StepBar';
+import AccommodationNameContents from '../components/accommodation/contents/AccommodationNameContents';
+import AccommodationDetailContents from '../components/accommodation/contents/AccommodationDetailContents';
+import AccommodationFeeContents from '../components/accommodation/contents/AccommodationFeeContents';
 
 export default function Accommodation() {
   return (
@@ -35,15 +38,6 @@ export default function Accommodation() {
       <br></br>
       <br></br>
       <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
       <AccommodationCountInfoContents />
       <br></br>
       <br></br>
@@ -55,6 +49,21 @@ export default function Accommodation() {
       <br></br>
       <br></br>
       <AccommodationAddPictureContents />
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <AccommodationNameContents />
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <AccommodationDetailContents />
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <AccommodationFeeContents />
       <br></br>
       <br></br>
       <br></br>
