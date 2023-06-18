@@ -20,6 +20,7 @@ export default function AccommodationAddPicture() {
   ]);
 
   const dragRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
@@ -41,6 +42,14 @@ export default function AccommodationAddPicture() {
       }
     }
   };
+
+  /**같은 이미지를 연속으로 업로드할때 필요한 함수 */
+  const resetFileInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  };
+
   // const handleLabelClick = (index: number) => {
   //   const updatedImageList = [...imageList];
   //   updatedImageList[index].isFocused = true;
@@ -97,39 +106,52 @@ export default function AccommodationAddPicture() {
                 <StyledImage src={item.image} alt="이미지" />
               </StyledContainer>
             );
+          } else {
+            return (
+              <div key={idx}>
+                {item.image === '' ? (
+                  <StyledPlusContainer>
+                    <StyledPlusImgIcon />
+                    <StyledPlusLabel
+                      htmlFor={`file${idx}`}
+                      onDrop={onDrop}
+                      onDragOver={onDragOver}
+                      onDragLeave={onDragLeave}
+                    ></StyledPlusLabel>
+                    <StyledPlusInput
+                      onChange={handleOnChange}
+                      id={`file${idx}`}
+                      type="file"
+                      accept="image/*"
+                    ></StyledPlusInput>
+                  </StyledPlusContainer>
+                ) : (
+                  <StyledPlusContainer>
+                    <ImageOption index={idx} setImageList={setImageList} imageList={imageList} />
+                    <StyledImage src={item.image} alt="이미지" />
+                  </StyledPlusContainer>
+                )}
+              </div>
+            );
           }
-          return (
-            <>
-              {item.image === '' ? (
-                <StyledPlusContainer>
-                  <StyledPlusImgIcon />
-                  <StyledPlusLabel
-                    htmlFor="file"
-                    onDrop={onDrop}
-                    onDragOver={onDragOver}
-                    onDragLeave={onDragLeave}
-                  ></StyledPlusLabel>
-                  <StyledPlusInput onChange={handleOnChange} id="file" type="file" accept="image/*"></StyledPlusInput>
-                </StyledPlusContainer>
-              ) : (
-                <StyledPlusContainer key={idx}>
-                  <ImageOption index={idx} setImageList={setImageList} imageList={imageList} />
-                  <StyledImage src={item.image} alt="이미지" />
-                </StyledPlusContainer>
-              )}
-            </>
-          );
         })}
       {imageList[0]?.image !== '' && (
         <StyledPlusContainer>
           <StyledLastImgIcon />
           <StyledPlusLabel
-            htmlFor="filelast"
+            htmlFor="fileLast"
             onDrop={onDrop}
             onDragOver={onDragOver}
             onDragLeave={onDragLeave}
           ></StyledPlusLabel>
-          <StyledPlusInput onChange={handleOnChange} id="filelast" type="file" accept="image/*"></StyledPlusInput>
+          <StyledPlusInput
+            ref={inputRef}
+            onChange={handleOnChange}
+            id="fileLast"
+            type="file"
+            accept="image/*"
+            onClick={resetFileInput}
+          ></StyledPlusInput>
           <StyledLastContentSubTitle>추가</StyledLastContentSubTitle>
         </StyledPlusContainer>
       )}

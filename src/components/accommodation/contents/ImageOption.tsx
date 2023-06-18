@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, MouseEvent } from 'react';
+import { useState, ChangeEvent, MouseEvent, useEffect, useRef, SyntheticEvent } from 'react';
 import { SlOptions } from 'react-icons/sl';
 import styled from 'styled-components';
 
@@ -13,15 +13,11 @@ interface ImageOptionProps {
 
 export default function ImageOption({ index, setImageList, imageList }: ImageOptionProps) {
   const [isClicked, setIsClicked] = useState<boolean>(false);
+  const divRef = useRef<HTMLDivElement>(null);
 
   const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setIsClicked(preState => !preState);
-  };
-
-  const handleOnBlur = () => {
-    setTimeout(() => {
-      setIsClicked(false);
-    }, 3000);
   };
 
   const deleteImage = (index: number) => () => {
@@ -37,7 +33,7 @@ export default function ImageOption({ index, setImageList, imageList }: ImageOpt
 
   const editImage = (index: number) => async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
-
+    setIsClicked(true);
     if (file?.[0]) {
       try {
         const result = (await imageReader(file[0])) as string;
@@ -52,9 +48,22 @@ export default function ImageOption({ index, setImageList, imageList }: ImageOpt
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e: Event) => {
+      if (divRef.current && !divRef.current.contains(e.target as Node)) {
+        setIsClicked(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <StyledRelativeDiv>
-      <StyledBtn onClick={handleOnClick} onBlur={handleOnBlur}>
+    <StyledRelativeDiv ref={divRef}>
+      <StyledBtn onMouseDown={handleOnClick}>
         <SlOptions />
       </StyledBtn>
 
@@ -83,21 +92,22 @@ const StyledBtn = styled.button`
   align-items: center;
   width: 32px;
   height: 32px;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.1);
   transition: transform 0.25s ease-in-out;
   cursor: pointer;
   border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.6);
     transform: scale(1.04);
-    box-shadow: 0 0 0 4px transparent;
+    box-shadow: 0 3px 10px 3px rgba(0, 0, 0, 0.07);
   }
 
   &:active {
     transform: scale(0.95);
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.05);
   }
 `;
 
