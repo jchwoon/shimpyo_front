@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, MouseEvent, useEffect, useRef, SyntheticEvent } from 'react';
+import { useState, ChangeEvent, MouseEvent, useEffect, useRef } from 'react';
 import { SlOptions } from 'react-icons/sl';
 import styled from 'styled-components';
 
