@@ -5,6 +5,7 @@ import App from '../App';
 const Hosting = lazy(() => import('../pages/Hosting'));
 const Main = lazy(() => import('../pages/Main'));
 const Detail = lazy(() => import('../pages/detail'));
+const Accommodation = lazy(() => import('../pages/Accommodation'));
 const NotFound = lazy(() => import('../pages/404'));
 const router = createBrowserRouter([
   {
