@@ -1,11 +1,17 @@
 {
   "name": "airbnb",
   "version": "0.1.0",
+  "sideEffects": false,
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.13.2",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/lab": "^5.0.0-alpha.132",
+    "@mui/material": "^5.13.3",
+    "@mui/styled-engine-sc": "^5.12.0",
+    "@mui/x-date-pickers": "^6.6.0",
+    "@mui/x-date-pickers-pro": "^6.6.0",
     "@react-icons/all-files": "^4.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -16,15 +22,21 @@
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.4",
     "@types/react-router-dom": "^5.3.3",
+    "autosuggest-highlight": "^3.3.4",
     "axios": "^1.4.0",
+    "dayjs": "^1.11.8",
+    "moment": "^2.29.4",
     "dotenv": "^16.1.4",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
+    "react-calendar": "^4.2.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.9.0",
-    "react-router-dom": "^6.11.2",
+    "react-rainbow-components": "^1.32.0",
+    "react-router-dom": "^6.13.0",
     "react-scripts": "5.0.1",
     "recoil": "^0.7.7",
+    "source-map-explorer": "^2.5.3",
     "styled-components": "^5.3.11",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
@@ -33,7 +45,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": [
@@ -54,7 +67,6 @@
     ]
   },
   "devDependencies": {
-    "@types/google.maps": "^3.53.3",
     "@types/styled-components": "^5.1.26"
   }
 }

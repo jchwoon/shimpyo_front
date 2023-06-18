@@ -1,0 +1,76 @@
+import {
+    CustomizedAppBar,
+    CustomizedToolBar,
+    CustomizedSearchButton,
+    CustomizedTypography,
+    CustomizedDivider,
+    CustomizedAvatar,
+    CustomizedSearchIcon,
+    CustomizedClearIcon,
+    CustomizedModbileNavbarDeleteIconButton
+} from "./MobileNavbar.style"
+import { useState } from "react"
+
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+
+import { DrawerContent } from "./DrawerContent";
+
+export default function MobileNavbar() {
+
+    const [open, setOpen] = useState(false);
+    const toggleDrawer = (newOpen: boolean) => () => {
+        setOpen(newOpen);
+    };
+    const [activecard, setActiveCard] = useState('')
+
+    const paperProps = {
+        style: { backgroundColor: "#F7F7F7" },
+    };
+
+    return <>
+        <SwipeableDrawer
+            open={open}
+            onClose={toggleDrawer(false)}
+            onOpen={toggleDrawer(true)}
+            anchor="top"
+            PaperProps={paperProps}
+        >
+            <div style={{ display: "flex", justifyContent: "flex-end", paddingTop: "5px", paddingRight: "10px" }}>
+                <CustomizedModbileNavbarDeleteIconButton onClick={toggleDrawer(false)} >
+                    <CustomizedClearIcon />
+                </CustomizedModbileNavbarDeleteIconButton>
+            </div>
+            <DrawerContent activecard={activecard} setActiveCard={setActiveCard} open={open} />
+        </SwipeableDrawer>
+        <CustomizedAppBar elevation={0}>
+            <CustomizedToolBar>
+                <CustomizedSearchButton
+                    variant="contained"
+                    disableRipple
+                    onClick={toggleDrawer(true)}
+                >
+                    <div onClick={() => setActiveCard('card1')}>
+                        <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" textAlign="left" sx={{ paddingLeft: "20px", paddingRight: "15px", width: "100px" }}>
+                            어디든지
+                        </CustomizedTypography>
+                    </div>
+                    <CustomizedDivider orientation="vertical" flexItem />
+                    <div onClick={() => setActiveCard('card2')}>
+                        <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" sx={{ paddingLeft: "15px", paddingRight: "15px", width: "90px" }}>
+                            언제든지
+                        </CustomizedTypography>
+                    </div>
+                    <CustomizedDivider orientation="vertical" flexItem />
+                    <div onClick={() => setActiveCard('card3')}>
+                        <CustomizedTypography fontFamily='Noto Sans KR' fontWeight="500" sx={{ paddingLeft: "20px", width: "100px" }}>
+                            게스트 추가
+                        </CustomizedTypography>
+                    </div>
+                    <CustomizedAvatar sx={{ marginLeft: "3px" }} >
+                        <CustomizedSearchIcon />
+                    </CustomizedAvatar>
+                </CustomizedSearchButton>
+            </CustomizedToolBar>
+        </CustomizedAppBar>
+    </>
+}

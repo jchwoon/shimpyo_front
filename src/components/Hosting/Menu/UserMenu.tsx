@@ -11,16 +11,16 @@ import { CgProfile } from 'react-icons/cg';
 import { useRef } from 'react';
 import MenuBlock from './MenuBlock';
 import Menu from '../Menu';
-import { StyleMenuList } from '../../style/menu';
+import { StyleMenuList } from '../../style/shareStyle';
 import Button from '../../shared/UI/Button';
-import UseMenuBar from '../../../hooks/UseMenuBar';
-import UseResponseToViewPort from '../../../hooks/UseResponseToViewPort';
+import useMenuBar from '../../../hooks/useMenuBar';
+import useResponseToViewPort from '../../../hooks/useResponseToViewPort';
 
 export default function UserMenu() {
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
-  const { isOpen } = UseMenuBar({ initialState: false, menuRef, buttonRef });
-  const { viewPortWidth } = UseResponseToViewPort();
+  const { isOpen } = useMenuBar({ initialState: false, menuRef, buttonRef });
+  const { viewPortWidth } = useResponseToViewPort();
 
   return (
     <Menu>
@@ -44,7 +44,7 @@ export default function UserMenu() {
         </StyleUserMenuList>
       )}
       {isOpen && viewPortWidth <= 1024 && (
-        <StyleTotalContainer showMenu={isOpen}>
+        <StyleTotalContainer ref={menuRef} showMenu={isOpen}>
           <StyleTotalMenuBox>
             <MenuBlock label="메뉴">
               <UserMenuItem icon={RiMailOpenLine} bold label="투데이" />

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
  *
  * @returns {object} - viewPortWidth: 브라우저 창의 너비값
  */
-export default function UseResponseToViewPort() {
+export default function useResponseToViewPort() {
   const [viewPortWidth, setViewPortWidth] = useState(window.innerWidth);
 
   const resizeHandler = useCallback(() => {

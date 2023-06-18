@@ -1,0 +1,48 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Frontend Repo
+        uses: actions/checkout@v3
+
+      - name: Set CI environment variable #경고 무시
+        run: echo "CI=false" >> $GITHUB_ENV
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Cache NPM dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Build
+        run: npm run build
+
+      - name: Setup SSH keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+  
+      - name: Install SSH client
+        run: sudo apt-get install -y openssh-client
+  
+      - name: Copy build folder to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no -r $GITHUB_WORKSPACE/build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/git/front
