@@ -10,13 +10,12 @@ import {
 } from '../../../recoil/atoms';
 import styled from 'styled-components';
 import { StyleBody, StyleFooter, StyleSwitchToLoginButton } from './JoinModal';
-import SocialButton from './SocialButton';
-import { ImBubble } from 'react-icons/im';
-import { SiNaver } from 'react-icons/si';
-import { FcGoogle } from 'react-icons/fc';
 import ColorButton from '../../shared/UI/ColorButton';
 import useHttpRequest from '../../../hooks/useHttpRequest';
 import Input from '../../shared/UI/Input';
+import NaverLogin from '../SocialLogin/NaverLogin';
+import GoogleSocialLogin from '../SocialLogin/GoogleSocialLogin';
+import KakaoLogin from '../SocialLogin/KakaoLogin';
 
 interface ResultData {
   accessToken: string;
@@ -100,9 +99,9 @@ export default function LoginModal() {
 
   const footer = (
     <StyleLoginFooter>
-      <SocialButton iconColor="#000000" containerColor="#FEE500" icon={ImBubble} label="카카오 로그인" />
-      <SocialButton iconColor="#FFFFFF" containerColor="#17B75E" icon={SiNaver} label="네이버 로그인" />
-      <SocialButton containerColor="#F4F4F4" icon={FcGoogle} label="구글 로그인" />
+      <KakaoLogin />
+      <NaverLogin />
+      <GoogleSocialLogin />
       <StyleSwitchToJoinButton
         onClick={() => {
           setIsLoginModalOpen(false);
@@ -114,14 +113,16 @@ export default function LoginModal() {
     </StyleLoginFooter>
   );
   return (
-    <Modal
-      footer={footer}
-      label="로그인"
-      onClose={() => setIsLoginModalOpen(false)}
-      title={title}
-      body={body}
-      isOpen={isLoginModalOpen}
-    />
+    <>
+      <Modal
+        footer={footer}
+        label="로그인"
+        onClose={() => setIsLoginModalOpen(false)}
+        title={title}
+        body={body}
+        isOpen={isLoginModalOpen}
+      />
+    </>
   );
 }
 const StyleLoginBody = styled(StyleBody)``;

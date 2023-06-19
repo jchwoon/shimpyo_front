@@ -6,6 +6,7 @@ import { accessTokenAtom } from './recoil/atoms';
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import useAuthorizedRequest from './hooks/useAuthorizedRequest';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 interface ResultData {
   accessToken: string;
@@ -41,9 +42,11 @@ function App() {
   }, []);
   return (
     <>
-      <RecoilRoot>
-        <Outlet />
-      </RecoilRoot>
+      <GoogleOAuthProvider clientId="1034913727334-csbf3k5ajfe5s5c1gpi8veo7pq2j94rl.apps.googleusercontent.com">
+        <RecoilRoot>
+          <Outlet />
+        </RecoilRoot>
+      </GoogleOAuthProvider>
     </>
   );
 }

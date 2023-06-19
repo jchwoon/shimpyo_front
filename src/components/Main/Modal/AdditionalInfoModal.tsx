@@ -31,6 +31,7 @@ export default function AdditionalInfoModal() {
   const [passwordValue, setPasswordValue] = useRecoilState(passwordValueAtom);
   const [nicknameValue, setNicknameValue] = useRecoilState(nicknameValueAtom);
 
+  console.log(emailValue);
   const isValid = isNicknameValid && isPhoneValid;
 
   const getNicknameValid = (valid: boolean) => {

@@ -74,7 +74,8 @@ const StyleModalBox = styled.div`
     background-color: white;
     height: auto;
     max-height: 600px;
-    width: 500px;
+    min-width: 500px;
+    width: auto;
   }
 `;
 
