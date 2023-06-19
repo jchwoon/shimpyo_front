@@ -12,16 +12,21 @@ jobs:
       - name: Checkout Frontend Repo
         uses: actions/checkout@v3
 
-      - name: Clear npm cache
-        run: npm cache clean --force
-
-      - name: Set CI environment variable
+      - name: Set CI environment variable #경고 무시
         run: echo "CI=false" >> $GITHUB_ENV
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # 설치할 Node.js 버전을 지정합니다.
+          node-version: '18'
+
+      - name: Cache NPM dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm install
