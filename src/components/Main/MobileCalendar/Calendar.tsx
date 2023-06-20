@@ -21,8 +21,8 @@ export const Calendar = () => {
         <StyledCalendarDiv>
 
             <Header currentDate={currentDate} setCurrentDate={setCurrentDate} />
-            <Days/>
-            <Cells currentDate={currentDate}/>
+            <Days />
+            <Cells currentDate={currentDate} />
         </StyledCalendarDiv>
     )
 }

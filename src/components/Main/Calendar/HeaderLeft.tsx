@@ -25,7 +25,7 @@ export const HeaderLeft: React.FC<HeaderProps> = ({ currentDate, setCurrentDate 
     const currentMonth = moment(currentDate).format("YYYY년 M월");
 
     const PrevButtonClick = () => {
-       setCurrentDate(moment(currentDate).subtract(1, "months").format())
+        setCurrentDate(moment(currentDate).subtract(1, "months").format())
     }
 
     const NextButtonClick = () => {
@@ -34,11 +34,11 @@ export const HeaderLeft: React.FC<HeaderProps> = ({ currentDate, setCurrentDate 
 
     return (
         <StyledHeaderDiv>
-            <IconButton onClick={PrevButtonClick}><KeyboardArrowLeftIcon/></IconButton>
-                <Typography fontFamily='Noto Sans KR' fontWeight="500">
-                    {currentMonth}
-                </Typography>
-            <div/>
+            <IconButton onClick={PrevButtonClick}><KeyboardArrowLeftIcon /></IconButton>
+            <Typography fontFamily='Noto Sans KR' fontWeight="500">
+                {currentMonth}
+            </Typography>
+            <div />
         </StyledHeaderDiv>
     );
 };

@@ -18,7 +18,7 @@ export default function Main() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsLargeScreen(window.innerWidth >= 930);
+      setIsLargeScreen(window.innerWidth >= 1060);
     };
     window.addEventListener('resize', handleResize);
     handleResize();

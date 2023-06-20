@@ -316,6 +316,7 @@ height: 30px;
 position: fixed;
 top: ${props => props.top}px;
 left: ${props => props.left}px;
+z-index: 1;
 `
 
 export const CustomizedDeleteIconButtonInSearchField = styled(IconButton) <{ top: number, left: number }>`
@@ -338,7 +339,7 @@ height: 30px;
 :hover {
   background-color: #00c5cf;
 }
-position:  fixed;
+position: fixed;
 top: ${props => props.top}px;
 left: ${props => props.left}px;
 `

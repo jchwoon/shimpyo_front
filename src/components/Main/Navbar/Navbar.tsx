@@ -205,6 +205,25 @@ export default function Navbar() {
     handleButtonClick('button3');
   }
 
+  const CustomizedDeleteIconButtonTop = secondDivider?.getBoundingClientRect().top;
+  const CustomizedDeleteIconButtonLeft = secondDivider?.getBoundingClientRect().left;
+
+  const firstDeleteIconButton = <CustomizedDeleteIconButton
+    onClick={resetFunction}
+    top={firstDivider ? firstDivider.getBoundingClientRect().top - 5 : 0}
+    left={firstDivider ? firstDivider.getBoundingClientRect().left - 10 : 0}
+  >
+    <CustomziedClearIcon />
+  </CustomizedDeleteIconButton>
+
+  const secondDeleteIconButton = <CustomizedDeleteIconButton
+    onClick={resetFunction}
+    top={secondDivider ? secondDivider.getBoundingClientRect().top - 5 : 0}
+    left={secondDivider ? secondDivider.getBoundingClientRect().left - 10 : 0}
+  >
+    <CustomziedClearIcon />
+  </CustomizedDeleteIconButton>
+
   return (
     <CustomizedAppBar elevation={0} appbarheight={appbarheight}>
       <CustomizedToolBar>
@@ -308,10 +327,10 @@ export default function Navbar() {
                           ? moment(firstPickedDate).format('M월 D일')
                           : '날짜 추가'
                         : firstPickedDate
-                        ? moment(secondPickedDate).format('M월 D일')
-                          ? moment(firstPickedDate).format('M월 D일')
-                          : '날짜 추가'
-                        : '날짜 추가'}
+                          ? secondPickedDate
+                            ? moment(firstPickedDate).format('M월 D일')
+                            : '날짜 추가'
+                          : '날짜 추가'}
                     </CustomizedChangeTypography>
                   </CustomizedWhenVerticalWrapperDiv>
                 </CustomizedActiveSearchButton>
@@ -333,10 +352,10 @@ export default function Navbar() {
                           ? moment(firstPickedDate).format('M월 D일')
                           : '날짜 추가'
                         : firstPickedDate
-                        ? moment(secondPickedDate).format('M월 D일')
-                          ? moment(firstPickedDate).format('M월 D일')
-                          : '날짜 추가'
-                        : '날짜 추가'}
+                          ? moment(secondPickedDate).format('M월 D일')
+                            ? moment(firstPickedDate).format('M월 D일')
+                            : '날짜 추가'
+                          : '날짜 추가'}
                     </CustomizedChangeTypography>
                   </CustomizedWhenVerticalWrapperDiv>
                 </CustomizedSearchInsideButton>
@@ -346,20 +365,34 @@ export default function Navbar() {
                 anchorEl={checkInOutAnchorEl}
                 open={checkInOutOpen}
                 onClose={checkInOutClose}
-                elevation={1}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+                elevation={1}
               >
-                {firstPickedDate && (
-                  <CustomizedDeleteIconButton
-                    onClick={resetFunction}
-                    top={buttonPosition.top}
-                    left={buttonPosition.left}
-                  >
-                    <CustomziedClearIcon />
-                  </CustomizedDeleteIconButton>
-                )}
                 <Calendar />
+                {
+                  firstPickedFirst ? (
+                    firstPickedDate ? (
+                      secondPickedDate ? (
+                        activebutton === "button2" ?
+                          firstDeleteIconButton
+                          : activebutton === "button3" ?
+                            secondDeleteIconButton
+                            : null
+                      ) : (
+                        secondDeleteIconButton
+                      )
+                    ) : null
+                  ) : firstPickedDate ? (
+                    secondPickedDate ? (
+                      activebutton === "button2" ? (
+                        firstDeleteIconButton
+                      ) : activebutton === "button3" ? (
+                        secondDeleteIconButton
+                      ) : null
+                    ) : firstDeleteIconButton
+                  ) : null
+                }
               </CustomizedMenu>
 
               <CustomizedAdditionalDivider
@@ -388,10 +421,10 @@ export default function Navbar() {
                           ? moment(secondPickedDate).format('M월 D일')
                           : '날짜 추가'
                         : firstPickedDate
-                        ? secondPickedDate
-                          ? moment(secondPickedDate).format('M월 D일')
-                          : moment(firstPickedDate).format('M월 D일')
-                        : '날짜 추가'}
+                          ? secondPickedDate
+                            ? moment(secondPickedDate).format('M월 D일')
+                            : moment(firstPickedDate).format('M월 D일')
+                          : '날짜 추가'}
                     </CustomizedChangeTypography>
                   </CustomizedAddtionalWhenVerticalWrapperDiv>
                 </CustomizedAdditionalActiveSearchButton>
@@ -413,10 +446,10 @@ export default function Navbar() {
                           ? moment(secondPickedDate).format('M월 D일')
                           : '날짜 추가'
                         : firstPickedDate
-                        ? secondPickedDate
-                          ? moment(secondPickedDate).format('M월 D일')
-                          : '날짜 추가'
-                        : '날짜 추가'}
+                          ? secondPickedDate
+                            ? moment(secondPickedDate).format('M월 D일')
+                            : moment(firstPickedDate).format('M월 D일')
+                          : '날짜 추가'}
                     </CustomizedChangeTypography>
                   </CustomizedAddtionalWhenVerticalWrapperDiv>
                 </CustomizedAdditionalSearchInsideButton>
@@ -499,6 +532,6 @@ export default function Navbar() {
 
         <CustomizedMenus />
       </CustomizedToolBar>
-    </CustomizedAppBar>
+    </CustomizedAppBar >
   );
 }

@@ -22,10 +22,10 @@ interface HeaderProps {
 
 export const HeaderRight: React.FC<HeaderProps> = ({ currentDate, setCurrentDate }) => {
 
-    const currentMonth = moment(currentDate).add(1,'months').format("YYYY년 M월");
+    const currentMonth = moment(currentDate).add(1, 'months').format("YYYY년 M월");
 
     const PrevButtonClick = () => {
-       setCurrentDate(moment(currentDate).subtract(1, "months").format())
+        setCurrentDate(moment(currentDate).subtract(1, "months").format())
     }
 
     const NextButtonClick = () => {
@@ -34,11 +34,11 @@ export const HeaderRight: React.FC<HeaderProps> = ({ currentDate, setCurrentDate
 
     return (
         <StyledHeaderDiv>
-            <div/>
-                <Typography fontFamily='Noto Sans KR' fontWeight="500">
-                    {currentMonth}
-                </Typography>
-            <IconButton onClick={NextButtonClick}><KeyboardArrowRightIcon/></IconButton>
+            <div />
+            <Typography fontFamily='Noto Sans KR' fontWeight="500">
+                {currentMonth}
+            </Typography>
+            <IconButton onClick={NextButtonClick}><KeyboardArrowRightIcon /></IconButton>
         </StyledHeaderDiv>
     );
 };
