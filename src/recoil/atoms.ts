@@ -104,3 +104,13 @@ export const accessTokenAtom = atom<string>({
   key: 'accessTokenAtom',
   default: '',
 });
+
+export const activeRoomPrice = atom<number | null>({
+  key: 'activeRoomPrice',
+  default: null,
+});
+
+export const activeRoomName = atom<string>({
+  key: 'activeRoomName',
+  default: '',
+});

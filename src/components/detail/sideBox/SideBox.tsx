@@ -2,7 +2,26 @@ import { useState } from 'react';
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 import styled from 'styled-components';
 import Guest from './Guest';
+import moment from 'moment';
 import 'moment/locale/ko';
+import { Typography } from '@mui/material';
+
+import { useRecoilValue, useRecoilState } from "recoil";
+import {
+  activeRoomPrice,
+  activeRoomName,
+  FirstPickedDate,
+  SecondPickedDate,
+  AdultGuest,
+  ChildGuest,
+  InfantGuest,
+} from '../../../recoil/atoms';
+
+import { CustomizedMenu } from '../Navbar/Navbar.styled';
+import { Calendar } from '../Calendar/Calendar';
+
+import { GuestCountAdult, GuestCountChild, GuestCountInfant } from '../Navbar/GuestCount';
+import { Divider } from '@mui/material';
 
 export default function SideBox() {
   const [guest, setGuest] = useState(false);
@@ -11,6 +30,11 @@ export default function SideBox() {
   const [endDate, setEndDate] = useState('날짜 추가');
   const [calendar, setCalendar] = useState(false);
   const [booking, setBooking] = useState(true);
+
+  const price = useRecoilValue(activeRoomPrice)
+  const Name = useRecoilValue(activeRoomName)
+  const firstPickedDate = useRecoilValue(FirstPickedDate)
+  const secondPickedDate = useRecoilValue(SecondPickedDate)
 
   /** 게스트의 연령층, 인원수를 바꿔주는 함수*/
   const guestChange = (label: string) => {
@@ -76,57 +100,111 @@ export default function SideBox() {
     setCalendar(prev => !prev);
   };
 
+  const checkCalendarBox = document.getElementById('CheckCalendarBox');
+  const [checkInOutAnchorEl, setCheckInOutAnchorEl] = useState<null | HTMLElement>(null);
+  const checkInOutOpen = Boolean(checkInOutAnchorEl);
+  const handleCheckInOutClick = () => {
+    setCheckInOutAnchorEl(checkCalendarBox);
+  };
+  const checkInOutClose = () => {
+    setCheckInOutAnchorEl(null);
+  };
+
+  const people = document.getElementById('People');
+  const [guestCountAnchorEl, setGuestCountAnchorEl] = useState<null | HTMLElement>(null);
+  const guestCountOpen = Boolean(guestCountAnchorEl);
+  const handleGuestCountClick = () => {
+    setGuestCountAnchorEl(people);
+  };
+  const guestCountClose = () => {
+    setGuestCountAnchorEl(null);
+  };
+
+  const [AdultGuestNumber, setAdultGuestNumber] = useRecoilState(AdultGuest);
+  const [ChildGuestNumber, setChildGuestNumber] = useRecoilState(ChildGuest);
+  const [InfantGuestNumber, setInfantGuestNumber] = useRecoilState(InfantGuest);
+
+  const TotalGuestNumber = AdultGuestNumber + ChildGuestNumber;
+  if (InfantGuestNumber > 0 && AdultGuestNumber === 0) {
+    setAdultGuestNumber(prevValue => prevValue + 1);
+  }
+  const TotalGuestNumberCount =
+    InfantGuestNumber === 0
+      ? `게스트 ${TotalGuestNumber}명`
+      : `게스트 ${TotalGuestNumber} 명, 유아 ${InfantGuestNumber}명 `;
+
   return (
     <Main booking={booking}>
-      <Text>
-        <TotalPrice>₩23,000</TotalPrice>
-        <Day>/박</Day>
-      </Text>
+      <div style={{ paddingBottom: "15px" }}>
+        {price && Name ?
+          <RoomInfo>
+            <Typography fontFamily='Noto Sans KR'>{Name}</Typography>
+            <div style={{ display: "flex", alignItems: "flex-end" }}>
+              <Typography fontFamily='Noto Sans KR' fontWeight="500">₩ {price.toLocaleString()}</Typography>
+              <Typography fontFamily='Noto Sans KR' fontWeight="300" fontSize="12px">/박</Typography>
+            </div>
+          </RoomInfo>
+          :
+          <Typography fontFamily='Noto Sans KR'>객실을 선택해주세요</Typography>}
+      </div>
       <CheckContainer>
-        <CheckCalendarBox onClick={toggleCalendar}>
+        <CheckCalendarBox onClick={handleCheckInOutClick} id='CheckCalendarBox'>
           <CheckInOutBox borderRight="1px solid black">
             <CheckTitle>체크인</CheckTitle>
-            <CheckDate>{startDate}</CheckDate>
+            <CheckDate>{moment(firstPickedDate).format('M월 D일')}</CheckDate>
           </CheckInOutBox>
           <CheckInOutBox>
             <CheckTitle>체크아웃</CheckTitle>
-            <CheckDate>{endDate}</CheckDate>
+            <CheckDate>{moment(secondPickedDate).format('M월 D일')}</CheckDate>
           </CheckInOutBox>
         </CheckCalendarBox>
-        <People onClick={toggleGuest}>
+        <CustomizedMenu
+          id="basic-menu"
+          anchorEl={checkInOutAnchorEl}
+          open={checkInOutOpen}
+          onClose={checkInOutClose}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+          elevation={1}
+        >
+          <Calendar />
+        </CustomizedMenu>
+        <People onClick={handleGuestCountClick} id='People'>
           <PeopleTitle>인원</PeopleTitle>
           <PeopleDetail>
-            <div>
-              게스트 {guestCount[0]}명{guestCount[1] !== 0 && <span>, 어린이 {guestCount[1]}명</span>}
-              {guestCount[2] !== 0 && <span>, 유아 {guestCount[2]}명</span>}
-            </div>
-            <div>
-              {!guest && <AiOutlineDown />}
-              {guest && <AiOutlineUp />}
-            </div>
+            {TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}
           </PeopleDetail>
         </People>
-        {guest && <Guest guestCount={guestCount} guestChange={guestChange} toggleGuest={toggleGuest} />}
+        <CustomizedMenu
+          id="basic-menu2"
+          anchorEl={guestCountAnchorEl}
+          open={guestCountOpen}
+          onClose={guestCountClose}
+          elevation={1}
+        >
+          <GuestCountAdult />
+          <Divider variant="middle" />
+          <GuestCountChild />
+          <Divider variant="middle" />
+          <GuestCountInfant />
+        </CustomizedMenu>
       </CheckContainer>
-      <BookingBtn onClick={toggleBooking}>예약 가능 여부 보기</BookingBtn>
-      {booking && (
-        <BookingInfo>
-          <BookingNotice>예약 확정 전에는 요금이 청구되지 않습니다.</BookingNotice>
-          <BookingLine>
-            <BookingDetail>₩230,000 x 1박</BookingDetail>
-            <BookingAmount>₩230,000 </BookingAmount>
-          </BookingLine>
-          <BookingLine>
-            <BookingDetail>에어비엔비 서비스 수수료</BookingDetail>
-            <BookingAmount>₩35,718 </BookingAmount>
-          </BookingLine>
-          <BookingTotal>
-            <TotalDetail>총 합계</TotalDetail>
-            <TotalAmount>₩265,718</TotalAmount>
-          </BookingTotal>
-        </BookingInfo>
-      )}
-    </Main>
+      <BookingBtn onClick={toggleBooking}>예약</BookingBtn>
+
+      {price && <BookingInfo>
+        <BookingNotice>예약 확정 전에는 요금이 청구되지 않습니다.</BookingNotice>
+        <BookingLine>
+          <BookingDetail>₩ {price.toLocaleString()} x {moment(secondPickedDate).diff(moment(firstPickedDate), "days")}</BookingDetail>
+          <BookingAmount>₩ {price * moment(secondPickedDate).diff(moment(firstPickedDate), "days")} </BookingAmount>
+        </BookingLine>
+        <BookingTotal>
+          <TotalDetail>총 합계</TotalDetail>
+          <TotalAmount>₩ {price * moment(secondPickedDate).diff(moment(firstPickedDate), "days")}</TotalAmount>
+        </BookingTotal>
+      </BookingInfo>}
+
+
+    </Main >
   );
 }
 interface IMain {
@@ -150,8 +228,10 @@ const Main = styled.div<IMain>`
     box-shadow: none;
   }
 `;
-const Text = styled.div`
-  margin-bottom: 24px;
+const RoomInfo = styled.div`
+display:flex;
+flex-direction:row;
+justify-content: space-between;
 `;
 
 const TotalPrice = styled.span`
@@ -167,7 +247,7 @@ const Day = styled.span`
 const CheckContainer = styled.div`
   position: relative;
   width: 100%;
-  border: 1px solid black;
+  border: 1px solid #c5c5c5;
   border-radius: 12px;
   cursor: pointer;
 `;

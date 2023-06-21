@@ -45,7 +45,6 @@ export default function BottomContainer() {
 }
 
 const MainTitle = styled.div`
-  border-top: 1px solid #666;
   padding: 48px 0 24px 0;
   font-size: 22px;
   font-weight: 600;
