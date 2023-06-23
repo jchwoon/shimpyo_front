@@ -4,6 +4,7 @@ import Input from '../../shared/UI/Input';
 import { useRecoilState } from 'recoil';
 import { emailValueAtom } from '../../../recoil/atoms';
 import useHttpRequest from '../../../hooks/useHttpRequest';
+import { EMAIL_OVERLAP_CHECK_API_PATH } from '../../../constants/api';
 
 interface EmailInputProps {
   getValid: (valid: boolean) => void;
@@ -42,7 +43,7 @@ export default function EmailInput({ getValid }: EmailInputProps) {
 
   const handleCheckEmail = async () => {
     if (emailValue && validationCheck) {
-      await sendRequest({ url: `/public/check-email`, method: 'POST', body: { email: emailValue } });
+      await sendRequest({ url: `${EMAIL_OVERLAP_CHECK_API_PATH}`, method: 'POST', body: { email: emailValue } });
     }
   };
 

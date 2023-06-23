@@ -8,6 +8,7 @@ import { phoneRule } from '../../../utils/validation';
 import { StyleNumberTypeInput } from '../../style/shareStyle';
 import Button from '../../shared/UI/Button';
 import useHttpRequest from '../../../hooks/useHttpRequest';
+import { PHONE_AUTHENTICATION_API_PATH, PHONE_OVERLAP_CHECK_API_PATH } from '../../../constants/api';
 
 interface PhoneInputProps {
   getValid: (valid: boolean) => void;
@@ -52,7 +53,7 @@ export default function PhoneInput({ getValid }: PhoneInputProps) {
   //폰 중복검사
   const handleCheckPhone = async () => {
     if (phoneValue && validationCheck) {
-      await sendRequest({ url: `/public/check-phone`, method: 'POST', body: { phoneNumber: phoneValue } });
+      await sendRequest({ url: `${PHONE_OVERLAP_CHECK_API_PATH}`, method: 'POST', body: { phoneNumber: phoneValue } });
     }
   };
 
@@ -63,7 +64,7 @@ export default function PhoneInput({ getValid }: PhoneInputProps) {
     }
 
     await toUserNumberSendRequest({
-      url: '/public/certification',
+      url: `${PHONE_AUTHENTICATION_API_PATH}`,
       body: { phoneNumber: phoneValue },
       method: 'POST',
     });

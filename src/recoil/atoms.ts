@@ -104,3 +104,8 @@ export const accessTokenAtom = atom<string>({
   key: 'accessTokenAtom',
   default: '',
 });
+
+export const profileImageAtom = atom<string>({
+  key: 'profileImageAtom',
+  default: '',
+});

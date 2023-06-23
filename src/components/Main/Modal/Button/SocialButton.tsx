@@ -11,7 +11,7 @@ interface ButtonProps {
 
 export default function SocialButton({ label, onClick, icon: Icon, containerColor, iconColor }: ButtonProps) {
   return (
-    <StyleButton $containerColor={containerColor}>
+    <StyleButton onClick={onClick} $containerColor={containerColor}>
       {Icon && <Icon style={{ color: iconColor, fontSize: '17px' }} />}
       <span style={{ color: iconColor }}>{label}</span>
     </StyleButton>
