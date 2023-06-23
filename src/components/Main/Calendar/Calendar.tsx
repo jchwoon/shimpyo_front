@@ -22,12 +22,12 @@ export const Calendar = () => {
     return (
         <StyledCalendarDiv>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', padding: "7px 7px 7px 10px" }}>
+                <div style={{ display: 'flex', flexDirection: 'column', padding: "15px 15px 10px 20px" }}>
                     <HeaderLeft currentDate={currentDate} setCurrentDate={setCurrentDate} />
                     <Days />
                     <Cells currentDate={currentDate} />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', padding: "7px 10px 7px 7px" }}>
+                <div style={{ display: 'flex', flexDirection: 'column', padding: "15px 20px 10px 15px" }}>
                     <HeaderRight currentDate={currentDate} setCurrentDate={setCurrentDate} />
                     <Days />
                     <CellsRight currentDate={currentDate} />

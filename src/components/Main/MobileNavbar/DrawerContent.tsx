@@ -29,7 +29,8 @@ import {
     FirstPickedDate,
     SecondPickedDate,
     googleMapsPlaceholder,
-    PlaceholderChanged
+    PlaceholderChanged,
+    objectPlaceholder
 } from "../../../recoil/atoms";
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
@@ -46,9 +47,19 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
 
     const [GoogleMapsPlaceholder, setGoogleMapsPlaceholder] = useRecoilState(googleMapsPlaceholder)
     const [placeholderChanged, setPlaceholderChanged] = useRecoilState(PlaceholderChanged)
+    const [ObjectPlaceholder, setObjectPlaceholder] = useRecoilState(objectPlaceholder);
     const [textfieldInputValue, setTextfieldInputValue] = useState(false)
     const resetFunctionInSearchField = () => {
-        setGoogleMapsPlaceholder('')
+        setObjectPlaceholder(
+            {
+                description: "",
+                structured_formatting: {
+                    main_text: "",
+                    secondary_text: "",
+                    main_text_matched_substrings: []
+                }
+            }
+        )
         setPlaceholderChanged(false)
         setTextfieldInputValue(false)
     }
@@ -88,7 +99,8 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
             <Collapse in={activecard === "card1"} collapsedSize={"110px"}>
                 <div style={{ position: "relative" }}>
                     {activecard === "card1" ?
-                        placeholderChanged ?
+                        ObjectPlaceholder.description !== ''
+                            ?
                             <CustomizedDeleteIconButton top={-10} left={0} onClick={resetFunctionInSearchField} >
                                 <CustomizedClearIcon />
                             </CustomizedDeleteIconButton>
@@ -109,6 +121,8 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
                                     setPlaceholderChanged={setPlaceholderChanged}
                                     textfieldInputValue={textfieldInputValue}
                                     setTextfieldInputValue={setTextfieldInputValue}
+                                    ObjectPlaceholder={ObjectPlaceholder}
+                                    setObjectPlaceholder={setObjectPlaceholder}
                                 />
                             </CustomizedAfterClickDiv>
                             :
@@ -121,7 +135,10 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
                                     setPlaceholder={setGoogleMapsPlaceholder}
                                     setPlaceholderChanged={setPlaceholderChanged}
                                     textfieldInputValue={textfieldInputValue}
-                                    setTextfieldInputValue={setTextfieldInputValue} />
+                                    setTextfieldInputValue={setTextfieldInputValue}
+                                    ObjectPlaceholder={ObjectPlaceholder}
+                                    setObjectPlaceholder={setObjectPlaceholder}
+                                />
                             </CustomizedBeforeClickDiv>
                         }
                     </CustomizedCard1>
@@ -147,8 +164,8 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
                                         체크인
                                     </CustomizedTypography>
                                     <CustomizedTypography fontWeight="300" color="#a2a2a2" sx={{ minWidth: "60px", marginBottom: "10px" }}>
-                                        {firstPickedDate ? 
-                                        moment(firstPickedDate).format("M월 D일"): "날짜 추가"}
+                                        {firstPickedDate ?
+                                            moment(firstPickedDate).format("M월 D일") : "날짜 추가"}
                                     </CustomizedTypography>
                                     <CustomizedTypography fontWeight="500">
                                         체크아웃

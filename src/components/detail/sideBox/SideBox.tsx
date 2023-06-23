@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
-import styled from 'styled-components';
-import Guest from './Guest';
 import moment from 'moment';
 import 'moment/locale/ko';
-import { Typography } from '@mui/material';
+import { Typography, Button } from '@mui/material';
+import styled from '@emotion/styled';
 
 import { useRecoilValue, useRecoilState } from "recoil";
 import {
@@ -17,8 +15,8 @@ import {
   InfantGuest,
 } from '../../../recoil/atoms';
 
-import { CustomizedMenu } from '../Navbar/Navbar.styled';
-import { Calendar } from '../Calendar/Calendar';
+import { CustomizedMenu } from '../Navbar/Navbar.styled'
+import { Calendar } from '../../Main/MobileCalendar/Calendar';
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from '../Navbar/GuestCount';
 import { Divider } from '@mui/material';
@@ -29,76 +27,11 @@ export default function SideBox() {
   const [startDate, setStartDate] = useState('날짜 추가');
   const [endDate, setEndDate] = useState('날짜 추가');
   const [calendar, setCalendar] = useState(false);
-  const [booking, setBooking] = useState(true);
 
   const price = useRecoilValue(activeRoomPrice)
   const Name = useRecoilValue(activeRoomName)
   const firstPickedDate = useRecoilValue(FirstPickedDate)
   const secondPickedDate = useRecoilValue(SecondPickedDate)
-
-  /** 게스트의 연령층, 인원수를 바꿔주는 함수*/
-  const guestChange = (label: string) => {
-    if (label === 'adultUp') {
-      setGuestCount(prevState => {
-        const newState = [...prevState];
-        newState[0] += 1;
-        return newState;
-      });
-    }
-    if (label === 'adultDown' && guestCount[0] > 0) {
-      setGuestCount(prevState => {
-        const newState = [...prevState];
-        newState[0] -= 1;
-        return newState;
-      });
-    }
-    if (label === 'kidUp') {
-      setGuestCount(prevState => {
-        const newState = [...prevState];
-        newState[1] += 1;
-        return newState;
-      });
-    }
-    if (label === 'kidDown' && guestCount[1] > 0) {
-      setGuestCount(prevState => {
-        const newState = [...prevState];
-        newState[1] -= 1;
-        return newState;
-      });
-    }
-    if (label === 'babyUp') {
-      setGuestCount(prevState => {
-        const newState = [...prevState];
-        newState[2] += 1;
-        return newState;
-      });
-    }
-    if (label === 'babyDown' && guestCount[2] > 0) {
-      setGuestCount(prevState => {
-        const newState = [...prevState];
-        newState[2] -= 1;
-        return newState;
-      });
-    }
-  };
-
-  const toggleGuest = () => {
-    setGuest(prev => !prev);
-  };
-
-  const toggleBooking = () => {
-    setBooking(prev => !prev);
-  };
-
-  const startDateChange = (date: string) => {
-    setStartDate(date);
-  };
-  const endDateChange = (date: string) => {
-    setEndDate(date);
-  };
-  const toggleCalendar = () => {
-    setCalendar(prev => !prev);
-  };
 
   const checkCalendarBox = document.getElementById('CheckCalendarBox');
   const [checkInOutAnchorEl, setCheckInOutAnchorEl] = useState<null | HTMLElement>(null);
@@ -133,8 +66,11 @@ export default function SideBox() {
       ? `게스트 ${TotalGuestNumber}명`
       : `게스트 ${TotalGuestNumber} 명, 유아 ${InfantGuestNumber}명 `;
 
+  const DaysDifference = moment(secondPickedDate).diff(moment(firstPickedDate), "days")
+  const TotalPrice = price ? price * DaysDifference : null
+
   return (
-    <Main booking={booking}>
+    <Main >
       <div style={{ paddingBottom: "15px" }}>
         {price && Name ?
           <RoomInfo>
@@ -151,11 +87,11 @@ export default function SideBox() {
         <CheckCalendarBox onClick={handleCheckInOutClick} id='CheckCalendarBox'>
           <CheckInOutBox borderRight="1px solid black">
             <CheckTitle>체크인</CheckTitle>
-            <CheckDate>{moment(firstPickedDate).format('M월 D일')}</CheckDate>
+            <CheckDate>{firstPickedDate ? moment(firstPickedDate).format('M월 D일') : "날짜 추가"}</CheckDate>
           </CheckInOutBox>
           <CheckInOutBox>
             <CheckTitle>체크아웃</CheckTitle>
-            <CheckDate>{moment(secondPickedDate).format('M월 D일')}</CheckDate>
+            <CheckDate>{secondPickedDate ? moment(secondPickedDate).format('M월 D일') : "날짜 추가"}</CheckDate>
           </CheckInOutBox>
         </CheckCalendarBox>
         <CustomizedMenu
@@ -189,32 +125,35 @@ export default function SideBox() {
           <GuestCountInfant />
         </CustomizedMenu>
       </CheckContainer>
-      <BookingBtn onClick={toggleBooking}>예약</BookingBtn>
+      <BookingBtn>
+        <Typography fontFamily='Noto Sans KR' fontSize="17px">예약</Typography>
+      </BookingBtn>
 
-      {price && <BookingInfo>
-        <BookingNotice>예약 확정 전에는 요금이 청구되지 않습니다.</BookingNotice>
-        <BookingLine>
-          <BookingDetail>₩ {price.toLocaleString()} x {moment(secondPickedDate).diff(moment(firstPickedDate), "days")}</BookingDetail>
-          <BookingAmount>₩ {price * moment(secondPickedDate).diff(moment(firstPickedDate), "days")} </BookingAmount>
-        </BookingLine>
-        <BookingTotal>
-          <TotalDetail>총 합계</TotalDetail>
-          <TotalAmount>₩ {price * moment(secondPickedDate).diff(moment(firstPickedDate), "days")}</TotalAmount>
-        </BookingTotal>
-      </BookingInfo>}
-
-
+      {price ? DaysDifference ?
+        <BookingInfo>
+          <BookingNotice>예약 확정 전에는 요금이 청구되지 않습니다.</BookingNotice>
+          <BookingLine>
+            <BookingDetail>₩ {price.toLocaleString()} x {DaysDifference}박</BookingDetail>
+          </BookingLine>
+          <Divider />
+          <BookingTotal>
+            <TotalDetail>총 합계</TotalDetail>
+            <TotalAmount>₩ {TotalPrice ? TotalPrice.toLocaleString() : null}</TotalAmount>
+          </BookingTotal>
+        </BookingInfo>
+        :
+        null
+        :
+        null}
     </Main >
   );
 }
-interface IMain {
-  booking: boolean;
-}
 
-const Main = styled.div<IMain>`
+
+const Main = styled.div`
   position: sticky;
   width: calc(30%);
-  height: ${p => (p.booking ? '450px' : '250px')};
+  height: 100%;
   top: 48px;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
   border-radius: 12px;
@@ -234,15 +173,6 @@ flex-direction:row;
 justify-content: space-between;
 `;
 
-const TotalPrice = styled.span`
-  font-weight: 600;
-  font-size: 22px;
-`;
-
-const Day = styled.span`
-  font-weight: 400;
-  font-size: 16px;
-`;
 
 const CheckContainer = styled.div`
   position: relative;
@@ -264,46 +194,55 @@ const CheckInOutBox = styled.div<ICheckInOutBox>`
 const CheckCalendarBox = styled.div`
   display: flex;
 `;
-const CheckTitle = styled.div`
+const CheckTitle = styled(Typography)`
   position: absolute;
   top: 12px;
   left: 12px;
   font-size: 10px;
+  font-family: 'Noto Sans KR';
+  color: #a2a2a2;
 `;
 
-const CheckDate = styled.div`
+const CheckDate = styled(Typography)`
   padding: 26px 12px 10px 12px;
+  font-family: 'Noto Sans KR';
 `;
 
 const People = styled.div`
   position: relative;
   width: 100%;
 `;
-const PeopleTitle = styled.div`
+const PeopleTitle = styled(Typography)`
   position: absolute;
   top: 12px;
   left: 12px;
   font-size: 10px;
+  font-family: 'Noto Sans KR';
+  color: #a2a2a2;
 `;
 
-const PeopleDetail = styled.div`
+const PeopleDetail = styled(Typography)`
   display: flex;
   padding: 26px 12px 10px 12px;
   border-top: 1px solid black;
   justify-content: space-between;
+  font-family: 'Noto Sans KR'
 `;
 
-const BookingBtn = styled.div`
-  background-color: red;
+const BookingBtn = styled(Button)`
+background-color:#00adb5;
+color: #ffffff;
   width: 100%;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 15px;
-  color: white;
+  border-radius: 25px;
   margin: 20px auto;
   cursor: pointer;
+  :hover {
+    background-color: #00c5cf;
+  }
 `;
 const BookingInfo = styled.div``;
 
@@ -315,24 +254,24 @@ const BookingNotice = styled.div`
 const BookingLine = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 10px;
+  padding: 10px 10px 20px 10px;
   font-size: 16px;
   color: rgb(34, 34, 34);
 `;
-const BookingDetail = styled.div`
+const BookingDetail = styled(Typography)`
   text-decoration: underline;
+  font-family: 'Noto Sans KR';
 `;
 
-const BookingAmount = styled.div``;
 
-const BookingTotal = styled.div`
+const BookingTotal = styled(Typography)`
   display: flex;
   justify-content: space-between;
-  padding: 20px 10px;
-  border-top: 1px solid rgb(221, 221, 221);
+  padding: 20px 10px 0px 10px;
   font-size: 16px;
-  color: rgb(113, 113, 113);
-  font-weight: 700;
+  color: #00adb5;
+  font-family: 'Noto Sans KR';
+  font-weight: 600;
 `;
 
 const TotalDetail = styled.div``;

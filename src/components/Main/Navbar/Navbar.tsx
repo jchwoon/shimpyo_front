@@ -39,8 +39,8 @@ import {
   InfantGuest,
   FirstPickedDate,
   SecondPickedDate,
-  googleMapsPlaceholder,
   PlaceholderChanged,
+  objectPlaceholder
 } from '../../../recoil/atoms';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
@@ -50,7 +50,7 @@ import { Calendar } from '../Calendar/Calendar';
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from './GuestCount';
 
-import GoogleMaps from './MuiSearchField';
+import MuiSearchField from './MuiSearchField';
 
 import CategoryTabs from "./Tabs"
 
@@ -60,7 +60,7 @@ export default function Navbar() {
   const [change, setChange] = useRecoilState(Change);
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
   const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
-  const [GoogleMapsPlaceholder, setGoogleMapsPlaceholder] = useRecoilState(googleMapsPlaceholder);
+  const [ObjectPlaceholder, setObjectPlaceholder] = useRecoilState(objectPlaceholder);
 
   const handleClick = () => {
     setAppBarHeight('160px');
@@ -144,9 +144,18 @@ export default function Navbar() {
   const [textfieldInputValue, setTextfieldInputValue] = useState(false);
 
   const resetFunctionInSearchField = () => {
-    setGoogleMapsPlaceholder('');
     setPlaceholderChanged(false);
     setTextfieldInputValue(false);
+    setObjectPlaceholder(
+      {
+        description: "",
+        structured_formatting: {
+          main_text: "",
+          secondary_text: "",
+          main_text_matched_substrings: []
+        }
+      }
+    )
   };
 
   useEffect(() => {
@@ -207,23 +216,6 @@ export default function Navbar() {
     handleButtonClick('button3');
   }
 
-
-  const firstDeleteIconButton = <CustomizedDeleteIconButton
-    onClick={resetFunction}
-    top={firstDivider ? firstDivider.getBoundingClientRect().top - 5 : 0}
-    left={firstDivider ? firstDivider.getBoundingClientRect().left - 10 : 0}
-  >
-    <CustomziedClearIcon />
-  </CustomizedDeleteIconButton>
-
-  const secondDeleteIconButton = <CustomizedDeleteIconButton
-    onClick={resetFunction}
-    top={secondDivider ? secondDivider.getBoundingClientRect().top - 5 : 0}
-    left={secondDivider ? secondDivider.getBoundingClientRect().left - 10 : 0}
-  >
-    <CustomziedClearIcon />
-  </CustomizedDeleteIconButton>
-
   return (
     <CustomizedAppBar elevation={0} appbarheight={appbarheight}>
       <CustomizedToolBar>
@@ -258,23 +250,18 @@ export default function Navbar() {
                   </div>
                 ) : activebutton === 'button1' ? (
                   <>
-                    {placeholderChanged ? (
-                      <CustomizedDeleteIconButtonInSearchField onClick={resetFunctionInSearchField} top={0} left={-10}>
-                        <CustomziedClearIcon />
-                      </CustomizedDeleteIconButtonInSearchField>
-                    ) : null}
-                    <CustomizedWhereActiveSearchButton elevation={2}>
-                      <CustomizedWhereVerticalWrapperDiv change={change ? change : undefined}>
+                    <CustomizedWhereActiveSearchButton elevation={2} style={{ paddingLeft: '20px' }}>
+                      <CustomizedWhereVerticalWrapperDiv change={change ? change : undefined} >
                         <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" textAlign="left">
                           여행지
                         </CustomizedTypography>
-                        <GoogleMaps
-                          placeholder={GoogleMapsPlaceholder}
-                          setPlaceholder={setGoogleMapsPlaceholder}
-                          setPlaceholderChanged={setPlaceholderChanged}
+                        <MuiSearchField
                           textfieldInputValue={textfieldInputValue}
                           setTextfieldInputValue={setTextfieldInputValue}
+                          ObjectPlaceholder={ObjectPlaceholder}
+                          setObjectPlaceholder={setObjectPlaceholder}
                         />
+
                       </CustomizedWhereVerticalWrapperDiv>
                     </CustomizedWhereActiveSearchButton>
                   </>
@@ -290,7 +277,7 @@ export default function Navbar() {
                         여행지
                       </CustomizedTypography>
                       <CustomizedTypography fontFamily="Noto Sans KR" color="#a2a2a2" fontSize="15px" fontWeight="300">
-                        {GoogleMapsPlaceholder ? GoogleMapsPlaceholder : '여행지 검색'}
+                        {ObjectPlaceholder.description ? ObjectPlaceholder.description : '여행지 검색'}
                       </CustomizedTypography>
                     </CustomizedWhereVerticalWrapperDiv>
                   </CustomizedSearchInsideButton>
@@ -363,7 +350,7 @@ export default function Navbar() {
                   </CustomizedSearchInsideButton>
                 )}
                 <CustomizedMenu
-                  id="basic-menu"
+                  id="calendar-menu"
                   anchorEl={checkInOutAnchorEl}
                   open={checkInOutOpen}
                   onClose={checkInOutClose}
@@ -371,30 +358,19 @@ export default function Navbar() {
                   transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                   elevation={1}
                 >
-                  <Calendar />
                   {
-                    firstPickedFirst ? (
-                      firstPickedDate ? (
-                        secondPickedDate ? (
-                          activebutton === "button2" ?
-                            firstDeleteIconButton
-                            : activebutton === "button3" ?
-                              secondDeleteIconButton
-                              : null
-                        ) : (
-                          secondDeleteIconButton
-                        )
-                      ) : null
-                    ) : firstPickedDate ? (
-                      secondPickedDate ? (
-                        activebutton === "button2" ? (
-                          firstDeleteIconButton
-                        ) : activebutton === "button3" ? (
-                          secondDeleteIconButton
-                        ) : null
-                      ) : firstDeleteIconButton
-                    ) : null
+                    firstPickedDate ?
+                      <CustomizedDeleteIconButton
+                        onClick={resetFunction}
+                        top={-15}
+                        left={-10}
+                      >
+                        <CustomziedClearIcon />
+                      </CustomizedDeleteIconButton>
+                      :
+                      null
                   }
+                  <Calendar />
                 </CustomizedMenu>
 
                 <CustomizedAdditionalDivider
@@ -515,13 +491,14 @@ export default function Navbar() {
                     {TotalGuestNumber > 0 ? (
                       <CustomizedDeleteIconButtonInGuestCount
                         onClick={guestCountReset}
-                        top={thirdDivider ? thirdDivider.getBoundingClientRect().top - 5 : 0}
-                        left={thirdDivider ? thirdDivider.getBoundingClientRect().left - 10 : 0}
+                        top={-15}
+                        left={-10}
                       >
                         <CustomziedClearIcon />
                       </CustomizedDeleteIconButtonInGuestCount>
                     ) : null}
                   </CustomizedMenu>
+
                 </CustomizedGuestVerticalWrapperDiv>
                 <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
                   <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change ? change : undefined}>

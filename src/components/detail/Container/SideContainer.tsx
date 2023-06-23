@@ -8,6 +8,7 @@ import { ClickAwayListener } from '@mui/material';
 
 import { Wifi, PC, Barbeque, Parking } from './Options';
 import { RoomCard } from './RoomCard';
+import LocationMap from './LocationMap';
 
 export default function SideContainer() {
 
@@ -35,18 +36,18 @@ export default function SideContainer() {
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
       </HotelDescription>
       <SeeMore onClick={handleHSeeMore}>
-        {lineLimit === 3 ? "더보기" : "줄이기"} <AiOutlineRight />
+        {lineLimit === 3 ? "자세히 보기" : "간략히"} <AiOutlineRight />
       </SeeMore>
       <Divider />
       <MainTitle >객실 안내</MainTitle >
-
       <RoomCardContainer>
         <RoomCard name={"디럭스룸"} doubleBed={1} bedroom={1} shower={1} person={4} price={50000} onClick={() => handleCardClick('디럭스룸')} active={activeCard === '디럭스룸'} />
         <RoomCard name={"스위트룸"} doubleBed={1} bedroom={2} shower={2} person={6} price={70000} onClick={() => handleCardClick('스위트룸')} active={activeCard === '스위트룸'} />
         <RoomCard name={"스탠다드룸"} doubleBed={1} bedroom={1} shower={1} person={2} price={60000} onClick={() => handleCardClick('스탠다드룸')} active={activeCard === '스탠다드룸'} />
       </RoomCardContainer>
-
       <Divider />
+      <MainTitle >위치</MainTitle >
+      <LocationMap latitude={38.715133} longitude={126.734086} width={100} height={300} />
     </Container>
   );
 }
@@ -78,15 +79,16 @@ const HotelDescription = styled(Typography) <{ lineLimit: number }>`
   text-overflow: ellipsis;
 `;
 
-const SeeMore = styled.div`
-  // text-decoration: underline;
-  font-weight: bold;
+const SeeMore = styled(Typography)`
+  font-family: Noto Sans KR;
+  font-weight: 400;
   display: flex;
   align-items: center;
   text-align: center;
   margin-top: 12px;
   padding-bottom: 30px;
   cursor: pointer;
+  color:#acacac;
 `;
 
 const RoomCardContainer = styled.div`
@@ -100,51 +102,4 @@ const MainTitle = styled(Typography)`
   font-size: 22px;
   font-weight: 600;
   font-family: Noto Sans KR;
-`;
-
-const MainImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
-const RoomIcon = styled.div`
-  margin-bottom: 14px;
-  font-size: 24px;
-`;
-
-const RoomIconTitle = styled.div`
-  font-weight: 600;
-  font-size: 16px;
-  margin-bottom: 8px;
-`;
-
-const RoomIconDetail = styled.div`
-  font-weight: 400;
-  font-size: 14px;
-`;
-
-const FacilityContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const FacilityText = styled.div`
-  margin-bottom: 14px;
-  display: flex;
-  text-align: center;
-  align-items: center;
-  width: 50%;
-`;
-
-const ShowAllBtn = styled.div`
-  border-radius: 8px;
-  margin-top: 12px;
-  margin-bottom: 48px;
-  padding: 13px 23px;
-  border: 1px solid black;
-  width: 180px;
-  display: flex;
-  justify-content: center;
-  cursor: pointer;
 `;

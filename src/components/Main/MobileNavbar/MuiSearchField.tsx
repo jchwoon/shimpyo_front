@@ -46,12 +46,28 @@ interface PlaceType {
     structured_formatting: StructuredFormatting;
 }
 
+interface MainTextMatchedSubstrings {
+    offset: number;
+    length: number;
+}
+interface StructuredFormatting {
+    main_text: string;
+    secondary_text: string;
+    main_text_matched_substrings?: readonly MainTextMatchedSubstrings[];
+}
+interface PlaceType {
+    description: string;
+    structured_formatting: StructuredFormatting;
+}
+
 interface GoogleMapsProps {
     placeholder: string;
     setPlaceholder: (value: string) => void;
     setPlaceholderChanged: (value: boolean) => void;
     textfieldInputValue: boolean
     setTextfieldInputValue: (value: boolean) => void;
+    ObjectPlaceholder: PlaceType;
+    setObjectPlaceholder: (value: PlaceType) => void
 }
 
 const GoogleMaps: React.FC<GoogleMapsProps> = ({
@@ -59,7 +75,9 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({
     setPlaceholder,
     setPlaceholderChanged,
     textfieldInputValue,
-    setTextfieldInputValue
+    setTextfieldInputValue,
+    ObjectPlaceholder,
+    setObjectPlaceholder
 }) => {
     const [value, setValue] = React.useState<PlaceType | null>(null);
     const [inputValue, setInputValue] = React.useState('');
@@ -70,7 +88,7 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({
     if (value) {
         setTextfieldInputValue(true)
     }
-    if (textfieldInputValue === false && value && placeholder === "") {
+    if (textfieldInputValue === false && value && ObjectPlaceholder.description === '') {
         setValue(null)
     }
 
@@ -148,11 +166,13 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({
     return (
         <Autocomplete
             id="google-map-demo"
-            sx={{ width: "100%", borderColor: "white" , "& .MuiAutocomplete-clearIndicator": {
-                display: "none", '& .MuiAutocomplete-endAdornment': {
-                    display: 'none',
-                  },
-              },}}
+            sx={{
+                width: "100%", borderColor: "white", "& .MuiAutocomplete-clearIndicator": {
+                    display: "none", '& .MuiAutocomplete-endAdornment': {
+                        display: 'none',
+                    },
+                },
+            }}
             getOptionLabel={(option) =>
                 typeof option === 'string' ? option : option.description
             }
@@ -172,6 +192,7 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({
                 setOptions(newValue ? [newValue, ...options] : options);
                 setValue(newValue);
                 setPlaceholderChanged(true);
+                if (newValue !== null) setObjectPlaceholder(newValue)
             }}
 
             open={open}
@@ -183,7 +204,7 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({
                 }
 
                 setInputValue(value);
-                setPlaceholder(value);
+                // setPlaceholder(value);
             }}
             onClose={() => setOpen(false)}
 
@@ -192,8 +213,12 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({
                     {...params}
                     variant="outlined"
                     fullWidth
-                    placeholder={placeholder ? placeholder : "여행지 검색"}
-                    sx={{padding:"0px"}}
+                    InputProps={{
+                        ...params.InputProps,
+                        endAdornment: null
+                    }}
+                    placeholder={ObjectPlaceholder.description ? ObjectPlaceholder.description : "여행지 검색"}
+                    sx={{ padding: "0px" }}
                 />
             )}
             renderOption={(props, option) => {

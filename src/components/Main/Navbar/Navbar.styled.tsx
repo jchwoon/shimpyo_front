@@ -279,6 +279,9 @@ display:flex;
 
 export const CustomizedMenu = styled(Menu)`
 margin-top:10px;
+.MuiPaper-root {
+  overflow: visible;
+}
 `
 
 export const CustomizedGuestCountMenuItem = styled(MenuItem)`
@@ -313,10 +316,9 @@ height: 30px;
 :hover {
   background-color: #00c5cf;
 }
-position: fixed;
 top: ${props => props.top}px;
 left: ${props => props.left}px;
-z-index: 1;
+position: absolute;
 `
 
 export const CustomizedDeleteIconButtonInSearchField = styled(IconButton) <{ top: number, left: number }>`
@@ -339,7 +341,7 @@ height: 30px;
 :hover {
   background-color: #00c5cf;
 }
-position: fixed;
+position: absolute;
 top: ${props => props.top}px;
 left: ${props => props.left}px;
 `

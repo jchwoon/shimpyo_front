@@ -12,7 +12,7 @@ import MobileNavbarTheme from '../components/Main/OverrideTheme/MobileNavbarThem
 import { useState, useEffect } from 'react';
 
 // import Navbar from '../components/Main/Navbar/Navbar';
-import Navbar from '../components/detail/Navbar/Navbar';
+import Navbar from '../components/Main/Navbar/Navbar';
 import MobileNavbar from '../components/Main/MobileNavbar/MobileNavbar';
 
 import { useRecoilState } from 'recoil';
@@ -27,7 +27,7 @@ export default function Detail() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsLargeScreen(window.innerWidth >= 1060);
+      setIsLargeScreen(window.innerWidth >= 750);
     };
     window.addEventListener('resize', handleResize);
     handleResize();
@@ -80,7 +80,7 @@ const Container = styled.div`
   max-width: 1220px;
   min-width: 800px;
   margin: 0 auto;
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 749px) {
     padding: 0px;
     width: 100%;
     min-width: 0;
