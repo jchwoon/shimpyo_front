@@ -16,6 +16,7 @@ import Input from '../../shared/UI/Input';
 import NaverLogin from '../SocialLogin/NaverLogin';
 import GoogleSocialLogin from '../SocialLogin/GoogleSocialLogin';
 import KakaoLogin from '../SocialLogin/KakaoLogin';
+import { LOGIN_API_PATH } from '../../../constants/api';
 
 interface ResultData {
   accessToken: string;
@@ -40,22 +41,31 @@ export default function LoginModal() {
     const emailValue = emailRef.current?.value;
     const passwordValue = passwordRef.current?.value;
     await sendRequest({
-      url: '/public/login',
+      url: `${LOGIN_API_PATH}`,
       body: { username: emailValue, password: passwordValue },
-      method: 'POST',
+      method: 'GET',
+      withcredential: true,
     });
+  };
+
+  const initialState = () => {
+    setIsLoginError(false);
+    setLoginErrorMessage('');
   };
 
   useEffect(() => {
     if (!responseData) return;
 
     if (responseData?.isSuccess) {
+      console.log(responseData.result);
       setAccessToken(responseData.result.accessToken);
       localStorage.setItem('isLoggedIn', JSON.stringify(true));
+      setIsLoginModalOpen(false);
     } else {
       setIsLoginError(true);
       setLoginErrorMessage('이메일과 비밀번호를 다시 한번 확인해주세요.');
     }
+    console.log('login');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);
 
@@ -117,7 +127,10 @@ export default function LoginModal() {
       <Modal
         footer={footer}
         label="로그인"
-        onClose={() => setIsLoginModalOpen(false)}
+        onClose={() => {
+          setIsLoginModalOpen(false);
+          initialState();
+        }}
         title={title}
         body={body}
         isOpen={isLoginModalOpen}

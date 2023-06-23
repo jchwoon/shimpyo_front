@@ -3,8 +3,10 @@ import Modal from '../../shared/Modal';
 import {
   additionalInfoModalAtom,
   confirmPasswordValueAtom,
+  emailValueAtom,
   joinModalAtom,
   loginModalAtom,
+  passwordValueAtom,
 } from '../../../recoil/atoms';
 import styled from 'styled-components';
 import { useState } from 'react';
@@ -12,7 +14,7 @@ import ColorButton from '../../shared/UI/ColorButton';
 import { SiNaver } from 'react-icons/si';
 import { ImBubble } from 'react-icons/im';
 import { FcGoogle } from 'react-icons/fc';
-import SocialButton from './SocialButton';
+import SocialButton from './Button/SocialButton';
 import EmailInput from '../Input/EmailInput';
 import PasswordInput from '../Input/PasswordInput';
 import ConfirmPasswordInput from '../Input/ConfirmPasswordInput';
@@ -21,11 +23,14 @@ export default function JoinModal() {
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
-  const setConfirmPasswordValue = useSetRecoilState(confirmPasswordValueAtom);
 
   const setIsLoginModalOpen = useSetRecoilState(loginModalAtom);
   const setIsAdditionalInfoModalOpen = useSetRecoilState(additionalInfoModalAtom);
   const [isJoinModalOpen, setIsJoinModalOpen] = useRecoilState(joinModalAtom);
+
+  const setEmailValue = useSetRecoilState(emailValueAtom);
+  const setPasswordValue = useSetRecoilState(passwordValueAtom);
+  const setConfirmPasswordValue = useSetRecoilState(confirmPasswordValueAtom);
 
   const isValid = isEmailValid && isPasswordValid && isConfirmPasswordValid;
 
@@ -45,6 +50,12 @@ export default function JoinModal() {
 
   const handleGetConfirmPasswordValid = (valid: boolean) => {
     setIsConfirmPasswordValid(valid);
+  };
+
+  const initialState = () => {
+    setEmailValue('');
+    setPasswordValue('');
+    setConfirmPasswordValue('');
   };
 
   const title = (
@@ -83,7 +94,10 @@ export default function JoinModal() {
   );
   return (
     <Modal
-      onClose={() => setIsJoinModalOpen(false)}
+      onClose={() => {
+        setIsJoinModalOpen(false);
+        initialState();
+      }}
       isOpen={isJoinModalOpen}
       label="회원가입"
       title={title}
