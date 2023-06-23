@@ -1,11 +1,5 @@
-import { useGoogleLogin } from '@react-oauth/google';
 import SocialButton from '../Modal/Button/SocialButton';
 import { FcGoogle } from 'react-icons/fc';
-import axios from 'axios';
-
-interface IAuth {
-  access_token: string;
-}
 
 export default function GoogleSocialLogin() {
   const login = () => {

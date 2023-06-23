@@ -1,17 +1,5 @@
-import { useEffect, useRef } from 'react';
 import SocialButton from '../Modal/Button/SocialButton';
 import { SiNaver } from 'react-icons/si';
-import { useLocation } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
-import { additionalInfoModalAtom, emailValueAtom, profileImageAtom } from '../../../recoil/atoms';
-
-declare global {
-  interface Window {
-    naver: any;
-  }
-}
-
-const { naver } = window;
 
 export default function NaverLogin() {
   // const naverRef = useRef<HTMLDivElement>(null);
