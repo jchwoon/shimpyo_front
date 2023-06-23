@@ -6,7 +6,12 @@ interface LocationMapProps {
   longitude: number;
 }
 
-export default function LocationMap({ latitude, longitude }: LocationMapProps) {
+interface sizeProps {
+  width: string;
+  height: string;
+}
+
+export default function LocationMap({ latitude, longitude, width, height }: LocationMapProps & sizeProps) {
   useEffect(() => {
     const script = document.createElement('script');
     script.async = true;
@@ -20,7 +25,21 @@ export default function LocationMap({ latitude, longitude }: LocationMapProps) {
           center: new window.kakao.maps.LatLng(latitude, longitude),
           level: 3,
         };
-        new window.kakao.maps.Map(container, options);
+        const map = new window.kakao.maps.Map(container, options);
+
+        const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);
+
+        const imageSrc = '/marker3.png';
+        const imageOption = { offset: new window.kakao.maps.Point(27, 69) };
+        const imageSize = new window.kakao.maps.Size(64, 69);
+        const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
+        const marker = new window.kakao.maps.Marker({
+          position: markerPosition,
+          image: markerImage,
+        });
+
+        marker.setMap(map);
       });
     };
 
@@ -29,10 +48,9 @@ export default function LocationMap({ latitude, longitude }: LocationMapProps) {
     };
   }, [latitude, longitude]);
 
-  return <MapContainer id="map"></MapContainer>;
+  return <MapContainer id="map" width={width} height={height}></MapContainer>;
 }
 
-const MapContainer = styled.div`
-  width: 500px;
-  height: 400px;
+const MapContainer = styled.div<sizeProps>`
+  ${({ width, height }) => `width: ${width}; height: ${height}`}
 `;
