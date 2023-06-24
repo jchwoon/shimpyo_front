@@ -10,13 +10,13 @@ import {
 } from '../../../recoil/atoms';
 import styled from 'styled-components';
 import { StyleBody, StyleFooter, StyleSwitchToLoginButton } from './JoinModal';
-import SocialButton from './SocialButton';
-import { ImBubble } from 'react-icons/im';
-import { SiNaver } from 'react-icons/si';
-import { FcGoogle } from 'react-icons/fc';
 import ColorButton from '../../shared/UI/ColorButton';
 import useHttpRequest from '../../../hooks/useHttpRequest';
 import Input from '../../shared/UI/Input';
+import NaverLogin from '../SocialLogin/NaverLogin';
+import GoogleSocialLogin from '../SocialLogin/GoogleSocialLogin';
+import KakaoLogin from '../SocialLogin/KakaoLogin';
+import { LOGIN_API_PATH } from '../../../constants/api';
 
 interface ResultData {
   accessToken: string;
@@ -41,22 +41,31 @@ export default function LoginModal() {
     const emailValue = emailRef.current?.value;
     const passwordValue = passwordRef.current?.value;
     await sendRequest({
-      url: '/public/login',
+      url: `${LOGIN_API_PATH}`,
       body: { username: emailValue, password: passwordValue },
-      method: 'POST',
+      method: 'GET',
+      withcredential: true,
     });
+  };
+
+  const initialState = () => {
+    setIsLoginError(false);
+    setLoginErrorMessage('');
   };
 
   useEffect(() => {
     if (!responseData) return;
 
     if (responseData?.isSuccess) {
+      console.log(responseData.result);
       setAccessToken(responseData.result.accessToken);
       localStorage.setItem('isLoggedIn', JSON.stringify(true));
+      setIsLoginModalOpen(false);
     } else {
       setIsLoginError(true);
       setLoginErrorMessage('이메일과 비밀번호를 다시 한번 확인해주세요.');
     }
+    console.log('login');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);
 
@@ -100,9 +109,9 @@ export default function LoginModal() {
 
   const footer = (
     <StyleLoginFooter>
-      <SocialButton iconColor="#000000" containerColor="#FEE500" icon={ImBubble} label="카카오 로그인" />
-      <SocialButton iconColor="#FFFFFF" containerColor="#17B75E" icon={SiNaver} label="네이버 로그인" />
-      <SocialButton containerColor="#F4F4F4" icon={FcGoogle} label="구글 로그인" />
+      <KakaoLogin />
+      <NaverLogin />
+      <GoogleSocialLogin />
       <StyleSwitchToJoinButton
         onClick={() => {
           setIsLoginModalOpen(false);
@@ -114,14 +123,19 @@ export default function LoginModal() {
     </StyleLoginFooter>
   );
   return (
-    <Modal
-      footer={footer}
-      label="로그인"
-      onClose={() => setIsLoginModalOpen(false)}
-      title={title}
-      body={body}
-      isOpen={isLoginModalOpen}
-    />
+    <>
+      <Modal
+        footer={footer}
+        label="로그인"
+        onClose={() => {
+          setIsLoginModalOpen(false);
+          initialState();
+        }}
+        title={title}
+        body={body}
+        isOpen={isLoginModalOpen}
+      />
+    </>
   );
 }
 const StyleLoginBody = styled(StyleBody)``;

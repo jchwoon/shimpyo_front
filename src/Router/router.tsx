@@ -7,6 +7,10 @@ const Main = lazy(() => import('../pages/Main'));
 const Detail = lazy(() => import('../pages/detail'));
 const Accommodation = lazy(() => import('../pages/Accommodation'));
 const NotFound = lazy(() => import('../pages/404'));
+const KakaoSocialAuth = lazy(() => import('../pages/KakaoSocialAuth'));
+const NaverSocialAuth = lazy(() => import('../pages/NaverSocialAuth'));
+const GoogleSocialAuth = lazy(() => import('../pages/GoogleSocialAuth'));
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -24,6 +28,18 @@ const router = createBrowserRouter([
       {
         path: 'detail',
         element: <Detail />,
+      },
+      {
+        path: 'auth/kakao/callback',
+        element: <KakaoSocialAuth />,
+      },
+      {
+        path: 'auth/naver/callback',
+        element: <NaverSocialAuth />,
+      },
+      {
+        path: 'auth/google/callback',
+        element: <GoogleSocialAuth />,
       },
       {
         path: 'accommodation',

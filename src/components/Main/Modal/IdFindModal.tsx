@@ -9,6 +9,7 @@ import ColorButton from '../../shared/UI/ColorButton';
 import { useState, useRef, useEffect } from 'react';
 import { phoneRule } from '../../../utils/validation';
 import useHttpRequest from '../../../hooks/useHttpRequest';
+import { FIND_EMAIL_API_PATH } from '../../../constants/api';
 
 export default function IdFindModal() {
   const { isLoading, responseData, sendRequest } = useHttpRequest();
@@ -29,7 +30,7 @@ export default function IdFindModal() {
     setIsConfirmNumberInputOpen(true);
     setConfirmNumberButtonText('인증번호 재발송');
     setError(false);
-    await sendRequest({ url: '/public/show-email', body: { phoneNumber: value }, method: 'POST' });
+    await sendRequest({ url: `${FIND_EMAIL_API_PATH}`, body: { phoneNumber: value }, method: 'POST' });
   };
 
   useEffect(() => {

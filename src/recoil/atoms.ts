@@ -106,6 +106,11 @@ export const accessTokenAtom = atom<string>({
   default: '',
 });
 
+export const profileImageAtom = atom<string>({
+  key: 'profileImageAtom',
+  default: '',
+});
+
 export const stepState = atom<number>({
   key: 'stepState',
   default: 0,

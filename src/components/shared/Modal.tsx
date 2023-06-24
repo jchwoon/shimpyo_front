@@ -67,14 +67,15 @@ const StyleModalBox = styled.div`
   width: 100%;
   animation: ${moveUp} 0.75s;
   height: 100%;
-  border-radius: 1rem;
   z-index: 5;
 
   @media only screen and (min-width: 640px) {
+    border-radius: 1rem;
     background-color: white;
     height: auto;
     max-height: 600px;
-    width: 500px;
+    min-width: 500px;
+    width: auto;
   }
 `;
 

@@ -6,6 +6,8 @@ import { accessTokenAtom } from './recoil/atoms';
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import useAuthorizedRequest from './hooks/useAuthorizedRequest';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { REGENERATION_REFRESH_API_PATH } from './constants/api';
 
 interface ResultData {
   accessToken: string;
@@ -26,24 +28,29 @@ function App() {
     onUnauthorized: handleUnAutorization,
   });
 
+  console.log(accessToken);
+
   useEffect(() => {
+    console.log(accessToken);
     const sendRefreshToken = async () => {
       if (!localStorage.getItem('isLoggedIn')) return;
       console.log('refresh');
-      await sendRequest({ url: '/api/refresh', withCredentials: true });
+      await sendRequest({ url: `${REGENERATION_REFRESH_API_PATH}`, withCredentials: true });
 
+      console.log(responseData);
       if (responseData && responseData.result) {
         setAccessToken(responseData.result.accessToken);
       }
     };
-
     sendRefreshToken();
-  }, []);
+  }, [accessToken]);
   return (
     <>
-      <RecoilRoot>
-        <Outlet />
-      </RecoilRoot>
+      <GoogleOAuthProvider clientId="1034913727334-csbf3k5ajfe5s5c1gpi8veo7pq2j94rl.apps.googleusercontent.com">
+        <RecoilRoot>
+          <Outlet />
+        </RecoilRoot>
+      </GoogleOAuthProvider>
     </>
   );
 }

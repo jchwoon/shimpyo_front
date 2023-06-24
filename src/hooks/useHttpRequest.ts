@@ -14,6 +14,7 @@ interface useHttpRequestProps {
   url: string;
   body?: any;
   method?: Method;
+  withcredential?: boolean;
 }
 
 //이 훅에서 권한이 필요한 요청과 권한이 필요없는 요청 에 대한 구분을 할 수있는 옵션을 제공
@@ -23,23 +24,26 @@ export default function useHttpRequest<T>() {
   const [responseData, setResponseData] = useState<IresponseData<T> | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const sendRequest = async ({ url, method = 'GET', body }: useHttpRequestProps) => {
+  const sendRequest = async ({ url, method = 'GET', body, withcredential }: useHttpRequestProps) => {
     setIsLoading(true);
     setResponseData(null);
     setErrorMessage('');
-    console.log(API_URL);
+
     try {
       const response: AxiosResponse = await axios({
         url: `${API_URL}${url}`,
         method,
         data: body,
+        withCredentials: withcredential,
       });
       setResponseData(response.data);
     } catch (error: any) {
       if (error.response) {
-        console.log(error.response);
+        console.error(error.response);
+        setErrorMessage(error.message);
       } else if (error.request) {
-        console.log(error.request);
+        console.error(error.request);
+        setErrorMessage(error.message);
       }
       setErrorMessage(error.message);
       console.error(error.message);
