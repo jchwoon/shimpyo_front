@@ -12,7 +12,6 @@ import JoinModal from '../components/Main/Modal/JoinModal';
 import LoginModal from '../components/Main/Modal/LoginModal';
 import IdFindModal from '../components/Main/Modal/IdFindModal';
 import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
-import Logout from '../components/Main/Modal/Logout';
 
 export default function Main() {
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
@@ -51,7 +50,6 @@ export default function Main() {
       <AdditionalInfoModal />
       <IdFindModal />
       <PasswordFindModal />
-      <Logout />
     </>
   );
 }

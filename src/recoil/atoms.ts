@@ -109,3 +109,8 @@ export const profileImageAtom = atom<string>({
   key: 'profileImageAtom',
   default: '',
 });
+
+export const loginStateAtom = atom<boolean>({
+  key: 'loginStateAtom',
+  default: true,
+});

@@ -6,8 +6,9 @@ import Divider from '@mui/material/Divider';
 import { CustomizedLoginButton, CustomizedMenuIcon, CustomizedAccountCircleIcon } from './UserMenu.style';
 import Typography from '@mui/material/Typography';
 import zIndex from '@mui/material/styles/zIndex';
-import { useSetRecoilState } from 'recoil';
-import { joinModalAtom, loginModalAtom } from '../../../recoil/atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { joinModalAtom, loginModalAtom, loginStateAtom } from '../../../recoil/atoms';
+import useLogout from '../../../hooks/useLogout';
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -47,7 +48,9 @@ const StyledMenu = styled((props: MenuProps) => (
 }));
 
 export default function CustomizedMenus() {
+  const { logoutHandler } = useLogout();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const isLoggedIn = useRecoilValue(loginStateAtom);
   const setLoginModal = useSetRecoilState(loginModalAtom);
   const setJoinModal = useSetRecoilState(joinModalAtom);
   const open = Boolean(anchorEl);
@@ -82,34 +85,74 @@ export default function CustomizedMenus() {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            setLoginModal(true);
-          }}
-          disableRipple
-        >
-          <Typography fontFamily="Noto Sans KR" fontWeight="400">
-            로그인
-          </Typography>
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            setJoinModal(true);
-          }}
-          disableRipple
-        >
-          <Typography fontFamily="Noto Sans KR" fontWeight="400">
-            회원가입
-          </Typography>
-        </MenuItem>
-        <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
-          <Typography fontFamily="Noto Sans KR" fontWeight="400">
-            호스트가 되어보세요
-          </Typography>
-        </MenuItem>
+        {isLoggedIn ? (
+          <div>
+            <MenuItem>
+              <Typography fontFamily="Noto Sans KR" fontWeight="400">
+                여행
+              </Typography>
+            </MenuItem>
+            <MenuItem>
+              <Typography fontFamily="Noto Sans KR" fontWeight="400">
+                관심 숙소
+              </Typography>
+            </MenuItem>
+            <Divider sx={{ my: 0.5 }} />
+            <MenuItem>
+              <Typography fontFamily="Noto Sans KR" fontWeight="400">
+                숙소 관리
+              </Typography>
+            </MenuItem>
+            <MenuItem>
+              <Typography fontFamily="Noto Sans KR" fontWeight="400">
+                계정
+              </Typography>
+            </MenuItem>
+            <Divider sx={{ my: 0.5 }} />
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                logoutHandler();
+              }}
+              disableRipple
+            >
+              <Typography fontFamily="Noto Sans KR" fontWeight="400">
+                로그아웃
+              </Typography>
+            </MenuItem>
+          </div>
+        ) : (
+          <div>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                setLoginModal(true);
+              }}
+              disableRipple
+            >
+              <Typography fontFamily="Noto Sans KR" fontWeight="400">
+                로그인
+              </Typography>
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                setJoinModal(true);
+              }}
+              disableRipple
+            >
+              <Typography fontFamily="Noto Sans KR" fontWeight="400">
+                회원가입
+              </Typography>
+            </MenuItem>
+            <Divider sx={{ my: 0.5 }} />
+            <MenuItem onClick={handleClose} disableRipple>
+              <Typography fontFamily="Noto Sans KR" fontWeight="400">
+                호스트가 되어보세요
+              </Typography>
+            </MenuItem>
+          </div>
+        )}
       </StyledMenu>
     </div>
   );
