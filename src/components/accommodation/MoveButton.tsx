@@ -1,6 +1,11 @@
+import { startTransition } from 'react';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+
 import { buttonConstants } from '../../constants/buttonContent';
 import buttonContent from '../../constants/buttonContent';
+import { stepState } from '../../recoil/atoms';
 
 interface buttonProps {
   step: keyof buttonConstants;
@@ -8,8 +13,26 @@ interface buttonProps {
 }
 
 export default function MoveButton({ step, isDisabled }: buttonProps) {
+  const [stepNumber, setStepNumber] = useRecoilState(stepState);
+  const navigate = useNavigate();
+
+  const handleOnClick = () => {
+    if (step === 'START' || step === 'NEXT') {
+      setStepNumber(stepNumber + 1);
+    }
+
+    if (step === 'PREV') {
+      setStepNumber(stepNumber - 1);
+    }
+
+    if (step === 'FIN') {
+      startTransition(() => {
+        navigate('/hosting');
+      });
+    }
+  };
   return (
-    <StyledBtn disabled={isDisabled} step={step}>
+    <StyledBtn disabled={isDisabled} step={step} onClick={handleOnClick}>
       {buttonContent[step]}
     </StyledBtn>
   );
@@ -51,6 +74,9 @@ const StyledBtn = styled.button<buttonProps>`
           background-color: white;
           color: black;
           text-decoration: underline;
+          &:hover{
+            background-color: rgba(0,0,0,0.1);
+          }
         `;
 
       case 'FIN':

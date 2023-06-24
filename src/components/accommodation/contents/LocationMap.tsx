@@ -30,8 +30,8 @@ export default function LocationMap({ latitude, longitude, width, height }: Loca
         const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);
 
         const imageSrc = '/marker3.png';
-        const imageOption = { offset: new window.kakao.maps.Point(27, 69) };
-        const imageSize = new window.kakao.maps.Size(64, 69);
+        const imageOption = { offset: new window.kakao.maps.Point(27, 64) };
+        const imageSize = new window.kakao.maps.Size(64, 64);
         const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
 
         const marker = new window.kakao.maps.Marker({

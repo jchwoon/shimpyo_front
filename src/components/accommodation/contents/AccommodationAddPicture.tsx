@@ -225,7 +225,7 @@ const StyledPlusContainer = styled.div`
   height: 200px;
   align-items: center;
   border: 2px dotted rgba(0, 0, 0, 0.2);
-  z-index: 100;
+  z-index: 10;
 
   margin-top: 30px;
 

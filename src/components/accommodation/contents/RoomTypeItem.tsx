@@ -12,7 +12,7 @@ export default function RoomTypeItem({ type, isSelected, onClick }: RoomTypeItem
     onClick(type);
   };
   return (
-    <>
+    <StyledButtonDiv>
       <StyledItemButton value={type} type="button" role="checkbox" aria-checked={isSelected} onClick={handleClick}>
         <StyledTextContainer>
           <StyledItemName>{RoomNameMap[type]}</StyledItemName>
@@ -20,9 +20,13 @@ export default function RoomTypeItem({ type, isSelected, onClick }: RoomTypeItem
         </StyledTextContainer>
         {RoomIconMap[type]}
       </StyledItemButton>
-    </>
+    </StyledButtonDiv>
   );
 }
+
+const StyledButtonDiv = styled.div`
+  padding: 20px;
+`;
 
 const StyledItemButton = styled.button`
   display: flex;

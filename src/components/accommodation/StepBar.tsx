@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { stepGaugeSelector } from '../../recoil/selector';
 
 interface StepProps {
   stepOne?: number;
@@ -9,29 +11,38 @@ interface StepProps {
 }
 
 export default function StepBar() {
-  const test = [3, 2, 5];
+  const gauge = useRecoilValue(stepGaugeSelector) as number[];
 
   const [stepOne, setStepOne] = useState<number>(0);
   const [stepTwo, setStepTwo] = useState<number>(0);
   const [stepThree, setStepThree] = useState<number>(0);
+  const [stepFour, setStepFour] = useState<number>(0);
 
-  const progress = Math.floor((test[1] / test[2]) * 100);
+  const progress = Math.floor((gauge[1] / gauge[2]) * 100);
 
   useEffect(() => {
-    if (test[0] === 1) {
+    if (gauge[0] === 1) {
       setStepOne(progress);
       setStepTwo(0);
       setStepThree(0);
-    } else if (test[0] === 2) {
+      setStepFour(0);
+    } else if (gauge[0] === 2) {
       setStepOne(100);
       setStepTwo(progress);
       setStepThree(0);
-    } else if (test[0] === 3) {
+      setStepFour(0);
+    } else if (gauge[0] === 3) {
       setStepOne(100);
       setStepTwo(100);
       setStepThree(progress);
+      setStepFour(0);
+    } else if (gauge[0] === 4) {
+      setStepOne(100);
+      setStepTwo(100);
+      setStepThree(100);
+      setStepFour(progress);
     }
-  }, [test]);
+  }, [progress, gauge]);
 
   return (
     <Container>
@@ -44,6 +55,9 @@ export default function StepBar() {
       <Step>
         <Progress stepThree={stepThree} progress={progress}></Progress>
       </Step>
+      <Step>
+        <Progress stepThree={stepFour} progress={progress}></Progress>
+      </Step>
     </Container>
   );
 }
@@ -54,7 +68,7 @@ const Container = styled.div`
 `;
 
 const Step = styled.div`
-  width: 32%;
+  width: 24%;
   height: 10px;
   background-color: rgba(0, 0, 0, 0.2);
   overflow-x: hidden;
@@ -76,12 +90,12 @@ const Progress = styled.div<StepProps>`
     } else if (props.stepTwo) {
       return `
       transform: translateX(${props.stepTwo}%);
-      transition: transform 600ms linear 0.6s;
+      transition: transform 600ms linear 0.1s;
       `;
     } else if (props.stepThree) {
       return `
       transform: translateX(${props.stepThree}%);
-      transition: transform 600ms linear 1.2s;
+      transition: transform 600ms linear 0.1s;
       `;
     }
   }}

@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import { Accommodation } from '../constants/accommodation';
 
 export const Height = atom<string>({
   key: 'Height',
@@ -103,4 +104,52 @@ export const phoneValueAtom = atom<string>({
 export const accessTokenAtom = atom<string>({
   key: 'accessTokenAtom',
   default: '',
+});
+
+export const stepState = atom<number>({
+  key: 'stepState',
+  default: 0,
+});
+
+export const accommodationState = atom<Accommodation>({
+  key: 'accommodationState',
+  default: {
+    name: '',
+    type: '',
+    option: {
+      wifi: false,
+      pc: false,
+      parking: false,
+      bbq: false,
+    },
+    room: [
+      {
+        name: '',
+        price: 0,
+        minPeople: 0,
+        maxPeople: 0,
+        bedCount: 0,
+        bedroomCount: 0,
+        bathroomCount: 0,
+        totalCount: 0,
+        checkIn: '',
+        checkOut: '',
+        imageCount: 0,
+      },
+    ],
+    address: {
+      postCode: '',
+      sido: '',
+      sigungu: '',
+      fullAddress: '',
+      lat: 0,
+      lng: 0,
+    },
+    contents: '',
+  },
+});
+
+export const isPassedState = atom<boolean>({
+  key: 'isPassedState',
+  default: true,
 });

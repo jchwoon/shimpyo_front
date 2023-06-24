@@ -89,7 +89,7 @@ export default function AddressSearchBar() {
         </StyledFlexDiv>
         {searchWord.length > 0 && <StyledCancelButton onClick={handleOnClick}>X</StyledCancelButton>}
       </StyledBarContainer>
-      <AddressSearchList searchResult={searchResult} focus={focus} searchWord={searchWord} />
+      <AddressSearchList searchResult={searchResult} focus={focus} />
     </StyledPositionDiv>
   );
 }
@@ -104,7 +104,7 @@ const StyledBarContainer = styled.div`
   align-items: center;
   position: relative;
   z-index: 100;
-  width: 500px;
+  width: 100%;
   height: 70px;
   padding: 20px;
   background-color: white;

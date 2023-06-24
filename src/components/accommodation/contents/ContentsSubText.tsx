@@ -15,4 +15,5 @@ const StyledStepContent = styled.p`
   text-align: left;
 
   margin-top: 15px;
+  margin-bottom: 30px;
 `;

@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, useCallback } from 'react';
 import styled from 'styled-components';
 
 import { FaPlus } from 'react-icons/fa';
@@ -10,7 +10,7 @@ export default function AccommodationSettingFeeBox() {
   const [isPlusDisabled, setIsPlusDisabled] = useState<boolean>(false);
   const MAX_PRICE = 99999999999;
 
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleOnChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === '' || !isNaN(Number(e.target.value))) {
       const newPrice = e.target.value === '' ? 0 : Number(e.target.value);
 
@@ -20,9 +20,9 @@ export default function AccommodationSettingFeeBox() {
         setPrice(newPrice.toString());
       }
     }
-  };
+  }, []);
 
-  const handlePlusOnClick = () => {
+  const handlePlusOnClick = useCallback(() => {
     setPrice(preState => {
       const currentValue = preState ? parseInt(preState) : 0;
       const increment = 1000;
@@ -34,14 +34,14 @@ export default function AccommodationSettingFeeBox() {
         return newPrice.toString();
       }
     });
-  };
+  }, []);
 
-  const handleMinusOnClick = () => {
+  const handleMinusOnClick = useCallback(() => {
     setPrice(preState => {
       const newPrice = preState ? parseInt(preState) - 1000 : 0;
       return newPrice >= 0 ? newPrice.toString() : '0';
     });
-  };
+  }, []);
 
   useEffect(() => {
     if (price === '' || price === '0') {

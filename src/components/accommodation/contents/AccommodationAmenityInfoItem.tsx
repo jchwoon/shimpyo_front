@@ -12,7 +12,7 @@ export default function AccommodationAmenityInfoItem({ amenity, isSelected, onCl
     onClick(value);
   };
   return (
-    <>
+    <StyledButtonDiv>
       <StyledItemButton
         value={amenity}
         type="button"
@@ -25,9 +25,13 @@ export default function AccommodationAmenityInfoItem({ amenity, isSelected, onCl
           <StyledItemName>{AmenityNameMap[amenity]}</StyledItemName>
         </StyledTextContainer>
       </StyledItemButton>
-    </>
+    </StyledButtonDiv>
   );
 }
+
+const StyledButtonDiv = styled.div`
+  padding: 5px;
+`;
 
 const StyledItemButton = styled.button`
   display: flex;

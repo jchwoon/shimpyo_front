@@ -13,14 +13,18 @@ export default function AccommodationTypeItem({ type, isSelected, onClick }: Acc
   };
 
   return (
-    <>
+    <StyledButtonDiv>
       <StyledItemButton value={type} type="button" role="checkbox" aria-checked={isSelected} onClick={handleClick}>
         {AccommodationIconMap[type]}
         <StyledItemName>{AccommodationNameMap[type]}</StyledItemName>
       </StyledItemButton>
-    </>
+    </StyledButtonDiv>
   );
 }
+
+const StyledButtonDiv = styled.div`
+  padding: 20px;
+`;
 
 const StyledItemButton = styled.button`
   display: flex;

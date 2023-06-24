@@ -13,17 +13,12 @@ export interface Prediction {
 export interface AddressSearchListProps {
   searchResult: { predictions?: Prediction[] };
   focus?: boolean;
-  searchWord: string;
 }
 
-interface focusProps {
-  focus?: boolean;
-}
-
-export default function AddressSearchList({ searchResult, focus, searchWord }: AddressSearchListProps) {
+export default function AddressSearchList({ searchResult, focus }: AddressSearchListProps) {
   if (searchResult.predictions) {
     return (
-      <StyledListContainer focus={focus}>
+      <StyledListContainer focus={focus} searchResult={searchResult}>
         {searchResult.predictions.map((element: any, idx) => {
           return <AddressSearchItem key={idx} element={element} />;
         })}
@@ -37,7 +32,7 @@ export default function AddressSearchList({ searchResult, focus, searchWord }: A
   }
 
   return (
-    <StyledListContainer focus={focus}>
+    <StyledListContainer focus={focus} searchResult={searchResult}>
       <StyledItem>
         <FaLocationArrow />
         <StyledFlexContainer>
@@ -48,24 +43,20 @@ export default function AddressSearchList({ searchResult, focus, searchWord }: A
   );
 }
 
-const StyledListContainer = styled.ul<focusProps>`
+const StyledListContainer = styled.ul<AddressSearchListProps>`
   position: absolute;
   top: 30px;
-  width: 500px;
+  width: 100%;
   background-color: white;
-  border-radius: 10px;
-  padding-top: 50px;
+  z-index: 10;
+  border-radius: 0 0 10px 10px;
+  margin-top: 40px;
+  padding-top: 20px;
+  overflow-y: auto;
 
-  ${props => {
-    if (props.focus === false) {
-      return `
-        visibility: hidden;
-        transition: visibility 0.1s ease-in-out;
-      `;
-    } else {
-      return `visibility: visible`;
-    }
-  }}
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+  height: ${props => (props.searchResult.predictions && props.searchResult.predictions.length > 0 ? '200px' : '80px')};
+  visibility: ${props => (props.focus === false ? 'hidden' : 'visible')};
 `;
 
 const StyledItem = styled.li`

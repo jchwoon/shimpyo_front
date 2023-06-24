@@ -13,7 +13,7 @@ export default function StepStartContents({ step }: StepContentProps) {
         <StyledStepTitle>{stepContent[step][1]}</StyledStepTitle>
         <StyledStepContent>{stepContent[step][2]}</StyledStepContent>
       </StyledTextContainer>
-      <StyledImage src="icon.jpg" />
+      <StyledImage src="/hotel5.jpg" alt="이미지" />
     </StyledStepElement>
   );
 }
@@ -26,7 +26,7 @@ const StyledStepElement = styled.li`
 `;
 
 const StyledTextContainer = styled.div`
-  width: 400px;
+  width: 380px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -42,11 +42,13 @@ const StyledStepTitle = styled.h2`
   font-size: 36px;
   font-weight: 600;
   margin-bottom: 10px;
+  line-height: 45px;
 `;
 
 const StyledStepContent = styled.p`
   font-size: 18px;
   color: rgba(0, 0, 0, 0.4);
+  line-height: 25px;
 `;
 
 const StyledImage = styled.img`

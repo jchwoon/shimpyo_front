@@ -10,11 +10,11 @@ export default function RoomTypeContents() {
     setSelectedType(type);
   };
   return (
-    <>
+    <div>
       <ContentsTitle>게스트가 사용할 숙소 유형</ContentsTitle>
       {typeList.map(type => (
         <RoomTypeItem key={type} type={type} isSelected={selectedType === type} onClick={handleTypeClick} />
       ))}
-    </>
+    </div>
   );
 }
