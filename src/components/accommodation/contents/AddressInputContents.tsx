@@ -1,5 +1,11 @@
 import styled from 'styled-components';
-import { useState, FocusEvent } from 'react';
+import { useState, FocusEvent, useEffect, ChangeEvent } from 'react';
+import { MdError } from 'react-icons/md';
+
+import { accommodationState, addressCheckState, isPassedState } from '../../../recoil/atoms';
+import { useRecoilState } from 'recoil';
+import LocationMap from './LocationMap';
+import ErrorMessageModal from './ErrorMessageModal';
 
 interface Focused {
   focused: boolean;
@@ -8,9 +14,9 @@ interface Focused {
 interface FocusList {
   sido: boolean;
   sigungu: boolean;
-  street: boolean;
+  address: boolean;
   detail: boolean;
-  post: boolean;
+  postCode: boolean;
   [key: string]: boolean; // 동적 속성에 대한 인덱스 시그니처 추가
 }
 
@@ -18,10 +24,17 @@ export default function AddressInputContents() {
   const [isFocused, setIsFocused] = useState<FocusList>({
     sido: false,
     sigungu: false,
-    street: false,
+    address: false,
     detail: false,
-    post: false,
+    postCode: false,
   });
+
+  const [accommodation, setAccommodation] = useRecoilState(accommodationState);
+  const [isPassed, setIsPassed] = useRecoilState(isPassedState);
+  const [addressCheck, setAddressCheck] = useRecoilState(addressCheckState);
+
+  const [restAddress, setRestAddress] = useState(accommodation.address.fullAddress.split(' ').slice(3).join(' '));
+  const [detailAddress, setDetailAddress] = useState<string>('');
 
   const handleInputFocus = (e: FocusEvent<HTMLInputElement>) => {
     const newIsFocused = { ...isFocused };
@@ -31,60 +44,192 @@ export default function AddressInputContents() {
 
   const handleInputBlur = (e: FocusEvent<HTMLInputElement>) => {
     const newIsBlur = { ...isFocused };
-    newIsBlur[e.target.id] = false;
-    setIsFocused(newIsBlur);
+
+    if (!e.target.value) {
+      newIsBlur[e.target.id] = false;
+      setIsFocused(newIsBlur);
+    }
   };
+
+  const handleOnChangeAddress = (e: ChangeEvent<HTMLInputElement>) => {
+    const newAccommodation = { ...accommodation };
+
+    if (e.target.id === 'address') {
+      setRestAddress(e.target.value);
+      newAccommodation.address = {
+        ...newAccommodation.address,
+        fullAddress:
+          newAccommodation.address.sido.trim() +
+          ' ' +
+          newAccommodation.address.sigungu.trim() +
+          ' ' +
+          restAddress.trim() +
+          ' ' +
+          detailAddress.trim(),
+      };
+      return setAccommodation(newAccommodation);
+    }
+
+    if (e.target.id === 'detail') {
+      setDetailAddress(e.target.value);
+      newAccommodation.address = {
+        ...newAccommodation.address,
+        fullAddress:
+          newAccommodation.address.sido.trim() +
+          ' ' +
+          newAccommodation.address.sigungu.trim() +
+          ' ' +
+          restAddress.trim() +
+          ' ' +
+          detailAddress.trim(),
+      };
+      return setAccommodation(newAccommodation);
+    }
+
+    newAccommodation.address = {
+      ...newAccommodation.address,
+      [e.target.id]: e.target.value,
+      fullAddress:
+        newAccommodation.address.sido.trim() +
+        ' ' +
+        newAccommodation.address.sigungu.trim() +
+        ' ' +
+        restAddress.trim() +
+        ' ' +
+        detailAddress.trim(),
+    };
+    setAccommodation(newAccommodation);
+  };
+
+  useEffect(() => {
+    const checkInitialValue = () => {
+      const newIsFocused = { ...isFocused };
+
+      if (accommodation.address.sido) newIsFocused.sido = true;
+      if (accommodation.address.sigungu) newIsFocused.sigungu = true;
+      if (accommodation.address.postCode) newIsFocused.postCode = true;
+      if (restAddress) newIsFocused.address = true;
+      if (detailAddress) newIsFocused.detail = true;
+
+      setIsFocused(newIsFocused);
+    };
+
+    checkInitialValue();
+  }, []);
+
+  useEffect(() => {
+    if (accommodation.address.sido && accommodation.address.sigungu && accommodation.address.postCode && restAddress) {
+      setIsPassed(false);
+    } else {
+      setIsPassed(true);
+    }
+  }, [
+    accommodation.address.sido,
+    accommodation.address.sigungu,
+    accommodation.address.postCode,
+    restAddress,
+    setIsPassed,
+  ]);
+
   return (
-    <StyledContainer>
-      <StyledRowContainer>
-        <StyledLabel htmlFor="sido" focused={isFocused.sido}>
-          도/특별･광역시
-        </StyledLabel>
-        <StyledInput id="sido" onFocus={handleInputFocus} onBlur={handleInputBlur} />
-      </StyledRowContainer>
-      <StyledRowContainer>
-        <StyledLabel htmlFor="sigungu" focused={isFocused.sigungu}>
-          시/군/구
-        </StyledLabel>
-        <StyledInput id="sigungu" onFocus={handleInputFocus} onBlur={handleInputBlur} />
-      </StyledRowContainer>
-      <StyledRowContainer>
-        <StyledLabel htmlFor="street" focused={isFocused.street}>
-          도로명 주소
-        </StyledLabel>
-        <StyledInput id="street" onFocus={handleInputFocus} onBlur={handleInputBlur} />
-      </StyledRowContainer>
-      <StyledRowContainer>
-        <StyledLabel htmlFor="detail" focused={isFocused.detail}>
-          상세주소
-        </StyledLabel>
-        <StyledInput id="detail" onFocus={handleInputFocus} onBlur={handleInputBlur} />
-      </StyledRowContainer>
-      <StyledRowContainer>
-        <StyledLabel htmlFor="post" focused={isFocused.post}>
-          우편번호
-        </StyledLabel>
-        <StyledInput id="post" onFocus={handleInputFocus} onBlur={handleInputBlur} />
-      </StyledRowContainer>
-    </StyledContainer>
+    <div>
+      <StyledContainer>
+        <StyledRowContainer>
+          <StyledLabel htmlFor="sido" focused={isFocused.sido}>
+            도/특별･광역시
+          </StyledLabel>
+          <StyledInput
+            id="sido"
+            value={accommodation.address.sido}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            onChange={handleOnChangeAddress}
+          />
+        </StyledRowContainer>
+        <StyledRowContainer>
+          <StyledLabel htmlFor="sigungu" focused={isFocused.sigungu}>
+            시/군/구
+          </StyledLabel>
+          <StyledInput
+            id="sigungu"
+            value={accommodation.address.sigungu}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            onChange={handleOnChangeAddress}
+          />
+        </StyledRowContainer>
+        <StyledRowContainer>
+          <StyledLabel htmlFor="address" focused={isFocused.address}>
+            주소
+          </StyledLabel>
+          <StyledInput
+            id="address"
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            onChange={handleOnChangeAddress}
+            value={restAddress}
+          />
+        </StyledRowContainer>
+        <StyledRowContainer>
+          <StyledLabel htmlFor="detail" focused={isFocused.detail}>
+            상세주소
+          </StyledLabel>
+          <StyledInput
+            id="detail"
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            onChange={handleOnChangeAddress}
+            value={detailAddress}
+          />
+        </StyledRowContainer>
+        <StyledRowContainer>
+          <StyledLabel htmlFor="postCode" focused={isFocused.postCode}>
+            우편번호
+          </StyledLabel>
+          <StyledInput
+            id="postCode"
+            value={accommodation.address.postCode}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            onChange={handleOnChangeAddress}
+          />
+        </StyledRowContainer>
+      </StyledContainer>
+      {!addressCheck && (
+        <StyledErrorMessage>
+          <MdError />
+          주소를 인식하지 못했습니다. 주소를 정확히 입력하셨나요?
+        </StyledErrorMessage>
+      )}
+      <StyledMapContainer>
+        <StyledTitle>지도에서 위치 확인하기</StyledTitle>
+        <LocationMap
+          width={'600px'}
+          height={'400px'}
+          latitude={accommodation.address.lat}
+          longitude={accommodation.address.lng}
+        />
+      </StyledMapContainer>
+      <ErrorMessageModal />
+    </div>
   );
 }
 
 const StyledContainer = styled.div`
-  width: 800px;
+  width: 700px;
   margin: 20px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 `;
 
 const StyledRowContainer = styled.div`
   display: flex;
   justify-content: center;
   height: 70px;
-  width: 800px;
+  width: 700px;
   position: relative;
-  border-top: 2px solid rgba(0, 0, 0, 0.3);
-  border-left: 2px solid rgba(0, 0, 0, 0.3);
-  border-right: 2px solid rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
 `;
 
 const StyledInput = styled.input`
@@ -112,4 +257,21 @@ const StyledLabel = styled.label<Focused>`
     font-size: 12px;
     transform: none;
   `};
+`;
+
+const StyledMapContainer = styled.div`
+  margin-top: 80px;
+  padding-top: 50px;
+  border-top: 2px solid rgba(0, 0, 0, 0.2);
+`;
+
+const StyledTitle = styled.h2`
+  font-size: 23px;
+  font-weight: 600;
+  margin: 20px 0 40px 10px;
+`;
+
+const StyledErrorMessage = styled.p`
+  color: #df1a1a;
+  text-indent: 20px;
 `;

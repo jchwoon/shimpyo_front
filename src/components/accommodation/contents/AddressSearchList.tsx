@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import AddressSearchItem from './AddressSearchItem';
 import { FaLocationArrow } from 'react-icons/fa';
+import { useRecoilState } from 'recoil';
+import { stepState } from '../../../recoil/atoms';
 
 export interface Prediction {
   description: string;
@@ -8,6 +10,7 @@ export interface Prediction {
     main_text: string;
     secondary_text: string;
   };
+  terms: { offset: number; value: string }[];
 }
 
 export interface AddressSearchListProps {
@@ -16,13 +19,18 @@ export interface AddressSearchListProps {
 }
 
 export default function AddressSearchList({ searchResult, focus }: AddressSearchListProps) {
+  const [stepNumber, setStepNumber] = useRecoilState(stepState);
+  const MoveAddressWrite = () => {
+    setStepNumber(preState => preState + 1);
+  };
+
   if (searchResult.predictions) {
     return (
       <StyledListContainer focus={focus} searchResult={searchResult}>
         {searchResult.predictions.map((element: any, idx) => {
           return <AddressSearchItem key={idx} element={element} />;
         })}
-        <StyledItem>
+        <StyledItem onClick={MoveAddressWrite}>
           <StyledFlexContainer>
             {searchResult.predictions.length !== 0 && <StyledItemTitle>주소를 직접 입력하겠습니다.</StyledItemTitle>}
           </StyledFlexContainer>

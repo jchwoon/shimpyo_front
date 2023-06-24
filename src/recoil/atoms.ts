@@ -156,5 +156,10 @@ export const accommodationState = atom<Accommodation>({
 
 export const isPassedState = atom<boolean>({
   key: 'isPassedState',
+  default: false,
+});
+
+export const addressCheckState = atom<boolean>({
+  key: 'addressCheckState',
   default: true,
 });

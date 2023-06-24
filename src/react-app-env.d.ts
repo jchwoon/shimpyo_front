@@ -3,4 +3,5 @@ interface Window {
   kakao: any;
   google: any;
   initAutocomplete?: () => void;
+  initCheckAddress?: () => void;
 }

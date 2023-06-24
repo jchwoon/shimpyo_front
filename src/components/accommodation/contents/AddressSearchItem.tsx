@@ -1,8 +1,9 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import { BsFillBuildingFill } from 'react-icons/bs';
 
 import { Prediction } from './AddressSearchList';
+import { accommodationState, stepState } from '../../../recoil/atoms';
+import { useRecoilState } from 'recoil';
 
 interface AddressSearchItemProps {
   element: Prediction;
@@ -22,11 +23,8 @@ interface GeocoderResponse {
 }
 
 export default function AddressSearchItem({ element }: AddressSearchItemProps) {
-  const [addInfo, setAddInfo] = useState({
-    latitude: 0,
-    longitude: 0,
-    postalCode: '',
-  });
+  const [accommodation, setAccommodation] = useRecoilState(accommodationState);
+  const [stepNumber, setStepNumber] = useRecoilState(stepState);
 
   /**
    * 위도와 경도, 우편번호 정보를 얻기위한 함수
@@ -45,12 +43,19 @@ export default function AddressSearchItem({ element }: AddressSearchItemProps) {
           postalCode = '';
         }
 
-        const newAddInfo = {
-          latitude: response.results[0].geometry.location.lat(),
-          longitude: response.results[0].geometry.location.lng(),
-          postalCode: postalCode,
+        const newAccommodation = {
+          ...accommodation,
+          address: {
+            sido: element.terms[element.terms.length - 2]?.value || '',
+            sigungu: element.terms[element.terms.length - 3]?.value || '',
+            fullAddress: element.description,
+            lat: response.results[0].geometry.location.lat(),
+            lng: response.results[0].geometry.location.lng(),
+            postCode: String(postalCode),
+          },
         };
-        setAddInfo(newAddInfo);
+        setAccommodation(newAccommodation);
+        setStepNumber(preState => preState + 1);
       })
       .catch((err: Error) => {
         console.log(err);

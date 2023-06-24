@@ -29,7 +29,9 @@ export default function AddressSearchBar() {
   };
 
   const handleOnBlur = () => {
-    setFocus(false);
+    setTimeout(() => {
+      setFocus(false);
+    }, 100);
   };
 
   useEffect(() => {
