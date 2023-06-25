@@ -203,6 +203,7 @@ export default function AddressInputContents() {
       )}
       <StyledMapContainer>
         <StyledTitle>지도에서 위치 확인하기</StyledTitle>
+        <StyledsubText>위치에 대한 오차가 있을 수 있습니다. 대략적인 위치를 확인하실 수 있습니다.</StyledsubText>
         <LocationMap
           width={'600px'}
           height={'400px'}
@@ -260,15 +261,20 @@ const StyledLabel = styled.label<Focused>`
 `;
 
 const StyledMapContainer = styled.div`
-  margin-top: 80px;
-  padding-top: 50px;
-  border-top: 2px solid rgba(0, 0, 0, 0.2);
+  margin-top: 30px;
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
 `;
 
 const StyledTitle = styled.h2`
-  font-size: 23px;
+  font-size: 21px;
   font-weight: 600;
-  margin: 20px 0 40px 10px;
+  margin: 20px 0 15px 10px;
+`;
+
+const StyledsubText = styled.p`
+  font-size: 12px;
+  margin: 20px 0 20px 10px;
+  color: rgba(0, 0, 0, 0.5);
 `;
 
 const StyledErrorMessage = styled.p`

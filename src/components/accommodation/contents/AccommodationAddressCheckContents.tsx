@@ -16,5 +16,5 @@ export default function AccommodationAddressCheckContents() {
 }
 
 const StyledTmpDiv = styled.div`
-  height: 400px;
+  height: 500px;
 `;

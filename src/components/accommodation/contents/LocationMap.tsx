@@ -18,8 +18,8 @@ export default function LocationMap({ latitude, longitude, width, height }: Loca
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_MAP_API_KEY}&autoload=false`;
     document.head.appendChild(script);
 
-    script.onload = () => {
-      window.kakao.maps.load(() => {
+    script.onload = async () => {
+      await window.kakao.maps.load(() => {
         const container = document.getElementById('map');
         const options = {
           center: new window.kakao.maps.LatLng(latitude, longitude),
@@ -52,5 +52,6 @@ export default function LocationMap({ latitude, longitude, width, height }: Loca
 }
 
 const MapContainer = styled.div<sizeProps>`
-  ${({ width, height }) => `width: ${width}; height: ${height}`}
+  ${({ width, height }) => `width: ${width}; height: ${height}`};
+  border-radius: 20px;
 `;
