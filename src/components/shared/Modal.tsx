@@ -8,7 +8,7 @@ interface ModalProps {
   footer?: ReactElement;
   label?: string;
   title?: string | ReactElement;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export default function Modal({ isOpen, label, title, body, footer, onClose }: ModalProps) {
@@ -17,13 +17,17 @@ export default function Modal({ isOpen, label, title, body, footer, onClose }: M
   }
 
   const closeModalHandler = () => {
-    onClose();
+    if (onClose) {
+      onClose();
+    }
   };
   return (
     <StyleModalOverlay onMouseDown={closeModalHandler}>
       <StyleModalBox onMouseDown={(e: MouseEvent) => e.stopPropagation()}>
         <StyleModalHead>
-          <MdClose onClick={onClose} style={{ position: 'absolute', left: 20, cursor: 'pointer' }} size={20} />
+          {onClose && (
+            <MdClose onClick={onClose} style={{ position: 'absolute', left: 20, cursor: 'pointer' }} size={20} />
+          )}
           <div>{label}</div>
         </StyleModalHead>
         <ParentContainer>

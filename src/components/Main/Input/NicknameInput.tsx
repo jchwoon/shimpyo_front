@@ -4,7 +4,7 @@ import Input from '../../shared/UI/Input';
 import { nicknameValueAtom } from '../../../recoil/atoms';
 import { nicknameRule } from '../../../utils/validation';
 import useHttpRequest from '../../../hooks/useHttpRequest';
-import { NICKNAME_OVERLAP_CHECK_API_PATh } from '../../../constants/api';
+import { NICKNAME_OVERLAP_CHECK_API_PATH } from '../../../constants/api';
 
 interface nickNameInputProps {
   getValid: (valid: boolean) => void;
@@ -27,7 +27,7 @@ export default function NicknameInput({ getValid }: nickNameInputProps) {
 
   const handleCheckNickname = async () => {
     if (nicknameValue && validationCheck) {
-      await sendRequest({ url: `${NICKNAME_OVERLAP_CHECK_API_PATh}?nickname=${nicknameValue}`, method: 'POST' });
+      await sendRequest({ url: `${NICKNAME_OVERLAP_CHECK_API_PATH}?nickname=${nicknameValue}`, method: 'POST' });
     }
   };
 

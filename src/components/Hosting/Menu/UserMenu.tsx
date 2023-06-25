@@ -26,7 +26,13 @@ export default function UserMenu() {
     <Menu>
       <StyleFlexBox>
         <StyleMenuButton ref={buttonRef}>
-          {viewPortWidth > 1024 ? <Avatar /> : isOpen ? <MdClose size={20} /> : <BiMenu size={20} />}
+          {viewPortWidth > 1024 ? (
+            <Avatar width="30px" height="30px" />
+          ) : isOpen ? (
+            <MdClose size={20} />
+          ) : (
+            <BiMenu size={20} />
+          )}
         </StyleMenuButton>
       </StyleFlexBox>
       {isOpen && viewPortWidth > 1024 && (
