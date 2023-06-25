@@ -163,3 +163,8 @@ export const addressCheckState = atom<boolean>({
   key: 'addressCheckState',
   default: true,
 });
+
+export const errorModalState = atom<boolean>({
+  key: 'errorModalState',
+  default: false,
+});

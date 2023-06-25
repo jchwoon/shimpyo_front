@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { buttonConstants } from '../../constants/buttonContent';
 import buttonContent from '../../constants/buttonContent';
-import { accommodationState, addressCheckState, stepState } from '../../recoil/atoms';
+import { accommodationState, addressCheckState, errorModalState, stepState } from '../../recoil/atoms';
 
 interface buttonProps {
   step: keyof buttonConstants;
@@ -16,6 +16,7 @@ export default function MoveButton({ step, isDisabled }: buttonProps) {
   const [stepNumber, setStepNumber] = useRecoilState(stepState);
   const [accommodation, setAccommodation] = useRecoilState(accommodationState);
   const [addressCheck, setAddressCheck] = useRecoilState(addressCheckState);
+  const [errorModal, setErrorModal] = useRecoilState(errorModalState);
 
   const navigate = useNavigate();
 
@@ -38,6 +39,7 @@ export default function MoveButton({ step, isDisabled }: buttonProps) {
   const CheckAddress = () => {
     if (step === 'PREV') {
       setStepNumber(stepNumber - 1);
+      setAddressCheck(true);
 
       const newAccommodation = { ...accommodation };
       newAccommodation.address = {
@@ -83,15 +85,18 @@ export default function MoveButton({ step, isDisabled }: buttonProps) {
 
             setStepNumber(preState => preState + 1);
             setAddressCheck(true);
+            setErrorModal(false);
             removeScript();
           } else {
             setAddressCheck(false);
+            setErrorModal(true);
             removeScript();
           }
         })
         .catch((err: Error) => {
           console.log(err);
           setAddressCheck(false);
+          setErrorModal(true);
           removeScript();
         });
     };
