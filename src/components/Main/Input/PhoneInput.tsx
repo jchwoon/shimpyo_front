@@ -27,7 +27,7 @@ export default function PhoneInput({ getValid }: PhoneInputProps) {
     sendCodeNumberButtonText,
     isLoading,
     initialState,
-  } = usePhoneCertification({ codeValue, phoneValue });
+  } = usePhoneCertification({ codeValue, phoneValue, isUser: false });
 
   const onPhoneValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;

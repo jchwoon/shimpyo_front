@@ -10,3 +10,6 @@ export const FIND_EMAIL_API_PATH = '/api/show-email';
 export const REGENERATION_REFRESH_API_PATH = '/user/refresh';
 export const LOGOUT_API_PATH = '/user/logout';
 export const PHONE_AUTHENTICATION_ONLY_USER_API_PATH = '/api/certification-onlyuser';
+export const SOCIAL_LOGIN_API_PATH = '/api/oauth2-request';
+export const SOCIAL_ADDITIONAL_INFO_API_PATH = '/api/oauth2-join';
+export const SOCIAL_SILENT_LOGIN_API_PATH = '/api/oauth2-access';

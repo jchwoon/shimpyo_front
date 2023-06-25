@@ -27,7 +27,7 @@ export default function PasswordFindModal() {
     phoneErrorMessage,
     sendCodeNumberButtonText,
     initialState: hookStateInitial,
-  } = usePhoneCertification({ phoneValue, codeValue });
+  } = usePhoneCertification({ phoneValue, codeValue, isUser: true });
   const { responseData: resetPWDResponseData, sendRequest: resetPWDSendRequest } = useHttpRequest();
 
   const [isPasswordValid, setIsPasswordValid] = useState(false);

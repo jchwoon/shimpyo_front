@@ -14,17 +14,10 @@ import NicknameInput from '../Input/NicknameInput';
 import ColorButton from '../../shared/UI/ColorButton';
 import PhoneInput from '../Input/PhoneInput';
 import useHttpRequest from '../../../hooks/useHttpRequest';
-import { useSearchParams } from 'react-router-dom';
 import { JOIN_API_PATH } from '../../../constants/api';
 
-interface ResultData {
-  name: string;
-  age: number;
-  email: string;
-}
-
 export default function AdditionalInfoModal() {
-  const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
+  const { isLoading, responseData, sendRequest } = useHttpRequest();
   const [isPhoneValid, setIsPhoneValid] = useState(false);
   const [isNicknameValid, setIsNicknameValid] = useState(false);
   const [isAdditionalInfoModalOpen, setIsAdditionalInfoModalOpen] = useRecoilState(additionalInfoModalAtom);
@@ -34,8 +27,6 @@ export default function AdditionalInfoModal() {
   const [emailValue, setEmailValue] = useRecoilState(emailValueAtom);
   const [passwordValue, setPasswordValue] = useRecoilState(passwordValueAtom);
   const [nicknameValue, setNicknameValue] = useRecoilState(nicknameValueAtom);
-
-  const [searchParams] = useSearchParams();
 
   const isValid = isNicknameValid && isPhoneValid;
 
@@ -48,15 +39,11 @@ export default function AdditionalInfoModal() {
   };
 
   const handleSubmitUserInfo = async () => {
-    try {
-      await sendRequest({
-        url: `${JOIN_API_PATH}`,
-        body: { email: emailValue, password: passwordValue, nickname: nicknameValue, phoneNumber: phoneValue },
-        method: 'POST',
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    await sendRequest({
+      url: `${JOIN_API_PATH}`,
+      body: { email: emailValue, password: passwordValue, nickname: nicknameValue, phoneNumber: phoneValue },
+      method: 'POST',
+    });
   };
   const initialState = () => {
     setNicknameValue('');
@@ -66,6 +53,8 @@ export default function AdditionalInfoModal() {
   };
 
   useEffect(() => {
+    if (!responseData) return;
+
     if (responseData?.isSuccess) {
       setIsAdditionalInfoModalOpen(false);
       setIsLoginModalOpen(true);
@@ -74,14 +63,6 @@ export default function AdditionalInfoModal() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);
-
-  useEffect(() => {
-    const isAdditionalTrue = searchParams.get('additional_info');
-
-    if (isAdditionalTrue === 'false') {
-      setIsAdditionalInfoModalOpen(true);
-    }
-  }, [searchParams, setIsAdditionalInfoModalOpen]);
   const body = (
     <StyleBody>
       <NicknameInput getValid={getNicknameValid} />

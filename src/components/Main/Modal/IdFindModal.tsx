@@ -29,7 +29,7 @@ export default function IdFindModal() {
     phoneErrorMessage,
     sendCodeNumberButtonText,
     initialState: hookStateInitial,
-  } = usePhoneCertification({ phoneValue, codeValue });
+  } = usePhoneCertification({ phoneValue, codeValue, isUser: true });
   const { responseData: emailResponseData, sendRequest: emailSendRequest } = useHttpRequest<IEmailData>();
 
   const [isIdFindModalOpen, setIsIdFindModalOpen] = useRecoilState(idFindModalAtom);

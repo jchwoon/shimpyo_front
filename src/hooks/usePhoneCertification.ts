@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import useHttpRequest from './useHttpRequest';
 import { phoneRule } from '../utils/validation';
-import { PHONE_AUTHENTICATION_ONLY_USER_API_PATH } from '../constants/api';
+import { PHONE_AUTHENTICATION_API_PATH, PHONE_AUTHENTICATION_ONLY_USER_API_PATH } from '../constants/api';
 
 interface IResultData {
   codeNumber: string;
@@ -10,10 +10,11 @@ interface IResultData {
 interface usePhoneCertificationProps {
   phoneValue: string | undefined;
   codeValue: string | undefined;
+  isUser: boolean;
 }
 
 //휴대폰 인증 요청
-export default function usePhoneCertification({ phoneValue, codeValue }: usePhoneCertificationProps) {
+export default function usePhoneCertification({ phoneValue, codeValue, isUser }: usePhoneCertificationProps) {
   const { responseData, isLoading, sendRequest } = useHttpRequest<IResultData>();
 
   const [phoneError, setPhoneError] = useState(false);
@@ -48,7 +49,10 @@ export default function usePhoneCertification({ phoneValue, codeValue }: usePhon
       setPhoneErrorMessage('휴대폰 번호를 올바르게 입력했는지 확인해주세요.');
       return;
     }
-    await sendRequest({ url: `${PHONE_AUTHENTICATION_ONLY_USER_API_PATH}`, body: { phoneNumber: phoneValue } });
+    await sendRequest({
+      url: `${isUser ? PHONE_AUTHENTICATION_ONLY_USER_API_PATH : PHONE_AUTHENTICATION_API_PATH}`,
+      body: { phoneNumber: phoneValue },
+    });
   };
 
   const initialState = () => {
