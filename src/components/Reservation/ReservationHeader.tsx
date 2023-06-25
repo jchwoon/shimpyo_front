@@ -1,18 +1,14 @@
 import styled from 'styled-components';
-import Logo from '../shared/Logo';
-import MotelManageMenu from './Menu/MotelManageMenu';
-import UserMenu from './Menu/UserMenu';
 import Header from '../layout/Header';
+import Avatar from '../shared/Avatar';
+import Logo from '../shared/Logo';
 
-export default function HostingHeader() {
+export default function ReservationHeader() {
   return (
     <Header>
       <FlexBox>
-        <Logo width="70px" heihgt="30px" path="/hosting" />
-        <StyleHeaderMenuBox hidden>
-          <MotelManageMenu />
-        </StyleHeaderMenuBox>
-        <UserMenu />
+        <Logo width="70px" heihgt="30px" path="/" />
+        <Avatar width="30px" height="30px" />
       </FlexBox>
     </Header>
   );

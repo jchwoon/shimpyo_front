@@ -32,6 +32,7 @@ export default function useAuthorizedRequest<T>({ onUnauthorized }: useAuthorize
   const axiosInstance = axios.create({
     baseURL: API_URL,
     timeout: 5000,
+    headers: { Authorization: `Bearer ${accessToken}` },
   });
 
   const sendRequest = async ({ url, method = 'GET', body, withCredentials }: useAuthorizedRequestProps) => {

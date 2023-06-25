@@ -5,10 +5,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import { CustomizedLoginButton, CustomizedMenuIcon, CustomizedAccountCircleIcon } from './UserMenu.style';
 import Typography from '@mui/material/Typography';
-import zIndex from '@mui/material/styles/zIndex';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { joinModalAtom, loginModalAtom, loginStateAtom } from '../../../recoil/atoms';
 import useLogout from '../../../hooks/useLogout';
+import { useNavigate } from 'react-router';
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -53,6 +53,7 @@ export default function CustomizedMenus() {
   const isLoggedIn = useRecoilValue(loginStateAtom);
   const setLoginModal = useSetRecoilState(loginModalAtom);
   const setJoinModal = useSetRecoilState(joinModalAtom);
+  const navigation = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -87,12 +88,24 @@ export default function CustomizedMenus() {
       >
         {isLoggedIn ? (
           <div>
-            <MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                navigation('/reservation');
+              }}
+              disableRipple
+            >
               <Typography fontFamily="Noto Sans KR" fontWeight="400">
-                여행
+                예약
               </Typography>
             </MenuItem>
-            <MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                navigation('/interest_list');
+              }}
+              disableRipple
+            >
               <Typography fontFamily="Noto Sans KR" fontWeight="400">
                 관심 숙소
               </Typography>

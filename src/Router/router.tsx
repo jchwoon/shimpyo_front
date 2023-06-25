@@ -1,14 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import App from '../App';
+import Loading from '../components/shared/Loading';
 
 const Hosting = lazy(() => import('../pages/Hosting'));
 const Main = lazy(() => import('../pages/Main'));
 const Detail = lazy(() => import('../pages/detail'));
 const NotFound = lazy(() => import('../pages/404'));
-const KakaoSocialAuth = lazy(() => import('../pages/KakaoSocialAuth'));
-const NaverSocialAuth = lazy(() => import('../pages/NaverSocialAuth'));
-const GoogleSocialAuth = lazy(() => import('../pages/GoogleSocialAuth'));
+const Reservation = lazy(() => import('../pages/Reservation'));
+const Interest = lazy(() => import('../pages/Interest'));
 
 const router = createBrowserRouter([
   {
@@ -18,27 +18,43 @@ const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <Main />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Main />
+          </Suspense>
+        ),
       },
       {
         path: 'hosting',
-        element: <Hosting />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Hosting />
+          </Suspense>
+        ),
       },
       {
         path: 'detail',
-        element: <Detail />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Detail />
+          </Suspense>
+        ),
       },
       {
-        path: 'auth/kakao/callback',
-        element: <KakaoSocialAuth />,
+        path: 'reservation',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Reservation />
+          </Suspense>
+        ),
       },
       {
-        path: 'auth/naver/callback',
-        element: <NaverSocialAuth />,
-      },
-      {
-        path: 'auth/google/callback',
-        element: <GoogleSocialAuth />,
+        path: 'interest_list',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Interest />
+          </Suspense>
+        ),
       },
     ],
   },

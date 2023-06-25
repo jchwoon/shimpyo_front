@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import Modal from '../../shared/Modal';
 import { useState, useEffect } from 'react';
 import {
@@ -31,8 +31,8 @@ export default function AdditionalInfoModal() {
   const setIsLoginModalOpen = useSetRecoilState(loginModalAtom);
 
   const [phoneValue, setPhoneValue] = useRecoilState(phoneValueAtom);
-  const emailValue = useRecoilValue(emailValueAtom);
-  const passwordValue = useRecoilValue(passwordValueAtom);
+  const [emailValue, setEmailValue] = useRecoilState(emailValueAtom);
+  const [passwordValue, setPasswordValue] = useRecoilState(passwordValueAtom);
   const [nicknameValue, setNicknameValue] = useRecoilState(nicknameValueAtom);
 
   const [searchParams] = useSearchParams();
@@ -61,6 +61,8 @@ export default function AdditionalInfoModal() {
   const initialState = () => {
     setNicknameValue('');
     setPhoneValue('');
+    setEmailValue('');
+    setPasswordValue('');
   };
 
   useEffect(() => {

@@ -6,40 +6,70 @@ import Input from '../../shared/UI/Input';
 import { StyleBody } from './JoinModal';
 import Button from '../../shared/UI/Button';
 import ColorButton from '../../shared/UI/ColorButton';
-import { useState, useRef, useEffect } from 'react';
-import { phoneRule } from '../../../utils/validation';
+import { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import useHttpRequest from '../../../hooks/useHttpRequest';
 import { FIND_EMAIL_API_PATH } from '../../../constants/api';
+import usePhoneCertification from '../../../hooks/usePhoneCertification';
+
+interface IEmailData {
+  email: string;
+}
 
 export default function IdFindModal() {
-  const { isLoading, responseData, sendRequest } = useHttpRequest();
-  const [isIdFindModalOpen, setIsIdFindModalOpen] = useRecoilState(idFindModalAtom);
-  const [isConfirmNumberInputOpen, setIsConfirmNumberInputOpen] = useState(false);
-  const [confirmNumberButtonText, setConfirmNumberButtonText] = useState('인증번호 발송');
-  const [error, setError] = useState(false);
+  const [phoneValue, setPhoneValue] = useState('');
+  const [codeValue, setCodeValue] = useState('');
 
-  const phoneRef = useRef<HTMLInputElement>(null);
+  const {
+    codeNumberError,
+    codeNumberErrorMessage,
+    handleSubmitConfirmNumber,
+    handleValidityPhone,
+    isPhoneOk,
+    phoneError,
+    phoneErrorMessage,
+    sendCodeNumberButtonText,
+    initialState: hookStateInitial,
+  } = usePhoneCertification({ phoneValue, codeValue });
+  const { responseData: emailResponseData, sendRequest: emailSendRequest } = useHttpRequest<IEmailData>();
+
+  const [isIdFindModalOpen, setIsIdFindModalOpen] = useRecoilState(idFindModalAtom);
+  const [getEmailValue, setGetEmailValue] = useState('');
+  const [isOkay, setIsOkay] = useState(false);
+
+  const onPhoneValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setPhoneValue(value);
+  }, []);
+
+  const onCodeValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setCodeValue(value);
+  }, []);
 
   const handleSendConfrimNumber = async () => {
-    const value = phoneRef.current?.value;
+    handleValidityPhone();
+  };
 
-    if (value === undefined || !phoneRule.test(value)) {
-      setError(true);
-      return;
-    }
-    setIsConfirmNumberInputOpen(true);
-    setConfirmNumberButtonText('인증번호 재발송');
-    setError(false);
-    await sendRequest({ url: `${FIND_EMAIL_API_PATH}`, body: { phoneNumber: value }, method: 'POST' });
+  const getEmailValueHandler = async () => {
+    const isCodeOk = handleSubmitConfirmNumber();
+    if (!isCodeOk) return;
+    await emailSendRequest({ url: FIND_EMAIL_API_PATH, method: 'POST', body: { phoneNumber: phoneValue } });
+  };
+
+  const initialState = () => {
+    setPhoneValue('');
+    setCodeValue('');
+    hookStateInitial();
   };
 
   useEffect(() => {
-    if (!responseData) return;
+    if (!emailResponseData) return;
 
-    if (!responseData.isSuccess) {
+    if (emailResponseData.isSuccess) {
+      setGetEmailValue(emailResponseData.result.email);
+      setIsOkay(true);
     }
-  }, []);
-
+  }, [emailResponseData]);
   const title = (
     <StyleTap>
       <div>아이디(이메일)찾기</div>
@@ -47,16 +77,18 @@ export default function IdFindModal() {
   );
   const body = (
     <StyleIdFindBody>
-      <Input ref={phoneRef} placeholder="휴대폰 번호" inputMode="tel" type="number" />
-      {error && <StyleError>휴대폰 번호를 입력해주세요.</StyleError>}
-      <ColorButton label={confirmNumberButtonText} onClick={handleSendConfrimNumber} />
+      <Input onChange={onPhoneValueChange} value={phoneValue} placeholder="휴대폰 번호" inputMode="tel" type="number" />
+      {phoneError && <StyleError>{phoneErrorMessage}</StyleError>}
+      <ColorButton label={sendCodeNumberButtonText} onClick={handleSendConfrimNumber} />
 
-      {isConfirmNumberInputOpen && (
+      {isPhoneOk && (
         <>
-          <Input placeholder="인증번호 입력" type="number" />
-          <Button label="확인" />
+          <Input onChange={onCodeValueChange} value={codeValue} placeholder="인증번호 입력" type="number" />
+          {codeNumberError && <StyleError>{codeNumberErrorMessage}</StyleError>}
+          <Button onClick={getEmailValueHandler} label="확인" />
         </>
       )}
+      {isOkay && <span>{getEmailValue}</span>}
     </StyleIdFindBody>
   );
   return (
@@ -67,6 +99,7 @@ export default function IdFindModal() {
       isOpen={isIdFindModalOpen}
       onClose={() => {
         setIsIdFindModalOpen(false);
+        initialState();
       }}
     />
   );
