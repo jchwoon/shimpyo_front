@@ -111,6 +111,7 @@ const StyledBarContainer = styled.div`
   padding: 20px;
   background-color: white;
   border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
 
   &:focus-within {
     outline: 2px solid black;

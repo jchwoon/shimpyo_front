@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import AddressSearchItem from './AddressSearchItem';
 import { FaLocationArrow } from 'react-icons/fa';
 import { useRecoilState } from 'recoil';
-import { stepState } from '../../../recoil/atoms';
+import { accommodationState, stepState } from '../../../recoil/atoms';
+import { getAddressFromLatLng } from '../../../utils/getAddressFromLatLng';
 
 export interface Prediction {
   description: string;
@@ -20,8 +21,44 @@ export interface AddressSearchListProps {
 
 export default function AddressSearchList({ searchResult, focus }: AddressSearchListProps) {
   const [stepNumber, setStepNumber] = useRecoilState(stepState);
+  const [accommodation, setAccommodation] = useRecoilState(accommodationState);
+
   const MoveAddressWrite = () => {
     setStepNumber(preState => preState + 1);
+  };
+
+  const getLocation = async () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async position => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          const { formatted_address, address_components } = await getAddressFromLatLng(lat, lng);
+
+          const newAccommodation = { ...accommodation };
+          newAccommodation.address = {
+            ...newAccommodation.address,
+            fullAddress: formatted_address,
+            lat: lat,
+            lng: lng,
+            postCode: address_components[address_components.length - 1].long_name || '',
+            sido: address_components[address_components.length - 3].long_name || '',
+            sigungu: address_components[address_components.length - 4].long_name || '',
+          };
+          setAccommodation(newAccommodation);
+
+          setStepNumber(preState => preState + 1);
+        },
+        err => {
+          alert('위치 정보를 가져올 수 없습니다.');
+          console.log('위치 정보를 가져올 수 없습니다.', err);
+        },
+      );
+    } else {
+      alert('브라우저가 위치 정보를 지원하지 않습니다.');
+      console.log('브라우저가 위치 정보를 지원하지 않습니다.');
+    }
   };
 
   if (searchResult.predictions) {
@@ -41,7 +78,7 @@ export default function AddressSearchList({ searchResult, focus }: AddressSearch
 
   return (
     <StyledListContainer focus={focus} searchResult={searchResult}>
-      <StyledItem>
+      <StyledItem onClick={getLocation}>
         <FaLocationArrow />
         <StyledFlexContainer>
           <StyledItemTitle>현재 위치 사용</StyledItemTitle>
