@@ -1,24 +1,33 @@
 import styled from 'styled-components';
 import { AmenityType, AmenityIconMap, AmenityNameMap } from '../../../constants/amenityType';
+import { useRecoilState } from 'recoil';
+import { accommodationState } from '../../../recoil/atoms';
 
 interface AmenityItemProps {
   amenity: keyof AmenityType;
-  isSelected: boolean;
-  onClick: (amenity: keyof AmenityType) => void;
 }
 
-export default function AccommodationAmenityInfoItem({ amenity, isSelected, onClick }: AmenityItemProps) {
-  const handleClick = (value: keyof AmenityType) => () => {
-    onClick(value);
+export default function AccommodationAmenityInfoItem({ amenity }: AmenityItemProps) {
+  const [accommodation, setAccommodation] = useRecoilState(accommodationState);
+
+  const handleClick = () => {
+    const newAccommodation = { ...accommodation };
+
+    newAccommodation.option = { ...newAccommodation.option };
+    newAccommodation.option[amenity] = !newAccommodation.option[amenity];
+
+    console.log(newAccommodation);
+    setAccommodation(newAccommodation);
   };
+
   return (
     <StyledButtonDiv>
       <StyledItemButton
         value={amenity}
         type="button"
         role="checkbox"
-        aria-checked={isSelected}
-        onClick={handleClick(amenity)}
+        aria-checked={accommodation.option[amenity]}
+        onClick={handleClick}
       >
         {AmenityIconMap[amenity]}
         <StyledTextContainer>
