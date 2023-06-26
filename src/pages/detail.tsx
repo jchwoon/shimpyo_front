@@ -11,7 +11,6 @@ import MobileNavbarTheme from '../components/Main/OverrideTheme/MobileNavbarThem
 
 import { useState, useEffect } from 'react';
 
-// import Navbar from '../components/Main/Navbar/Navbar';
 import Navbar from '../components/Main/Navbar/Navbar';
 import MobileNavbar from '../components/Main/MobileNavbar/MobileNavbar';
 
