@@ -105,6 +105,16 @@ export const accessTokenAtom = atom<string>({
   default: '',
 });
 
+export const profileImageAtom = atom<string>({
+  key: 'profileImageAtom',
+  default: '',
+});
+
+export const loginStateAtom = atom<boolean>({
+  key: 'loginStateAtom',
+  default: false,
+});
+
 export const activeRoomPrice = atom<number | null>({
   key: 'activeRoomPrice',
   default: null,
