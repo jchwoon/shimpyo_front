@@ -15,17 +15,14 @@ import {
   InfantGuest,
 } from '../../../recoil/atoms';
 
-import { CustomizedMenu } from '../Navbar/Navbar.styled'
 import { Calendar } from '../../Main/MobileCalendar/Calendar';
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from '../Navbar/GuestCount';
 import { Divider } from '@mui/material';
 
-import * as React from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -35,26 +32,6 @@ export default function NewSideBox() {
   const Name = useRecoilValue(activeRoomName)
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
   const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
-
-  const checkCalendarBox = document.getElementById('CheckCalendarBox');
-  const [checkInOutAnchorEl, setCheckInOutAnchorEl] = useState<null | HTMLElement>(null);
-  const checkInOutOpen = Boolean(checkInOutAnchorEl);
-  const handleCheckInOutClick = () => {
-    setCheckInOutAnchorEl(checkCalendarBox);
-  };
-  const checkInOutClose = () => {
-    setCheckInOutAnchorEl(null);
-  };
-
-  const people = document.getElementById('People');
-  const [guestCountAnchorEl, setGuestCountAnchorEl] = useState<null | HTMLElement>(null);
-  const guestCountOpen = Boolean(guestCountAnchorEl);
-  const handleGuestCountClick = () => {
-    setGuestCountAnchorEl(people);
-  };
-  const guestCountClose = () => {
-    setGuestCountAnchorEl(null);
-  };
 
   const [AdultGuestNumber, setAdultGuestNumber] = useRecoilState(AdultGuest);
   const [ChildGuestNumber, setChildGuestNumber] = useRecoilState(ChildGuest);
@@ -106,11 +83,11 @@ export default function NewSideBox() {
         >
           <div style={{ display: "flex", width: "100%", height: "100%" }}>
             <div style={{ width: "50%", height: "50px", borderBottom: "solid 1px #c5c5c5", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <Typography fontFamily='Noto Sans KR' fontSize="12px">체크인</Typography>
+              <Typography fontFamily='Noto Sans KR' fontSize="12px" color="#a2a2a2">체크인</Typography>
               <Typography fontFamily='Noto Sans KR'>{firstPickedDate ? moment(firstPickedDate).format('M월 D일') : "날짜 추가"}</Typography>
             </div>
             <div style={{ width: "50%", height: "50px", border: "solid 1px #c5c5c5", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <Typography fontFamily='Noto Sans KR' fontSize="12px">체크아웃</Typography>
+              <Typography fontFamily='Noto Sans KR' fontSize="12px" color="#a2a2a2">체크아웃</Typography>
               <Typography fontFamily='Noto Sans KR'>{secondPickedDate ? moment(secondPickedDate).format('M월 D일') : "날짜 추가"}</Typography>
             </div>
           </div>
@@ -137,7 +114,7 @@ export default function NewSideBox() {
           id="panel1a-header2"
         >
           <div style={{ display: "flex", width: "100%", height: "50px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-            <Typography fontFamily='Noto Sans KR' fontSize="12px">여행자</Typography>
+            <Typography fontFamily='Noto Sans KR' fontSize="12px" color="#a2a2a2">여행자</Typography>
             <Typography fontFamily='Noto Sans KR'>{TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}</Typography>
           </div>
         </CutomizedGuestAccordionSummary>
