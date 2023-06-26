@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { Accommodation } from '../constants/accommodation';
+import { Accommodation, ImageItem } from '../constants/accommodation';
 
 export const Height = atom<string>({
   key: 'Height',
@@ -167,4 +167,19 @@ export const addressCheckState = atom<boolean>({
 export const errorModalState = atom<boolean>({
   key: 'errorModalState',
   default: false,
+});
+
+export const imageDataState = atom<FormData>({
+  key: 'imageDataState',
+  default: new FormData(),
+});
+
+export const imageListState = atom<ImageItem[]>({
+  key: 'imageListState',
+  default: [
+    { image: '', isFocused: false },
+    { image: '', isFocused: false },
+    { image: '', isFocused: false },
+    { image: '', isFocused: false },
+  ],
 });

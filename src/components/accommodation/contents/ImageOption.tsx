@@ -2,8 +2,10 @@ import { useState, ChangeEvent, MouseEvent, useEffect, useRef } from 'react';
 import { SlOptions } from 'react-icons/sl';
 import styled from 'styled-components';
 
-import { type ImageItem } from './AccommodationAddPicture';
+import { type ImageItem } from '../../../constants/accommodation';
 import imageReader from '../../../utils/imageReader';
+import { useRecoilState } from 'recoil';
+import { imageDataState, isPassedState } from '../../../recoil/atoms';
 
 interface ImageOptionProps {
   index: number;
@@ -12,7 +14,10 @@ interface ImageOptionProps {
 }
 
 export default function ImageOption({ index, setImageList, imageList }: ImageOptionProps) {
+  const [isPassed, setIsPassed] = useRecoilState(isPassedState);
   const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [imageData, setImageData] = useRecoilState(imageDataState);
+
   const divRef = useRef<HTMLDivElement>(null);
 
   const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
@@ -21,13 +26,31 @@ export default function ImageOption({ index, setImageList, imageList }: ImageOpt
   };
 
   const deleteImage = (index: number) => () => {
+    const newImageData = new FormData();
+    imageData.forEach((value, key) => {
+      newImageData.append(key, value);
+    });
+
+    const imageDataValues = Array.from(imageData.getAll('houseImages'));
+
     const newImageList = [...imageList];
     newImageList.splice(index, 1);
+    imageDataValues.splice(index, 1);
 
     if (newImageList.length < 4) {
       newImageList.push({ image: '', isFocused: false });
     }
 
+    if (newImageList[0].image?.length !== 0) {
+      setIsPassed(false);
+    } else {
+      setIsPassed(true);
+    }
+
+    newImageData.delete('houseImages');
+    imageDataValues.forEach(value => newImageData.append('houseImages', value));
+
+    setImageData(newImageData);
     setImageList(newImageList);
   };
 
@@ -35,11 +58,26 @@ export default function ImageOption({ index, setImageList, imageList }: ImageOpt
     const file = e.target.files;
     setIsClicked(true);
     if (file?.[0]) {
+      const imageDataValues = Array.from(imageData.getAll('houseImages'));
+
+      const newImageData = new FormData();
+      imageData.forEach((value, key) => {
+        newImageData.append(key, value);
+      });
+
       try {
         const result = (await imageReader(file[0])) as string;
         const newImageList = [...imageList];
+
         newImageList.splice(index, 1, { image: result, isFocused: false });
+        imageDataValues.splice(index, 1, file[0]);
+
         setImageList(newImageList);
+
+        newImageData.delete('houseImages');
+
+        imageDataValues.forEach(value => newImageData.append('houseImages', value));
+        setImageData(newImageData);
 
         setIsClicked(false);
       } catch (err) {

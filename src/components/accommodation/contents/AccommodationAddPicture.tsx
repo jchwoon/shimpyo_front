@@ -1,30 +1,31 @@
-import { useEffect, useCallback, useState, useRef, type DragEvent, ChangeEvent } from 'react';
+import { useRef, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import { TbPhotoPlus } from 'react-icons/tb';
 import { AiOutlinePicture, AiOutlinePlus } from 'react-icons/ai';
 
 import ImageOption from './ImageOption';
 import imageReader from '../../../utils/imageReader';
-export interface ImageItem {
-  image?: string;
-  isFocused: boolean;
-}
-export default function AccommodationAddPicture() {
-  const [isDrag, setIsDrag] = useState<boolean>(false);
-  const [isDragOver, setIsDragOver] = useState<boolean>(false);
-  const [imageList, setImageList] = useState<ImageItem[]>([
-    { image: '', isFocused: false },
-    { image: '', isFocused: false },
-    { image: '', isFocused: false },
-    { image: '', isFocused: false },
-  ]);
+import { useRecoilState } from 'recoil';
+import { imageDataState, imageListState, isPassedState } from '../../../recoil/atoms';
 
-  const dragRef = useRef<HTMLInputElement>(null);
+export default function AccommodationAddPicture() {
+  const [isPassed, setIsPassed] = useRecoilState(isPassedState);
+  const [imageData, setImageData] = useRecoilState(imageDataState);
+  const [imageList, setImageList] = useRecoilState(imageListState);
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
     if (file?.[0]) {
+      const newImageData = new FormData();
+      imageData.forEach((value, key) => {
+        newImageData.append(key, value);
+      });
+
+      newImageData.append('houseImages', file[0]);
+      setImageData(newImageData);
+
       try {
         const result = (await imageReader(file[0])) as string;
         const newImageList = [...imageList];
@@ -34,6 +35,12 @@ export default function AccommodationAddPicture() {
           newImageList.splice(index, 1, { image: result, isFocused: false });
         } else {
           newImageList.push({ image: result, isFocused: false });
+        }
+
+        if (newImageList[0].image?.length !== 0) {
+          setIsPassed(false);
+        } else {
+          setIsPassed(true);
         }
 
         setImageList(newImageList);
@@ -50,50 +57,14 @@ export default function AccommodationAddPicture() {
     }
   };
 
-  // const handleLabelClick = (index: number) => {
-  //   const updatedImageList = [...imageList];
-  //   updatedImageList[index].isFocused = true;
-  //   setImageList(updatedImageList);
-  //   dragRef.current?.focus();
-  // };
-
-  // const handleFocusOut = (index: number) => {
-  //   const updatedImageList = [...imageList];
-  //   updatedImageList[index].isFocused = false;
-  //   setImageList(updatedImageList);
-  // };
-
-  const onDragLeave = (e: DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-  };
-
-  const onDragOver = (e: DragEvent) => {
-    e.preventDefault();
-    console.log('위에 있음');
-    setIsDragOver(true);
-  };
-
-  const onDrop = (e: DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-    const files = e.dataTransfer.files;
-    if (files) {
-      for (let i = 0; i < files.length; i++) {
-        const file: File | null = files.item(i);
-        console.log(file);
-      }
-    }
-  };
-
   return (
-    <StyledFlexDiv onDragLeave={onDragLeave}>
+    <StyledFlexDiv>
       {imageList[0]?.image === '' && (
         <StyledContainer>
           <StyledImgIcon />
           <StyledContentTitle>여기로 사진을 끌어다 놓으세요.</StyledContentTitle>
-          <StyledContentSubTitle>5장 이상의 사진을 선택하세요.</StyledContentSubTitle>
-          <StyledLabel htmlFor="file" onDrop={onDrop} onDragOver={onDragOver} onDragLeave={onDragLeave}></StyledLabel>
+          <StyledContentSubTitle>최대 5장의 사진을 선택하세요.</StyledContentSubTitle>
+          <StyledLabel htmlFor="file"></StyledLabel>
           <StyledInput onChange={handleOnChange} id="file" type="file" accept="image/*"></StyledInput>
         </StyledContainer>
       )}
@@ -112,12 +83,7 @@ export default function AccommodationAddPicture() {
                 {item.image === '' ? (
                   <StyledPlusContainer>
                     <StyledPlusImgIcon />
-                    <StyledPlusLabel
-                      htmlFor={`file${idx}`}
-                      onDrop={onDrop}
-                      onDragOver={onDragOver}
-                      onDragLeave={onDragLeave}
-                    ></StyledPlusLabel>
+                    <StyledPlusLabel htmlFor={`file${idx}`}></StyledPlusLabel>
                     <StyledPlusInput
                       onChange={handleOnChange}
                       id={`file${idx}`}
@@ -135,15 +101,10 @@ export default function AccommodationAddPicture() {
             );
           }
         })}
-      {imageList[0]?.image !== '' && (
+      {imageList[0]?.image !== '' && imageList.length < 5 && (
         <StyledPlusContainer>
           <StyledLastImgIcon />
-          <StyledPlusLabel
-            htmlFor="fileLast"
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            onDragLeave={onDragLeave}
-          ></StyledPlusLabel>
+          <StyledPlusLabel htmlFor="fileLast"></StyledPlusLabel>
           <StyledPlusInput
             ref={inputRef}
             onChange={handleOnChange}
