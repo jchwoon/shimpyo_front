@@ -43,7 +43,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: 'reservation',
+        path: 'reservations',
         element: (
           <Suspense fallback={<Loading />}>
             <Reservation />
@@ -51,7 +51,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: 'interest_list',
+        path: 'interest_lists',
         element: (
           <Suspense fallback={<Loading />}>
             <Interest />

@@ -1,11 +1,9 @@
-import useSocialLogin from '../../../hooks/useSocialLogin';
 import SocialButton from '../Modal/Button/SocialButton';
 import { SiNaver } from 'react-icons/si';
 
 export default function NaverLogin() {
-  const { login } = useSocialLogin({ provider: 'naver' });
   const naverButtonClickHandler = () => {
-    login();
+    window.location.href = 'http://shimpyo-api.p-e.kr:8081/oauth2/authorization/naver';
   };
   return (
     <>

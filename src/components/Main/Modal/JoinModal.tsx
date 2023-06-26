@@ -11,13 +11,12 @@ import {
 import styled from 'styled-components';
 import { useState } from 'react';
 import ColorButton from '../../shared/UI/ColorButton';
-import { SiNaver } from 'react-icons/si';
-import { ImBubble } from 'react-icons/im';
-import { FcGoogle } from 'react-icons/fc';
-import SocialButton from './Button/SocialButton';
 import EmailInput from '../Input/EmailInput';
 import PasswordInput from '../Input/PasswordInput';
 import ConfirmPasswordInput from '../Input/ConfirmPasswordInput';
+import GoogleSocialLogin from '../SocialLogin/GoogleSocialLogin';
+import NaverLogin from '../SocialLogin/NaverLogin';
+import KakaoLogin from '../SocialLogin/KakaoLogin';
 
 export default function JoinModal() {
   const [isEmailValid, setIsEmailValid] = useState(false);
@@ -79,9 +78,9 @@ export default function JoinModal() {
 
   const footer = (
     <StyleFooter>
-      <SocialButton iconColor="#000000" containerColor="#FEE500" icon={ImBubble} label="카카오 로그인" />
-      <SocialButton iconColor="#FFFFFF" containerColor="#17B75E" icon={SiNaver} label="네이버 로그인" />
-      <SocialButton containerColor="#F4F4F4" icon={FcGoogle} label="구글 로그인" />
+      <KakaoLogin />
+      <NaverLogin />
+      <GoogleSocialLogin />
       <StyleSwitchToLoginButton
         onClick={() => {
           setIsJoinModalOpen(false);

@@ -1,11 +1,9 @@
 import { ImBubble } from 'react-icons/im';
 import SocialButton from '../Modal/Button/SocialButton';
-import useSocialLogin from '../../../hooks/useSocialLogin';
 
 export default function KakaoLogin() {
-  const { login } = useSocialLogin({ provider: 'kakao' });
   const kakaoLoginClickHandler = () => {
-    login();
+    window.location.href = 'http://shimpyo-api.p-e.kr:8081/oauth2/authorization/kakao';
   };
   return (
     <SocialButton

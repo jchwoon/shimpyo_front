@@ -1,6 +1,6 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import Modal from '../../shared/Modal';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, KeyboardEvent } from 'react';
 import {
   accessTokenAtom,
   idFindModalAtom,
@@ -50,6 +50,12 @@ export default function LoginModal() {
     });
   };
 
+  const submitHandler = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Enter') return;
+
+    handleLoginButtonClick();
+  };
+
   const initialState = () => {
     setIsLoginError(false);
     setLoginErrorMessage('');
@@ -78,7 +84,7 @@ export default function LoginModal() {
 
   const body = (
     <>
-      <StyleLoginBody>
+      <StyleLoginBody onKeyUp={submitHandler}>
         <Input ref={emailRef} placeholder="이메일" type="text" />
         <Input ref={passwordRef} placeholder="비밀번호" type="password" />
         {isLoginError && <StyleError>{loginErrorMessage}</StyleError>}
