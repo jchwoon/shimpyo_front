@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import { LuBuilding } from 'react-icons/lu'
 import { HiOutlineOfficeBuilding } from 'react-icons/hi'
 import { BsHouses, BsHouse } from 'react-icons/bs'
+import { BiBuildingHouse } from 'react-icons/bi'
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -33,7 +34,7 @@ function a11yProps(index: number) {
 }
 
 export default function CategoryTabs() {
-    const [value, setValue] = React.useState<number | null>(null);
+    const [value, setValue] = React.useState<number>(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -42,10 +43,11 @@ export default function CategoryTabs() {
     return (
         <Box sx={{ width: '100%' }}>
             <CustomizedTabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
-                <CustomizedTab icon={<LuBuilding />} iconPosition="start" label="호텔" {...a11yProps(0)} />
-                <CustomizedTab icon={<HiOutlineOfficeBuilding />} iconPosition="start" label="모텔" {...a11yProps(1)} />
-                <CustomizedTab icon={<BsHouses />} iconPosition="start" label="펜션" {...a11yProps(2)} />
-                <CustomizedTab icon={<BsHouse />} iconPosition="start" label="게스트하우스" {...a11yProps(3)} />
+                <CustomizedTab icon={<BiBuildingHouse />} iconPosition="start" label="전체" {...a11yProps(0)} />
+                <CustomizedTab icon={<LuBuilding />} iconPosition="start" label="호텔" {...a11yProps(1)} />
+                <CustomizedTab icon={<HiOutlineOfficeBuilding />} iconPosition="start" label="모텔" {...a11yProps(2)} />
+                <CustomizedTab icon={<BsHouses />} iconPosition="start" label="펜션" {...a11yProps(3)} />
+                <CustomizedTab icon={<BsHouse />} iconPosition="start" label="게스트하우스" {...a11yProps(4)} />
             </CustomizedTabs>
         </Box>
     );

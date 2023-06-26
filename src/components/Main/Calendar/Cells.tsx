@@ -123,6 +123,7 @@ export const Cells: React.FC<HeaderProps> = ({ currentDate }) => {
             const cloneDay = day
             days.push(
                 <StyledDaysSquareDiv
+                    key={day}
                     className={
                         `${moment(cloneDay).isBetween((moment(firstClicked)), (moment(secondClicked))) ? "betweenClicked" : null}
                     ${firstClicked && secondClicked && moment(cloneDay).isSame(moment(firstClicked)) ? "firstClicked" : null}

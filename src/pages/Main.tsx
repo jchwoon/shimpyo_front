@@ -18,7 +18,7 @@ export default function Main() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsLargeScreen(window.innerWidth >= 750);
+      setIsLargeScreen(window.innerWidth > 750);
     };
     window.addEventListener('resize', handleResize);
     handleResize();
@@ -42,7 +42,7 @@ export default function Main() {
       <Cards />
       {isLargeScreen ? null : (
         <ThemeProvider theme={MobileNavbarTheme}>
-          <MobileFooter />
+          <MobileFooter defaultValue={0} />
         </ThemeProvider>
       )}
       <LoginModal />

@@ -9,7 +9,7 @@ export default function ImageContainer() {
         />
         <MainImage
           src="https://source.unsplash.com/random?wallpapers"
-          style={{ borderRadius: "20px 0 0 20px" }}
+        // style={{ borderRadius: "20px 0 0 20px" }}
         />
       </MainImageBox>
       <SideImageBox>
@@ -64,7 +64,7 @@ const MainImageBox = styled.div`
   cursor: pointer;
   object-fit: cover;
   position: relative;
-  @media screen and (max-width: 900px){
+  @media screen and (max-width: 750px){
     width: 100%;
   };
 `
@@ -73,6 +73,10 @@ const MainImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 20px 0 0 20px;
+  @media screen and (max-width: 750px){
+    border-radius: 20px 20px 20px 20px;
+  };
 `;
 
 const HoverDiv = styled.div`
@@ -96,9 +100,9 @@ const SideImageBox = styled.div`
   width: 25%;
   height: 100%;
   margin-left: 10px;
-  // @media screen and (max-width: 900px){
-  //   display : none
-  // };
+  @media screen and (max-width: 750px){
+    display : none
+  };
 `;
 
 const SideImagePiece = styled.div`

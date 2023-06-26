@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import React, { useEffect } from 'react';
 
+import marker3 from "./marker3.png"
+
 const REACT_APP_MAP_API_KEY = "f6529a2e6cc9efdf495926fa540e1080"
 
 interface LocationMapProps {
@@ -9,8 +11,8 @@ interface LocationMapProps {
 }
 
 interface sizeProps {
-  width: number;
-  height: number;
+  width: string;
+  height: string;
 }
 
 export default function LocationMap({ latitude, longitude, width, height }: LocationMapProps & sizeProps) {
@@ -31,8 +33,14 @@ export default function LocationMap({ latitude, longitude, width, height }: Loca
 
         const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);
 
+        const imageSrc = marker3
+        const imageOption = { offset: new window.kakao.maps.Point(27, 64) };
+        const imageSize = new window.kakao.maps.Size(64, 64);
+        const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
         const marker = new window.kakao.maps.Marker({
           position: markerPosition,
+          image: markerImage,
         });
 
         marker.setMap(map);

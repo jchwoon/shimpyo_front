@@ -223,14 +223,14 @@ export default function Navbar() {
           <img src={logo2} alt="website logo" style={{ height: 13, marginBottom: 5 }} />
           <CustomizedLogoTypography>쉼표</CustomizedLogoTypography>
         </LogoButton>
-        <CustomizedSearchButtonWrapperDiv change={change ? change : undefined}>
+        <CustomizedSearchButtonWrapperDiv change={change.toString()}>
           <ClickAwayListener onClickAway={clickAwayHandler}>
             <div>
               {change ? <CategoryTabs /> : null}
               <CustomizedSearchButton
                 id="customizedSearchButton"
                 onClick={handleClick}
-                change={change ? change : undefined}
+                change={change.toString()}
                 activebutton={activebutton}
                 elevation={2}
               >
@@ -251,7 +251,7 @@ export default function Navbar() {
                 ) : activebutton === 'button1' ? (
                   <>
                     <CustomizedWhereActiveSearchButton elevation={2} style={{ paddingLeft: '20px' }}>
-                      <CustomizedWhereVerticalWrapperDiv change={change ? change : undefined} >
+                      <CustomizedWhereVerticalWrapperDiv >
                         <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" textAlign="left">
                           여행지
                         </CustomizedTypography>
@@ -267,12 +267,11 @@ export default function Navbar() {
                   </>
                 ) : (
                   <CustomizedSearchInsideButton
-                    change={change ? change : undefined}
                     disableRipple
                     sx={{ paddingLeft: '20px' }}
                     onClick={() => handleButtonClick('button1')}
                   >
-                    <CustomizedWhereVerticalWrapperDiv change={change ? change : undefined}>
+                    <CustomizedWhereVerticalWrapperDiv >
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" textAlign="left">
                         여행지
                       </CustomizedTypography>
@@ -306,11 +305,11 @@ export default function Navbar() {
                     sx={{ paddingLeft: '20px', paddingRight: '20px' }}
                     onClick={handleCheckInOutClick}
                   >
-                    <CustomizedWhenVerticalWrapperDiv change={change ? change : undefined}>
+                    <CustomizedWhenVerticalWrapperDiv>
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                         {change ? '체크인' : '언제든지'}
                       </CustomizedTypography>
-                      <CustomizedChangeTypography change={change ? change : undefined}>
+                      <CustomizedChangeTypography change={change.toString()}>
                         {firstPickedFirst
                           ? firstPickedDate
                             ? moment(firstPickedDate).format('M월 D일')
@@ -326,16 +325,15 @@ export default function Navbar() {
                 ) : (
                   <CustomizedSearchInsideButton
                     id="inactiveCheckInButton"
-                    change={change ? change : undefined}
                     disableRipple
                     sx={{ paddingLeft: '20px', paddingRight: '20px' }}
                     onClick={() => handleButtonClick('button2')}
                   >
-                    <CustomizedWhenVerticalWrapperDiv change={change ? change : undefined}>
+                    <CustomizedWhenVerticalWrapperDiv >
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                         체크인
                       </CustomizedTypography>
-                      <CustomizedChangeTypography change={change ? change : undefined}>
+                      <CustomizedChangeTypography change={change.toString()}>
                         {firstPickedFirst
                           ? firstPickedDate
                             ? moment(firstPickedDate).format('M월 D일')
@@ -377,7 +375,7 @@ export default function Navbar() {
                   id="secondDivider"
                   orientation="vertical"
                   flexItem
-                  change={change ? change : undefined}
+                  change={change.toString()}
                   variant="middle"
                 />
                 {activebutton === 'button3' ? (
@@ -386,14 +384,14 @@ export default function Navbar() {
                     variant="contained"
                     disableRipple
                     sx={{ paddingLeft: '20px', paddingRight: '20px' }}
-                    change={change ? change : undefined}
+                    change={change.toString()}
                     onClick={handleCheckInOutClick}
                   >
-                    <CustomizedAddtionalWhenVerticalWrapperDiv change={change ? change : undefined}>
+                    <CustomizedAddtionalWhenVerticalWrapperDiv change={change.toString()}>
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                         {change ? '체크아웃' : ''}
                       </CustomizedTypography>
-                      <CustomizedChangeTypography change={change ? change : undefined}>
+                      <CustomizedChangeTypography change={change.toString()}>
                         {firstPickedFirst
                           ? secondPickedDate
                             ? moment(secondPickedDate).format('M월 D일')
@@ -409,16 +407,16 @@ export default function Navbar() {
                 ) : (
                   <CustomizedAdditionalSearchInsideButton
                     id="inactiveCheckOutButton"
-                    change={change ? change : undefined}
+                    change={change.toString()}
                     disableRipple
                     sx={{ paddingLeft: '20px', paddingRight: '20px' }}
                     onClick={() => handleButtonClick('button3')}
                   >
-                    <CustomizedAddtionalWhenVerticalWrapperDiv change={change ? change : undefined}>
+                    <CustomizedAddtionalWhenVerticalWrapperDiv change={change.toString()}>
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                         {change ? '체크아웃' : ''}
                       </CustomizedTypography>
-                      <CustomizedChangeTypography change={change ? change : undefined}>
+                      <CustomizedChangeTypography change={change.toString()}>
                         {firstPickedFirst
                           ? secondPickedDate
                             ? moment(secondPickedDate).format('M월 D일')
@@ -433,7 +431,7 @@ export default function Navbar() {
                   </CustomizedAdditionalSearchInsideButton>
                 )}
                 <CustomizedDivider id="thirdDivider" orientation="vertical" flexItem variant="middle" />
-                <CustomizedGuestVerticalWrapperDiv change={change ? change : undefined}>
+                <CustomizedGuestVerticalWrapperDiv >
                   {!change ? (
                     <div
                       onClick={() => handleButtonClick('button4')}
@@ -450,27 +448,26 @@ export default function Navbar() {
                       sx={{ paddingLeft: '20px', paddingRight: '20px' }}
                       onClick={handleGuestCountClick}
                     >
-                      <CustomizedGuestVerticalWrapperDiv change={change ? change : undefined}>
+                      <CustomizedGuestVerticalWrapperDiv >
                         <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                           여행자
                         </CustomizedTypography>
-                        <CustomizedChangeTypography change={change ? change : undefined}>
+                        <CustomizedChangeTypography change={change.toString()}>
                           {TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}
                         </CustomizedChangeTypography>
                       </CustomizedGuestVerticalWrapperDiv>
                     </CustomizedActiveSearchButton>
                   ) : (
                     <CustomizedSearchInsideButton
-                      change={change ? change : undefined}
                       disableRipple
                       sx={{ paddingLeft: '20px', paddingRight: '20px' }}
                       onClick={() => handleButtonClick('button4')}
                     >
-                      <CustomizedGuestVerticalWrapperDiv change={change ? change : undefined}>
+                      <CustomizedGuestVerticalWrapperDiv>
                         <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                           여행자
                         </CustomizedTypography>
-                        <CustomizedChangeTypography change={change ? change : undefined}>
+                        <CustomizedChangeTypography change={change.toString()}>
                           {TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}
                         </CustomizedChangeTypography>
                       </CustomizedGuestVerticalWrapperDiv>
@@ -501,8 +498,8 @@ export default function Navbar() {
 
                 </CustomizedGuestVerticalWrapperDiv>
                 <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-                  <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change ? change : undefined}>
-                    <CustomizedSearchIcon change={change ? change : undefined} />
+                  <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change.toString()}>
+                    <CustomizedSearchIcon change={change.toString()} />
                   </CustomizedAvatar>
                 </div>
               </CustomizedSearchButton>

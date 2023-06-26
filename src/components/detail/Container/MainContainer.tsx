@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import SideContainer from './SideContainer';
-import SideBox from '../sideBox/SideBox';
 import BottomContainer from './BottomContainer';
 import NewSideBox from '../sideBox/NewSideBox';
 

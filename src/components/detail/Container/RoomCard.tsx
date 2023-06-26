@@ -3,7 +3,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import {
     CustomizedCard, CustomizedPricePerNightTypography,
-    CustomizedTitleRowBox, CustomizedTitleTypography
+    CustomizedTitleRowBox, CustomizedTitleTypography, OptionWrapper
 } from "./RoomCard.styled"
 
 import { LuBedDouble } from 'react-icons/lu'
@@ -15,6 +15,7 @@ import { Typography } from '@mui/material';
 import { useRecoilState } from "recoil";
 import { activeRoomPrice, activeRoomName } from '../../../recoil/atoms';
 
+
 interface RommCardProps {
     name: string;
     doubleBed: number;
@@ -25,6 +26,7 @@ interface RommCardProps {
     onClick: () => void;
     active: boolean;
 }
+
 
 export const RoomCard: React.FC<RommCardProps> = ({ name, doubleBed, bedroom, shower, person, price, onClick, active }) => {
 
@@ -55,36 +57,34 @@ export const RoomCard: React.FC<RommCardProps> = ({ name, doubleBed, bedroom, sh
 
                     </CustomizedTitleRowBox>
 
-                    <div style={{ display: "flex", flexDirection: "row", marginTop: "15px", marginBottom: "10px" }}>
+                    <div style={{ display: "flex", flexDirection: "row", marginTop: "15px", marginBottom: "10px", flexWrap: "wrap" }}>
                         {bedroom ?
-                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: "15px" }}>
-
+                            <OptionWrapper>
                                 <MdOutlineBedroomParent size={25} />
-
                                 <Typography fontFamily='Noto Sans KR' fontSize="5px">침실 {bedroom}개</Typography>
-                            </div>
+                            </OptionWrapper>
                             : null}
                         {doubleBed ?
-                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: "15px" }}>
+                            <OptionWrapper>
                                 <LuBedDouble size={25} />
                                 <Typography fontFamily='Noto Sans KR' fontSize="5px">침대 {doubleBed}개</Typography>
-                            </div>
+                            </OptionWrapper>
                             : null}
                         {shower ?
-                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: "15px" }}>
+                            <OptionWrapper>
 
                                 <LuShowerHead size={25} />
 
                                 <Typography fontFamily='Noto Sans KR' fontSize="5px">샤워실 {shower}</Typography>
-                            </div>
+                            </OptionWrapper>
                             : null}
                         {person ?
-                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: "15px" }}>
+                            <OptionWrapper>
 
                                 <BsPersonPlus size={25} />
 
                                 <Typography fontFamily='Noto Sans KR' fontSize="5px">최대인원 {person}명</Typography>
-                            </div>
+                            </OptionWrapper>
                             : null}
                     </div>
                     <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end", width: "100%" }}>

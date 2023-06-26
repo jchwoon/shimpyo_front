@@ -2,7 +2,7 @@ import * as React from 'react';
 import moment from "moment";
 import 'moment/locale/ko'
 import styled from '@emotion/styled';
-import {useState} from "react"
+import { useState } from "react"
 import "./styles.css"
 import { useRecoilState, useRecoilValue } from "recoil";
 import { FirstPickedDate, SecondPickedDate } from "../../../recoil/atoms";
@@ -24,7 +24,8 @@ justify-content: space-between;
 
 const StyledDaysSquareDiv = styled.div`
 height: 35px;
-width: 35px;
+// width: 35px;
+width: 100%;
 display:flex;
 justify-content: center;
 align-items: center;
@@ -67,7 +68,7 @@ border-radius: 50%;
 }
 `
 
-export const Cells: React.FC<HeaderProps> = ({currentDate}) => {
+export const Cells: React.FC<HeaderProps> = ({ currentDate }) => {
 
     const monthStart = moment(currentDate).startOf('month').format()
     const monthEnd = moment(currentDate).endOf('month').format()
@@ -78,86 +79,86 @@ export const Cells: React.FC<HeaderProps> = ({currentDate}) => {
     let days = []
     let day = startDate
     let formattedDate = ''
-    
+
     const [firstClicked, setFirstClicked] = useRecoilState(FirstPickedDate)
     const [secondClicked, setSecondClicked] = useRecoilState(SecondPickedDate)
 
-    if(firstClicked && secondClicked && moment(firstClicked).isAfter(moment(secondClicked))){
+    if (firstClicked && secondClicked && moment(firstClicked).isAfter(moment(secondClicked))) {
         const firstClickedClone = firstClicked
         const SecondClickedClone = secondClicked
         setFirstClicked(SecondClickedClone)
         setSecondClicked(firstClickedClone)
     }
 
-    const handleClicked = (day:string) => {
-        firstClicked === '' 
-        ? 
-        setFirstClicked(day) 
-        : 
-        firstClicked === day
-        ?
-        setFirstClicked('')
-        :
-        secondClicked === ''
-        ?
-        setSecondClicked(day)
-        :
-        secondClicked === day
-        ?
-        setSecondClicked('')
-        :
-        setSecondClicked(day)
+    const handleClicked = (day: string) => {
+        firstClicked === ''
+            ?
+            setFirstClicked(day)
+            :
+            firstClicked === day
+                ?
+                setFirstClicked('')
+                :
+                secondClicked === ''
+                    ?
+                    setSecondClicked(day)
+                    :
+                    secondClicked === day
+                        ?
+                        setSecondClicked('')
+                        :
+                        setSecondClicked(day)
     }
 
-    while (moment(day).isSameOrBefore(moment(endDate))){
-        
-        for(let i=0; i<7; i++){
+    while (moment(day).isSameOrBefore(moment(endDate))) {
+
+        for (let i = 0; i < 7; i++) {
             formattedDate = moment(day).format('D')
             const cloneDay = day
             days.push(
                 <StyledDaysSquareDiv
-                className={
-                    `${moment(cloneDay).isBetween((moment(firstClicked)), (moment(secondClicked))) ? "betweenClicked" : null}
+                    key={day}
+                    className={
+                        `${moment(cloneDay).isBetween((moment(firstClicked)), (moment(secondClicked))) ? "betweenClicked" : null}
                     ${firstClicked && secondClicked && moment(cloneDay).isSame(moment(firstClicked)) ? "firstClicked" : null}
                     ${firstClicked && secondClicked && moment(cloneDay).isSame(moment(secondClicked)) ? "secondClicked" : null}
                     `
-                }
+                    }
                 >
-                <StyledDaysRoundDiv 
-                key={day} 
-                onClick={() => handleClicked(cloneDay)}
-                className={`${
-                moment(day).isSame(moment(monthStart), 'month') 
-                ? 
-                moment(cloneDay).isAfter(moment())
-                ?
-                "visible"
-                :
-                "blur"
-                :
-                moment(day).isAfter(moment(monthStart))
-                ?
-                "hidden"
-                :
-                "blur"
-                }
-                ${moment(cloneDay).isSame(moment(firstClicked)) || moment(cloneDay).isSame(moment (secondClicked)) ? "clicked" : null}
+                    <StyledDaysRoundDiv
+                        key={day}
+                        onClick={() => handleClicked(cloneDay)}
+                        className={`${moment(day).isSame(moment(monthStart), 'month')
+                            ?
+                            moment(cloneDay).isAfter(moment())
+                                ?
+                                "visible"
+                                :
+                                "blur"
+                            :
+                            moment(day).isAfter(moment(monthStart))
+                                ?
+                                "hidden"
+                                :
+                                "blur"
+                            }
+                ${moment(cloneDay).isSame(moment(firstClicked)) || moment(cloneDay).isSame(moment(secondClicked)) ? "clicked" : null}
                 `}>
-                    {formattedDate}
-                </StyledDaysRoundDiv>
+                        {formattedDate}
+                    </StyledDaysRoundDiv>
                 </StyledDaysSquareDiv>
             )
-            day = moment(day).add(1,"days").format()
+            day = moment(day).add(1, "days").format()
         }
         rows.push(
             <StyledRowsDiv key={day}>
                 {days}
             </StyledRowsDiv>
         )
-        days=[]
+        days = []
     }
 
-    return(
+    return (
         <StyledCellsDiv>
             {rows}
         </StyledCellsDiv>

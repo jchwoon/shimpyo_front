@@ -21,13 +21,15 @@ import { Height, Display, Change } from '../recoil/atoms';
 import CssBaseline from '@mui/material/CssBaseline';
 import ToggleFavorite from '../components/detail/Container/ToggleFavorite';
 
+import MobileFooter from '../components/Main/MobileFooter/MobileFooter';
+
 export default function Detail() {
 
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsLargeScreen(window.innerWidth >= 750);
+      setIsLargeScreen(window.innerWidth > 750);
     };
     window.addEventListener('resize', handleResize);
     handleResize();
@@ -47,43 +49,54 @@ export default function Detail() {
 
   return (
     <>
-      <CssBaseline />
-      {isLargeScreen ? (
-        <ThemeProvider theme={NavbarTheme}>
-          <Navbar />
-        </ThemeProvider>
-      ) : (
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <CssBaseline />
+        {isLargeScreen ? (
+          <ThemeProvider theme={NavbarTheme}>
+            <Navbar />
+          </ThemeProvider>
+        ) : (
+          <ThemeProvider theme={MobileNavbarTheme}>
+            <MobileNavbar />
+          </ThemeProvider>
+        )}
+        <Container>
+          <CustomizedDarkDiv onClick={handleClick} customDisplay={customDisplay} />
+          <Description>
+            <TitleWrapper>
+              <Title>Title</Title>
+              <DescriptionLocation>Explaination</DescriptionLocation>
+            </TitleWrapper>
+            <ToggleButtonWrapper>
+              <ToggleFavorite />
+            </ToggleButtonWrapper>
+          </Description>
+          <ImageContainer />
+          <MainContainer />
+        </Container>
+      </div>
+      {isLargeScreen ? null : (
         <ThemeProvider theme={MobileNavbarTheme}>
-          <MobileNavbar />
+          <MobileFooter defaultValue={null} />
         </ThemeProvider>
       )}
-      <Container>
-        <CustomizedDarkDiv onClick={handleClick} customDisplay={customDisplay} />
-        <Description>
-          <TitleWrapper>
-            <Title>Title</Title>
-            <DescriptionLocation>Explaination</DescriptionLocation>
-          </TitleWrapper>
-          <ToggleButtonWrapper>
-            <ToggleFavorite />
-          </ToggleButtonWrapper>
-        </Description>
-        <ImageContainer />
-        <MainContainer />
-      </Container>
     </>
-  );
+  )
 }
 
 const Container = styled.div`
   padding: 70px 60px;
   max-width: 1220px;
-  min-width: 800px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   @media screen and (max-width: 749px) {
-    padding: 0px;
+    padding: 70px 24px 0px 24px;
     width: 100%;
-    min-width: 0;
+  }
+  @media screen and (max-width: 599px) {
+    padding: 70px 16px 0px 16px;
+    width: 100%;
   }
 `;
 
@@ -100,21 +113,7 @@ const Title = styled.div`
   font-size: 26px;
   font-weight: bold;
   font-family: "Noto Sans KR";
-  // margin-top: 24px;
-  // @media screen and (max-width: 900px) {
-  //   padding: 0 20px;
-  // }
 `;
-
-// const Description = styled.div`
-//   font-size: 14px;
-//   display: flex;
-//   justify-content: space-between;
-//   margin-bottom: 24px;
-//   @media screen and (max-width: 900px) {
-//     padding: 0 20px;
-//   }
-// `;
 
 const Description = styled.div`
 display:flex;
@@ -124,11 +123,7 @@ margin-bottom:20px;
 `;
 
 const DescriptionLocation = styled.div`
-  // width: auto;
   text-decoration: underline;
-`;
-const DescriptionLike = styled.div`
-  font-weight: bold;
 `;
 
 const CustomizedDarkDiv = styled.div < { customDisplay: boolean }> `

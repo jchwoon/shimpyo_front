@@ -12,8 +12,12 @@ import logo3 from '../../../logo3.svg';
 import { useSetRecoilState } from 'recoil';
 import { loginModalAtom } from '../../../recoil/atoms';
 
-export default function MobileFooter() {
-  const [value, setValue] = React.useState(0);
+interface MobileFooterProps {
+  defaultValue: number | null
+}
+
+export default function MobileFooter({ defaultValue }: MobileFooterProps) {
+  const [value, setValue] = React.useState(defaultValue);
   const setLoginModal = useSetRecoilState(loginModalAtom);
 
   return (

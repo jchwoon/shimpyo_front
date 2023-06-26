@@ -72,9 +72,17 @@ display: flex;
 flex-direction: row;
 // justify-content: space-between;
 align-items: center;
+margin-left: 15px; 
 `
 
 export const CustomizedWrapperDiv = styled.div`
 position:relative;
 `
 
+export const OptionWrapper = styled.div`
+display: flex; 
+flex-direction: column;
+align-items: center; 
+margin-left: 15px; 
+margin-bottom: 10px;
+`

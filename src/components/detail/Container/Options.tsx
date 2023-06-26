@@ -13,6 +13,7 @@ display: flex;
 justify-content:center;
 align-items: center;
 margin-right:10px;
+margin-bottom: 10px;
 `
 
 export const Wifi = () => {

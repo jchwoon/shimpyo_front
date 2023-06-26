@@ -11,6 +11,7 @@ const StyledDayDiv = styled.div`
 height: 50px;
 width: 50px;
 
+
 // height: 35px;
 // width: 35px;
 

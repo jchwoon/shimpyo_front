@@ -96,7 +96,7 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
 
     return (
         <>
-            <Collapse in={activecard === "card1"} collapsedSize={"110px"}>
+            <Collapse in={activecard === "card1"} collapsedSize={"90px"}>
                 <div style={{ position: "relative" }}>
                     {activecard === "card1" ?
                         ObjectPlaceholder.description !== ''
