@@ -50,6 +50,7 @@ export default function ImageOption({ index, setImageList, imageList }: ImageOpt
     newImageData.delete('houseImages');
     imageDataValues.forEach(value => newImageData.append('houseImages', value));
 
+    setIsClicked(false);
     setImageData(newImageData);
     setImageList(newImageList);
   };

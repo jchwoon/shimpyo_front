@@ -16,7 +16,6 @@ export default function AccommodationAmenityInfoItem({ amenity }: AmenityItemPro
     newAccommodation.option = { ...newAccommodation.option };
     newAccommodation.option[amenity] = !newAccommodation.option[amenity];
 
-    console.log(newAccommodation);
     setAccommodation(newAccommodation);
   };
 

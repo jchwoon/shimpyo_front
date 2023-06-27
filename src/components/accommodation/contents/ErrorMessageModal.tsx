@@ -1,6 +1,6 @@
 import { MdError } from 'react-icons/md';
 import { AiOutlineClose } from 'react-icons/ai';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { addressCheckState, errorModalState, stepState } from '../../../recoil/atoms';
 

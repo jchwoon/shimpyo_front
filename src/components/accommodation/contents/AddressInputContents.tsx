@@ -4,7 +4,7 @@ import { MdError } from 'react-icons/md';
 
 import { accommodationState, addressCheckState, isPassedState } from '../../../recoil/atoms';
 import { useRecoilState } from 'recoil';
-import LocationMap from './LocationMap';
+import LocationMap from '../../shared/LocationMap';
 import ErrorMessageModal from './ErrorMessageModal';
 
 interface Focused {
