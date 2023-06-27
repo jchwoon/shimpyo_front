@@ -8,12 +8,11 @@ justify-content: space-between;
 `
 
 const StyledDayDiv = styled.div`
-height: 50px;
-width: 50px;
+// height: 50px;
+// width: 50px;
 
-
-// height: 35px;
-// width: 35px;
+height: 35px;
+width: 35px;
 
 display:flex;
 justify-content: center;

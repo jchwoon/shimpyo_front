@@ -39,8 +39,8 @@ import {
   InfantGuest,
   FirstPickedDate,
   SecondPickedDate,
+  googleMapsPlaceholder,
   PlaceholderChanged,
-  objectPlaceholder
 } from '../../../recoil/atoms';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
@@ -50,7 +50,7 @@ import { Calendar } from '../Calendar/Calendar';
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from './GuestCount';
 
-import MuiSearchField from './MuiSearchField';
+import GoogleMaps from './MuiSearchField';
 
 import CategoryTabs from "./Tabs"
 
@@ -60,7 +60,7 @@ export default function Navbar() {
   const [change, setChange] = useRecoilState(Change);
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
   const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
-  const [ObjectPlaceholder, setObjectPlaceholder] = useRecoilState(objectPlaceholder);
+  const [GoogleMapsPlaceholder, setGoogleMapsPlaceholder] = useRecoilState(googleMapsPlaceholder);
 
   const handleClick = () => {
     setAppBarHeight('160px');
@@ -144,18 +144,9 @@ export default function Navbar() {
   const [textfieldInputValue, setTextfieldInputValue] = useState(false);
 
   const resetFunctionInSearchField = () => {
+    setGoogleMapsPlaceholder('');
     setPlaceholderChanged(false);
     setTextfieldInputValue(false);
-    setObjectPlaceholder(
-      {
-        description: "",
-        structured_formatting: {
-          main_text: "",
-          secondary_text: "",
-          main_text_matched_substrings: []
-        }
-      }
-    )
   };
 
   useEffect(() => {
@@ -216,6 +207,23 @@ export default function Navbar() {
     handleButtonClick('button3');
   }
 
+
+  const firstDeleteIconButton = <CustomizedDeleteIconButton
+    onClick={resetFunction}
+    top={firstDivider ? firstDivider.getBoundingClientRect().top - 5 : 0}
+    left={firstDivider ? firstDivider.getBoundingClientRect().left - 10 : 0}
+  >
+    <CustomziedClearIcon />
+  </CustomizedDeleteIconButton>
+
+  const secondDeleteIconButton = <CustomizedDeleteIconButton
+    onClick={resetFunction}
+    top={secondDivider ? secondDivider.getBoundingClientRect().top - 5 : 0}
+    left={secondDivider ? secondDivider.getBoundingClientRect().left - 10 : 0}
+  >
+    <CustomziedClearIcon />
+  </CustomizedDeleteIconButton>
+
   return (
     <CustomizedAppBar elevation={0} appbarheight={appbarheight}>
       <CustomizedToolBar>
@@ -223,14 +231,14 @@ export default function Navbar() {
           <img src={logo2} alt="website logo" style={{ height: 13, marginBottom: 5 }} />
           <CustomizedLogoTypography>쉼표</CustomizedLogoTypography>
         </LogoButton>
-        <CustomizedSearchButtonWrapperDiv change={change.toString()}>
+        <CustomizedSearchButtonWrapperDiv change={change ? change : undefined}>
           <ClickAwayListener onClickAway={clickAwayHandler}>
             <div>
               {change ? <CategoryTabs /> : null}
               <CustomizedSearchButton
                 id="customizedSearchButton"
                 onClick={handleClick}
-                change={change.toString()}
+                change={change ? change : undefined}
                 activebutton={activebutton}
                 elevation={2}
               >
@@ -250,33 +258,39 @@ export default function Navbar() {
                   </div>
                 ) : activebutton === 'button1' ? (
                   <>
-                    <CustomizedWhereActiveSearchButton elevation={2} style={{ paddingLeft: '20px' }}>
-                      <CustomizedWhereVerticalWrapperDiv >
+                    {placeholderChanged ? (
+                      <CustomizedDeleteIconButtonInSearchField onClick={resetFunctionInSearchField} top={0} left={-10}>
+                        <CustomziedClearIcon />
+                      </CustomizedDeleteIconButtonInSearchField>
+                    ) : null}
+                    <CustomizedWhereActiveSearchButton elevation={2}>
+                      <CustomizedWhereVerticalWrapperDiv change={change ? change : undefined}>
                         <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" textAlign="left">
                           여행지
                         </CustomizedTypography>
-                        <MuiSearchField
+                        <GoogleMaps
+                          placeholder={GoogleMapsPlaceholder}
+                          setPlaceholder={setGoogleMapsPlaceholder}
+                          setPlaceholderChanged={setPlaceholderChanged}
                           textfieldInputValue={textfieldInputValue}
                           setTextfieldInputValue={setTextfieldInputValue}
-                          ObjectPlaceholder={ObjectPlaceholder}
-                          setObjectPlaceholder={setObjectPlaceholder}
                         />
-
                       </CustomizedWhereVerticalWrapperDiv>
                     </CustomizedWhereActiveSearchButton>
                   </>
                 ) : (
                   <CustomizedSearchInsideButton
+                    change={change ? change : undefined}
                     disableRipple
                     sx={{ paddingLeft: '20px' }}
                     onClick={() => handleButtonClick('button1')}
                   >
-                    <CustomizedWhereVerticalWrapperDiv >
+                    <CustomizedWhereVerticalWrapperDiv change={change ? change : undefined}>
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" textAlign="left">
                         여행지
                       </CustomizedTypography>
                       <CustomizedTypography fontFamily="Noto Sans KR" color="#a2a2a2" fontSize="15px" fontWeight="300">
-                        {ObjectPlaceholder.description ? ObjectPlaceholder.description : '여행지 검색'}
+                        {GoogleMapsPlaceholder ? GoogleMapsPlaceholder : '여행지 검색'}
                       </CustomizedTypography>
                     </CustomizedWhereVerticalWrapperDiv>
                   </CustomizedSearchInsideButton>
@@ -305,11 +319,11 @@ export default function Navbar() {
                     sx={{ paddingLeft: '20px', paddingRight: '20px' }}
                     onClick={handleCheckInOutClick}
                   >
-                    <CustomizedWhenVerticalWrapperDiv>
+                    <CustomizedWhenVerticalWrapperDiv change={change ? change : undefined}>
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                         {change ? '체크인' : '언제든지'}
                       </CustomizedTypography>
-                      <CustomizedChangeTypography change={change.toString()}>
+                      <CustomizedChangeTypography change={change ? change : undefined}>
                         {firstPickedFirst
                           ? firstPickedDate
                             ? moment(firstPickedDate).format('M월 D일')
@@ -325,15 +339,16 @@ export default function Navbar() {
                 ) : (
                   <CustomizedSearchInsideButton
                     id="inactiveCheckInButton"
+                    change={change ? change : undefined}
                     disableRipple
                     sx={{ paddingLeft: '20px', paddingRight: '20px' }}
                     onClick={() => handleButtonClick('button2')}
                   >
-                    <CustomizedWhenVerticalWrapperDiv >
+                    <CustomizedWhenVerticalWrapperDiv change={change ? change : undefined}>
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                         체크인
                       </CustomizedTypography>
-                      <CustomizedChangeTypography change={change.toString()}>
+                      <CustomizedChangeTypography change={change ? change : undefined}>
                         {firstPickedFirst
                           ? firstPickedDate
                             ? moment(firstPickedDate).format('M월 D일')
@@ -348,7 +363,7 @@ export default function Navbar() {
                   </CustomizedSearchInsideButton>
                 )}
                 <CustomizedMenu
-                  id="calendar-menu"
+                  id="basic-menu"
                   anchorEl={checkInOutAnchorEl}
                   open={checkInOutOpen}
                   onClose={checkInOutClose}
@@ -356,26 +371,37 @@ export default function Navbar() {
                   transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                   elevation={1}
                 >
-                  {
-                    firstPickedDate ?
-                      <CustomizedDeleteIconButton
-                        onClick={resetFunction}
-                        top={-15}
-                        left={-10}
-                      >
-                        <CustomziedClearIcon />
-                      </CustomizedDeleteIconButton>
-                      :
-                      null
-                  }
                   <Calendar />
+                  {
+                    firstPickedFirst ? (
+                      firstPickedDate ? (
+                        secondPickedDate ? (
+                          activebutton === "button2" ?
+                            firstDeleteIconButton
+                            : activebutton === "button3" ?
+                              secondDeleteIconButton
+                              : null
+                        ) : (
+                          secondDeleteIconButton
+                        )
+                      ) : null
+                    ) : firstPickedDate ? (
+                      secondPickedDate ? (
+                        activebutton === "button2" ? (
+                          firstDeleteIconButton
+                        ) : activebutton === "button3" ? (
+                          secondDeleteIconButton
+                        ) : null
+                      ) : firstDeleteIconButton
+                    ) : null
+                  }
                 </CustomizedMenu>
 
                 <CustomizedAdditionalDivider
                   id="secondDivider"
                   orientation="vertical"
                   flexItem
-                  change={change.toString()}
+                  change={change ? change : undefined}
                   variant="middle"
                 />
                 {activebutton === 'button3' ? (
@@ -384,14 +410,14 @@ export default function Navbar() {
                     variant="contained"
                     disableRipple
                     sx={{ paddingLeft: '20px', paddingRight: '20px' }}
-                    change={change.toString()}
+                    change={change ? change : undefined}
                     onClick={handleCheckInOutClick}
                   >
-                    <CustomizedAddtionalWhenVerticalWrapperDiv change={change.toString()}>
+                    <CustomizedAddtionalWhenVerticalWrapperDiv change={change ? change : undefined}>
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                         {change ? '체크아웃' : ''}
                       </CustomizedTypography>
-                      <CustomizedChangeTypography change={change.toString()}>
+                      <CustomizedChangeTypography change={change ? change : undefined}>
                         {firstPickedFirst
                           ? secondPickedDate
                             ? moment(secondPickedDate).format('M월 D일')
@@ -407,16 +433,16 @@ export default function Navbar() {
                 ) : (
                   <CustomizedAdditionalSearchInsideButton
                     id="inactiveCheckOutButton"
-                    change={change.toString()}
+                    change={change ? change : undefined}
                     disableRipple
                     sx={{ paddingLeft: '20px', paddingRight: '20px' }}
                     onClick={() => handleButtonClick('button3')}
                   >
-                    <CustomizedAddtionalWhenVerticalWrapperDiv change={change.toString()}>
+                    <CustomizedAddtionalWhenVerticalWrapperDiv change={change ? change : undefined}>
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                         {change ? '체크아웃' : ''}
                       </CustomizedTypography>
-                      <CustomizedChangeTypography change={change.toString()}>
+                      <CustomizedChangeTypography change={change ? change : undefined}>
                         {firstPickedFirst
                           ? secondPickedDate
                             ? moment(secondPickedDate).format('M월 D일')
@@ -431,7 +457,7 @@ export default function Navbar() {
                   </CustomizedAdditionalSearchInsideButton>
                 )}
                 <CustomizedDivider id="thirdDivider" orientation="vertical" flexItem variant="middle" />
-                <CustomizedGuestVerticalWrapperDiv >
+                <CustomizedGuestVerticalWrapperDiv change={change ? change : undefined}>
                   {!change ? (
                     <div
                       onClick={() => handleButtonClick('button4')}
@@ -448,26 +474,27 @@ export default function Navbar() {
                       sx={{ paddingLeft: '20px', paddingRight: '20px' }}
                       onClick={handleGuestCountClick}
                     >
-                      <CustomizedGuestVerticalWrapperDiv >
+                      <CustomizedGuestVerticalWrapperDiv change={change ? change : undefined}>
                         <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                           여행자
                         </CustomizedTypography>
-                        <CustomizedChangeTypography change={change.toString()}>
+                        <CustomizedChangeTypography change={change ? change : undefined}>
                           {TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}
                         </CustomizedChangeTypography>
                       </CustomizedGuestVerticalWrapperDiv>
                     </CustomizedActiveSearchButton>
                   ) : (
                     <CustomizedSearchInsideButton
+                      change={change ? change : undefined}
                       disableRipple
                       sx={{ paddingLeft: '20px', paddingRight: '20px' }}
                       onClick={() => handleButtonClick('button4')}
                     >
-                      <CustomizedGuestVerticalWrapperDiv>
+                      <CustomizedGuestVerticalWrapperDiv change={change ? change : undefined}>
                         <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
                           여행자
                         </CustomizedTypography>
-                        <CustomizedChangeTypography change={change.toString()}>
+                        <CustomizedChangeTypography change={change ? change : undefined}>
                           {TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}
                         </CustomizedChangeTypography>
                       </CustomizedGuestVerticalWrapperDiv>
@@ -488,18 +515,17 @@ export default function Navbar() {
                     {TotalGuestNumber > 0 ? (
                       <CustomizedDeleteIconButtonInGuestCount
                         onClick={guestCountReset}
-                        top={-15}
-                        left={-10}
+                        top={thirdDivider ? thirdDivider.getBoundingClientRect().top - 5 : 0}
+                        left={thirdDivider ? thirdDivider.getBoundingClientRect().left - 10 : 0}
                       >
                         <CustomziedClearIcon />
                       </CustomizedDeleteIconButtonInGuestCount>
                     ) : null}
                   </CustomizedMenu>
-
                 </CustomizedGuestVerticalWrapperDiv>
                 <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-                  <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change.toString()}>
-                    <CustomizedSearchIcon change={change.toString()} />
+                  <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change ? change : undefined}>
+                    <CustomizedSearchIcon change={change ? change : undefined} />
                   </CustomizedAvatar>
                 </div>
               </CustomizedSearchButton>

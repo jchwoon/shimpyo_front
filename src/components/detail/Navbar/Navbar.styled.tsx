@@ -19,7 +19,7 @@ background-color: #fff;
 padding-left : 40px;
 padding-right : 40px;
 height: ${({ appbarheight }) => appbarheight};
-position: fixed;
+position: absolute;
 transition: height 0.3s ease;
 `
 
@@ -36,15 +36,15 @@ border-color: #ffffff;
 `
 
 
-export const CustomizedSearchButtonWrapperDiv = styled.div<{ change: string }>`
+export const CustomizedSearchButtonWrapperDiv = styled.div<{ change: boolean | undefined }>`
 display:flex;
 align-items: flex-end;
-height: ${({ change }) => (change === "true" ? "240px" : "50px")};
+height: ${({ change }) => (change ? "240px" : "50px")};
 transition: 0.3s ease;
-padding-bottom:${({ change }) => (change === "true" ? "10px" : "0px")};
+padding-bottom:${({ change }) => (change ? "10px" : "0px")};
 `
 
-export const CustomizedWhereVerticalWrapperDiv = styled.div`
+export const CustomizedWhereVerticalWrapperDiv = styled.div<{ change: boolean | undefined }>`
 display:flex;
 flex-direction: column;
 justify-content: center;
@@ -52,22 +52,22 @@ align-items: flex-start;
 width: 200px;
 `
 
-export const CustomizedWhenVerticalWrapperDiv = styled.div`
+export const CustomizedWhenVerticalWrapperDiv = styled.div<{ change: boolean | undefined }>`
 display:flex;
 flex-direction: column;
 justify-content: flex-end;
 `
 interface CustomizedAddtionalWhenVerticalWrapperDivProps {
-  change: string;
+  change: boolean | undefined;
 }
 
 export const CustomizedAddtionalWhenVerticalWrapperDiv = styled.div<CustomizedAddtionalWhenVerticalWrapperDivProps>`
-display:${({ change }) => (change === "true" ? "flex" : "none")};
+display:${({ change }) => (change ? "flex" : "none")};
 flex-direction: column;
 justify-content: flex-end;
 `
 
-export const CustomizedGuestVerticalWrapperDiv = styled.div`
+export const CustomizedGuestVerticalWrapperDiv = styled.div<{ change: boolean | undefined }>`
 display:flex;
 flex-direction: column;
 justify-content: flex-end;
@@ -88,8 +88,8 @@ justify-content: flex-end;
 // transition: 0.2s ease;
 // `
 
-export const CustomizedSearchButton = styled(Card) <{ change: string, activebutton: string }>`
-height: ${({ change }) => (change === "true" ? "70px" : "50px")};
+export const CustomizedSearchButton = styled(Card) <{ change: boolean | undefined, activebutton: string }>`
+height: ${({ change }) => (change ? "70px" : "50px")};
 display: flex;
 justify-content: center; 
 color: #000000;
@@ -140,7 +140,7 @@ border-radius: 50px;
 height: 70px;
 `
 
-export const CustomizedSearchInsideButton = styled(Button)`
+export const CustomizedSearchInsideButton = styled(Button) <{ change: boolean | undefined }>`
 color: #000000;
 border-radius: 50px;
 :hover {
@@ -150,8 +150,8 @@ border: 0px;
 height: 70px;
 `
 
-export const CustomizedAdditionalActiveSearchButton = styled(Button) <{ change: string }>`
-display:${({ change }) => (change === "true" ? "flex" : "none")};
+export const CustomizedAdditionalActiveSearchButton = styled(Button) <{ change: boolean | undefined }>`
+display:${({ change }) => (change ? "flex" : "none")};
 color: #000000;
 background-color: #ffffff;
 border-radius: 50px;
@@ -161,8 +161,8 @@ border-radius: 50px;
 height: 70px;
 `
 
-export const CustomizedAdditionalSearchInsideButton = styled(Button) <{ change: string }>`
-display:${({ change }) => (change === "true" ? "flex" : "none")};
+export const CustomizedAdditionalSearchInsideButton = styled(Button) <{ change: boolean | undefined }>`
+display:${({ change }) => (change ? "flex" : "none")};
 color: #000000;
 border-radius: 50px;
 :hover {
@@ -190,19 +190,19 @@ box-shadow: unset;
 export const CustomizedDivider = styled(Divider)`
 `
 
-export const CustomizedAdditionalDivider = styled(Divider) <{ change: string }>`
-display:${({ change }) => (change === "true" ? "flex" : "none")};
+export const CustomizedAdditionalDivider = styled(Divider) <{ change: boolean | undefined }>`
+display:${({ change }) => (change ? "flex" : "none")};
 `
 
 export const CustomizedTypography = styled(Typography)`
 `
 
 interface CustomizedChangeTypographyProps {
-  change: string;
+  change: boolean | undefined;
 }
 
 export const CustomizedChangeTypography = styled(Typography) <CustomizedChangeTypographyProps>`
-display:${({ change }) => (change === "true" ? "block" : "none")};
+display:${({ change }) => (change ? "block" : "none")};
 color: #a2a2a2;
 font-family: Noto Sans KR;
 font-weight: 300;
@@ -221,19 +221,19 @@ font-size: 25px;
 // width:${({ change }) => (change ? "50px" : "32px")};
 // `
 
-export const CustomizedAvatar = styled(IconButton) <{ change: string | undefined }>`
+export const CustomizedAvatar = styled(IconButton) <{ change: boolean | undefined }>`
 background-color: #00ADB5;
-height:${({ change }) => (change === "true" ? "50px" : "32px")};
-width:${({ change }) => (change === "true" ? "50px" : "32px")};
+height:${({ change }) => (change ? "50px" : "32px")};
+width:${({ change }) => (change ? "50px" : "32px")};
 :hover {
   background-color: #00c5cf;
 }
 `
 
 
-export const CustomizedSearchIcon = styled(SearchIcon) <{ change: string | undefined }>`
-height:${({ change }) => (change === "true" ? "30px" : "20px")};
-width:${({ change }) => (change === "true" ? "30px" : "20px")};
+export const CustomizedSearchIcon = styled(SearchIcon) <{ change: boolean | undefined }>`
+height:${({ change }) => (change ? "30px" : "20px")};
+width:${({ change }) => (change ? "30px" : "20px")};
 color: white;
 `
 export const CustomizedMenuIcon = styled(MenuIcon)`
@@ -278,10 +278,7 @@ display:flex;
 `
 
 export const CustomizedMenu = styled(Menu)`
-margin-top:10px;
-.MuiPaper-root {
-  overflow: visible;
-}
+// margin-top:10px;
 `
 
 export const CustomizedGuestCountMenuItem = styled(MenuItem)`
@@ -316,9 +313,10 @@ height: 30px;
 :hover {
   background-color: #00c5cf;
 }
+position: fixed;
 top: ${props => props.top}px;
 left: ${props => props.left}px;
-position: absolute;
+z-index: 1;
 `
 
 export const CustomizedDeleteIconButtonInSearchField = styled(IconButton) <{ top: number, left: number }>`
@@ -341,7 +339,7 @@ height: 30px;
 :hover {
   background-color: #00c5cf;
 }
-position: absolute;
+position: fixed;
 top: ${props => props.top}px;
 left: ${props => props.left}px;
 `
