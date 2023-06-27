@@ -183,3 +183,8 @@ export const imageListState = atom<ImageItem[]>({
     { image: '', isFocused: false },
   ],
 });
+
+export const roomImageListState = atom<string[][]>({
+  key: 'roomImageListState',
+  default: [[]],
+});
