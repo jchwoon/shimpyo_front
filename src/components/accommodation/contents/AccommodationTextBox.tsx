@@ -3,8 +3,11 @@ import styled from 'styled-components';
 import { MdError } from 'react-icons/md';
 
 import debounce from '../../../utils/debounce';
+import { useRecoilState } from 'recoil';
+import { accommodationState } from '../../../recoil/atoms';
 
 interface TextBoxProps {
+  title: string;
   lengthError?: boolean;
   limit: number;
   width: number;
@@ -12,37 +15,46 @@ interface TextBoxProps {
   row?: number;
 }
 
-export default function AccommodationTextBox({ limit, width, height, row }: TextBoxProps) {
-  const [accommodationName, setAccommodationName] = useState<string>('');
+export default function AccommodationTextBox({ title, limit, width, height, row }: TextBoxProps) {
+  const [accommodation, setAccommodation] = useRecoilState(accommodationState);
   const [lengthError, setLengthError] = useState<boolean>(false);
 
   const handleOnChange = debounce((e: ChangeEvent<HTMLTextAreaElement>) => {
-    setAccommodationName(e.target.value);
+    if (title === 'name') {
+      const newAccommodation = { ...accommodation, name: e.target.value };
+      setAccommodation(newAccommodation);
+    }
+
+    if (title === 'contents') {
+      const newAccommodation = { ...accommodation, contents: e.target.value };
+      setAccommodation(newAccommodation);
+    }
   }, 10);
 
   useEffect(() => {
-    if (accommodationName.length > limit) {
+    if (accommodation.name.length > limit || accommodation.contents.length > limit) {
       setLengthError(true);
     } else {
       setLengthError(false);
     }
-  }, [accommodationName, limit]);
+  }, [accommodation.name, accommodation.contents, limit]);
 
   return (
     <StyledContainer>
       <StyledTextBox
+        title={title}
         limit={limit}
         width={width}
         height={height}
         lengthError={lengthError}
         rows={row}
         onChange={handleOnChange}
-        defaultValue={accommodationName}
+        defaultValue={title === 'name' ? accommodation.name : accommodation.contents}
       ></StyledTextBox>
       <StyledLimitLength>
-        {accommodationName.length}/{limit}
+        {accommodation.name.length}/{limit}
       </StyledLimitLength>
-      <StyledFlexDiv limit={limit} width={width} height={height} lengthError={lengthError}>
+      <StyledFlexDiv title={title} limit={limit} width={width} height={height} lengthError={lengthError}>
         <StyledErrorIcon />
         <StyledErrorText>{limit}자까지 입력하실 수 있습니다.</StyledErrorText>
       </StyledFlexDiv>
