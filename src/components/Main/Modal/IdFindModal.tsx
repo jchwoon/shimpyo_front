@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
 import Modal from '../../shared/Modal';
-import { idFindModalAtom } from '../../../recoil/atoms';
+import { idFindModalAtom } from '../../../recoil/Modal/modalAtoms';
 import styled from 'styled-components';
 import Input from '../../shared/UI/Input';
 import { StyleBody } from './JoinModal';
@@ -8,7 +8,7 @@ import Button from '../../shared/UI/Button';
 import ColorButton from '../../shared/UI/ColorButton';
 import { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import useHttpRequest from '../../../hooks/useHttpRequest';
-import { FIND_EMAIL_API_PATH } from '../../../constants/api';
+import { FIND_EMAIL_API_PATH } from '../../../constants/api/userApi';
 import usePhoneCertification from '../../../hooks/usePhoneCertification';
 
 interface IEmailData {

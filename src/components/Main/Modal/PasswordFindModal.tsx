@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import Modal from '../../shared/Modal';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { passwordFindModalAtom, passwordValueAtom } from '../../../recoil/atoms';
+import { passwordValueAtom } from '../../../recoil/User/userAtoms';
+import { passwordFindModalAtom } from '../../../recoil/Modal/modalAtoms';
 import { StyleBody } from './JoinModal';
 import Input from '../../shared/UI/Input';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
@@ -10,7 +11,7 @@ import Button from '../../shared/UI/Button';
 import PasswordInput from '../Input/PasswordInput';
 import ConfirmPasswordInput from '../Input/ConfirmPasswordInput';
 import useHttpRequest from '../../../hooks/useHttpRequest';
-import { RESET_PASSWORD_API_PATH } from '../../../constants/api';
+import { RESET_PASSWORD_API_PATH } from '../../../constants/api/userApi';
 import usePhoneCertification from '../../../hooks/usePhoneCertification';
 
 export default function PasswordFindModal() {

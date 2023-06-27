@@ -2,13 +2,12 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import Modal from '../../shared/Modal';
 import { useRef, useEffect, useState, KeyboardEvent } from 'react';
 import {
-  accessTokenAtom,
   idFindModalAtom,
   joinModalAtom,
   loginModalAtom,
-  loginStateAtom,
   passwordFindModalAtom,
-} from '../../../recoil/atoms';
+} from '../../../recoil/Modal/modalAtoms';
+import { loginStateAtom, accessTokenAtom } from '../../../recoil/User/userAtoms';
 import styled from 'styled-components';
 import { StyleBody, StyleFooter, StyleSwitchToLoginButton } from './JoinModal';
 import ColorButton from '../../shared/UI/ColorButton';
@@ -17,7 +16,7 @@ import Input from '../../shared/UI/Input';
 import NaverLogin from '../SocialLogin/NaverLogin';
 import GoogleSocialLogin from '../SocialLogin/GoogleSocialLogin';
 import KakaoLogin from '../SocialLogin/KakaoLogin';
-import { LOGIN_API_PATH } from '../../../constants/api';
+import { LOGIN_API_PATH } from '../../../constants/api/userApi';
 
 interface ResultData {
   accessToken: string;

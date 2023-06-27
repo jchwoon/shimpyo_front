@@ -7,9 +7,9 @@ import useHttpRequest from '../../hooks/useHttpRequest';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { accessTokenAtom, nicknameValueAtom, phoneValueAtom } from '../../recoil/atoms';
-import { SOCIAL_ADDITIONAL_INFO_API_PATH } from '../../constants/api';
+import { SOCIAL_ADDITIONAL_INFO_API_PATH } from '../../constants/api/userApi';
 import Button from '../shared/UI/Button';
+import { accessTokenAtom, nicknameValueAtom, phoneValueAtom } from '../../recoil/User/userAtoms';
 
 interface IResultData {
   accessToken: string;

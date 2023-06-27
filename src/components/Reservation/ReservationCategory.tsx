@@ -3,14 +3,16 @@ import styled from 'styled-components';
 interface ReservationCategoryProps {
   header: React.ReactElement;
   main: React.ReactElement;
+  footer: React.ReactElement;
 }
 
-export default function ReservationCategory({ header, main }: ReservationCategoryProps) {
+export default function ReservationCategory({ header, main, footer }: ReservationCategoryProps) {
   return (
     <StyleCategoryBox>
       <StyleFlexColumnBox>
         <StyleCategorysHeaderBox>{header}</StyleCategorysHeaderBox>
-        {<StyleCategoryMainBox>{main}</StyleCategoryMainBox>}
+        <StyleCategoryMainBox>{main}</StyleCategoryMainBox>
+        <StyleCategoryFooterBox>{footer}</StyleCategoryFooterBox>
       </StyleFlexColumnBox>
     </StyleCategoryBox>
   );
@@ -28,3 +30,7 @@ const StyleFlexColumnBox = styled.div`
 const StyleCategorysHeaderBox = styled.div``;
 
 const StyleCategoryMainBox = styled.div``;
+
+const StyleCategoryFooterBox = styled.div`
+  margin-top: 2rem;
+`;

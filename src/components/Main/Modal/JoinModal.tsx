@@ -1,13 +1,7 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import Modal from '../../shared/Modal';
-import {
-  additionalInfoModalAtom,
-  confirmPasswordValueAtom,
-  emailValueAtom,
-  joinModalAtom,
-  loginModalAtom,
-  passwordValueAtom,
-} from '../../../recoil/atoms';
+import { additionalInfoModalAtom, joinModalAtom, loginModalAtom } from '../../../recoil/Modal/modalAtoms';
+import { passwordValueAtom, confirmPasswordValueAtom, emailValueAtom } from '../../../recoil/User/userAtoms';
 import styled from 'styled-components';
 import { useState } from 'react';
 import ColorButton from '../../shared/UI/ColorButton';

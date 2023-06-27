@@ -2,9 +2,9 @@ import { ChangeEvent, useState, useCallback, useEffect } from 'react';
 import { emailValidation } from '../../../utils/validation';
 import Input from '../../shared/UI/Input';
 import { useRecoilState } from 'recoil';
-import { emailValueAtom } from '../../../recoil/atoms';
 import useHttpRequest from '../../../hooks/useHttpRequest';
-import { EMAIL_OVERLAP_CHECK_API_PATH } from '../../../constants/api';
+import { EMAIL_OVERLAP_CHECK_API_PATH } from '../../../constants/api/userApi';
+import { emailValueAtom } from '../../../recoil/User/userAtoms';
 
 interface EmailInputProps {
   getValid: (valid: boolean) => void;

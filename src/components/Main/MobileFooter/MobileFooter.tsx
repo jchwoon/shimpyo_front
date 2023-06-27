@@ -10,7 +10,7 @@ import { CustomizedBottomNavigation } from './MobileFooter.style';
 import logo2 from '../../../logo2.svg';
 import logo3 from '../../../logo3.svg';
 import { useSetRecoilState } from 'recoil';
-import { loginModalAtom } from '../../../recoil/atoms';
+import { loginModalAtom } from '../../../recoil/Modal/modalAtoms';
 
 export default function MobileFooter() {
   const [value, setValue] = React.useState(0);

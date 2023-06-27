@@ -4,12 +4,27 @@ import HeaderContents from '../HeaderContents';
 import ReservationCategory from '../ReservationCategory';
 import styled from 'styled-components';
 import Button from '../../shared/UI/Button';
+import { useSearchParams } from 'react-router-dom';
 
 export default function ReservationCancel() {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const toggleShowButton = () => {
     setIsOpen(prev => !prev);
+
+    if (searchParams.get('reservationCancel') === 'true') {
+      setSearchParams(searchParams => {
+        searchParams.set('reservationCancel', 'false');
+        return searchParams;
+      });
+    } else if (searchParams.get('reservationCancel') === 'false' || !searchParams.get('reservationCancel')) {
+      setSearchParams(searchParams => {
+        searchParams.set('reservationCancel', 'true');
+        searchParams.set('reservationCancelPage', '1');
+        return searchParams;
+      });
+    }
   };
 
   const subElement = (
@@ -33,13 +48,26 @@ export default function ReservationCancel() {
       )}
     </>
   );
-  return <ReservationCategory header={header} main={main} />;
+
+  const footer = (
+    <>
+      {isOpen && (
+        <StyleFlexFooterBox>
+          <div>
+            <span>&lt;&lt;</span>&nbsp;&nbsp;<span>&lt;</span> <span>&gt;</span>&nbsp;&nbsp;<span>&gt;&gt;</span>
+          </div>
+        </StyleFlexFooterBox>
+      )}
+    </>
+  );
+
+  return <ReservationCategory header={header} main={main} footer={footer} />;
 }
 
 const StyleGridBox = styled.div`
   display: grid;
   grid-gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(330px, 360px));
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
   justify-content: space-evenly;
 `;
 
@@ -48,4 +76,8 @@ const StyleButtonBox = styled.div`
   flex-direction: row;
   gap: 1rem;
   margin-top: 0.3;
+`;
+
+const StyleFlexFooterBox = styled.div`
+  text-align: center;
 `;

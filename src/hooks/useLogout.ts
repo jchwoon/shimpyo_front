@@ -1,8 +1,9 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { accessTokenAtom, loginStateAtom } from '../recoil/atoms';
+
 import useAuthorizedRequest from './useAuthorizedRequest';
 import { useEffect } from 'react';
-import { LOGOUT_API_PATH } from '../constants/api';
+import { LOGOUT_API_PATH } from '../constants/api/userApi';
+import { accessTokenAtom, loginStateAtom } from '../recoil/User/userAtoms';
 
 export default function useLogout() {
   const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);

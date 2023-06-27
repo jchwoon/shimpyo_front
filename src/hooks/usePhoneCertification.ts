@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import useHttpRequest from './useHttpRequest';
 import { phoneRule } from '../utils/validation';
-import { PHONE_AUTHENTICATION_API_PATH, PHONE_AUTHENTICATION_ONLY_USER_API_PATH } from '../constants/api';
+import { PHONE_AUTHENTICATION_API_PATH, PHONE_AUTHENTICATION_ONLY_USER_API_PATH } from '../constants/api/userApi';
 
 interface IResultData {
   codeNumber: string;

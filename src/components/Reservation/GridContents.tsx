@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 type Item = {
@@ -10,28 +11,26 @@ type Item = {
 
 interface GridContentsProps {
   subElement?: React.ReactElement;
+  contentsArray?: Item[];
 }
 
-export default function GridContents({ subElement }: GridContentsProps) {
-  const [contentsArray, setContentsArray] = useState<Item[]>([
-    { id: Math.random(), title: '르네상스 서울', checkIn: '06.13 목 14:00', checkOut: '06.14 금 11:00' },
-    { id: Math.random(), title: '르네상스 서울', checkIn: '06.13 목 14:00', checkOut: '06.14 금 11:00' },
-    { id: Math.random(), title: '르네상스 서울', checkIn: '06.13 목 14:00', checkOut: '06.14 금 11:00' },
-  ]);
+export default function GridContents({ subElement, contentsArray }: GridContentsProps) {
   return (
     <>
-      {contentsArray.map(item => (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <StyleGridItem key={item.id}>
-            <StyleAccommodation loading="lazy" src="/images/image.png" alt="토끼" />
-            <StyleContent>
-              <h3>{item.title}</h3>
-              <div>
-                <span>{`체크인 : ${item.checkIn}`}</span>
-                <span>{`체크아웃 : ${item.checkOut}`}</span>
-              </div>
-            </StyleContent>
-          </StyleGridItem>
+      {contentsArray?.map(item => (
+        <div key={item.id} style={{ display: 'flex', flexDirection: 'column' }}>
+          <Link to={'detail'}>
+            <StyleGridItem>
+              <StyleAccommodation loading="lazy" src="/images/image.png" alt="토끼" />
+              <StyleContent>
+                <h3>{item.title}</h3>
+                <div>
+                  <span>{`체크인 : ${item.checkIn}`}</span>
+                  <span>{`체크아웃 : ${item.checkOut}`}</span>
+                </div>
+              </StyleContent>
+            </StyleGridItem>
+          </Link>
           {subElement}
         </div>
       ))}
