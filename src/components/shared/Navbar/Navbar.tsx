@@ -1,11 +1,10 @@
-import logo2 from '../../../logo2.svg';
+
 import CustomizedMenus from '../UserMenu/UserMenu';
-// import 'moment/locale/ko';
 import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import styled from '@emotion/styled';
+
+import LogoButton from '../LogoButton/LogoButton';
 
 const CustomizedAppBar = styled(AppBar) <{ appbarheight: string }>`
 background-color: #fff;
@@ -21,27 +20,11 @@ height: 80px;
 justify-content: space-between;
 `
 
-const LogoButton = styled(Button)`
-border-color: #ffffff;
-:hover {
-  background-color: #ffffff;
-}
-`
-
-const CustomizedLogoTypography = styled(Typography)`
-color: #00ADB5;
-font-family: sunflower;
-font-size: 25px;
-`
-
 export default function Navbar() {
   return (
     <CustomizedAppBar elevation={0} appbarheight={"80px"}>
       <CustomizedToolBar>
-        <LogoButton disableRipple>
-          <img src={logo2} alt="website logo" style={{ height: 13, marginBottom: 5 }} />
-          <CustomizedLogoTypography>쉼표</CustomizedLogoTypography>
-        </LogoButton>
+        <LogoButton path={'/'} imageHeight={13} fontSize={"25px"} />
         <CustomizedMenus />
       </CustomizedToolBar>
     </CustomizedAppBar >

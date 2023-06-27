@@ -8,7 +8,7 @@ import { ClickAwayListener } from '@mui/material';
 
 import { Wifi, PC, Barbeque, Parking } from './Options';
 import { RoomCard } from './RoomCard';
-import LocationMap from './LocationMap';
+import LocationMap from '../../shared/LocationMap';
 
 export default function SideContainer() {
 
