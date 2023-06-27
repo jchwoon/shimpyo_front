@@ -22,11 +22,11 @@ justify-content: space-between;
 `
 
 const StyledDaysSquareDiv = styled.div`
-height: 50px;
-width: 50px;
+// height: 50px;
+// width: 50px;
 
-// height: 35px;
-// width: 35px;
+height: 35px;
+width: 35px;
 
 display:flex;
 justify-content: center;
@@ -45,11 +45,11 @@ margin-bottom:2px;
 `
 
 const StyledDaysRoundDiv = styled.div`
-height: 50px;
-width: 50px;
+// height: 50px;
+// width: 50px;
 
-// height: 35px;
-// width: 35px;
+height: 35px;
+width: 35px;
 
 display:flex;
 justify-content: center;

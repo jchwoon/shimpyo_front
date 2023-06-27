@@ -6,11 +6,13 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import parse from 'autosuggest-highlight/parse';
 import { debounce } from '@mui/material/utils';
-import { Paper } from '@mui/material';
+import { Paper, PaperProps } from '@mui/material';
+
 import { CustomizedTextfield } from './Navbar.styled';
 
-import { CustomziedClearIcon, CustomizedDeleteIconButtonInSearchField } from './Navbar.styled';
-
+const CustomPaper = (props: PaperProps) => {
+    return <Paper {...props} sx={{ marginTop: "20px" }} />
+}
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyA5ADsk4mK_A2hZuC2dSIHLpHGKFbixz88';
 
@@ -43,27 +45,30 @@ interface PlaceType {
 }
 
 interface GoogleMapsProps {
+    placeholder: string;
+    setPlaceholder: (value: string) => void;
+    setPlaceholderChanged: (value: boolean) => void;
     textfieldInputValue: boolean
     setTextfieldInputValue: (value: boolean) => void;
-    ObjectPlaceholder: PlaceType;
-    setObjectPlaceholder: (value: PlaceType) => void
 }
 
-const MuiSearchField: React.FC<GoogleMapsProps> = ({
+const GoogleMaps: React.FC<GoogleMapsProps> = ({
+    placeholder,
+    setPlaceholder,
+    setPlaceholderChanged,
     textfieldInputValue,
-    setTextfieldInputValue,
-    ObjectPlaceholder,
-    setObjectPlaceholder
+    setTextfieldInputValue
 }) => {
     const [value, setValue] = React.useState<PlaceType | null>(null);
     const [inputValue, setInputValue] = React.useState('');
     const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
+    const [open, setOpen] = React.useState<boolean>(false)
     const loaded = React.useRef(false);
 
     if (value) {
         setTextfieldInputValue(true)
     }
-    if (textfieldInputValue === false && value && ObjectPlaceholder.description === '') {
+    if (textfieldInputValue === false && value && placeholder === "") {
         setValue(null)
     }
 
@@ -138,31 +143,14 @@ const MuiSearchField: React.FC<GoogleMapsProps> = ({
         };
     }, [value, inputValue, fetch]);
 
-    const resetFunctionInSearchField = () => {
-        setTextfieldInputValue(false);
-        setObjectPlaceholder(
-            {
-                description: "",
-                structured_formatting: {
-                    main_text: "",
-                    secondary_text: "",
-                    main_text_matched_substrings: []
-                }
-            }
-        )
-    }
-
-
     return (
-        <Autocomplete
+        <Autocomplete 
             id="google-map-demo"
-            sx={{
-                width: 300, borderColor: "white", "& .MuiAutocomplete-clearIndicator": {
-                    display: "none", '& .MuiAutocomplete-endAdornment': {
-                        display: 'none',
-                    },
-                },
-            }}
+            sx={{ width: 200, borderColor: "white" , "& .MuiAutocomplete-clearIndicator": {
+                display: "none", '& .MuiAutocomplete-endAdornment': {
+                    display: 'none',
+                  },
+              },}}
             getOptionLabel={(option) =>
                 typeof option === 'string' ? option : option.description
             }
@@ -172,59 +160,36 @@ const MuiSearchField: React.FC<GoogleMapsProps> = ({
             includeInputInList
             filterSelectedOptions
             value={value}
-            noOptionsText={ObjectPlaceholder.description ?
-                <Grid container alignItems="center" >
-                    <Grid item sx={{ display: 'flex', width: 44 }}>
-                        <LocationOnIcon sx={{ color: 'text.secondary' }} />
-                    </Grid>
-                    <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
-                        <Box
-                            component="span"
-                            sx={{ fontWeight: 'bold' }}
-                        >
-                            {ObjectPlaceholder.structured_formatting.main_text}
-                        </Box>
-                        <Typography variant="body2" color="text.secondary">
-                            {ObjectPlaceholder.structured_formatting.secondary_text}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                :
-                <Typography sx={{ fontFamily: "Noto Sans KR" }}>여행지가 없습니다.</Typography>}
-            PaperComponent={({ children }) => {
-                return <Paper sx={{ marginTop: "22px !important" }} >
-                    {ObjectPlaceholder.description !== ''
-                        ?
-                        <CustomizedDeleteIconButtonInSearchField onMouseDown={resetFunctionInSearchField} top={5} left={-10}>
-                            <CustomziedClearIcon />
-                        </CustomizedDeleteIconButtonInSearchField>
-                        :
-                        null}
-                    {children}
-                </Paper>
-            }}
+            noOptionsText={<Typography sx={{ fontFamily: "Noto Sans KR" }}>여행지가 없습니다.</Typography>}
+
+            PaperComponent={CustomPaper}
 
             onChange={(event: any, newValue: PlaceType | null) => {
                 setOptions(newValue ? [newValue, ...options] : options);
                 setValue(newValue);
-                if (newValue !== null) setObjectPlaceholder(newValue)
+                setPlaceholderChanged(true);
             }}
 
+            open={open}
             onInputChange={(event, value) => {
+                if (value.length === 0) {
+                    if (open) setOpen(false);
+                } else {
+                    if (!open) setOpen(true);
+                }
+
                 setInputValue(value);
+                setPlaceholder(value);
             }}
+            onClose={() => setOpen(false)}
 
             renderInput={(params) => (
                 <CustomizedTextfield
                     {...params}
                     variant="outlined"
                     fullWidth
-                    InputProps={{
-                        ...params.InputProps,
-                        endAdornment: null
-                    }}
-                    placeholder={ObjectPlaceholder.description ? ObjectPlaceholder.description : "여행지 검색"}
-                    sx={{ padding: "0px !important" }}
+                    placeholder={placeholder ? placeholder : "여행지 검색"}
+                    sx={{padding:"0px"}}
                 />
             )}
             renderOption={(props, option) => {
@@ -264,4 +229,4 @@ const MuiSearchField: React.FC<GoogleMapsProps> = ({
     );
 }
 
-export default MuiSearchField
+export default GoogleMaps

@@ -22,11 +22,11 @@ justify-content: space-between;
 `
 
 const StyledDaysSquareDiv = styled.div`
-height: 50px;
-width: 50px;
+// height: 50px;
+// width: 50px;
 
-// height: 35px;
-// width: 35px;
+height: 35px;
+width: 35px;
 
 display:flex;
 justify-content: center;
@@ -45,11 +45,11 @@ margin-bottom:2px;
 `
 
 const StyledDaysRoundDiv = styled.div`
-height: 50px;
-width: 50px;
+// height: 50px;
+// width: 50px;
 
-// height: 35px;
-// width: 35px;
+height: 35px;
+width: 35px;
 
 display:flex;
 justify-content: center;
@@ -74,11 +74,10 @@ border-radius: 50%;
 }
 `
 
-export const CellsRight: React.FC<HeaderProps> = ({ currentDate }) => {
+export const Cells: React.FC<HeaderProps> = ({ currentDate }) => {
 
-    const futureDate = moment(currentDate).add(1, 'months').format()
-    const monthStart = moment(futureDate).startOf('month').format()
-    const monthEnd = moment(futureDate).endOf('month').format()
+    const monthStart = moment(currentDate).startOf('month').format()
+    const monthEnd = moment(currentDate).endOf('month').format()
     const startDate = moment(monthStart).startOf('week').format()
     const endDate = moment(monthEnd).endOf('week').format()
 
@@ -144,7 +143,11 @@ export const CellsRight: React.FC<HeaderProps> = ({ currentDate }) => {
                                 :
                                 "blur"
                             :
-                            "hidden"
+                            moment(day).isAfter(moment(monthStart))
+                                ?
+                                "hidden"
+                                :
+                                "blur"
                             }
                 ${moment(cloneDay).isSame(moment(firstClicked)) || moment(cloneDay).isSame(moment(secondClicked)) ? "clicked" : null}
                 `}>
