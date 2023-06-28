@@ -11,28 +11,26 @@ import { Cells } from './Cells';
 import { CellsRight } from './CellsRight';
 
 const StyledCalendarDiv = styled.div`
-padding:10px;
+padding:0px;
 `
 
 export const Calendar = () => {
     const [currentDate, setCurrentDate] = useState(moment().format());
-    const [selectedDate, setSelectedDate] = useState(moment().format());
-
 
     return (
         <StyledCalendarDiv>
-                <div style={{display:'flex', flexDirection:'row'}}>
-                        <div style={{display:'flex', flexDirection:'column', padding: "30px 15px 30px 30px"}}>
-                            <HeaderLeft currentDate={currentDate} setCurrentDate={setCurrentDate} />
-                            <Days/>
-                            <Cells currentDate={currentDate}/>
-                        </div>
-                        <div style={{display:'flex', flexDirection:'column', padding: "30px 30px 30px 15px"}}>
-                            <HeaderRight currentDate={currentDate} setCurrentDate={setCurrentDate} />
-                            <Days/>
-                            <CellsRight currentDate={currentDate}/>
-                        </div>
-                    </div>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', padding: "15px 15px 10px 20px" }}>
+                    <HeaderLeft currentDate={currentDate} setCurrentDate={setCurrentDate} />
+                    <Days />
+                    <Cells currentDate={currentDate} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', padding: "15px 20px 10px 15px" }}>
+                    <HeaderRight currentDate={currentDate} setCurrentDate={setCurrentDate} />
+                    <Days />
+                    <CellsRight currentDate={currentDate} />
+                </div>
+            </div>
         </StyledCalendarDiv>
     )
 }

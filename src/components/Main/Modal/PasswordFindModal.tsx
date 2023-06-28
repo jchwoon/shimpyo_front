@@ -1,33 +1,52 @@
 import styled from 'styled-components';
 import Modal from '../../shared/Modal';
-import { useRecoilState } from 'recoil';
-import { passwordFindModalAtom } from '../../../recoil/atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { passwordFindModalAtom, passwordValueAtom } from '../../../recoil/atoms';
 import { StyleBody } from './JoinModal';
 import Input from '../../shared/UI/Input';
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import ColorButton from '../../shared/UI/ColorButton';
 import Button from '../../shared/UI/Button';
 import PasswordInput from '../Input/PasswordInput';
 import ConfirmPasswordInput from '../Input/ConfirmPasswordInput';
-import { emailValidation } from '../../../utils/validation';
 import useHttpRequest from '../../../hooks/useHttpRequest';
-import { FIND_USER_API_PATH } from '../../../constants/api';
-
-interface IResultData {
-  code: number;
-}
+import { RESET_PASSWORD_API_PATH } from '../../../constants/api';
+import usePhoneCertification from '../../../hooks/usePhoneCertification';
 
 export default function PasswordFindModal() {
-  const emailRef = useRef<HTMLInputElement>(null);
-  const { isLoading, responseData, sendRequest } = useHttpRequest<IResultData>();
+  const [phoneValue, setPhoneValue] = useState('');
+  const [codeValue, setCodeValue] = useState('');
+
+  const {
+    codeNumberError,
+    codeNumberErrorMessage,
+    isPhoneOk,
+    handleSubmitConfirmNumber,
+    handleValidityPhone,
+    phoneError,
+    phoneErrorMessage,
+    sendCodeNumberButtonText,
+    initialState: hookStateInitial,
+  } = usePhoneCertification({ phoneValue, codeValue, isUser: true });
+  const { responseData: resetPWDResponseData, sendRequest: resetPWDSendRequest } = useHttpRequest();
+
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+
   const [isPasswordFindModalOpen, setIsPasswordFindModalOpen] = useRecoilState(passwordFindModalAtom);
-  const [isConfirmNumberInputOpen, setIsConfirmNumberInputOpen] = useState(false);
+  const passwordValue = useRecoilValue(passwordValueAtom);
 
   const isValid = isPasswordValid && isConfirmPasswordValid;
+
+  const onPhoneValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setPhoneValue(value);
+  }, []);
+
+  const onCodeValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setCodeValue(value);
+  }, []);
 
   const handleGetPasswordValid = (valid: boolean) => {
     setIsPasswordValid(valid);
@@ -37,38 +56,38 @@ export default function PasswordFindModal() {
     setIsConfirmPasswordValid(valid);
   };
 
-  const handleSendConfrimNumber = async () => {
-    const value = emailRef.current?.value;
-    if (value === undefined || !emailValidation.test(value)) {
-      setError(true);
-      setErrorMessage('이메일을 올바르게 입력했는지 확인해주세요.');
-      return;
-    }
-    await sendRequest({ url: `${FIND_USER_API_PATH}`, method: 'POST', body: { email: value } });
+  const handleSendConfrimNumber = () => {
+    handleValidityPhone();
   };
 
-  const handleClickButton = () => {
+  const handleClickConfirmButton = async () => {
+    const isValueOk = handleSubmitConfirmNumber();
+    if (!isValueOk) return;
     if (!isValid) return;
+
+    await resetPWDSendRequest({
+      url: RESET_PASSWORD_API_PATH,
+      method: 'PATCH',
+      body: { phoneNumber: phoneValue, password: passwordValue },
+    });
   };
 
   const initialState = () => {
     setIsPasswordValid(false);
     setIsConfirmPasswordValid(false);
-    setError(false);
-    setIsConfirmNumberInputOpen(false);
+    setPhoneValue('');
+    setCodeValue('');
+    hookStateInitial();
   };
 
   useEffect(() => {
-    if (!responseData) return;
+    if (!resetPWDResponseData) return;
 
-    if (responseData?.isSuccess) {
-      setIsConfirmNumberInputOpen(true);
-      setError(false);
-    } else {
-      setError(true);
-      setErrorMessage(responseData.message);
+    if (resetPWDResponseData.isSuccess) {
+      setIsPasswordFindModalOpen(false);
     }
-  }, [responseData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetPWDResponseData]);
 
   const title = (
     <StyleTap>
@@ -77,16 +96,17 @@ export default function PasswordFindModal() {
   );
   const body = (
     <StylePasswordFindBody>
-      <Input ref={emailRef} placeholder="이메일" type="text" />
-      {error && <StyleError>{errorMessage}</StyleError>}
-      <ColorButton disabled={responseData?.isSuccess} label="비밀번호 찾기" onClick={handleSendConfrimNumber} />
+      <Input onChange={onPhoneValueChange} placeholder="휴대폰 번호" type="number" inputMode="tel" />
+      {phoneError && <StyleError>{phoneErrorMessage}</StyleError>}
+      <ColorButton label={sendCodeNumberButtonText} onClick={handleSendConfrimNumber} />
 
-      {isConfirmNumberInputOpen && (
+      {isPhoneOk && (
         <>
-          <Input placeholder="인증번호 입력" type="number" />
+          <Input onChange={onCodeValueChange} placeholder="인증번호 입력" type="number" />
+          {codeNumberError && <StyleError>{codeNumberErrorMessage}</StyleError>}
           <PasswordInput getValid={handleGetPasswordValid} />
           <ConfirmPasswordInput getValid={handleGetConfirmPasswordValid} />
-          <Button label="확인" onClick={handleClickButton} />
+          <Button label="확인" onClick={handleClickConfirmButton} />
         </>
       )}
     </StylePasswordFindBody>

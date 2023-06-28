@@ -12,14 +12,13 @@ import JoinModal from '../components/Main/Modal/JoinModal';
 import LoginModal from '../components/Main/Modal/LoginModal';
 import IdFindModal from '../components/Main/Modal/IdFindModal';
 import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
-import Logout from '../components/Main/Modal/Logout';
 
 export default function Main() {
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsLargeScreen(window.innerWidth >= 930);
+      setIsLargeScreen(window.innerWidth > 750);
     };
     window.addEventListener('resize', handleResize);
     handleResize();
@@ -43,7 +42,7 @@ export default function Main() {
       <Cards />
       {isLargeScreen ? null : (
         <ThemeProvider theme={MobileNavbarTheme}>
-          <MobileFooter />
+          <MobileFooter defaultValue={0} />
         </ThemeProvider>
       )}
       <LoginModal />
@@ -51,7 +50,6 @@ export default function Main() {
       <AdditionalInfoModal />
       <IdFindModal />
       <PasswordFindModal />
-      <Logout />
     </>
   );
 }

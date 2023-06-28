@@ -39,8 +39,8 @@ import {
   InfantGuest,
   FirstPickedDate,
   SecondPickedDate,
-  googleMapsPlaceholder,
   PlaceholderChanged,
+  objectPlaceholder
 } from '../../../recoil/atoms';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
@@ -50,7 +50,9 @@ import { Calendar } from '../Calendar/Calendar';
 
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from './GuestCount';
 
-import GoogleMaps from './MuiSearchField';
+import MuiSearchField from './MuiSearchField';
+
+import CategoryTabs from "./Tabs"
 
 export default function Navbar() {
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
@@ -58,7 +60,7 @@ export default function Navbar() {
   const [change, setChange] = useRecoilState(Change);
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
   const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
-  const [GoogleMapsPlaceholder, setGoogleMapsPlaceholder] = useRecoilState(googleMapsPlaceholder);
+  const [ObjectPlaceholder, setObjectPlaceholder] = useRecoilState(objectPlaceholder);
 
   const handleClick = () => {
     setAppBarHeight('160px');
@@ -142,9 +144,18 @@ export default function Navbar() {
   const [textfieldInputValue, setTextfieldInputValue] = useState(false);
 
   const resetFunctionInSearchField = () => {
-    setGoogleMapsPlaceholder('');
     setPlaceholderChanged(false);
     setTextfieldInputValue(false);
+    setObjectPlaceholder(
+      {
+        description: "",
+        structured_formatting: {
+          main_text: "",
+          secondary_text: "",
+          main_text_matched_substrings: []
+        }
+      }
+    )
   };
 
   useEffect(() => {
@@ -212,293 +223,292 @@ export default function Navbar() {
           <img src={logo2} alt="website logo" style={{ height: 13, marginBottom: 5 }} />
           <CustomizedLogoTypography>쉼표</CustomizedLogoTypography>
         </LogoButton>
-        <CustomizedSearchButtonWrapperDiv change={change ? change : undefined}>
+        <CustomizedSearchButtonWrapperDiv change={change.toString()}>
           <ClickAwayListener onClickAway={clickAwayHandler}>
-            <CustomizedSearchButton
-              id="customizedSearchButton"
-              onClick={handleClick}
-              change={change ? change : undefined}
-              activebutton={activebutton}
-              elevation={2}
-            >
-              {!change ? (
-                <div
-                  onClick={() => handleButtonClick('button1')}
-                  style={{ height: '50px', display: 'flex', alignItems: 'center' }}
-                >
-                  <CustomizedTypography
-                    fontFamily="Noto Sans KR"
-                    fontWeight="500"
-                    textAlign="left"
-                    sx={{ paddingLeft: '20px', paddingRight: '15px' }}
+            <div>
+              {change ? <CategoryTabs /> : null}
+              <CustomizedSearchButton
+                id="customizedSearchButton"
+                onClick={handleClick}
+                change={change.toString()}
+                activebutton={activebutton}
+                elevation={2}
+              >
+                {!change ? (
+                  <div
+                    onClick={() => handleButtonClick('button1')}
+                    style={{ height: '50px', display: 'flex', alignItems: 'center' }}
                   >
-                    어디든지
-                  </CustomizedTypography>
-                </div>
-              ) : activebutton === 'button1' ? (
-                <>
-                  {placeholderChanged ? (
-                    <CustomizedDeleteIconButtonInSearchField onClick={resetFunctionInSearchField} top={0} left={-10}>
-                      <CustomziedClearIcon />
-                    </CustomizedDeleteIconButtonInSearchField>
-                  ) : null}
-                  <CustomizedWhereActiveSearchButton elevation={2}>
-                    <CustomizedWhereVerticalWrapperDiv change={change ? change : undefined}>
+                    <CustomizedTypography
+                      fontFamily="Noto Sans KR"
+                      fontWeight="500"
+                      textAlign="left"
+                      sx={{ paddingLeft: '20px', paddingRight: '15px' }}
+                    >
+                      어디든지
+                    </CustomizedTypography>
+                  </div>
+                ) : activebutton === 'button1' ? (
+                  <>
+                    <CustomizedWhereActiveSearchButton elevation={2} style={{ paddingLeft: '20px' }}>
+                      <CustomizedWhereVerticalWrapperDiv >
+                        <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" textAlign="left">
+                          여행지
+                        </CustomizedTypography>
+                        <MuiSearchField
+                          textfieldInputValue={textfieldInputValue}
+                          setTextfieldInputValue={setTextfieldInputValue}
+                          ObjectPlaceholder={ObjectPlaceholder}
+                          setObjectPlaceholder={setObjectPlaceholder}
+                        />
+
+                      </CustomizedWhereVerticalWrapperDiv>
+                    </CustomizedWhereActiveSearchButton>
+                  </>
+                ) : (
+                  <CustomizedSearchInsideButton
+                    disableRipple
+                    sx={{ paddingLeft: '20px' }}
+                    onClick={() => handleButtonClick('button1')}
+                  >
+                    <CustomizedWhereVerticalWrapperDiv >
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" textAlign="left">
                         여행지
                       </CustomizedTypography>
-                      <GoogleMaps
-                        placeholder={GoogleMapsPlaceholder}
-                        setPlaceholder={setGoogleMapsPlaceholder}
-                        setPlaceholderChanged={setPlaceholderChanged}
-                        textfieldInputValue={textfieldInputValue}
-                        setTextfieldInputValue={setTextfieldInputValue}
-                      />
+                      <CustomizedTypography fontFamily="Noto Sans KR" color="#a2a2a2" fontSize="15px" fontWeight="300">
+                        {ObjectPlaceholder.description ? ObjectPlaceholder.description : '여행지 검색'}
+                      </CustomizedTypography>
                     </CustomizedWhereVerticalWrapperDiv>
-                  </CustomizedWhereActiveSearchButton>
-                </>
-              ) : (
-                <CustomizedSearchInsideButton
-                  change={change ? change : undefined}
-                  disableRipple
-                  sx={{ paddingLeft: '20px' }}
-                  onClick={() => handleButtonClick('button1')}
-                >
-                  <CustomizedWhereVerticalWrapperDiv change={change ? change : undefined}>
-                    <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" textAlign="left">
-                      여행지
-                    </CustomizedTypography>
-                    <CustomizedTypography fontFamily="Noto Sans KR" color="#a2a2a2" fontSize="15px" fontWeight="300">
-                      {GoogleMapsPlaceholder ? GoogleMapsPlaceholder : '여행지 검색'}
-                    </CustomizedTypography>
-                  </CustomizedWhereVerticalWrapperDiv>
-                </CustomizedSearchInsideButton>
-              )}
-              <CustomizedDivider id="firstDivider" orientation="vertical" flexItem variant="middle" />
-              {!change ? (
-                <div
-                  onClick={() => {
-                    handleButtonClick('button2');
-                  }}
-                  style={{ height: '50px', display: 'flex', alignItems: 'center' }}
-                >
-                  <CustomizedTypography
-                    fontFamily="Noto Sans KR"
-                    fontWeight="500"
-                    sx={{ paddingLeft: '15px', paddingRight: '15px' }}
-                  >
-                    언제든지
-                  </CustomizedTypography>
-                </div>
-              ) : activebutton === 'button2' ? (
-                <CustomizedActiveSearchButton
-                  id="activeCheckInButton"
-                  variant="contained"
-                  disableRipple
-                  sx={{ paddingLeft: '20px', paddingRight: '20px' }}
-                  onClick={handleCheckInOutClick}
-                >
-                  <CustomizedWhenVerticalWrapperDiv change={change ? change : undefined}>
-                    <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
-                      {change ? '체크인' : '언제든지'}
-                    </CustomizedTypography>
-                    <CustomizedChangeTypography change={change ? change : undefined}>
-                      {firstPickedFirst
-                        ? firstPickedDate
-                          ? moment(firstPickedDate).format('M월 D일')
-                          : '날짜 추가'
-                        : firstPickedDate
-                        ? moment(secondPickedDate).format('M월 D일')
-                          ? moment(firstPickedDate).format('M월 D일')
-                          : '날짜 추가'
-                        : '날짜 추가'}
-                    </CustomizedChangeTypography>
-                  </CustomizedWhenVerticalWrapperDiv>
-                </CustomizedActiveSearchButton>
-              ) : (
-                <CustomizedSearchInsideButton
-                  id="inactiveCheckInButton"
-                  change={change ? change : undefined}
-                  disableRipple
-                  sx={{ paddingLeft: '20px', paddingRight: '20px' }}
-                  onClick={() => handleButtonClick('button2')}
-                >
-                  <CustomizedWhenVerticalWrapperDiv change={change ? change : undefined}>
-                    <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
-                      체크인
-                    </CustomizedTypography>
-                    <CustomizedChangeTypography change={change ? change : undefined}>
-                      {firstPickedFirst
-                        ? firstPickedDate
-                          ? moment(firstPickedDate).format('M월 D일')
-                          : '날짜 추가'
-                        : firstPickedDate
-                        ? moment(secondPickedDate).format('M월 D일')
-                          ? moment(firstPickedDate).format('M월 D일')
-                          : '날짜 추가'
-                        : '날짜 추가'}
-                    </CustomizedChangeTypography>
-                  </CustomizedWhenVerticalWrapperDiv>
-                </CustomizedSearchInsideButton>
-              )}
-              <CustomizedMenu
-                id="basic-menu"
-                anchorEl={checkInOutAnchorEl}
-                open={checkInOutOpen}
-                onClose={checkInOutClose}
-                elevation={1}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-              >
-                {firstPickedDate && (
-                  <CustomizedDeleteIconButton
-                    onClick={resetFunction}
-                    top={buttonPosition.top}
-                    left={buttonPosition.left}
-                  >
-                    <CustomziedClearIcon />
-                  </CustomizedDeleteIconButton>
+                  </CustomizedSearchInsideButton>
                 )}
-                <Calendar />
-              </CustomizedMenu>
-
-              <CustomizedAdditionalDivider
-                id="secondDivider"
-                orientation="vertical"
-                flexItem
-                change={change ? change : undefined}
-                variant="middle"
-              />
-              {activebutton === 'button3' ? (
-                <CustomizedAdditionalActiveSearchButton
-                  id="activeCheckOutButton"
-                  variant="contained"
-                  disableRipple
-                  sx={{ paddingLeft: '20px', paddingRight: '20px' }}
-                  change={change ? change : undefined}
-                  onClick={handleCheckInOutClick}
-                >
-                  <CustomizedAddtionalWhenVerticalWrapperDiv change={change ? change : undefined}>
-                    <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
-                      {change ? '체크아웃' : ''}
-                    </CustomizedTypography>
-                    <CustomizedChangeTypography change={change ? change : undefined}>
-                      {firstPickedFirst
-                        ? secondPickedDate
-                          ? moment(secondPickedDate).format('M월 D일')
-                          : '날짜 추가'
-                        : firstPickedDate
-                        ? secondPickedDate
-                          ? moment(secondPickedDate).format('M월 D일')
-                          : moment(firstPickedDate).format('M월 D일')
-                        : '날짜 추가'}
-                    </CustomizedChangeTypography>
-                  </CustomizedAddtionalWhenVerticalWrapperDiv>
-                </CustomizedAdditionalActiveSearchButton>
-              ) : (
-                <CustomizedAdditionalSearchInsideButton
-                  id="inactiveCheckOutButton"
-                  change={change ? change : undefined}
-                  disableRipple
-                  sx={{ paddingLeft: '20px', paddingRight: '20px' }}
-                  onClick={() => handleButtonClick('button3')}
-                >
-                  <CustomizedAddtionalWhenVerticalWrapperDiv change={change ? change : undefined}>
-                    <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
-                      {change ? '체크아웃' : ''}
-                    </CustomizedTypography>
-                    <CustomizedChangeTypography change={change ? change : undefined}>
-                      {firstPickedFirst
-                        ? secondPickedDate
-                          ? moment(secondPickedDate).format('M월 D일')
-                          : '날짜 추가'
-                        : firstPickedDate
-                        ? secondPickedDate
-                          ? moment(secondPickedDate).format('M월 D일')
-                          : '날짜 추가'
-                        : '날짜 추가'}
-                    </CustomizedChangeTypography>
-                  </CustomizedAddtionalWhenVerticalWrapperDiv>
-                </CustomizedAdditionalSearchInsideButton>
-              )}
-              <CustomizedDivider id="thirdDivider" orientation="vertical" flexItem variant="middle" />
-              <CustomizedGuestVerticalWrapperDiv change={change ? change : undefined}>
+                <CustomizedDivider id="firstDivider" orientation="vertical" flexItem variant="middle" />
                 {!change ? (
                   <div
-                    onClick={() => handleButtonClick('button4')}
+                    onClick={() => {
+                      handleButtonClick('button2');
+                    }}
                     style={{ height: '50px', display: 'flex', alignItems: 'center' }}
                   >
-                    <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" sx={{ paddingLeft: '20px' }}>
-                      게스트 추가
+                    <CustomizedTypography
+                      fontFamily="Noto Sans KR"
+                      fontWeight="500"
+                      sx={{ paddingLeft: '15px', paddingRight: '15px' }}
+                    >
+                      언제든지
                     </CustomizedTypography>
                   </div>
-                ) : activebutton === 'button4' ? (
+                ) : activebutton === 'button2' ? (
                   <CustomizedActiveSearchButton
+                    id="activeCheckInButton"
                     variant="contained"
                     disableRipple
                     sx={{ paddingLeft: '20px', paddingRight: '20px' }}
-                    onClick={handleGuestCountClick}
+                    onClick={handleCheckInOutClick}
                   >
-                    <CustomizedGuestVerticalWrapperDiv change={change ? change : undefined}>
+                    <CustomizedWhenVerticalWrapperDiv>
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
-                        여행자
+                        {change ? '체크인' : '언제든지'}
                       </CustomizedTypography>
-                      <CustomizedChangeTypography change={change ? change : undefined}>
-                        {TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}
+                      <CustomizedChangeTypography change={change.toString()}>
+                        {firstPickedFirst
+                          ? firstPickedDate
+                            ? moment(firstPickedDate).format('M월 D일')
+                            : '날짜 추가'
+                          : firstPickedDate
+                            ? secondPickedDate
+                              ? moment(firstPickedDate).format('M월 D일')
+                              : '날짜 추가'
+                            : '날짜 추가'}
                       </CustomizedChangeTypography>
-                    </CustomizedGuestVerticalWrapperDiv>
+                    </CustomizedWhenVerticalWrapperDiv>
                   </CustomizedActiveSearchButton>
                 ) : (
                   <CustomizedSearchInsideButton
-                    change={change ? change : undefined}
+                    id="inactiveCheckInButton"
                     disableRipple
                     sx={{ paddingLeft: '20px', paddingRight: '20px' }}
-                    onClick={() => handleButtonClick('button4')}
+                    onClick={() => handleButtonClick('button2')}
                   >
-                    <CustomizedGuestVerticalWrapperDiv change={change ? change : undefined}>
+                    <CustomizedWhenVerticalWrapperDiv >
                       <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
-                        여행자
+                        체크인
                       </CustomizedTypography>
-                      <CustomizedChangeTypography change={change ? change : undefined}>
-                        {TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}
+                      <CustomizedChangeTypography change={change.toString()}>
+                        {firstPickedFirst
+                          ? firstPickedDate
+                            ? moment(firstPickedDate).format('M월 D일')
+                            : '날짜 추가'
+                          : firstPickedDate
+                            ? moment(secondPickedDate).format('M월 D일')
+                              ? moment(firstPickedDate).format('M월 D일')
+                              : '날짜 추가'
+                            : '날짜 추가'}
                       </CustomizedChangeTypography>
-                    </CustomizedGuestVerticalWrapperDiv>
+                    </CustomizedWhenVerticalWrapperDiv>
                   </CustomizedSearchInsideButton>
                 )}
                 <CustomizedMenu
-                  id="basic-menu"
-                  anchorEl={guestCountAnchorEl}
-                  open={guestCountOpen}
-                  onClose={guestCountClose}
+                  id="calendar-menu"
+                  anchorEl={checkInOutAnchorEl}
+                  open={checkInOutOpen}
+                  onClose={checkInOutClose}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                   elevation={1}
                 >
-                  <GuestCountAdult />
-                  <Divider variant="middle" />
-                  <GuestCountChild />
-                  <Divider variant="middle" />
-                  <GuestCountInfant />
-                  {TotalGuestNumber > 0 ? (
-                    <CustomizedDeleteIconButtonInGuestCount
-                      onClick={guestCountReset}
-                      top={thirdDivider ? thirdDivider.getBoundingClientRect().top - 5 : 0}
-                      left={thirdDivider ? thirdDivider.getBoundingClientRect().left - 10 : 0}
-                    >
-                      <CustomziedClearIcon />
-                    </CustomizedDeleteIconButtonInGuestCount>
-                  ) : null}
+                  {
+                    firstPickedDate ?
+                      <CustomizedDeleteIconButton
+                        onClick={resetFunction}
+                        top={-15}
+                        left={-10}
+                      >
+                        <CustomziedClearIcon />
+                      </CustomizedDeleteIconButton>
+                      :
+                      null
+                  }
+                  <Calendar />
                 </CustomizedMenu>
-              </CustomizedGuestVerticalWrapperDiv>
-              <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-                <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change ? change : undefined}>
-                  <CustomizedSearchIcon change={change ? change : undefined} />
-                </CustomizedAvatar>
-              </div>
-            </CustomizedSearchButton>
+
+                <CustomizedAdditionalDivider
+                  id="secondDivider"
+                  orientation="vertical"
+                  flexItem
+                  change={change.toString()}
+                  variant="middle"
+                />
+                {activebutton === 'button3' ? (
+                  <CustomizedAdditionalActiveSearchButton
+                    id="activeCheckOutButton"
+                    variant="contained"
+                    disableRipple
+                    sx={{ paddingLeft: '20px', paddingRight: '20px' }}
+                    change={change.toString()}
+                    onClick={handleCheckInOutClick}
+                  >
+                    <CustomizedAddtionalWhenVerticalWrapperDiv change={change.toString()}>
+                      <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
+                        {change ? '체크아웃' : ''}
+                      </CustomizedTypography>
+                      <CustomizedChangeTypography change={change.toString()}>
+                        {firstPickedFirst
+                          ? secondPickedDate
+                            ? moment(secondPickedDate).format('M월 D일')
+                            : '날짜 추가'
+                          : firstPickedDate
+                            ? secondPickedDate
+                              ? moment(secondPickedDate).format('M월 D일')
+                              : moment(firstPickedDate).format('M월 D일')
+                            : '날짜 추가'}
+                      </CustomizedChangeTypography>
+                    </CustomizedAddtionalWhenVerticalWrapperDiv>
+                  </CustomizedAdditionalActiveSearchButton>
+                ) : (
+                  <CustomizedAdditionalSearchInsideButton
+                    id="inactiveCheckOutButton"
+                    change={change.toString()}
+                    disableRipple
+                    sx={{ paddingLeft: '20px', paddingRight: '20px' }}
+                    onClick={() => handleButtonClick('button3')}
+                  >
+                    <CustomizedAddtionalWhenVerticalWrapperDiv change={change.toString()}>
+                      <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
+                        {change ? '체크아웃' : ''}
+                      </CustomizedTypography>
+                      <CustomizedChangeTypography change={change.toString()}>
+                        {firstPickedFirst
+                          ? secondPickedDate
+                            ? moment(secondPickedDate).format('M월 D일')
+                            : '날짜 추가'
+                          : firstPickedDate
+                            ? secondPickedDate
+                              ? moment(secondPickedDate).format('M월 D일')
+                              : moment(firstPickedDate).format('M월 D일')
+                            : '날짜 추가'}
+                      </CustomizedChangeTypography>
+                    </CustomizedAddtionalWhenVerticalWrapperDiv>
+                  </CustomizedAdditionalSearchInsideButton>
+                )}
+                <CustomizedDivider id="thirdDivider" orientation="vertical" flexItem variant="middle" />
+                <CustomizedGuestVerticalWrapperDiv >
+                  {!change ? (
+                    <div
+                      onClick={() => handleButtonClick('button4')}
+                      style={{ height: '50px', display: 'flex', alignItems: 'center' }}
+                    >
+                      <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" sx={{ paddingLeft: '20px' }}>
+                        게스트 추가
+                      </CustomizedTypography>
+                    </div>
+                  ) : activebutton === 'button4' ? (
+                    <CustomizedActiveSearchButton
+                      variant="contained"
+                      disableRipple
+                      sx={{ paddingLeft: '20px', paddingRight: '20px' }}
+                      onClick={handleGuestCountClick}
+                    >
+                      <CustomizedGuestVerticalWrapperDiv >
+                        <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
+                          여행자
+                        </CustomizedTypography>
+                        <CustomizedChangeTypography change={change.toString()}>
+                          {TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}
+                        </CustomizedChangeTypography>
+                      </CustomizedGuestVerticalWrapperDiv>
+                    </CustomizedActiveSearchButton>
+                  ) : (
+                    <CustomizedSearchInsideButton
+                      disableRipple
+                      sx={{ paddingLeft: '20px', paddingRight: '20px' }}
+                      onClick={() => handleButtonClick('button4')}
+                    >
+                      <CustomizedGuestVerticalWrapperDiv>
+                        <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500">
+                          여행자
+                        </CustomizedTypography>
+                        <CustomizedChangeTypography change={change.toString()}>
+                          {TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}
+                        </CustomizedChangeTypography>
+                      </CustomizedGuestVerticalWrapperDiv>
+                    </CustomizedSearchInsideButton>
+                  )}
+                  <CustomizedMenu
+                    id="basic-menu"
+                    anchorEl={guestCountAnchorEl}
+                    open={guestCountOpen}
+                    onClose={guestCountClose}
+                    elevation={1}
+                  >
+                    <GuestCountAdult />
+                    <Divider variant="middle" />
+                    <GuestCountChild />
+                    <Divider variant="middle" />
+                    <GuestCountInfant />
+                    {TotalGuestNumber > 0 ? (
+                      <CustomizedDeleteIconButtonInGuestCount
+                        onClick={guestCountReset}
+                        top={-15}
+                        left={-10}
+                      >
+                        <CustomziedClearIcon />
+                      </CustomizedDeleteIconButtonInGuestCount>
+                    ) : null}
+                  </CustomizedMenu>
+
+                </CustomizedGuestVerticalWrapperDiv>
+                <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                  <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change.toString()}>
+                    <CustomizedSearchIcon change={change.toString()} />
+                  </CustomizedAvatar>
+                </div>
+              </CustomizedSearchButton>
+            </div>
           </ClickAwayListener>
         </CustomizedSearchButtonWrapperDiv>
 
         <CustomizedMenus />
       </CustomizedToolBar>
-    </CustomizedAppBar>
+    </CustomizedAppBar >
   );
 }

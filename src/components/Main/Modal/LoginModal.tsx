@@ -6,6 +6,7 @@ import {
   idFindModalAtom,
   joinModalAtom,
   loginModalAtom,
+  loginStateAtom,
   passwordFindModalAtom,
 } from '../../../recoil/atoms';
 import styled from 'styled-components';
@@ -31,6 +32,7 @@ export default function LoginModal() {
   const [isLoginError, setIsLoginError] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
 
+  const setIsLoggedIn = useSetRecoilState(loginStateAtom);
   const [isLoginModalOpen, setIsLoginModalOpen] = useRecoilState(loginModalAtom);
   const setIsIdFindModalOpen = useSetRecoilState(idFindModalAtom);
   const setIsPasswordFindModalOpen = useSetRecoilState(passwordFindModalAtom);
@@ -43,7 +45,7 @@ export default function LoginModal() {
     await sendRequest({
       url: `${LOGIN_API_PATH}`,
       body: { username: emailValue, password: passwordValue },
-      method: 'GET',
+      method: 'POST',
       withcredential: true,
     });
   };
@@ -57,15 +59,13 @@ export default function LoginModal() {
     if (!responseData) return;
 
     if (responseData?.isSuccess) {
-      console.log(responseData.result);
       setAccessToken(responseData.result.accessToken);
-      localStorage.setItem('isLoggedIn', JSON.stringify(true));
+      setIsLoggedIn(true);
       setIsLoginModalOpen(false);
     } else {
       setIsLoginError(true);
       setLoginErrorMessage('이메일과 비밀번호를 다시 한번 확인해주세요.');
     }
-    console.log('login');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);
 

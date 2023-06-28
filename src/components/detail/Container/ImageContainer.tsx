@@ -4,34 +4,47 @@ export default function ImageContainer() {
   return (
     <ImageBox>
       <MainImageBox>
-        <HoverDiv />
-        <MainImage src="https://a0.muscache.com/im/pictures/7ea9f758-6fd4-4b4c-9aa0-bcb3ed503d65.jpg?im_w=960" />
+        <HoverDiv
+          style={{ borderRadius: "20px 0 0 20px" }}
+        />
+        <MainImage
+          src="https://source.unsplash.com/random?wallpapers"
+        // style={{ borderRadius: "20px 0 0 20px" }}
+        />
       </MainImageBox>
       <SideImageBox>
-        <SideImagePiece marginBottom='10px'>
-          <HoverDiv />
-          <SideImage
-            src="https://a0.muscache.com/im/pictures/7ea9f758-6fd4-4b4c-9aa0-bcb3ed503d65.jpg?im_w=960"
-          />
-        </SideImagePiece>
         <SideImagePiece>
           <HoverDiv />
           <SideImage
-            src="https://a0.muscache.com/im/pictures/7ea9f758-6fd4-4b4c-9aa0-bcb3ed503d65.jpg?im_w=960"
+            src="https://source.unsplash.com/random?wallpapers"
+          />
+        </SideImagePiece>
+        <div style={{ height: "5px", width: "100%" }} />
+        <SideImagePiece>
+          <HoverDiv />
+          <SideImage
+            src="https://source.unsplash.com/random?wallpapers"
           />
         </SideImagePiece>
       </SideImageBox>
       <SideImageBox>
-        <SideImagePiece marginBottom='10px'>
-          <HoverDiv />
+        <SideImagePiece>
+          <HoverDiv
+            style={{ borderRadius: "0 20px 0 0" }}
+          />
           <SideImage
-            src="https://a0.muscache.com/im/pictures/7ea9f758-6fd4-4b4c-9aa0-bcb3ed503d65.jpg?im_w=960"
+            src="https://source.unsplash.com/random?wallpapers"
+            style={{ borderRadius: "0 20px 0 0" }}
           />
         </SideImagePiece>
+        <div style={{ height: "5px", width: "100%" }} />
         <SideImagePiece>
-          <HoverDiv />
+          <HoverDiv
+            style={{ borderRadius: "0 0 20px 0" }}
+          />
           <SideImage
-            src="https://a0.muscache.com/im/pictures/7ea9f758-6fd4-4b4c-9aa0-bcb3ed503d65.jpg?im_w=960"
+            src="https://source.unsplash.com/random?wallpapers"
+            style={{ borderRadius: "0 0 20px 0" }}
           />
         </SideImagePiece>
       </SideImageBox>
@@ -42,7 +55,7 @@ export default function ImageContainer() {
 const ImageBox = styled.div`
   display: flex;
   width: 100%;
-  height: 500px;
+  height: 300px;
 `;
 
 const MainImageBox = styled.div`
@@ -51,7 +64,7 @@ const MainImageBox = styled.div`
   cursor: pointer;
   object-fit: cover;
   position: relative;
-  @media screen and (max-width: 900px){
+  @media screen and (max-width: 750px){
     width: 100%;
   };
 `
@@ -60,6 +73,10 @@ const MainImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 20px 0 0 20px;
+  @media screen and (max-width: 750px){
+    border-radius: 20px 20px 20px 20px;
+  };
 `;
 
 const HoverDiv = styled.div`
@@ -80,19 +97,18 @@ const SideImageBox = styled.div`
   display: flex;
   position: relative;
   flex-wrap: wrap;
-  width: calc(25% - 10px);
+  width: 25%;
+  height: 100%;
   margin-left: 10px;
-  @media screen and (max-width: 900px){
+  @media screen and (max-width: 750px){
     display : none
   };
 `;
-interface ISideImagePiece {
-  marginBottom?: string;
-}
 
-const SideImagePiece = styled.div<ISideImagePiece>`
+const SideImagePiece = styled.div`
+height: calc(50% - 5px);
+width: 100%;
   position: relative;
-  margin-bottom: ${p => p.marginBottom ?? '0px'};
 
 `
 const SideImage = styled.img`
