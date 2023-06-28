@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 import React, { useEffect } from 'react';
 
-import marker3 from "./marker3.png"
-
-const REACT_APP_MAP_API_KEY = "f6529a2e6cc9efdf495926fa540e1080"
-
 interface LocationMapProps {
   latitude: number;
   longitude: number;
@@ -19,11 +15,11 @@ export default function LocationMap({ latitude, longitude, width, height }: Loca
   useEffect(() => {
     const script = document.createElement('script');
     script.async = true;
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${REACT_APP_MAP_API_KEY}&autoload=false`;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_MAP_API_KEY}&autoload=false`;
     document.head.appendChild(script);
 
-    script.onload = () => {
-      window.kakao.maps.load(() => {
+    script.onload = async () => {
+      await window.kakao.maps.load(() => {
         const container = document.getElementById('map');
         const options = {
           center: new window.kakao.maps.LatLng(latitude, longitude),
@@ -33,7 +29,7 @@ export default function LocationMap({ latitude, longitude, width, height }: Loca
 
         const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);
 
-        const imageSrc = marker3
+        const imageSrc = 'marker.png';
         const imageOption = { offset: new window.kakao.maps.Point(27, 64) };
         const imageSize = new window.kakao.maps.Size(64, 64);
         const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -56,5 +52,6 @@ export default function LocationMap({ latitude, longitude, width, height }: Loca
 }
 
 const MapContainer = styled.div<sizeProps>`
-  ${({ width, height }) => `width: ${width}%; height: ${height}px`}
+  ${({ width, height }) => `width: ${width}; height: ${height}`};
+  border-radius: 20px;
 `;

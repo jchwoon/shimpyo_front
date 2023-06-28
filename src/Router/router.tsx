@@ -7,6 +7,7 @@ import SocialLogin from '../pages/SocialLogin';
 const Hosting = lazy(() => import('../pages/Hosting'));
 const Main = lazy(() => import('../pages/Main'));
 const Detail = lazy(() => import('../pages/detail'));
+const Accommodation = lazy(() => import('../pages/Accommodation'));
 const NotFound = lazy(() => import('../pages/404'));
 const Reservation = lazy(() => import('../pages/Reservation'));
 const Interest = lazy(() => import('../pages/Interest'));
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
             ),
           },
         ],
+      },
+      {
+        path: 'accommodation',
+        element: <Accommodation />,
       },
     ],
   },
