@@ -1,14 +1,15 @@
 import { useRef, ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { TbPhotoPlus } from 'react-icons/tb';
-import { AiOutlinePicture, AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
+import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
 import { useRecoilState } from 'recoil';
-import { isPassedState, imageDataState, accommodationState, roomImageListState } from '../../../recoil/atoms';
 
+import { isPassedState, imageDataState, accommodationState, roomImageListState } from '../../../recoil/atoms';
 import DeleteCheckModal from './DeleteCheckModal';
 import imageReader from '../../../utils/imageReader';
+import AccommodationRoomOption from './AccommodationRoomOption';
 
-interface RoomDataProps {
+export interface RoomDataProps {
   idx: number;
 }
 
@@ -86,6 +87,14 @@ export default function AccommodationRoomItem({ idx }: RoomDataProps) {
         const result = (await imageReader(file[0])) as string;
         newRoomImageList[idx] = [...roomImageList[idx], result];
 
+        const newAccommodation = { ...accommodation };
+        const newRoom = { ...newAccommodation.room[idx], imageCount: newAccommodation.room[idx].imageCount + 1 };
+        newAccommodation.room = [
+          ...newAccommodation.room.slice(0, idx),
+          newRoom,
+          ...newAccommodation.room.slice(idx + 1),
+        ];
+
         const newImageData = new FormData();
         imageData.forEach((value, key) => {
           newImageData.append(key, value);
@@ -119,6 +128,7 @@ export default function AccommodationRoomItem({ idx }: RoomDataProps) {
           });
         }
 
+        setAccommodation(newAccommodation);
         setImageData(newImageData);
         setRoomImageList(newRoomImageList);
       } catch (err) {
@@ -176,7 +186,7 @@ export default function AccommodationRoomItem({ idx }: RoomDataProps) {
           )}
         </StyledCarouselDiv>
       </StyledImageContainer>
-      <div>여기는 조건 넣을 곳</div>
+      <AccommodationRoomOption idx={idx} />
       {isOpenModal && (
         <DeleteCheckModal
           label="해당 객실을 제거하시겠습니까?"
@@ -252,11 +262,6 @@ const StyledImgIcon = styled(TbPhotoPlus)`
 
 const StyledCarouselDiv = styled.div`
   display: flex;
-  /* width: 300px; */
-  /* overflow-x: auto; */
-  /* &::-webkit-scrollbar {
-    display: none;
-  } */
 `;
 
 const StyledPlusContainer = styled.div`
@@ -282,14 +287,6 @@ const StyledPlusLabel = styled.label`
 
 const StyledPlusInput = styled.input`
   display: none;
-`;
-
-const StyledPlusImgIcon = styled(AiOutlinePicture)`
-  position: absolute;
-  top: 20px;
-  font-size: 40px;
-  z-index: -1;
-  color: rgba(0, 0, 0, 0.4);
 `;
 
 const StyledLastImgIcon = styled(AiOutlinePlus)`
