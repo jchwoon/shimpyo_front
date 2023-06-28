@@ -1,6 +1,7 @@
 /// <reference types="react-scripts" />
 interface Window {
-    kakao: any;
-    google: any;
-    initAutocomplete?: () => void;
+  kakao: any;
+  google: any;
+  initAutocomplete?: () => void;
+  initCheckAddress?: () => void;
 }
