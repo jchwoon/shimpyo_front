@@ -16,7 +16,7 @@ export default function StartContents() {
             <StyledStepTitle>1. 숙소 정보를 알려주세요.</StyledStepTitle>
             <StyledStepContent>숙소 위치와 숙박 가능 인원 등 기본 정보를 알려주세요.</StyledStepContent>
           </StyledTextContainer>
-          <StyledImage src="/hotel1.jpg" />
+          <StyledImage src="" />
         </StyledStepElement>
         <StyledStepElement>
           <StyledTextContainer>
@@ -25,21 +25,21 @@ export default function StartContents() {
               사진을 5장 이상 제출하고 제목과 설명을 추가해주시면 숙소가 돋보일 수 있도록 도와드릴게요.
             </StyledStepContent>
           </StyledTextContainer>
-          <StyledImage src="/hotel2.jpg" />
+          <StyledImage src="" />
         </StyledStepElement>
         <StyledStepElement>
           <StyledTextContainer>
             <StyledStepTitle>3. 객실을 등록하세요.</StyledStepTitle>
             <StyledStepContent>다양한 객실을 설정해보세요.</StyledStepContent>
           </StyledTextContainer>
-          <StyledImage src="/hotel3.jpg" />
+          <StyledImage src="" />
         </StyledStepElement>
         <StyledStepElement>
           <StyledTextContainer>
             <StyledStepTitle>4. 등록을 완료하세요.</StyledStepTitle>
             <StyledStepContent>숙소 요금을 설정한 후 등록을 완료하세요.</StyledStepContent>
           </StyledTextContainer>
-          <StyledImage src="/hotel4.jpg" />
+          <StyledImage src="" />
         </StyledStepElement>
       </StyledStepList>
     </Container>
