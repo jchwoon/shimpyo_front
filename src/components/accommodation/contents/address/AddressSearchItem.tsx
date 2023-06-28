@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { BsFillBuildingFill } from 'react-icons/bs';
 
 import { Prediction } from './AddressSearchList';
-import { accommodationState, stepState } from '../../../recoil/atoms';
+import { accommodationState, stepState } from '../../../../recoil/atoms';
 import { useRecoilState } from 'recoil';
 
 interface AddressSearchItemProps {

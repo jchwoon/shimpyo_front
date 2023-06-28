@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import ContentsTitle from './ContentsTitle';
-import ContentsSubText from './ContentsSubText';
+import ContentsTitle from '../ContentsTitle';
+import ContentsSubText from '../ContentsSubText';
 import AccommodationTextBox from './AccommodationTextBox';
 
 export default function AccommodationNameContents() {

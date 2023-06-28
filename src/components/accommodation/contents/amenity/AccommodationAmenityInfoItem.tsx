@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { AmenityType, AmenityIconMap, AmenityNameMap } from '../../../constants/amenityType';
+import { AmenityType, AmenityIconMap, AmenityNameMap } from '../../../../constants/amenityType';
 import { useRecoilState } from 'recoil';
-import { accommodationState } from '../../../recoil/atoms';
+import { accommodationState } from '../../../../recoil/atoms';
 
 interface AmenityItemProps {
   amenity: keyof AmenityType;

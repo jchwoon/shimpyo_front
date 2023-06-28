@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { accommodationState } from '../../../recoil/atoms';
+import { accommodationState } from '../../../../recoil/atoms';
 import { RoomDataProps } from './AccommodationRoomItem';
 import { ChangeEvent } from 'react';
 

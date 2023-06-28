@@ -1,6 +1,6 @@
-import ContentsTitle from './ContentsTitle';
-import ContentsSubText from './ContentsSubText';
-import { AmenityType } from '../../../constants/amenityType';
+import ContentsTitle from '../ContentsTitle';
+import ContentsSubText from '../ContentsSubText';
+import { AmenityType } from '../../../../constants/amenityType';
 
 import AccommodationAmenityInfoItem from './AccommodationAmenityInfoItem';
 import styled from 'styled-components';

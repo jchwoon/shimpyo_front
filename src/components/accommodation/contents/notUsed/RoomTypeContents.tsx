@@ -1,6 +1,6 @@
-import { RoomType } from '../../../constants/roomType';
+import { RoomType } from '../../../../constants/roomType';
 import RoomTypeItem from './RoomTypeItem';
-import ContentsTitle from './ContentsTitle';
+import ContentsTitle from '../ContentsTitle';
 import { useState } from 'react';
 
 export default function RoomTypeContents() {

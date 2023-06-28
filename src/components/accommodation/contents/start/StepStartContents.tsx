@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { stepContent, stepConstants, stepContentVideo } from '../../../constants/stepContent';
+import { stepContent, stepConstants, stepContentVideo } from '../../../../constants/stepContent';
 
 interface StepContentProps {
   step: keyof stepConstants;

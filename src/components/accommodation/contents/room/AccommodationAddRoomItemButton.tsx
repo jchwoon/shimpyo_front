@@ -2,7 +2,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import { accommodationState, roomImageListState } from '../../../recoil/atoms';
+import { accommodationState, roomImageListState } from '../../../../recoil/atoms';
 
 export default function AccommodationAddRoomItemButton() {
   const [accommodation, setAccommodation] = useRecoilState(accommodationState);

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { AccommodationType } from '../../../constants/accommodationType';
+import { AccommodationType } from '../../../../constants/accommodationType';
 import AccommodationTypeItem from './AccommodationTypeItem';
-import ContentsTitle from './ContentsTitle';
+import ContentsTitle from '../ContentsTitle';
 import { useRecoilState } from 'recoil';
-import { accommodationState } from '../../../recoil/atoms';
+import { accommodationState } from '../../../../recoil/atoms';
 
 export default function AccommodationTypeContents() {
   const typeList: (keyof AccommodationType)[] = ['MOTEL', 'HOTEL', 'PENSION', 'GUEST'];

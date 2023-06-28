@@ -4,9 +4,9 @@ import { TbPhotoPlus } from 'react-icons/tb';
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
 import { useRecoilState } from 'recoil';
 
-import { isPassedState, imageDataState, accommodationState, roomImageListState } from '../../../recoil/atoms';
-import DeleteCheckModal from './DeleteCheckModal';
-import imageReader from '../../../utils/imageReader';
+import { isPassedState, imageDataState, accommodationState, roomImageListState } from '../../../../recoil/atoms';
+import DeleteCheckModal from '../DeleteCheckModal';
+import imageReader from '../../../../utils/imageReader';
 import AccommodationRoomOption from './AccommodationRoomOption';
 
 export interface RoomDataProps {

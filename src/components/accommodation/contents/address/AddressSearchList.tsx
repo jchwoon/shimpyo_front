@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import AddressSearchItem from './AddressSearchItem';
 import { FaLocationArrow } from 'react-icons/fa';
 import { useRecoilState } from 'recoil';
-import { accommodationState, stepState } from '../../../recoil/atoms';
-import { getAddressFromLatLng } from '../../../utils/getAddressFromLatLng';
+import { accommodationState, stepState } from '../../../../recoil/atoms';
+import { getAddressFromLatLng } from '../../../../utils/getAddressFromLatLng';
 
 export interface Prediction {
   description: string;

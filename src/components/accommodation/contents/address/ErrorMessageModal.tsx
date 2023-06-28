@@ -2,7 +2,7 @@ import { MdError } from 'react-icons/md';
 import { AiOutlineClose } from 'react-icons/ai';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { addressCheckState, errorModalState, stepState } from '../../../recoil/atoms';
+import { addressCheckState, errorModalState, stepState } from '../../../../recoil/atoms';
 
 interface ErrorMessageModalProps {
   isOpen: boolean;

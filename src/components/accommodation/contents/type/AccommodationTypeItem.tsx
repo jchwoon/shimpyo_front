@@ -1,24 +1,22 @@
 import styled from 'styled-components';
-import { RoomIconMap, RoomNameMap, RoomContentMap, RoomType } from '../../../constants/roomType';
+import { AccommodationIconMap, AccommodationNameMap, AccommodationType } from '../../../../constants/accommodationType';
 
-interface RoomTypeItemProps {
-  type: keyof RoomType;
+interface AccommodationTypeItemProps {
+  type: keyof AccommodationType;
   isSelected: boolean;
-  onClick: (type: keyof RoomType) => void;
+  onClick: (type: keyof AccommodationType) => void;
 }
 
-export default function RoomTypeItem({ type, isSelected, onClick }: RoomTypeItemProps) {
+export default function AccommodationTypeItem({ type, isSelected, onClick }: AccommodationTypeItemProps) {
   const handleClick = () => {
     onClick(type);
   };
+
   return (
     <StyledButtonDiv>
       <StyledItemButton value={type} type="button" role="checkbox" aria-checked={isSelected} onClick={handleClick}>
-        <StyledTextContainer>
-          <StyledItemName>{RoomNameMap[type]}</StyledItemName>
-          <StyledStepContent>{RoomContentMap[type]}</StyledStepContent>
-        </StyledTextContainer>
-        {RoomIconMap[type]}
+        {AccommodationIconMap[type]}
+        <StyledItemName>{AccommodationNameMap[type]}</StyledItemName>
       </StyledItemButton>
     </StyledButtonDiv>
   );
@@ -30,13 +28,13 @@ const StyledButtonDiv = styled.div`
 
 const StyledItemButton = styled.button`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 550px;
-  height: 90px;
+  flex-direction: column;
+  justify-content: center;
+  width: 200px;
+  height: 110px;
   border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  padding: 0 20px;
+  padding-left: 10px;
   background-color: white;
 
   &:hover {
@@ -59,20 +57,7 @@ const StyledItemButton = styled.button`
   }}
 `;
 
-const StyledTextContainer = styled.div`
-  width: 400px;
-  display: flex;
-  flex-direction: column;
-`;
-
 const StyledItemName = styled.span`
   font-size: 15px;
-  font-weight: 500;
-  text-align: left;
-`;
-
-const StyledStepContent = styled.p`
-  font-size: 13px;
-  color: rgba(0, 0, 0, 0.4);
-  text-align: left;
+  margin: 10px 0 0 10px;
 `;

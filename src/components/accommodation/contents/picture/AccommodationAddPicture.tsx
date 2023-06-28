@@ -4,9 +4,9 @@ import { TbPhotoPlus } from 'react-icons/tb';
 import { AiOutlinePicture, AiOutlinePlus } from 'react-icons/ai';
 
 import ImageOption from './ImageOption';
-import imageReader from '../../../utils/imageReader';
+import imageReader from '../../../../utils/imageReader';
 import { useRecoilState } from 'recoil';
-import { imageDataState, imageListState, isPassedState } from '../../../recoil/atoms';
+import { imageDataState, imageListState, isPassedState } from '../../../../recoil/atoms';
 
 export default function AccommodationAddPicture() {
   const [isPassed, setIsPassed] = useRecoilState(isPassedState);

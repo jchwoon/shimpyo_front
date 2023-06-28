@@ -2,9 +2,9 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdError } from 'react-icons/md';
 
-import debounce from '../../../utils/debounce';
+import debounce from '../../../../utils/debounce';
 import { useRecoilState } from 'recoil';
-import { accommodationState } from '../../../recoil/atoms';
+import { accommodationState } from '../../../../recoil/atoms';
 
 interface TextBoxProps {
   title: string;

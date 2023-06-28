@@ -2,10 +2,10 @@ import { useState, ChangeEvent, MouseEvent, useEffect, useRef } from 'react';
 import { SlOptions } from 'react-icons/sl';
 import styled from 'styled-components';
 
-import { type ImageItem } from '../../../constants/accommodation';
-import imageReader from '../../../utils/imageReader';
+import { type ImageItem } from '../../../../constants/accommodation';
+import imageReader from '../../../../utils/imageReader';
 import { useRecoilState } from 'recoil';
-import { imageDataState, isPassedState } from '../../../recoil/atoms';
+import { imageDataState, isPassedState } from '../../../../recoil/atoms';
 
 interface ImageOptionProps {
   index: number;

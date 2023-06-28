@@ -5,18 +5,18 @@ import { isPassedState, stepState } from '../recoil/atoms';
 
 import AccommodationHeader from '../components/accommodation/UI/AccommodationHeader';
 import AccommodationFooter from '../components/accommodation/UI/AccommodationFooter';
-import StartContents from '../components/accommodation/contents/StartContents';
-import StepStartContents from '../components/accommodation/contents/StepStartContents';
-import AccommodationTypeContents from '../components/accommodation/contents/AccommodationTypeContents';
-import AccommodationAddressContents from '../components/accommodation/contents/AccommodationAddressContents';
-import AccommodationAddressCheckContents from '../components/accommodation/contents/AccommodationAddressCheckContents';
-import AccommodationAmenityInfoContents from '../components/accommodation/contents/AccommodationAmenityInfoContents';
-import AccommodationAddPictureContents from '../components/accommodation/contents/AccommodationAddPictureContents';
-import AccommodationNameContents from '../components/accommodation/contents/AccommodationNameContents';
-import AccommodationDetailContents from '../components/accommodation/contents/AccommodationDetailContents';
+import StartContents from '../components/accommodation/contents/start/StartContents';
+import StepStartContents from '../components/accommodation/contents/start/StepStartContents';
+import AccommodationTypeContents from '../components/accommodation/contents/type/AccommodationTypeContents';
+import AccommodationAddressContents from '../components/accommodation/contents/address/AccommodationAddressContents';
+import AccommodationAddressCheckContents from '../components/accommodation/contents/address/AccommodationAddressCheckContents';
+import AccommodationAmenityInfoContents from '../components/accommodation/contents/amenity/AccommodationAmenityInfoContents';
+import AccommodationAddPictureContents from '../components/accommodation/contents/picture/AccommodationAddPictureContents';
+import AccommodationNameContents from '../components/accommodation/contents/text/AccommodationNameContents';
+import AccommodationDetailContents from '../components/accommodation/contents/text/AccommodationDetailContents';
 import StepFreePass from '../components/accommodation/contents/StepFreePass';
 import StepLimitPass from '../components/accommodation/contents/StepLimitPass';
-import AccommodationRoomContents from '../components/accommodation/contents/AccommodationRoomContents';
+import AccommodationRoomContents from '../components/accommodation/contents/room/AccommodationRoomContents';
 
 export default function Accommodation() {
   const stepNumber = useRecoilValue(stepState);

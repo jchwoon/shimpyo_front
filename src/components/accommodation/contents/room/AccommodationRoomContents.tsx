@@ -2,9 +2,9 @@ import styled from 'styled-components';
 
 import { useRecoilValue } from 'recoil';
 import AccommodationRoomItem from './AccommodationRoomItem';
-import { accommodationState } from '../../../recoil/atoms';
-import ContentsTitle from './ContentsTitle';
-import ContentsSubText from './ContentsSubText';
+import { accommodationState } from '../../../../recoil/atoms';
+import ContentsTitle from '../ContentsTitle';
+import ContentsSubText from '../ContentsSubText';
 import AccommodationAddRoomItemButton from './AccommodationAddRoomItemButton';
 
 export default function AccommodationRoomContents() {

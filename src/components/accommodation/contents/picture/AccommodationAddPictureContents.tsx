@@ -1,5 +1,5 @@
-import ContentsTitle from './ContentsTitle';
-import ContentsSubText from './ContentsSubText';
+import ContentsTitle from '../ContentsTitle';
+import ContentsSubText from '../ContentsSubText';
 import AccommodationAddPicture from './AccommodationAddPicture';
 
 export default function AccommodationAddPictureContents() {

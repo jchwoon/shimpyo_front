@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { useState, FocusEvent, useEffect, ChangeEvent } from 'react';
 import { MdError } from 'react-icons/md';
 
-import { accommodationState, addressCheckState, isPassedState } from '../../../recoil/atoms';
+import { accommodationState, addressCheckState, isPassedState } from '../../../../recoil/atoms';
 import { useRecoilState } from 'recoil';
-import LocationMap from '../../shared/LocationMap';
+import LocationMap from '../../../shared/LocationMap';
 import ErrorMessageModal from './ErrorMessageModal';
 
 interface Focused {
