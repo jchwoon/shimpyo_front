@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { SOCIAL_ADDITIONAL_INFO_API_PATH } from '../../constants/api/userApi';
 import Button from '../shared/UI/Button';
-import { accessTokenAtom, nicknameValueAtom, phoneValueAtom } from '../../recoil/User/userAtoms';
+import { accessTokenAtom, nicknameValueAtom, phoneValueAtom } from '../../recoil/userAtoms';
 
 interface IResultData {
   accessToken: string;

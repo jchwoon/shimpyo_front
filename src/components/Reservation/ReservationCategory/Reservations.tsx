@@ -1,47 +1,92 @@
 import ReservationCategory from '../ReservationCategory';
 import GridContents from '../GridContents';
 import HeaderContents from '../HeaderContents';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import useReservationCategoryToggle from '../../../hooks/useReservationCategoryToggle';
 import { useSearchParams } from 'react-router-dom';
+import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
+import usePagination from '../../../hooks/usePagination';
+import CategoryFooter from '../CategoryFooter';
 
-type Item = {
-  title: string;
-  checkIn: string;
-  checkOut: string;
-  id: number;
+type ListType = {
+  reservationId: number;
+  houseImageUrl: string;
+  houseName: string;
+  houseOwnerName: string;
+  houseType: string;
+  checkInDate: string;
+  checkOutDate: string;
+  reservationStatus: string;
 };
 
+interface IResultData {
+  totalPage: number;
+  totalElements: number;
+  pageSize: number;
+  list: ListType[];
+}
+
 export default function Reservations() {
-  const [contentsArray, setContentsArray] = useState<Item[]>([
-    { id: 1, title: '르네상스 서울', checkIn: '06.13 목 14:00', checkOut: '06.14 금 11:00' },
-    { id: 2, title: '르네상스 서울', checkIn: '06.13 목 14:00', checkOut: '06.14 금 11:00' },
-    { id: 3, title: '르네상스 서울', checkIn: '06.13 목 14:00', checkOut: '06.14 금 11:00' },
+  const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
+  const { isOpen, toggleShowButton } = useReservationCategoryToggle('reservation');
+
+  const [totalPage, setTotalPage] = useState<number>(3);
+  const [totalItem, setTotalItem] = useState<number>(25);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [contentsArray, setContentsArray] = useState<ListType[]>([
+    {
+      reservationId: 1,
+      checkInDate: '2023.06.19.09',
+      houseOwnerName: '정채운',
+      houseType: '펜션',
+      checkOutDate: '2023.06.19.09',
+      houseImageUrl: '/images/image.png',
+      reservationStatus: '예약확정',
+      houseName: '럭셔리 호텔',
+    },
   ]);
-  const [isOpen, setIsOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { changeClickedPage, changeNextPage, changePrevPage } = usePagination({
+    category: 'reservation',
+    currentPage,
+    searchParams,
+    setCurrentPage,
+    setSearchParams,
+  });
 
-  const toggleShowButton = () => {
-    setIsOpen(prev => !prev);
+  useEffect(() => {
+    if (!responseData) return;
 
-    if (searchParams.get('reservation') === 'true') {
-      setSearchParams(searchParams => {
-        searchParams.set('reservation', 'false');
-        return searchParams;
-      });
-    } else if (searchParams.get('reservation') === 'false' || !searchParams.get('reservation')) {
-      setSearchParams(searchParams => {
-        searchParams.set('reservation', 'true');
-        searchParams.set('reservationPage', '1');
-        return searchParams;
-      });
+    if (responseData?.isSuccess) {
+      setContentsArray(responseData.result.list);
+      setTotalPage(responseData.result.totalPage);
+      setTotalItem(responseData.result.totalElements);
     }
-  };
+  }, [responseData, totalPage]);
+
+  useEffect(() => {
+    const getData = async () => {
+      if (!currentPage) return;
+      if (currentPage > totalPage || currentPage <= 0) return;
+      await sendRequest({ url: `/user/reservations?page=${currentPage}` });
+    };
+
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
   const header = (
-    <>
-      <HeaderContents isOpen={isOpen} onClick={toggleShowButton} title="예약 내역" />
-    </>
+    <StyleHeaderBox>
+      <HeaderContents
+        isOpen={isOpen}
+        onClick={() => {
+          toggleShowButton();
+        }}
+        title="예약 내역"
+      />
+      <span style={{ position: 'absolute', left: '190px', top: '20px' }}>{`(${totalItem})`}</span>
+    </StyleHeaderBox>
   );
 
   const main = (
@@ -55,15 +100,14 @@ export default function Reservations() {
   );
 
   const footer = (
-    <>
-      {isOpen && (
-        <StyleFlexFooterBox>
-          <div>
-            <span>&lt;&lt;</span>&nbsp;&nbsp;<span>&lt;</span> <span>&gt;</span>&nbsp;&nbsp;<span>&gt;&gt;</span>
-          </div>
-        </StyleFlexFooterBox>
-      )}
-    </>
+    <CategoryFooter
+      changeClickedPage={changeClickedPage}
+      changeNextPage={changeNextPage}
+      changePrevPage={changePrevPage}
+      currentPage={currentPage}
+      isOpen={isOpen}
+      totalPage={totalPage}
+    />
   );
 
   return <ReservationCategory header={header} main={main} footer={footer} />;
@@ -71,11 +115,22 @@ export default function Reservations() {
 
 const StyleGridBox = styled.div`
   display: grid;
-  grid-gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(330px, 360px));
+  grid-gap: 1rem;
+  grid-template-columns: 1fr;
+
   justify-content: space-evenly;
+
+  @media only screen and (min-width: 628px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media only screen and (min-width: 928px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media only screen and (min-width: 1228px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 `;
 
-const StyleFlexFooterBox = styled.div`
-  text-align: center;
+const StyleHeaderBox = styled.div`
+  position: relative;
 `;

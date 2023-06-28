@@ -6,8 +6,8 @@ import Divider from '@mui/material/Divider';
 import { CustomizedLoginButton, CustomizedMenuIcon, CustomizedAccountCircleIcon } from './UserMenu.style';
 import Typography from '@mui/material/Typography';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { joinModalAtom, loginModalAtom } from '../../../recoil/Modal/modalAtoms';
-import { loginStateAtom } from '../../../recoil/User/userAtoms';
+import { joinModalAtom, loginModalAtom } from '../../../recoil/modalAtoms';
+import { loginStateAtom } from '../../../recoil/userAtoms';
 import useLogout from '../../../hooks/useLogout';
 import { useNavigate } from 'react-router';
 

@@ -1,9 +1,9 @@
 import { useRecoilState } from 'recoil';
 import Modal from '../../shared/Modal';
-import { idFindModalAtom } from '../../../recoil/Modal/modalAtoms';
+import { idFindModalAtom } from '../../../recoil/modalAtoms';
 import styled from 'styled-components';
 import Input from '../../shared/UI/Input';
-import { StyleBody } from './JoinModal';
+import { StyleBody } from '../../shared/Modal/JoinModal';
 import Button from '../../shared/UI/Button';
 import ColorButton from '../../shared/UI/ColorButton';
 import { useState, useEffect, useCallback, ChangeEvent } from 'react';

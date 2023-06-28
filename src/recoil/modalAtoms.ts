@@ -24,3 +24,13 @@ export const passwordFindModalAtom = atom<boolean>({
   key: 'passwordFindModalAtom',
   default: false,
 });
+
+export const reviewModalAtom = atom<boolean>({
+  key: 'reviewModalAtom',
+  default: false,
+});
+
+export const alarmAtoms = atom<boolean>({
+  key: 'alarmAtoms',
+  default: false,
+});

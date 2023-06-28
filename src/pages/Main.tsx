@@ -8,8 +8,8 @@ import MobileNavbarTheme from '../components/Main/OverrideTheme/MobileNavbarThem
 import MobileFooter from '../components/Main/MobileFooter/MobileFooter';
 import { useState, useEffect } from 'react';
 import AdditionalInfoModal from '../components/Main/Modal/AdditionalInfoModal';
-import JoinModal from '../components/Main/Modal/JoinModal';
-import LoginModal from '../components/Main/Modal/LoginModal';
+import JoinModal from '../components/shared/Modal/JoinModal';
+import LoginModal from '../components/shared/Modal/LoginModal';
 import IdFindModal from '../components/Main/Modal/IdFindModal';
 import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
 

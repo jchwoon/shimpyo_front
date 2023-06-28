@@ -1,22 +1,18 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import Modal from '../../shared/Modal';
+import Modal from '../Modal';
 import { useRef, useEffect, useState, KeyboardEvent } from 'react';
-import {
-  idFindModalAtom,
-  joinModalAtom,
-  loginModalAtom,
-  passwordFindModalAtom,
-} from '../../../recoil/Modal/modalAtoms';
-import { loginStateAtom, accessTokenAtom } from '../../../recoil/User/userAtoms';
+import { idFindModalAtom, joinModalAtom, loginModalAtom, passwordFindModalAtom } from '../../../recoil/modalAtoms';
+import { loginStateAtom, accessTokenAtom } from '../../../recoil/userAtoms';
 import styled from 'styled-components';
 import { StyleBody, StyleFooter, StyleSwitchToLoginButton } from './JoinModal';
-import ColorButton from '../../shared/UI/ColorButton';
+import ColorButton from '../UI/ColorButton';
 import useHttpRequest from '../../../hooks/useHttpRequest';
-import Input from '../../shared/UI/Input';
-import NaverLogin from '../SocialLogin/NaverLogin';
-import GoogleSocialLogin from '../SocialLogin/GoogleSocialLogin';
-import KakaoLogin from '../SocialLogin/KakaoLogin';
+import Input from '../UI/Input';
+
 import { LOGIN_API_PATH } from '../../../constants/api/userApi';
+import KakaoLogin from '../../Main/SocialLogin/KakaoLogin';
+import NaverLogin from '../../Main/SocialLogin/NaverLogin';
+import GoogleSocialLogin from '../../Main/SocialLogin/GoogleSocialLogin';
 
 interface ResultData {
   accessToken: string;

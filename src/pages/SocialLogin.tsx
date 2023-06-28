@@ -3,7 +3,7 @@ import useHttpRequest from '../hooks/useHttpRequest';
 import { useSearchParams } from 'react-router-dom';
 import { SOCIAL_SILENT_LOGIN_API_PATH } from '../constants/api/userApi';
 import { useSetRecoilState } from 'recoil';
-import { accessTokenAtom } from '../recoil/User/userAtoms';
+import { accessTokenAtom } from '../recoil/userAtoms';
 
 interface IResultData {
   accessToken: string;

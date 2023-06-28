@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import Input from '../../shared/UI/Input';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { passwordSelector } from '../../../recoil/selector';
-import { confirmPasswordValueAtom } from '../../../recoil/User/userAtoms';
+import { confirmPasswordValueAtom } from '../../../recoil/userAtoms';
 
 interface ConfirmPasswordInputProps {
   getValid: (valid: boolean, value: string) => void;

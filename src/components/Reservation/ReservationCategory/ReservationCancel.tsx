@@ -1,64 +1,111 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GridContents from '../GridContents';
 import HeaderContents from '../HeaderContents';
 import ReservationCategory from '../ReservationCategory';
 import styled from 'styled-components';
-import Button from '../../shared/UI/Button';
+import useReservationCategoryToggle from '../../../hooks/useReservationCategoryToggle';
+import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { useSearchParams } from 'react-router-dom';
+import CategoryFooter from '../CategoryFooter';
+import usePagination from '../../../hooks/usePagination';
+
+type ListType = {
+  reservationId: number;
+  houseImageUrl: string;
+  houseName: string;
+  houseOwnerName: string;
+  houseType: string;
+  checkInDate: string;
+  checkOutDate: string;
+  reservationStatus?: string;
+};
+
+interface IResultData {
+  totalPage: number;
+  totalElements: number;
+  pageSize: number;
+  list: ListType[];
+}
 
 export default function ReservationCancel() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
+  const { isOpen, toggleShowButton } = useReservationCategoryToggle('reservationCancel');
+
+  const [totalPage, setTotalPage] = useState<number>(3);
+  const [totalItem, setTotalItem] = useState<number>(25);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [contentsArray, setContentsArray] = useState<ListType[]>([
+    {
+      reservationId: 1,
+      checkInDate: '2023.06.19.09',
+      houseOwnerName: '정채운',
+      houseType: '펜션',
+      checkOutDate: '2023.06.19.09',
+      houseImageUrl: '/images/image.png',
+      houseName: '럭셔리 호텔',
+    },
+  ]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { changeClickedPage, changeNextPage, changePrevPage } = usePagination({
+    category: 'reservationCancel',
+    currentPage,
+    searchParams,
+    setCurrentPage,
+    setSearchParams,
+  });
 
-  const toggleShowButton = () => {
-    setIsOpen(prev => !prev);
+  useEffect(() => {
+    if (!responseData) return;
 
-    if (searchParams.get('reservationCancel') === 'true') {
-      setSearchParams(searchParams => {
-        searchParams.set('reservationCancel', 'false');
-        return searchParams;
-      });
-    } else if (searchParams.get('reservationCancel') === 'false' || !searchParams.get('reservationCancel')) {
-      setSearchParams(searchParams => {
-        searchParams.set('reservationCancel', 'true');
-        searchParams.set('reservationCancelPage', '1');
-        return searchParams;
-      });
+    if (responseData?.isSuccess) {
+      setContentsArray(responseData.result.list);
+      setTotalPage(responseData.result.totalPage);
+      setTotalItem(responseData.result.totalElements);
     }
-  };
+  }, [responseData, totalPage]);
 
-  const subElement = (
-    <StyleButtonBox>
-      <Button label="삭제하기" />
-    </StyleButtonBox>
-  );
+  useEffect(() => {
+    const getData = async () => {
+      if (!currentPage) return;
+      if (currentPage > totalPage || currentPage <= 0) return;
+      await sendRequest({ url: `/user/reservations?page=${currentPage}` });
+    };
 
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
   const header = (
-    <>
-      <HeaderContents isOpen={isOpen} onClick={toggleShowButton} title="취소 내역" />
-    </>
+    <StyleHeaderBox>
+      <HeaderContents
+        isOpen={isOpen}
+        onClick={() => {
+          toggleShowButton();
+        }}
+        title="취소 내역"
+      />
+      <span style={{ position: 'absolute', left: '190px', top: '20px' }}>{`(${totalItem})`}</span>
+    </StyleHeaderBox>
   );
 
   const main = (
     <>
       {isOpen && (
         <StyleGridBox>
-          <GridContents subElement={subElement} />
+          <GridContents contentsArray={contentsArray} />
         </StyleGridBox>
       )}
     </>
   );
 
   const footer = (
-    <>
-      {isOpen && (
-        <StyleFlexFooterBox>
-          <div>
-            <span>&lt;&lt;</span>&nbsp;&nbsp;<span>&lt;</span> <span>&gt;</span>&nbsp;&nbsp;<span>&gt;&gt;</span>
-          </div>
-        </StyleFlexFooterBox>
-      )}
-    </>
+    <CategoryFooter
+      changeClickedPage={changeClickedPage}
+      changeNextPage={changeNextPage}
+      changePrevPage={changePrevPage}
+      currentPage={currentPage}
+      isOpen={isOpen}
+      totalPage={totalPage}
+    />
   );
 
   return <ReservationCategory header={header} main={main} footer={footer} />;
@@ -66,18 +113,22 @@ export default function ReservationCancel() {
 
 const StyleGridBox = styled.div`
   display: grid;
-  grid-gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  grid-gap: 1rem;
+  grid-template-columns: 1fr;
+
   justify-content: space-evenly;
+
+  @media only screen and (min-width: 628px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media only screen and (min-width: 928px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media only screen and (min-width: 1228px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 `;
 
-const StyleButtonBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  margin-top: 0.3;
-`;
-
-const StyleFlexFooterBox = styled.div`
-  text-align: center;
+const StyleHeaderBox = styled.div`
+  position: relative;
 `;

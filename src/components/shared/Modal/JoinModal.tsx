@@ -1,16 +1,16 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import Modal from '../../shared/Modal';
-import { additionalInfoModalAtom, joinModalAtom, loginModalAtom } from '../../../recoil/Modal/modalAtoms';
-import { passwordValueAtom, confirmPasswordValueAtom, emailValueAtom } from '../../../recoil/User/userAtoms';
+import Modal from '../Modal';
+import { additionalInfoModalAtom, joinModalAtom, loginModalAtom } from '../../../recoil/modalAtoms';
+import { passwordValueAtom, confirmPasswordValueAtom, emailValueAtom } from '../../../recoil/userAtoms';
 import styled from 'styled-components';
 import { useState } from 'react';
-import ColorButton from '../../shared/UI/ColorButton';
-import EmailInput from '../Input/EmailInput';
-import PasswordInput from '../Input/PasswordInput';
-import ConfirmPasswordInput from '../Input/ConfirmPasswordInput';
-import GoogleSocialLogin from '../SocialLogin/GoogleSocialLogin';
-import NaverLogin from '../SocialLogin/NaverLogin';
-import KakaoLogin from '../SocialLogin/KakaoLogin';
+import ColorButton from '../UI/ColorButton';
+import EmailInput from '../../Main/Input/EmailInput';
+import PasswordInput from '../../Main/Input/PasswordInput';
+import ConfirmPasswordInput from '../../Main/Input/ConfirmPasswordInput';
+import GoogleSocialLogin from '../../Main/SocialLogin/GoogleSocialLogin';
+import NaverLogin from '../../Main/SocialLogin/NaverLogin';
+import KakaoLogin from '../../Main/SocialLogin/KakaoLogin';
 
 export default function JoinModal() {
   const [isEmailValid, setIsEmailValid] = useState(false);

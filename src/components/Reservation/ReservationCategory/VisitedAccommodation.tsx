@@ -1,76 +1,114 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GridContents from '../GridContents';
 import HeaderContents from '../HeaderContents';
 import ReservationCategory from '../ReservationCategory';
 import styled from 'styled-components';
-import ColorButton from '../../shared/UI/ColorButton';
-import Button from '../../shared/UI/Button';
+import useReservationCategoryToggle from '../../../hooks/useReservationCategoryToggle';
 import { useSearchParams } from 'react-router-dom';
+import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
+import usePagination from '../../../hooks/usePagination';
+import CategoryFooter from '../CategoryFooter';
 
-type Item = {
-  title: string;
-  checkIn: string;
-  checkOut: string;
-  id: number;
+type ListType = {
+  reservationId: number;
+  houseImageUrl: string;
+  houseName: string;
+  houseOwnerName: string;
+  houseType: string;
+  checkInDate: string;
+  checkOutDate: string;
+  reservationStatus?: string;
+  existReview: boolean;
 };
 
+interface IResultData {
+  totalPage: number;
+  totalElements: number;
+  pageSize: number;
+  list: ListType[];
+}
+
 export default function VisitedAccommodation() {
-  const [contentsArray, setContentsArray] = useState<Item[]>([
-    { id: 1, title: '르네상스 서울', checkIn: '06.13 목 14:00', checkOut: '06.14 금 11:00' },
-    { id: 2, title: '르네상스 서울', checkIn: '06.13 목 14:00', checkOut: '06.14 금 11:00' },
-    { id: 3, title: '르네상스 서울', checkIn: '06.13 목 14:00', checkOut: '06.14 금 11:00' },
+  const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
+  const { isOpen, toggleShowButton } = useReservationCategoryToggle('visited');
+
+  const [totalPage, setTotalPage] = useState<number>(3);
+  const [totalItem, setTotalItem] = useState<number>(25);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [contentsArray, setContentsArray] = useState<ListType[]>([
+    {
+      reservationId: 1,
+      checkInDate: '2023.06.19.09',
+      houseOwnerName: '정채운',
+      houseType: '펜션',
+      checkOutDate: '2023.06.19.09',
+      houseImageUrl: '/images/image.png',
+      existReview: true,
+      houseName: '럭셔리 호텔',
+    },
   ]);
-  const [isOpen, setIsOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { changeClickedPage, changeNextPage, changePrevPage } = usePagination({
+    category: 'visited',
+    currentPage,
+    searchParams,
+    setCurrentPage,
+    setSearchParams,
+  });
 
-  const toggleShowButton = () => {
-    setIsOpen(prev => !prev);
-    if (searchParams.get('visited') === 'true') {
-      setSearchParams(searchParams => {
-        searchParams.set('visited', 'false');
-        return searchParams;
-      });
-    } else if (searchParams.get('visited') === 'false' || !searchParams.get('visited')) {
-      setSearchParams(searchParams => {
-        searchParams.set('visited', 'true');
-        searchParams.set('visitedPage', '1');
-        return searchParams;
-      });
+  useEffect(() => {
+    if (!responseData) return;
+
+    if (responseData?.isSuccess) {
+      setContentsArray(responseData.result.list);
+      setTotalPage(responseData.result.totalPage);
+      setTotalItem(responseData.result.totalElements);
     }
-  };
+  }, [responseData, totalPage]);
 
-  const subElement = (
-    <StyleButtonBox>
-      <Button label="삭제하기" />
-      <ColorButton label="후기 작성하기" onClick={() => console.log('hi')} />
-    </StyleButtonBox>
-  );
+  useEffect(() => {
+    const getData = async () => {
+      if (!currentPage) return;
+      if (currentPage > totalPage || currentPage <= 0) return;
+      await sendRequest({ url: `/user/reservations?page=${currentPage}` });
+    };
+
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
   const header = (
-    <>
-      <HeaderContents isOpen={isOpen} onClick={toggleShowButton} title="이용 내역" />
-    </>
+    <StyleHeaderBox>
+      <HeaderContents
+        isOpen={isOpen}
+        onClick={() => {
+          toggleShowButton();
+        }}
+        title="이용 내역"
+      />
+      <span style={{ position: 'absolute', left: '190px', top: '20px' }}>{`(${totalItem})`}</span>
+    </StyleHeaderBox>
   );
 
   const main = (
     <>
       {isOpen && (
         <StyleGridBox>
-          <GridContents contentsArray={contentsArray} subElement={subElement} />
+          <GridContents visited contentsArray={contentsArray} />
         </StyleGridBox>
       )}
     </>
   );
 
   const footer = (
-    <>
-      {isOpen && (
-        <StyleFlexFooterBox>
-          <div>
-            <span>&lt;&lt;</span>&nbsp;&nbsp;<span>&lt;</span> <span>&gt;</span>&nbsp;&nbsp;<span>&gt;&gt;</span>
-          </div>
-        </StyleFlexFooterBox>
-      )}
-    </>
+    <CategoryFooter
+      changeClickedPage={changeClickedPage}
+      changeNextPage={changeNextPage}
+      changePrevPage={changePrevPage}
+      currentPage={currentPage}
+      isOpen={isOpen}
+      totalPage={totalPage}
+    />
   );
 
   return <ReservationCategory header={header} main={main} footer={footer} />;
@@ -78,18 +116,22 @@ export default function VisitedAccommodation() {
 
 const StyleGridBox = styled.div`
   display: grid;
-  grid-gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(330px, 360px));
+  grid-gap: 1rem;
+  grid-template-columns: 1fr;
+
   justify-content: space-evenly;
+
+  @media only screen and (min-width: 628px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media only screen and (min-width: 928px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media only screen and (min-width: 1228px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 `;
 
-const StyleButtonBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  margin-top: 0.3;
-`;
-
-const StyleFlexFooterBox = styled.div`
-  text-align: center;
+const StyleHeaderBox = styled.div`
+  position: relative;
 `;

@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import useAuthorizedRequest from './hooks/useAuthorizedRequest';
 import { REGENERATION_REFRESH_API_PATH } from './constants/api/userApi';
-import { accessTokenAtom, loginStateAtom } from './recoil/User/userAtoms';
+import { accessTokenAtom, loginStateAtom } from './recoil/userAtoms';
 
 interface ResultData {
   accessToken: string;

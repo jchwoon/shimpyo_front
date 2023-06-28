@@ -5,7 +5,7 @@ import Input from '../../shared/UI/Input';
 import { nicknameRule } from '../../../utils/validation';
 import useHttpRequest from '../../../hooks/useHttpRequest';
 import { NICKNAME_OVERLAP_CHECK_API_PATH } from '../../../constants/api/userApi';
-import { nicknameValueAtom } from '../../../recoil/User/userAtoms';
+import { nicknameValueAtom } from '../../../recoil/userAtoms';
 
 interface nickNameInputProps {
   getValid: (valid: boolean) => void;

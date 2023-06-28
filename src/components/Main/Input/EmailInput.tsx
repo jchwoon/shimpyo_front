@@ -4,7 +4,7 @@ import Input from '../../shared/UI/Input';
 import { useRecoilState } from 'recoil';
 import useHttpRequest from '../../../hooks/useHttpRequest';
 import { EMAIL_OVERLAP_CHECK_API_PATH } from '../../../constants/api/userApi';
-import { emailValueAtom } from '../../../recoil/User/userAtoms';
+import { emailValueAtom } from '../../../recoil/userAtoms';
 
 interface EmailInputProps {
   getValid: (valid: boolean) => void;

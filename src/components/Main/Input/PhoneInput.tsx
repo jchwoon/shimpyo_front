@@ -6,7 +6,7 @@ import { StyleNumberTypeInput } from '../../style/shareStyle';
 import Button from '../../shared/UI/Button';
 import usePhoneCertification from '../../../hooks/usePhoneCertification';
 import { useRecoilState } from 'recoil';
-import { phoneValueAtom } from '../../../recoil/User/userAtoms';
+import { phoneValueAtom } from '../../../recoil/userAtoms';
 
 interface PhoneInputProps {
   getValid: (valid: boolean) => void;

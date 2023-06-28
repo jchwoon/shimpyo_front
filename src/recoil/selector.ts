@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import { passwordValueAtom } from './User/userAtoms';
+import { passwordValueAtom } from './userAtoms';
 
 export const passwordSelector = selector({
   key: 'passwordSelector',
