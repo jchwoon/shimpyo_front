@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
-import { stepState } from '../recoil/atoms';
+import { useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { isPassedState, stepState } from '../recoil/atoms';
 
 import AccommodationHeader from '../components/accommodation/UI/AccommodationHeader';
 import AccommodationFooter from '../components/accommodation/UI/AccommodationFooter';
@@ -9,16 +10,22 @@ import StepStartContents from '../components/accommodation/contents/StepStartCon
 import AccommodationTypeContents from '../components/accommodation/contents/AccommodationTypeContents';
 import AccommodationAddressContents from '../components/accommodation/contents/AccommodationAddressContents';
 import AccommodationAddressCheckContents from '../components/accommodation/contents/AccommodationAddressCheckContents';
-import AccommodationCountInfoContents from '../components/accommodation/contents/AccommodationCountInfoContents';
 import AccommodationAmenityInfoContents from '../components/accommodation/contents/AccommodationAmenityInfoContents';
 import AccommodationAddPictureContents from '../components/accommodation/contents/AccommodationAddPictureContents';
 import AccommodationNameContents from '../components/accommodation/contents/AccommodationNameContents';
 import AccommodationDetailContents from '../components/accommodation/contents/AccommodationDetailContents';
-import AccommodationFeeContents from '../components/accommodation/contents/AccommodationFeeContents';
-import LocationMap from '../components/accommodation/contents/LocationMap';
+import StepFreePass from '../components/accommodation/contents/StepFreePass';
+import StepLimitPass from '../components/accommodation/contents/StepLimitPass';
+import AccommodationRoomContents from '../components/accommodation/contents/AccommodationRoomContents';
 
 export default function Accommodation() {
   const stepNumber = useRecoilValue(stepState);
+
+  const [isPassed, setIsPassed] = useRecoilState(isPassedState); // isPassed 상태와 설정 함수 추가
+
+  useEffect(() => {
+    setIsPassed(false);
+  }, [stepNumber]);
 
   return (
     <StyledContainer>
@@ -35,36 +42,27 @@ export default function Accommodation() {
             case 3:
               return <AccommodationAddressContents></AccommodationAddressContents>;
             case 4:
-              return <></>;
-            case 5:
               return <AccommodationAddressCheckContents></AccommodationAddressCheckContents>;
-            case 6:
-              return <AccommodationCountInfoContents></AccommodationCountInfoContents>;
-            case 7:
+            case 5:
               return <StepStartContents step="TWO"></StepStartContents>;
-            case 8:
+            case 6:
               return <AccommodationAmenityInfoContents></AccommodationAmenityInfoContents>;
-            case 9:
+            case 7:
               return <AccommodationAddPictureContents></AccommodationAddPictureContents>;
-            case 10:
+            case 8:
               return <AccommodationNameContents></AccommodationNameContents>;
-            case 11:
+            case 9:
               return <AccommodationDetailContents></AccommodationDetailContents>;
-            case 12:
-              return <AccommodationFeeContents></AccommodationFeeContents>;
-            case 13:
+            case 10:
               return <StepStartContents step="THR"></StepStartContents>;
-            case 14:
+            case 11:
+              return <AccommodationRoomContents></AccommodationRoomContents>;
+            case 12:
               return <StepStartContents step="FOR"></StepStartContents>;
-            case 15:
-              return (
-                <LocationMap
-                  latitude={37.5642135}
-                  longitude={127.0016985}
-                  width={'500px'}
-                  height={'400px'}
-                ></LocationMap>
-              );
+            case 13:
+              return <></>;
+            case 14:
+              return <></>;
             default:
               return null;
           }

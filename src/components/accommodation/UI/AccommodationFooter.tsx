@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import StepBar from '../StepBar';
 import MoveButton from '../MoveButton';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { isPassedState, stepState } from '../../../recoil/atoms';
 import { ALL_STEP_NUMBER } from '../../../constants/accommodation';
 
 export default function AccommodationFooter() {
   const stepNumber = useRecoilValue(stepState);
-  const isPassed = useRecoilValue(isPassedState);
+  const [isPassed, setIsPassed] = useRecoilState(isPassedState);
 
   return (
     <StyledFooter>

@@ -24,8 +24,8 @@ interface Disabled {
 
 export default function AccommodationCountInfo() {
   const [countInfo, setCountInfo] = useState<CountInfo>({
-    minPeople: 0,
-    maxPeople: 0,
+    minPeople: 1,
+    maxPeople: 1,
     bedCount: 0,
     bedroomCount: 0,
     bathroomCount: 0,
@@ -41,30 +41,52 @@ export default function AccommodationCountInfo() {
 
   const handlePlusOnClick = (id: string) => (e: MouseEvent<HTMLButtonElement>) => {
     const newCountInfo = { ...countInfo };
-    if (newCountInfo[id] === 0) {
-      const newIsDisabled = { ...isDisabled };
-      newIsDisabled[id] = false;
-      setIsDisabled(newIsDisabled);
+
+    if (id === 'minPeople' || id === 'maxPeople') {
+      if (newCountInfo[id] === 1) {
+        const newIsDisabled = { ...isDisabled };
+        newIsDisabled[id] = false;
+        setIsDisabled(newIsDisabled);
+      }
+      newCountInfo[id]++;
+      setCountInfo(newCountInfo);
+    } else {
+      if (newCountInfo[id] === 0) {
+        const newIsDisabled = { ...isDisabled };
+        newIsDisabled[id] = false;
+        setIsDisabled(newIsDisabled);
+      }
+      newCountInfo[id]++;
+      setCountInfo(newCountInfo);
     }
-    newCountInfo[id]++;
-    setCountInfo(newCountInfo);
   };
 
   const handleMinusOnClick = (id: string) => (e: MouseEvent<HTMLButtonElement>) => {
     const newCountInfo = { ...countInfo };
-    if (newCountInfo[id] === 1) {
-      const newIsDisabled = { ...isDisabled };
-      newIsDisabled[id] = true;
-      setIsDisabled(newIsDisabled);
+
+    if (id === 'minPeople' || id === 'maxPeople') {
+      if (newCountInfo[id] === 2) {
+        const newIsDisabled = { ...isDisabled };
+        newIsDisabled[id] = true;
+        setIsDisabled(newIsDisabled);
+      }
+      newCountInfo[id]--;
+      setCountInfo(newCountInfo);
+    } else {
+      if (newCountInfo[id] === 1) {
+        const newIsDisabled = { ...isDisabled };
+        newIsDisabled[id] = true;
+        setIsDisabled(newIsDisabled);
+      }
+      newCountInfo[id]--;
+      setCountInfo(newCountInfo);
     }
-    newCountInfo[id]--;
-    setCountInfo(newCountInfo);
   };
 
   return (
-    <>
+    <StyledContentDiv>
       <StyledItemContainer>
-        <div>최소인원</div>
+        <StyledItemName>최소인원</StyledItemName>
         <StyledCounterContainer>
           <StyledCounterBtn disabled={isDisabled.minPeople} onClick={handleMinusOnClick('minPeople')}>
             <StyledMinusIcon />
@@ -76,7 +98,7 @@ export default function AccommodationCountInfo() {
         </StyledCounterContainer>
       </StyledItemContainer>
       <StyledItemContainer>
-        <div>최대인원</div>
+        <StyledItemName>최대인원</StyledItemName>
         <StyledCounterContainer>
           <StyledCounterBtn disabled={isDisabled.maxPeople} onClick={handleMinusOnClick('maxPeople')}>
             <StyledMinusIcon />
@@ -88,7 +110,7 @@ export default function AccommodationCountInfo() {
         </StyledCounterContainer>
       </StyledItemContainer>
       <StyledItemContainer>
-        <div>침실</div>
+        <StyledItemName>침실</StyledItemName>
         <StyledCounterContainer>
           <StyledCounterBtn disabled={isDisabled.bedroomCount} onClick={handleMinusOnClick('bedroomCount')}>
             <StyledMinusIcon />
@@ -100,7 +122,7 @@ export default function AccommodationCountInfo() {
         </StyledCounterContainer>
       </StyledItemContainer>
       <StyledItemContainer>
-        <div>침대</div>
+        <StyledItemName>침대</StyledItemName>
         <StyledCounterContainer>
           <StyledCounterBtn disabled={isDisabled.bedCount} onClick={handleMinusOnClick('bedCount')}>
             <StyledMinusIcon />
@@ -112,7 +134,7 @@ export default function AccommodationCountInfo() {
         </StyledCounterContainer>
       </StyledItemContainer>
       <StyledItemContainer>
-        <div>욕실</div>
+        <StyledItemName>욕실</StyledItemName>
         <StyledCounterContainer>
           <StyledCounterBtn disabled={isDisabled.bathroomCount} onClick={handleMinusOnClick('bathroomCount')}>
             <StyledMinusIcon />
@@ -123,16 +145,28 @@ export default function AccommodationCountInfo() {
           </StyledCounterBtn>
         </StyledCounterContainer>
       </StyledItemContainer>
-    </>
+    </StyledContentDiv>
   );
 }
 
+const StyledContentDiv = styled.div`
+  width: 600px;
+`;
+
 const StyledItemContainer = styled.div`
-  width: 400px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 30px 0;
+
+  & + & {
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+  }
+`;
+
+const StyledItemName = styled.span`
+  font-size: 18px;
 `;
 
 const StyledCounterContainer = styled.div`

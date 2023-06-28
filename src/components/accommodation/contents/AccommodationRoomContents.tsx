@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import AccommodationRoomItem from './AccommodationRoomItem';
 import { accommodationState } from '../../../recoil/atoms';
 import ContentsTitle from './ContentsTitle';
@@ -8,7 +8,7 @@ import ContentsSubText from './ContentsSubText';
 import AccommodationAddRoomItemButton from './AccommodationAddRoomItemButton';
 
 export default function AccommodationRoomContents() {
-  const [accommodation, setAccommodation] = useRecoilState(accommodationState);
+  const accommodation = useRecoilValue(accommodationState);
 
   return (
     <StyledFlexDiv>

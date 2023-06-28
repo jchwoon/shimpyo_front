@@ -1,6 +1,6 @@
-export const PAGE_NUMBERS = [5, 3, 4, 3];
+export const PAGE_NUMBERS = [5, 5, 2, 2];
 
-export const ALL_STEP_NUMBER = 15;
+export const ALL_STEP_NUMBER = 14;
 
 export interface Room {
   name: string;
@@ -23,4 +23,9 @@ export interface Accommodation {
   room: Room[];
   address: { postCode: string; sido: string; sigungu: string; fullAddress: string; lat: number; lng: number };
   contents: string;
+}
+
+export interface ImageItem {
+  image?: string;
+  isFocused: boolean;
 }

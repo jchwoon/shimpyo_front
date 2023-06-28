@@ -10,7 +10,9 @@ export default function StepFreePass({ children }: StepLimitPassProps) {
   const [isPassed, setIsPassed] = useRecoilState(isPassedState);
 
   useEffect(() => {
-    setIsPassed(true);
+    if (!isPassed) {
+      setIsPassed(true);
+    }
   }, []);
 
   return <div>{children}</div>;
