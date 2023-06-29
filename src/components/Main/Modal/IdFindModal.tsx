@@ -1,14 +1,14 @@
 import { useRecoilState } from 'recoil';
 import Modal from '../../shared/Modal';
-import { idFindModalAtom } from '../../../recoil/atoms';
+import { idFindModalAtom } from '../../../recoil/modalAtoms';
 import styled from 'styled-components';
 import Input from '../../shared/UI/Input';
-import { StyleBody } from './JoinModal';
+import { StyleBody } from '../../shared/Modal/JoinModal';
 import Button from '../../shared/UI/Button';
 import ColorButton from '../../shared/UI/ColorButton';
 import { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import useHttpRequest from '../../../hooks/useHttpRequest';
-import { FIND_EMAIL_API_PATH } from '../../../constants/api';
+import { FIND_EMAIL_API_PATH } from '../../../constants/api/userApi';
 import usePhoneCertification from '../../../hooks/usePhoneCertification';
 
 interface IEmailData {
@@ -53,7 +53,7 @@ export default function IdFindModal() {
   const getEmailValueHandler = async () => {
     const isCodeOk = handleSubmitConfirmNumber();
     if (!isCodeOk) return;
-    await emailSendRequest({ url: FIND_EMAIL_API_PATH, method: 'POST', body: { phoneNumber: phoneValue } });
+    await emailSendRequest({ url: FIND_EMAIL_API_PATH, body: { phoneNumber: phoneValue } });
   };
 
   const initialState = () => {

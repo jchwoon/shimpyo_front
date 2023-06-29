@@ -1,20 +1,14 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import Modal from '../../shared/Modal';
 import { useState, useEffect } from 'react';
-import {
-  additionalInfoModalAtom,
-  emailValueAtom,
-  loginModalAtom,
-  nicknameValueAtom,
-  passwordValueAtom,
-  phoneValueAtom,
-} from '../../../recoil/atoms';
+import { additionalInfoModalAtom, loginModalAtom } from '../../../recoil/modalAtoms';
+import { emailValueAtom, nicknameValueAtom, passwordValueAtom, phoneValueAtom } from '../../../recoil/userAtoms';
 import styled from 'styled-components';
 import NicknameInput from '../Input/NicknameInput';
 import ColorButton from '../../shared/UI/ColorButton';
 import PhoneInput from '../Input/PhoneInput';
 import useHttpRequest from '../../../hooks/useHttpRequest';
-import { JOIN_API_PATH } from '../../../constants/api';
+import { JOIN_API_PATH } from '../../../constants/api/userApi';
 
 export default function AdditionalInfoModal() {
   const { isLoading, responseData, sendRequest } = useHttpRequest();

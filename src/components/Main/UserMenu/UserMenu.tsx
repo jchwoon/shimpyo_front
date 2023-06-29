@@ -6,7 +6,8 @@ import Divider from '@mui/material/Divider';
 import { CustomizedLoginButton, CustomizedMenuIcon, CustomizedAccountCircleIcon } from './UserMenu.style';
 import Typography from '@mui/material/Typography';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { joinModalAtom, loginModalAtom, loginStateAtom } from '../../../recoil/atoms';
+import { joinModalAtom, loginModalAtom } from '../../../recoil/modalAtoms';
+import { loginStateAtom } from '../../../recoil/userAtoms';
 import useLogout from '../../../hooks/useLogout';
 import { useNavigate } from 'react-router';
 
@@ -91,7 +92,7 @@ export default function CustomizedMenus() {
             <MenuItem
               onClick={() => {
                 handleClose();
-                navigation('/reservation');
+                navigation('/reservations');
               }}
               disableRipple
             >
@@ -102,7 +103,7 @@ export default function CustomizedMenus() {
             <MenuItem
               onClick={() => {
                 handleClose();
-                navigation('/interest_list');
+                navigation('/interest_lists');
               }}
               disableRipple
             >

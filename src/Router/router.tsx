@@ -12,6 +12,7 @@ const NotFound = lazy(() => import('../pages/404'));
 const Reservation = lazy(() => import('../pages/Reservation'));
 const Interest = lazy(() => import('../pages/Interest'));
 const SocialAddInfo = lazy(() => import('../pages/SocialAddInfo'));
+const ReservationDetail = lazy(() => import('../pages/ReservationDetail'));
 
 const router = createBrowserRouter([
   {
@@ -44,15 +45,28 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: 'reservation',
-        element: (
-          <Suspense fallback={<Loading />}>
-            <Reservation />
-          </Suspense>
-        ),
+        path: 'reservations',
+        children: [
+          {
+            path: '',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <Reservation />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'detail',
+            element: (
+              <Suspense fallback={<Loading />}>
+                <ReservationDetail />
+              </Suspense>
+            ),
+          },
+        ],
       },
       {
-        path: 'interest_list',
+        path: 'interest_lists',
         element: (
           <Suspense fallback={<Loading />}>
             <Interest />

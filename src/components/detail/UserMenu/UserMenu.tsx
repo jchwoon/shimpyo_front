@@ -7,7 +7,7 @@ import { CustomizedLoginButton, CustomizedMenuIcon, CustomizedAccountCircleIcon 
 import Typography from '@mui/material/Typography';
 import zIndex from '@mui/material/styles/zIndex';
 import { useSetRecoilState } from 'recoil';
-import { joinModalAtom, loginModalAtom } from '../../../recoil/atoms';
+import { loginModalAtom, joinModalAtom } from '../../../recoil/modalAtoms';
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu

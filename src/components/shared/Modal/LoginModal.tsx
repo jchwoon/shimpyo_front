@@ -1,23 +1,18 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import Modal from '../../shared/Modal';
-import { useRef, useEffect, useState } from 'react';
-import {
-  accessTokenAtom,
-  idFindModalAtom,
-  joinModalAtom,
-  loginModalAtom,
-  loginStateAtom,
-  passwordFindModalAtom,
-} from '../../../recoil/atoms';
+import Modal from '../Modal';
+import { useRef, useEffect, useState, KeyboardEvent } from 'react';
+import { idFindModalAtom, joinModalAtom, loginModalAtom, passwordFindModalAtom } from '../../../recoil/modalAtoms';
+import { loginStateAtom, accessTokenAtom } from '../../../recoil/userAtoms';
 import styled from 'styled-components';
 import { StyleBody, StyleFooter, StyleSwitchToLoginButton } from './JoinModal';
-import ColorButton from '../../shared/UI/ColorButton';
+import ColorButton from '../UI/ColorButton';
 import useHttpRequest from '../../../hooks/useHttpRequest';
-import Input from '../../shared/UI/Input';
-import NaverLogin from '../SocialLogin/NaverLogin';
-import GoogleSocialLogin from '../SocialLogin/GoogleSocialLogin';
-import KakaoLogin from '../SocialLogin/KakaoLogin';
-import { LOGIN_API_PATH } from '../../../constants/api';
+import Input from '../UI/Input';
+
+import { LOGIN_API_PATH } from '../../../constants/api/userApi';
+import KakaoLogin from '../../Main/SocialLogin/KakaoLogin';
+import NaverLogin from '../../Main/SocialLogin/NaverLogin';
+import GoogleSocialLogin from '../../Main/SocialLogin/GoogleSocialLogin';
 
 interface ResultData {
   accessToken: string;
@@ -50,6 +45,12 @@ export default function LoginModal() {
     });
   };
 
+  const submitHandler = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Enter') return;
+
+    handleLoginButtonClick();
+  };
+
   const initialState = () => {
     setIsLoginError(false);
     setLoginErrorMessage('');
@@ -78,7 +79,7 @@ export default function LoginModal() {
 
   const body = (
     <>
-      <StyleLoginBody>
+      <StyleLoginBody onKeyUp={submitHandler}>
         <Input ref={emailRef} placeholder="이메일" type="text" />
         <Input ref={passwordRef} placeholder="비밀번호" type="password" />
         {isLoginError && <StyleError>{loginErrorMessage}</StyleError>}
