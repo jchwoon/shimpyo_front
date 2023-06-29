@@ -11,8 +11,10 @@ import MobileNavbarTheme from '../components/Main/OverrideTheme/MobileNavbarThem
 
 import { useState, useEffect } from 'react';
 
-import Navbar from '../components/Main/Navbar/Navbar';
+// import Navbar from '../components/Main/Navbar/Navbar';
 import MobileNavbar from '../components/Main/MobileNavbar/MobileNavbar';
+
+import Navbar from '../components/shared/Navbar/Navbar';
 
 import { useRecoilState } from 'recoil';
 import { Height, Display, Change } from '../recoil/atoms';
