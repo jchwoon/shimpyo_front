@@ -30,11 +30,12 @@ import { Card } from '@mui/material';
 
 export const CustomizedCard = styled(Card)`
 height: 150px;
-width: calc(100% - 50px);
+width: calc(100% - 40px);
 display: flex; 
 flex-direction: row; 
-// box-shadow: none;
+box-shadow: none;
 position: absolute;
+// position: relative;
 align-items: center;
 border-radius: 10px;
 padding-left: 15px;

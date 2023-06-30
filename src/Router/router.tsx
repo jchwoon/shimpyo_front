@@ -11,7 +11,6 @@ const NotFound = lazy(() => import('../pages/404'));
 const Reservation = lazy(() => import('../pages/Reservation'));
 const Interest = lazy(() => import('../pages/Interest'));
 const SocialAddInfo = lazy(() => import('../pages/SocialAddInfo'));
-const Pay = lazy(() => import('../pages/Pay'));
 
 const router = createBrowserRouter([
   {
@@ -40,14 +39,6 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Detail />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'pay',
-        element: (
-          <Suspense fallback={<Loading />}>
-            <Pay />
           </Suspense>
         ),
       },

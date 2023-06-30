@@ -115,6 +115,11 @@ export const loginStateAtom = atom<boolean>({
   default: false,
 });
 
+export const activeRoom = atom<string | null>({
+  key: 'activeRoom',
+  default: null,
+});
+
 export const activeRoomPrice = atom<number | null>({
   key: 'activeRoomPrice',
   default: null,

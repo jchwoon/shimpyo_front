@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
-import { Typography, Button, IconButton } from '@mui/material';
+import { Typography, Button, IconButton, Card } from '@mui/material';
 import styled from '@emotion/styled';
 
 import { useRecoilValue, useRecoilState } from "recoil";
 import {
+  activeRoom,
   activeRoomPrice,
   activeRoomName,
   FirstPickedDate,
@@ -26,8 +27,16 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 
 import ClearIcon from '@mui/icons-material/Clear';
 
-export default function NewSideBox() {
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
 
+import Backdrop from '@mui/material/Backdrop';
+import PaymentInfoBox from '../../Pay/PaymentInfoBox';
+
+import Box from '@mui/material/Box';
+
+export default function NewSideBox() {
+  const room = useRecoilValue(activeRoom)
   const price = useRecoilValue(activeRoomPrice)
   const Name = useRecoilValue(activeRoomName)
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
@@ -60,15 +69,31 @@ export default function NewSideBox() {
     setInfantGuestNumber(0);
   };
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    // bgcolor: 'background.paper',
+    // border: '2px solid #000',
+    // boxShadow: 24,
+    p: 4,
+  };
+
   return (
     <Main >
       <MainTitle>예약</MainTitle>
       <div style={{ paddingBottom: "15px" }}>
-        {price && Name ?
+        {room ?
           <RoomInfo>
             <Typography fontFamily='Noto Sans KR'>{Name}</Typography>
             <div style={{ display: "flex", alignItems: "flex-end" }}>
-              <Typography fontFamily='Noto Sans KR' fontWeight="500">₩ {price.toLocaleString()}</Typography>
+              <Typography fontFamily='Noto Sans KR' fontWeight="500">₩ {price ? price.toLocaleString() : null}</Typography>
               <Typography fontFamily='Noto Sans KR' fontWeight="300" fontSize="12px">/박</Typography>
             </div>
           </RoomInfo>
@@ -136,9 +161,30 @@ export default function NewSideBox() {
         </CutomizedAccordionDetails>
       </CustomizedGuestAccordion>
 
-      <BookingBtn disabled={!Name || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} >
+      <BookingBtn disabled={!Name || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} >
         <Typography fontFamily='Noto Sans KR' fontSize="17px">예약</Typography>
       </BookingBtn>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+
+        <Fade in={open}>
+          <Box sx={style}>
+            <PaymentInfoBox checkInDate={firstPickedDate} checkOutDate={secondPickedDate} price={price} />
+          </Box>
+        </Fade>
+
+      </Modal>
 
       {
         price ? DaysDifference ?
@@ -225,19 +271,15 @@ padding-left: 0px;
 padding-right:0px;
 `
 
-
-const Main = styled.div`
+const Main = styled(Card)`
 display:flex;
 flex-direction: column;
 align-self:flex-start;
   position: sticky;
   width: 330px;
   top: 100px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
   border-radius: 12px;
   padding: 24px;
-//   margin-bottom: 42px;
-//   margin-left: 30px;
   margin: 0px 30px 40px 30px;
   @media screen and (max-width: 750px) {
     position: relative;
@@ -247,66 +289,11 @@ align-self:flex-start;
     box-shadow: none;
   }
 `;
+
 const RoomInfo = styled.div`
 display:flex;
 flex-direction:row;
 justify-content: space-between;
-`;
-
-
-const CheckContainer = styled.div`
-  position: relative;
-  width: 100%;
-  border: 1px solid #c5c5c5;
-  border-radius: 12px;
-  cursor: pointer;
-`;
-
-interface ICheckInOutBox {
-  borderRight?: string;
-}
-
-const CheckInOutBox = styled.div<ICheckInOutBox>`
-  width: 50%;
-  border-right: ${p => p.borderRight ?? ''};
-  position: relative;
-`;
-const CheckCalendarBox = styled.div`
-  display: flex;
-`;
-const CheckTitle = styled(Typography)`
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  font-size: 10px;
-  font-family: 'Noto Sans KR';
-  color: #a2a2a2;
-`;
-
-const CheckDate = styled(Typography)`
-  padding: 26px 12px 10px 12px;
-  font-family: 'Noto Sans KR';
-`;
-
-const People = styled.div`
-  position: relative;
-  width: 100%;
-`;
-const PeopleTitle = styled(Typography)`
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  font-size: 10px;
-  font-family: 'Noto Sans KR';
-  color: #a2a2a2;
-`;
-
-const PeopleDetail = styled(Typography)`
-  display: flex;
-  padding: 26px 12px 10px 12px;
-  border-top: 1px solid black;
-  justify-content: space-between;
-  font-family: 'Noto Sans KR'
 `;
 
 const BookingBtn = styled(Button)`
@@ -327,8 +314,8 @@ color: #ffffff;
     background-color: #00959c;
     color:#d9d9d9;
   }
-
 `;
+
 const BookingInfo = styled.div``;
 
 const BookingNotice = styled.div`

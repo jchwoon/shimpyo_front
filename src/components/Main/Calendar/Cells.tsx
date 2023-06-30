@@ -137,7 +137,7 @@ export const Cells: React.FC<HeaderProps> = ({ currentDate }) => {
                         style={{ fontSize: "12px" }}
                         className={`${moment(day).isSame(moment(monthStart), 'month')
                             ?
-                            moment(cloneDay).isAfter(moment())
+                            moment(cloneDay).isSameOrAfter(moment(), 'day')
                                 ?
                                 "visible"
                                 :

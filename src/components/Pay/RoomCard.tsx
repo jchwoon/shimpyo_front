@@ -19,13 +19,18 @@ interface RommCardProps {
     shower: number;
     person: number;
     price: number;
-    isHovered: boolean
+    isHovered: boolean;
 }
 
 
 export const RoomCard: React.FC<RommCardProps> = ({ name, doubleBed, bedroom, shower, person, price, isHovered }) => {
     return (
-        <CustomizedCard sx={{ top: isHovered ? "120px" : "50px" }}>
+        <CustomizedCard
+            sx={{
+                top: isHovered ? "150px" : "40px",
+                zIndex: 1
+            }}
+        >
             <CardMedia
                 component="div"
                 sx={{
