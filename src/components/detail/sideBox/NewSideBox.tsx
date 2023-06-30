@@ -85,6 +85,9 @@ export default function NewSideBox() {
     p: 4,
   };
 
+  const customizedSearchButton = document.getElementsByClassName("activeRoomCard")
+  // console.log("activeRoomCard:", customizedSearchButton[0].props.price)
+
   return (
     <Main >
       <MainTitle>예약</MainTitle>

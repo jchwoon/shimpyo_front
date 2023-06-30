@@ -7,8 +7,9 @@ import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
 import { CustomizedBottomNavigation } from './MobileFooter.style';
 
-import logo2 from '../../../logo2.svg';
-import logo3 from '../../../logo3.svg';
+// import logo2 from '../../../../public/images/logo2.svg'
+// import logo3 from '../../../../public/images/logo2.svg'
+
 import { useSetRecoilState } from 'recoil';
 import { loginModalAtom } from '../../../recoil/atoms';
 
@@ -38,9 +39,9 @@ export default function MobileFooter({ defaultValue }: MobileFooterProps) {
             }
             icon={
               value === 0 ? (
-                <img src={logo2} alt="website logo" style={{ width: '23px', height: '23px' }} />
+                <img src="images/logo2.svg" alt="website logo" style={{ width: '23px', height: '23px' }} />
               ) : (
-                <img src={logo3} alt="website logo" style={{ width: '23px', height: '23px' }} />
+                <img src="images/logo3.svg" alt="website logo" style={{ width: '23px', height: '23px' }} />
               )
             }
           />

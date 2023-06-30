@@ -15,7 +15,6 @@ import { activeRoom } from '../../../recoil/atoms';
 
 export default function SideContainer() {
 
-  // const [activeCard, setActiveCard] = useState<string | null>(null);
   const [activeRecoilCard, setActiveRecoilCard] = useRecoilState(activeRoom)
 
   const handleCardClick = (cardName: string) => {
@@ -110,3 +109,11 @@ const MainTitle = styled(Typography)`
   font-weight: 600;
   font-family: Noto Sans KR;
 `;
+
+  // const [activeCard, setActiveCard] = useState<string | null>(null);
+
+  // const handleCardClick = (cardName: string) => {
+  //   if (activeCard === null) { setActiveCard(cardName) }
+  //   else if (activeCard === cardName) { setActiveCard(null) }
+  //   else if (activeCard !== cardName) { setActiveCard(cardName) }
+  // };

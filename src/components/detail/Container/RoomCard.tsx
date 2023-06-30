@@ -14,6 +14,7 @@ import { Typography } from '@mui/material';
 
 import { useRecoilState } from "recoil";
 import { activeRoomPrice, activeRoomName } from '../../../recoil/atoms';
+import { useEffect } from 'react';
 
 
 interface RommCardProps {
@@ -32,14 +33,19 @@ export const RoomCard: React.FC<RommCardProps> = ({ name, doubleBed, bedroom, sh
 
     const [roomPrice, setRoomPrice] = useRecoilState(activeRoomPrice);
     const [roomName, setRoomName] = useRecoilState(activeRoomName);
-    if (active) {
-        setRoomPrice(price)
-        setRoomName(name)
-    }
+    useEffect(() => {
+        if (active) {
+            setRoomPrice(price);
+            setRoomName(name);
+        }
+    }, [active]);
+
 
     return (
         <div>
-            <CustomizedCard onClick={onClick} active={active}>
+            <CustomizedCard onClick={onClick}
+                active={active}
+                className={active ? "activeRoomCard" : ""}>
                 <CardMedia
                     component="div"
                     sx={{

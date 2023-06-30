@@ -6,7 +6,9 @@ import IconButton from '@mui/material/IconButton';
 import { Box } from '@mui/material';
 
 
-export const CustomizedCard = styled.div<{ active: boolean }>`
+export const CustomizedCard = styled.div
+  <{ active: boolean }>
+  `
 height: 100%;
 display: flex; 
 flex-direction: row; 

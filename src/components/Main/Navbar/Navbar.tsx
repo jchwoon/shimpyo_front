@@ -26,7 +26,7 @@ import {
   CustomizedDeleteIconButtonInGuestCount,
   CustomizedWhereActiveSearchButton,
 } from './Navbar.styled';
-import logo2 from '../../../logo2.svg';
+import logo2 from '../../../../public/images/logo2.svg'
 import { Divider, ClickAwayListener, Collapse } from '@mui/material';
 import CustomizedMenus from '../UserMenu/UserMenu';
 import { useRecoilState } from 'recoil';
@@ -220,7 +220,7 @@ export default function Navbar() {
     <CustomizedAppBar elevation={0} appbarheight={appbarheight}>
       <CustomizedToolBar>
         <LogoButton disableRipple>
-          <img src={logo2} alt="website logo" style={{ height: 13, marginBottom: 5 }} />
+          <img src="images/logo2.svg" alt="website logo" style={{ height: 13, marginBottom: 5 }} />
           <CustomizedLogoTypography>쉼표</CustomizedLogoTypography>
         </LogoButton>
         <CustomizedSearchButtonWrapperDiv change={change.toString()}>
