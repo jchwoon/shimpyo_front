@@ -9,10 +9,10 @@ const Main = lazy(() => import('../pages/Main'));
 const Detail = lazy(() => import('../pages/detail'));
 const Accommodation = lazy(() => import('../pages/Accommodation'));
 const NotFound = lazy(() => import('../pages/404'));
-const Reservation = lazy(() => import('../pages/Reservation'));
+const CheckReservation = lazy(() => import('../pages/CheckReservation'));
 const Interest = lazy(() => import('../pages/Interest'));
 const SocialAddInfo = lazy(() => import('../pages/SocialAddInfo'));
-const ReservationDetail = lazy(() => import('../pages/ReservationDetail'));
+const CheckReservationDetail = lazy(() => import('../pages/CheckReservationDetail'));
 
 const router = createBrowserRouter([
   {
@@ -46,20 +46,22 @@ const router = createBrowserRouter([
       },
       {
         path: 'reservations',
+        errorElement: <NotFound />,
         children: [
           {
             path: '',
             element: (
               <Suspense fallback={<Loading />}>
-                <Reservation />
+                <CheckReservation />
               </Suspense>
             ),
+            errorElement: <NotFound />,
           },
           {
             path: 'detail',
             element: (
               <Suspense fallback={<Loading />}>
-                <ReservationDetail />
+                <CheckReservationDetail />
               </Suspense>
             ),
           },

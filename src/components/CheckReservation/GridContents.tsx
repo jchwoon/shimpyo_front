@@ -29,7 +29,7 @@ export default function GridContents({ contentsArray, visited }: GridContentsPro
     <>
       {contentsArray?.map(item => (
         <div key={item.reservationId} style={{ display: 'flex', flexDirection: 'column' }}>
-          <Link to={'detail'}>
+          <Link to={`detail?reservationId=${item.reservationId}`}>
             <StyleGridItem>
               <StyleAccommodation
                 loading="lazy"

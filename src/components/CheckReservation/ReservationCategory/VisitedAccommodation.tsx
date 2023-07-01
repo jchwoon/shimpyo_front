@@ -3,7 +3,6 @@ import GridContents from '../GridContents';
 import HeaderContents from '../HeaderContents';
 import ReservationCategory from '../ReservationCategory';
 import styled from 'styled-components';
-import useReservationCategoryToggle from '../../../hooks/useReservationCategoryToggle';
 import { useSearchParams } from 'react-router-dom';
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import usePagination from '../../../hooks/usePagination';
@@ -30,7 +29,7 @@ interface IResultData {
 
 export default function VisitedAccommodation() {
   const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
-  const { isOpen, toggleShowButton } = useReservationCategoryToggle('visited');
+  // const { isOpen, toggleShowButton } = useReservationCategoryToggle('visited');
 
   const [totalPage, setTotalPage] = useState<number>(3);
   const [totalItem, setTotalItem] = useState<number>(25);
@@ -54,6 +53,7 @@ export default function VisitedAccommodation() {
     searchParams,
     setCurrentPage,
     setSearchParams,
+    totalPage,
   });
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function VisitedAccommodation() {
     const getData = async () => {
       if (!currentPage) return;
       if (currentPage > totalPage || currentPage <= 0) return;
-      await sendRequest({ url: `/user/reservations?page=${currentPage}` });
+      await sendRequest({ url: `/user/reservations?page=${currentPage}&reservationStatus=FINISHED` });
     };
 
     getData();
@@ -79,25 +79,15 @@ export default function VisitedAccommodation() {
 
   const header = (
     <StyleHeaderBox>
-      <HeaderContents
-        isOpen={isOpen}
-        onClick={() => {
-          toggleShowButton();
-        }}
-        title="이용 내역"
-      />
-      <span style={{ position: 'absolute', left: '190px', top: '20px' }}>{`(${totalItem})`}</span>
+      <HeaderContents title="이용 내역" />
+      <span style={{ position: 'absolute', left: '130px', top: '18px' }}>{`(${totalItem})`}</span>
     </StyleHeaderBox>
   );
 
   const main = (
-    <>
-      {isOpen && (
-        <StyleGridBox>
-          <GridContents visited contentsArray={contentsArray} />
-        </StyleGridBox>
-      )}
-    </>
+    <StyleGridBox>
+      <GridContents visited contentsArray={contentsArray} />
+    </StyleGridBox>
   );
 
   const footer = (
@@ -106,7 +96,6 @@ export default function VisitedAccommodation() {
       changeNextPage={changeNextPage}
       changePrevPage={changePrevPage}
       currentPage={currentPage}
-      isOpen={isOpen}
       totalPage={totalPage}
     />
   );

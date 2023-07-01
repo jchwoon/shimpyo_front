@@ -3,37 +3,18 @@ import Main from '../layout/Main';
 import Reservations from './ReservationCategory/Reservations';
 import VisitedAccommodation from './ReservationCategory/VisitedAccommodation';
 import ReservationCancel from './ReservationCategory/ReservationCancel';
-import useAuthorizedRequest from '../../hooks/useAuthorizedRequest';
-import { useEffect, useState } from 'react';
-
-type Item = {
-  title: string;
-  checkIn: Date;
-  checkOut: Date;
-};
-
-interface IResultData {
-  ContentsArray: Item[];
-}
+import { useSearchParams } from 'react-router-dom';
 
 export default function ReservationMain() {
-  const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
-  const [array, setArray] = useState<Item[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    if (!responseData) return;
-
-    if (responseData.result) {
-      setArray(responseData.result.ContentsArray);
-    }
-  }, [responseData]);
   return (
     <Main>
       <StyleListBox>
         <StyleFlexBox>
-          <Reservations />
-          <VisitedAccommodation />
-          <ReservationCancel />
+          {searchParams.get('category') === 'reservation' && <Reservations />}
+          {searchParams.get('category') === 'visited' && <VisitedAccommodation />}
+          {searchParams.get('category') === 'cancel' && <ReservationCancel />}
         </StyleFlexBox>
       </StyleListBox>
     </Main>

@@ -9,9 +9,10 @@ interface LocationMapProps {
 interface sizeProps {
   width: string;
   height: string;
+  radius?: string;
 }
 
-export default function LocationMap({ latitude, longitude, width, height }: LocationMapProps & sizeProps) {
+export default function LocationMap({ latitude, longitude, width, height, radius }: LocationMapProps & sizeProps) {
   useEffect(() => {
     const script = document.createElement('script');
     script.async = true;
@@ -29,7 +30,7 @@ export default function LocationMap({ latitude, longitude, width, height }: Loca
 
         const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);
 
-        const imageSrc = 'marker.png';
+        const imageSrc = '/marker.png';
         const imageOption = { offset: new window.kakao.maps.Point(27, 64) };
         const imageSize = new window.kakao.maps.Size(64, 64);
         const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -48,10 +49,9 @@ export default function LocationMap({ latitude, longitude, width, height }: Loca
     };
   }, [latitude, longitude]);
 
-  return <MapContainer id="map" width={width} height={height}></MapContainer>;
+  return <MapContainer id="map" radius={radius} width={width} height={height}></MapContainer>;
 }
 
 const MapContainer = styled.div<sizeProps>`
-  ${({ width, height }) => `width: ${width}; height: ${height}`};
-  border-radius: 20px;
+  ${({ width, height, radius }) => `width: ${width}; height: ${height}; borderRadius:${radius}`};
 `;

@@ -10,7 +10,7 @@ export default function useReservationCategoryToggle(category: string) {
 
     if (searchParams.get(category) === 'true') {
       setSearchParams(searchParams => {
-        searchParams.set(category, 'false');
+        searchParams.set('category', category);
         return searchParams;
       });
     } else if (searchParams.get(category) === 'false' || !searchParams.get(category)) {

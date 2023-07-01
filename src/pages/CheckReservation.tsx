@@ -1,9 +1,9 @@
 import { useRecoilValue } from 'recoil';
 import Alarm from '../components/shared/Alarm';
-import ReviewModal from '../components/Reservation/Modal/ReviewModal';
-import ReservationHeader from '../components/Reservation/ReservationHeader';
-import ReservationMain from '../components/Reservation/ReservationMain';
+import ReviewModal from '../components/CheckReservation/Modal/ReviewModal';
+import ReservationMain from '../components/CheckReservation/ReservationMain';
 import { alarmAtoms } from '../recoil/modalAtoms';
+import ReservationHeader from '../components/CheckReservation/ReservationHeader';
 
 export default function Reservation() {
   const isAlarmOpen = useRecoilValue(alarmAtoms);

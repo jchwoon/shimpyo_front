@@ -1,12 +1,9 @@
 import styled from 'styled-components';
-import Header from '../layout/Header';
-import Navbar from '../shared/Navbar/Navbar';
-import UserMenuItem from '../shared/UserMenu/UserMenuItem';
-import { useRecoilState } from 'recoil';
-import { loginStateAtom } from '../../recoil/userAtoms';
+import Header from '../../layout/Header';
+import Navbar from '../../shared/Navbar/Navbar';
+import UserMenuItem from '../../shared/UserMenu/UserMenuItem';
 
-export default function ReservationHeader() {
-  const [loginState, setLoginState] = useRecoilState(loginStateAtom);
+export default function CheckReservationDetailHeader() {
   const menuItems = (
     <div>
       <>
@@ -21,7 +18,9 @@ export default function ReservationHeader() {
   return (
     <Header>
       <FlexBox>
-        <Navbar menuItems={menuItems} logoPath="/" />
+        <Navbar logoPath="/" menuItems={menuItems}>
+          <div>hi</div>
+        </Navbar>
       </FlexBox>
     </Header>
   );

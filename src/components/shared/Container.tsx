@@ -11,6 +11,7 @@ export default function Container({ children }: ContainerProps): JSX.Element {
 
 const ContainerBox = styled.div`
   width: auto;
+  padding: 0 1rem;
 
   @media only screen and (min-width: 640px) {
     padding: 0 1rem;

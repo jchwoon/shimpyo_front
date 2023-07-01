@@ -92,7 +92,7 @@ export default function CustomizedMenus() {
             <MenuItem
               onClick={() => {
                 handleClose();
-                navigation('/reservations');
+                navigation('/reservations?category=reservation');
               }}
               disableRipple
             >

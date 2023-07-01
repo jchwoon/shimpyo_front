@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import { IconType } from 'react-icons/lib';
 import styled from 'styled-components';
 
@@ -5,12 +6,13 @@ interface MenuItemProps {
   label: string;
   bold?: boolean;
   icon?: IconType;
-  onClick?: () => void;
+  onClick?: (e: MouseEvent<HTMLDivElement>) => void;
+  className?: string;
 }
 
-export default function MenuItem({ label, bold, icon: Icon, onClick }: MenuItemProps) {
+export default function MenuItem({ label, bold, icon: Icon, onClick, className }: MenuItemProps) {
   return (
-    <StyleItem onClick={onClick} $bold={bold}>
+    <StyleItem className={className} onClick={onClick} $bold={bold}>
       {Icon && <Icon size={25} />}
       <div>{label}</div>
     </StyleItem>
