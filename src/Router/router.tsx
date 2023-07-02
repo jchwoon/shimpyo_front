@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 import App from '../App';
 import Loading from '../components/shared/Loading';
 import SocialLogin from '../pages/SocialLogin';
+import AuthCheck from '../components/AuthCheck/AuthCheck';
 
 const Hosting = lazy(() => import('../pages/Hosting'));
 const Main = lazy(() => import('../pages/Main'));
@@ -14,6 +15,9 @@ const Interest = lazy(() => import('../pages/Interest'));
 const SocialAddInfo = lazy(() => import('../pages/SocialAddInfo'));
 const CheckReservationDetail = lazy(() => import('../pages/CheckReservationDetail'));
 
+const onlyLogin = 'ONLY_LOGIN';
+const onlyLogout = 'ONLY_LOGOUT';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -24,7 +28,7 @@ const router = createBrowserRouter([
         path: '',
         element: (
           <Suspense fallback={<Loading />}>
-            <Main />
+            <AuthCheck Component={Main} option={null} />
           </Suspense>
         ),
       },
@@ -32,7 +36,7 @@ const router = createBrowserRouter([
         path: 'hosting',
         element: (
           <Suspense fallback={<Loading />}>
-            <Hosting />
+            <AuthCheck Component={Hosting} option={onlyLogin} />
           </Suspense>
         ),
       },
@@ -40,28 +44,26 @@ const router = createBrowserRouter([
         path: 'detail',
         element: (
           <Suspense fallback={<Loading />}>
-            <Detail />
+            <AuthCheck Component={Detail} option={null} />
           </Suspense>
         ),
       },
       {
         path: 'reservations',
-        errorElement: <NotFound />,
         children: [
           {
             path: '',
             element: (
               <Suspense fallback={<Loading />}>
-                <CheckReservation />
+                <AuthCheck Component={CheckReservation} option={onlyLogin} />
               </Suspense>
             ),
-            errorElement: <NotFound />,
           },
           {
             path: 'detail',
             element: (
               <Suspense fallback={<Loading />}>
-                <CheckReservationDetail />
+                <AuthCheck Component={CheckReservationDetail} option={onlyLogin} />
               </Suspense>
             ),
           },
@@ -71,7 +73,7 @@ const router = createBrowserRouter([
         path: 'interest_lists',
         element: (
           <Suspense fallback={<Loading />}>
-            <Interest />
+            <AuthCheck Component={Interest} option={onlyLogin} />
           </Suspense>
         ),
       },
@@ -80,13 +82,13 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'login',
-            element: <SocialLogin />,
+            element: <AuthCheck Component={SocialLogin} option={onlyLogout} />,
           },
           {
             path: 'add_info',
             element: (
               <Suspense fallback={<Loading />}>
-                <SocialAddInfo />
+                <AuthCheck Component={SocialAddInfo} option={onlyLogout} />
               </Suspense>
             ),
           },
@@ -94,7 +96,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'accommodation',
-        element: <Accommodation />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck Component={Accommodation} option={onlyLogin} />
+          </Suspense>
+        ),
       },
     ],
   },

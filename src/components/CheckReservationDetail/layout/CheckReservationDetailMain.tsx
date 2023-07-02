@@ -68,7 +68,7 @@ export default function CheckReservationDetailMain() {
       setDetailData(responseData.result);
     }
   }, []);
-
+  console.log('main');
   useEffect(() => {
     const getData = async () => {
       await sendRequest({ url: `/user/reservations/${searchParams.get('reservationId')}` });

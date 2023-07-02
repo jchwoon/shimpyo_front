@@ -5,7 +5,6 @@ import SectionListBox from '../../ReUse/SectionListBox';
 import Section from '../../ReUse/Section';
 import { BsHouseDoor } from 'react-icons/bs';
 import { GrUserManager } from 'react-icons/gr';
-import { hostname } from 'os';
 
 interface ImageSectionProps {
   imageList: string[];
