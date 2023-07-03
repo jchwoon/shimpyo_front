@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import { Accommodation, ImageItem } from '../constants/accommodation';
 
 export const Height = atom<string>({
   key: 'Height',
@@ -50,71 +51,6 @@ export const PlaceholderChanged = atom<boolean>({
   default: false,
 });
 
-export const joinModalAtom = atom<boolean>({
-  key: 'joinModalAtom',
-  default: false,
-});
-
-export const additionalInfoModalAtom = atom<boolean>({
-  key: 'additionalInfoModalAtom',
-  default: false,
-});
-
-export const idFindModalAtom = atom<boolean>({
-  key: 'idFindModalAtom',
-  default: false,
-});
-
-export const passwordFindModalAtom = atom<boolean>({
-  key: 'passwordFindModalAtom',
-  default: false,
-});
-
-export const loginModalAtom = atom<boolean>({
-  key: 'loginModalAtom',
-  default: false,
-});
-
-export const passwordValueAtom = atom<string>({
-  key: 'PasswordValueState',
-  default: '',
-});
-
-export const confirmPasswordValueAtom = atom<string>({
-  key: 'confirmPasswordValueAtom',
-  default: '',
-});
-
-export const nicknameValueAtom = atom<string>({
-  key: 'nicknameValueAtom',
-  default: '',
-});
-
-export const emailValueAtom = atom<string>({
-  key: 'emailValueAtom',
-  default: '',
-});
-
-export const phoneValueAtom = atom<string>({
-  key: 'phoneValueAtom',
-  default: '',
-});
-
-export const accessTokenAtom = atom<string>({
-  key: 'accessTokenAtom',
-  default: '',
-});
-
-export const profileImageAtom = atom<string>({
-  key: 'profileImageAtom',
-  default: '',
-});
-
-export const loginStateAtom = atom<boolean>({
-  key: 'loginStateAtom',
-  default: false,
-});
-
 export const activeRoom = atom<string | null>({
   key: 'activeRoom',
   default: null,
@@ -147,11 +83,88 @@ interface PlaceType {
 export const objectPlaceholder = atom<PlaceType>({
   key: 'objectPlaceholder',
   default: {
-    description: "",
+    description: '',
     structured_formatting: {
-      main_text: "",
-      secondary_text: "",
-      main_text_matched_substrings: []
-    }
+      main_text: '',
+      secondary_text: '',
+      main_text_matched_substrings: [],
+    },
   },
+});
+export const stepState = atom<number>({
+  key: 'stepState',
+  default: 0,
+});
+
+export const accommodationState = atom<Accommodation>({
+  key: 'accommodationState',
+  default: {
+    name: '',
+    type: '',
+    option: {
+      wifi: false,
+      pc: false,
+      parking: false,
+      bbq: false,
+    },
+    room: [
+      {
+        name: '',
+        price: 0,
+        minPeople: 0,
+        maxPeople: 0,
+        bedCount: 0,
+        bedroomCount: 0,
+        bathroomCount: 0,
+        totalCount: 0,
+        checkIn: '',
+        checkOut: '',
+        imageCount: 0,
+      },
+    ],
+    address: {
+      postCode: '',
+      sido: '',
+      sigungu: '',
+      fullAddress: '',
+      lat: 0,
+      lng: 0,
+    },
+    contents: '',
+  },
+});
+
+export const isPassedState = atom<boolean>({
+  key: 'isPassedState',
+  default: false,
+});
+
+export const addressCheckState = atom<boolean>({
+  key: 'addressCheckState',
+  default: true,
+});
+
+export const errorModalState = atom<boolean>({
+  key: 'errorModalState',
+  default: false,
+});
+
+export const imageDataState = atom<FormData>({
+  key: 'imageDataState',
+  default: new FormData(),
+});
+
+export const imageListState = atom<ImageItem[]>({
+  key: 'imageListState',
+  default: [
+    { image: '', isFocused: false },
+    { image: '', isFocused: false },
+    { image: '', isFocused: false },
+    { image: '', isFocused: false },
+  ],
+});
+
+export const roomImageListState = atom<string[][]>({
+  key: 'roomImageListState',
+  default: [[]],
 });

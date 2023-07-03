@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse, Method } from 'axios';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { accessTokenAtom } from '../recoil/atoms';
+import { accessTokenAtom } from '../recoil/userAtoms';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -43,6 +43,7 @@ export default function useAuthorizedRequest<T>({ onUnauthorized }: useAuthorize
     try {
       const response: AxiosResponse = await axiosInstance({ url, method, data: body, withCredentials });
       setResponseData(response.data);
+      //리다이렉트 -> 구글쪽에서 회원 데이터가 오기까지 기다린다 -> 성공적으로 갖고 와지면 응답으로 엑세스, 리프레쉬 준다
     } catch (error: any) {
       if (error.response) {
         console.log(error);

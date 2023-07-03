@@ -1,10 +1,11 @@
 import { useRecoilState } from 'recoil';
 import { ChangeEvent, useState, useEffect, useCallback } from 'react';
 import Input from '../../shared/UI/Input';
-import { nicknameValueAtom } from '../../../recoil/atoms';
+
 import { nicknameRule } from '../../../utils/validation';
 import useHttpRequest from '../../../hooks/useHttpRequest';
-import { NICKNAME_OVERLAP_CHECK_API_PATH } from '../../../constants/api';
+import { NICKNAME_OVERLAP_CHECK_API_PATH } from '../../../constants/api/userApi';
+import { nicknameValueAtom } from '../../../recoil/userAtoms';
 
 interface nickNameInputProps {
   getValid: (valid: boolean) => void;

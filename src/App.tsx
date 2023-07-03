@@ -2,11 +2,12 @@ import './App.css';
 import './fonts.css';
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { accessTokenAtom, loginStateAtom } from './recoil/atoms';
+
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import useAuthorizedRequest from './hooks/useAuthorizedRequest';
-import { REGENERATION_REFRESH_API_PATH } from './constants/api';
+import { REGENERATION_REFRESH_API_PATH } from './constants/api/userApi';
+import { accessTokenAtom, loginStateAtom } from './recoil/userAtoms';
 
 interface ResultData {
   accessToken: string;
