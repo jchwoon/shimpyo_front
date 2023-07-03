@@ -7,7 +7,7 @@ import React from 'react';
 import MenuBar from '../UserMenu/UserMenu';
 import Container from '../Container';
 
-const CustomizedAppBar = styled(AppBar)<{ appbarheight: string }>`
+const CustomizedAppBar = styled(AppBar) <{ appbarheight: string }>`
   background-color: #fff;
 
   height: ${({ appbarheight }) => appbarheight};
@@ -25,11 +25,12 @@ interface NavbarProps {
   children?: React.ReactNode;
   menuItems: React.ReactElement;
   logoPath: string;
+  height?: string
 }
 
-export default function Navbar({ children, menuItems, logoPath }: NavbarProps) {
+export default function Navbar({ children, menuItems, logoPath, height }: NavbarProps) {
   return (
-    <CustomizedAppBar elevation={0} appbarheight={'80px'}>
+    <CustomizedAppBar elevation={0} appbarheight={height ? height : '80px'}>
       <Container>
         <CustomizedToolBar>
           <LogoButton path={logoPath} imageHeight={13} fontSize={'25px'} />

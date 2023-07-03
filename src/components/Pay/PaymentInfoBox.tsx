@@ -12,7 +12,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-
+import ColorButton from "../shared/UI/ColorButton";
 import Radio from '@mui/material/Radio';
 
 
@@ -138,9 +138,10 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
                 <TotalAmount>₩ {(TotalPrice - DiscountPrice).toLocaleString()}</TotalAmount>
             </BookingTotal>
             {/* <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}> */}
-            <BookingBtn disabled={paymentRadioSelectedValue === ''}>
+            {/* <BookingBtn disabled={paymentRadioSelectedValue === ''}>
                 <Typography fontFamily='Noto Sans KR' fontSize="17px">결제</Typography>
-            </BookingBtn>
+            </BookingBtn> */}
+            <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={() => console.log("hello")} />
             {/* </div> */}
 
         </PaymentInfoWrapper >

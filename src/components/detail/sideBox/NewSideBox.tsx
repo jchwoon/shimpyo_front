@@ -35,6 +35,8 @@ import PaymentInfoBox from '../../Pay/PaymentInfoBox';
 
 import Box from '@mui/material/Box';
 
+import ColorButton from '../../shared/UI/ColorButton';
+
 export default function NewSideBox() {
   const room = useRecoilValue(activeRoom)
   const price = useRecoilValue(activeRoomPrice)
@@ -164,9 +166,10 @@ export default function NewSideBox() {
         </CutomizedAccordionDetails>
       </CustomizedGuestAccordion>
 
-      <BookingBtn disabled={!Name || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} >
+      <ColorButton disabled={!room || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} label="예약" />
+      {/* <BookingBtn disabled={!Name || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} >
         <Typography fontFamily='Noto Sans KR' fontSize="17px">예약</Typography>
-      </BookingBtn>
+      </BookingBtn> */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
