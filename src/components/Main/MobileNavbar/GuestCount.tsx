@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { AdultGuest, ChildGuest, InfantGuest } from "../../../recoil/atoms";
+import { AdultGuest, ChildGuest, InfantGuest } from "../../../recoil/navBarAtoms";
 
 export function GuestCountAdult() {
     const [adultGuest, setAdultGuest] = useRecoilState(AdultGuest)

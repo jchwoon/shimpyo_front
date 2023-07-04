@@ -8,10 +8,9 @@ import Navbar from '../components/shared/Navbar/Navbar';
 import MobileNavbar from '../components/Main/MobileNavbar/MobileNavbar';
 import Cards from '../components/Main/Cards/Cards';
 
-import NavbarTheme from '../components/Main/OverrideTheme/NavbarTheme';
-
 import MobileNavbarTheme from '../components/Main/OverrideTheme/MobileNavbarTheme';
-import MobileFooter from '../components/Main/MobileFooter/MobileFooter';
+import NewMobileFooter from '../components/shared/MobileFooter/NewMobileFooter';
+
 import { useState, useEffect } from 'react';
 import AdditionalInfoModal from '../components/Main/Modal/AdditionalInfoModal';
 import JoinModal from '../components/shared/Modal/JoinModal';
@@ -23,11 +22,18 @@ import UserMenuItem from '../components/shared/UserMenu/UserMenuItem';
 
 import SearchBar from '../components/Main/Navbar/SearchBar'
 
-import {
-  Height,
-} from '../recoil/atoms';
+import { Height } from '../recoil/navBarAtoms';
 
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { CustomIcon } from '../components/shared/MobileFooter/CustomIcon';
+
+import { useNavigate } from 'react-router-dom';
+
+import { loginModalAtom } from '../recoil/modalAtoms';
 
 export default function Main() {
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
@@ -65,6 +71,14 @@ export default function Main() {
     };
   }, []);
 
+  const navigate = useNavigate()
+  const setLoginModal = useSetRecoilState(loginModalAtom);
+
+  const value0 = <BottomNavigationAction icon={<CustomIcon />} label="홈" onClick={() => navigate('/')} />
+  const value1 = <BottomNavigationAction icon={<FavoriteIcon />} label="관심 숙소" onClick={() => console.log("hi im value1")} />
+  const value2 = <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
+
+
   return (
     <>
       <CssBaseline />
@@ -79,9 +93,12 @@ export default function Main() {
       )}
       <Cards />
       {isLargeScreen ? null : (
-        <ThemeProvider theme={MobileNavbarTheme}>
-          <MobileFooter defaultValue={0} />
-        </ThemeProvider>
+        <NewMobileFooter
+          defaultValue={0}
+          Action0={value0}
+          Action1={value1}
+          Action2={value2}
+        />
       )}
       <LoginModal />
       <JoinModal />

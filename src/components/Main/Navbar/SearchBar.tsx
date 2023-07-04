@@ -30,6 +30,7 @@ import logo2 from '../../../../public/images/logo2.svg'
 import { Divider, ClickAwayListener, Collapse } from '@mui/material';
 import CustomizedMenus from '../UserMenu/UserMenu';
 import { useRecoilState } from 'recoil';
+
 import {
   Height,
   Display,
@@ -41,7 +42,7 @@ import {
   SecondPickedDate,
   PlaceholderChanged,
   objectPlaceholder
-} from '../../../recoil/atoms';
+} from '../../../recoil/navBarAtoms';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';

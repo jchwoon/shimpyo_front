@@ -4,7 +4,7 @@ import 'moment/locale/ko'
 import styled from '@emotion/styled';
 import { useState } from "react"
 import { useRecoilState, useRecoilValue } from "recoil";
-import { FirstPickedDate, SecondPickedDate } from "../../../recoil/atoms";
+import { FirstPickedDate, SecondPickedDate } from "../../../recoil/navBarAtoms";
 
 interface HeaderProps {
     currentDate: string;

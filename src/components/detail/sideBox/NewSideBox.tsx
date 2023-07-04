@@ -9,12 +9,15 @@ import {
   activeRoom,
   activeRoomPrice,
   activeRoomName,
-  FirstPickedDate,
-  SecondPickedDate,
+} from '../../../recoil/detailPageAtoms';
+
+import {
   AdultGuest,
   ChildGuest,
   InfantGuest,
-} from '../../../recoil/atoms';
+  FirstPickedDate,
+  SecondPickedDate,
+} from '../../../recoil/navBarAtoms';
 
 import { Calendar } from '../../Main/MobileCalendar/Calendar';
 

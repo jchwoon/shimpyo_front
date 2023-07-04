@@ -13,7 +13,7 @@ import { BsPersonPlus } from 'react-icons/bs'
 import { Typography } from '@mui/material';
 
 import { useRecoilState } from "recoil";
-import { activeRoomPrice, activeRoomName } from '../../../recoil/atoms';
+import { activeRoomPrice, activeRoomName } from '../../../recoil/detailPageAtoms';
 import { useEffect } from 'react';
 
 
