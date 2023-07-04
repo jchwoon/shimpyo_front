@@ -31,21 +31,10 @@ export default function VisitedAccommodation() {
   const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
   // const { isOpen, toggleShowButton } = useReservationCategoryToggle('visited');
 
-  const [totalPage, setTotalPage] = useState<number>(3);
-  const [totalItem, setTotalItem] = useState<number>(25);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [contentsArray, setContentsArray] = useState<ListType[]>([
-    {
-      reservationId: 1,
-      checkInDate: '2023.06.19.09',
-      houseOwnerName: '정채운',
-      houseType: '펜션',
-      checkOutDate: '2023.06.19.09',
-      houseImageUrl: '/images/image.png',
-      existReview: true,
-      houseName: '럭셔리 호텔',
-    },
-  ]);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const [totalItem, setTotalItem] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [contentsArray, setContentsArray] = useState<ListType[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const { changeClickedPage, changeNextPage, changePrevPage } = usePagination({
     category: 'visited',
@@ -70,12 +59,12 @@ export default function VisitedAccommodation() {
     const getData = async () => {
       if (!currentPage) return;
       if (currentPage > totalPage || currentPage <= 0) return;
-      await sendRequest({ url: `/user/reservations?page=${currentPage}&reservationStatus=FINISHED` });
+      await sendRequest({ url: `/user/reservations?page=${currentPage - 1}&reservationStatus=FINISHED` });
     };
 
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [currentPage, totalPage]);
 
   const header = (
     <StyleHeaderBox>

@@ -103,7 +103,7 @@ export default function CustomizedMenus() {
             <MenuItem
               onClick={() => {
                 handleClose();
-                navigation('/interest_lists');
+                navigation('/wishlists');
               }}
               disableRipple
             >

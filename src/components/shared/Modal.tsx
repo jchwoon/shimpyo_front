@@ -33,6 +33,7 @@ export default function Modal({ isOpen, label, title, body, footer, onClose }: M
         <ParentContainer>
           <StyleModalBody>
             <div style={{ fontWeight: 'bold', fontSize: '20px' }}>{title}</div>
+
             <div>{body}</div>
             {footer}
           </StyleModalBody>

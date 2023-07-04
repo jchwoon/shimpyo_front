@@ -2,14 +2,16 @@ import styled from 'styled-components';
 import LocationMap from '../../shared/LocationMap';
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ImageSection from '../Section/ImageSection/ImageSection';
 import DetailSection from '../Section/DetailSection';
 import GuideSection from '../Section/GuideSection';
 import PaySection from '../Section/PaySection';
+import GuestManageModal from '../Modal/GuestManageModal';
+import ReservationCancelModal from '../Modal/ReservationCancelModal';
+import NotFound from '../../../pages/404';
 
 interface IResultData {
-  reservationId: number;
   houseId: number;
   reservationStatus: string;
   houseImageUrl: string[];
@@ -26,39 +28,31 @@ interface IResultData {
   price: string;
   remainPrice: string;
   existReview: boolean;
+  houseOwnerId: number;
 }
 
 export default function CheckReservationDetailMain() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { reservationId } = useParams();
+  const [isValidReservationId, setIsValidReservationId] = useState(true);
   const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
-  const [detailData, setDetailData] = useState({
-    reservationId: 6,
-    houseId: 1,
-    houseImageUrl: [
-      '/images/logo.png',
-      '/images/basicProfile.jpg',
-      '/images/image.png',
-      '/images/logo.png',
-      '/images/basicProfile.jpg',
-      '/images/image.png',
-      '/images/logo.png',
-      '/images/basicProfile.jpg',
-      '/images/image.png',
-    ],
-    reservationStatus: 'ComPlete',
-    houseName: 'ㅁㅁ 호텔',
-    houseOwnerName: 'ONDA',
-    checkInDate: '2023.06.13 16:00',
-    checkOutDate: '2023.06.14 16:00',
-    roomId: '5',
-    roomName: '202호',
-    peopleCount: '5',
-    lat: 35.165024,
-    lng: 126.858658,
-    address: '서울 마포구 마포대로 58',
-    price: '120000',
-    remainPrice: '50000',
-    existReview: true,
+  const [detailData, setDetailData] = useState<IResultData>({
+    address: '',
+    checkInDate: '',
+    checkOutDate: '',
+    existReview: false,
+    houseId: 0,
+    houseImageUrl: [''],
+    houseName: '',
+    houseOwnerId: 0,
+    houseOwnerName: '',
+    lat: 0,
+    lng: 0,
+    peopleCount: '',
+    price: '',
+    remainPrice: '',
+    reservationStatus: '',
+    roomId: '',
+    roomName: '',
   });
 
   useEffect(() => {
@@ -66,41 +60,53 @@ export default function CheckReservationDetailMain() {
 
     if (responseData.isSuccess) {
       setDetailData(responseData.result);
+    } else {
+      // if (responseData.code === 3100)
+      setIsValidReservationId(false);
     }
-  }, []);
-  console.log('main');
+  }, [responseData]);
+
   useEffect(() => {
     const getData = async () => {
-      await sendRequest({ url: `/user/reservations/${searchParams.get('reservationId')}` });
+      await sendRequest({ url: `/user/reservations/${reservationId}` });
     };
 
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (!isValidReservationId) {
+    return <NotFound />;
+  }
   return (
-    <StyleMainBox>
-      <StyleFlexBox>
-        <StyleLeftBox>
-          <StyleLeftContents>
-            <StyleFlexColumnBox>
-              <ImageSection
-                imageList={detailData.houseImageUrl}
-                checkIn={detailData.checkInDate}
-                checkOut={detailData.checkOutDate}
-                houseId={detailData.houseId}
-                hostname={detailData.houseOwnerName}
-              />
-              <DetailSection reservationNumber={detailData.reservationId} peopleCount={detailData.peopleCount} />
-              <GuideSection address={detailData.address} lat={detailData.lat} lng={detailData.lng} />
-              <PaySection price={detailData.price} />
-            </StyleFlexColumnBox>
-          </StyleLeftContents>
-        </StyleLeftBox>
-        <StyleRightBox>
-          <LocationMap latitude={detailData?.lat} longitude={detailData?.lng} height="100%" width="100%" />
-        </StyleRightBox>
-      </StyleFlexBox>
-    </StyleMainBox>
+    <>
+      <StyleMainBox>
+        <StyleFlexBox>
+          <StyleLeftBox>
+            <StyleLeftContents>
+              <StyleFlexColumnBox>
+                <ImageSection
+                  houseOwnerId={detailData.houseOwnerId}
+                  imageList={detailData.houseImageUrl}
+                  checkIn={detailData.checkInDate}
+                  checkOut={detailData.checkOutDate}
+                  houseId={detailData.houseId}
+                  hostname={detailData.houseOwnerName}
+                />
+                <DetailSection peopleCount={detailData.peopleCount} />
+                <GuideSection address={detailData.address} lat={detailData.lat} lng={detailData.lng} />
+                <PaySection price={detailData.price} />
+              </StyleFlexColumnBox>
+            </StyleLeftContents>
+          </StyleLeftBox>
+          <StyleRightBox>
+            <LocationMap latitude={detailData?.lat} longitude={detailData?.lng} height="100%" width="100%" />
+          </StyleRightBox>
+        </StyleFlexBox>
+      </StyleMainBox>
+      <GuestManageModal peopleCount={detailData.peopleCount} />
+      <ReservationCancelModal price={detailData.price} checkIn={detailData.checkInDate} />
+    </>
   );
 }
 

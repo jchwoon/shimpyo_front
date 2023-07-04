@@ -13,6 +13,7 @@ import { LOGIN_API_PATH } from '../../../constants/api/userApi';
 import KakaoLogin from '../../Main/SocialLogin/KakaoLogin';
 import NaverLogin from '../../Main/SocialLogin/NaverLogin';
 import GoogleSocialLogin from '../../Main/SocialLogin/GoogleSocialLogin';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ResultData {
   accessToken: string;
@@ -20,6 +21,8 @@ interface ResultData {
 
 export default function LoginModal() {
   const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
+  const location = useLocation();
+  const navigation = useNavigate();
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -44,7 +47,6 @@ export default function LoginModal() {
       withcredential: true,
     });
   };
-
   const submitHandler = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key !== 'Enter') return;
 
@@ -63,6 +65,8 @@ export default function LoginModal() {
       setAccessToken(responseData.result.accessToken);
       setIsLoggedIn(true);
       setIsLoginModalOpen(false);
+      window.history.replaceState(null, '', '/');
+      navigation(location?.state?.redirectedFrom?.pathname || '/');
     } else {
       setIsLoginError(true);
       setLoginErrorMessage('이메일과 비밀번호를 다시 한번 확인해주세요.');

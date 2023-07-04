@@ -1,38 +1,32 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { accessTokenAtom } from '../../recoil/userAtoms';
-import { loginModalAtom } from '../../recoil/modalAtoms';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import { Navigate, useLocation } from 'react-router-dom';
 
 interface AuthCheckProps {
-  Component: React.ComponentType;
   option: string | null;
+  children: React.ReactNode;
 }
 
-const AuthCheck: React.FC<AuthCheckProps> = ({ Component, option }) => {
+const AuthCheck: React.FC<AuthCheckProps> = ({ children, option }) => {
   const accessToken = useRecoilValue(accessTokenAtom);
-  const setLoginModal = useSetRecoilState(loginModalAtom);
-  const navigation = useNavigate();
+  const currentLocation = useLocation();
 
-  useEffect(() => {
-    const redirect = () => {
-      if (option === 'ONLY_LOGIN') {
-        // 토큰 검사
-        if (!accessToken) {
-          navigation('/');
-          setLoginModal(true);
-        }
-      } else if (option === 'ONLY_LOGOUT') {
-        if (accessToken) {
-          navigation('/');
-        }
-      }
-    };
-    redirect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken, navigation, option]);
+  if (option === 'ONLY_LOGIN' && !accessToken) {
+    return (
+      <Navigate
+        to={`/?redirect_url=${encodeURIComponent(currentLocation.pathname)}`}
+        replace
+        state={{ redirectedFrom: currentLocation }}
+      />
+    );
+  }
 
-  return <Component />;
+  if (option === 'ONLY_LOGOUT' && accessToken) {
+    return <Navigate to={'/'} replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default AuthCheck;

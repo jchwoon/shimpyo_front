@@ -6,6 +6,7 @@ import { alarmAtoms } from '../recoil/modalAtoms';
 
 export default function CheckReservationDetail() {
   const isAlarmOpen = useRecoilValue(alarmAtoms);
+
   return (
     <>
       <CheckReservationDetailHeader />

@@ -14,6 +14,8 @@ interface sizeProps {
 
 export default function LocationMap({ latitude, longitude, width, height, radius }: LocationMapProps & sizeProps) {
   useEffect(() => {
+    if (!latitude || !longitude) return;
+
     const script = document.createElement('script');
     script.async = true;
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_MAP_API_KEY}&autoload=false`;

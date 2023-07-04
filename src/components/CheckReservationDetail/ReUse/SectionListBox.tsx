@@ -3,15 +3,23 @@ import styled, { css } from 'styled-components';
 
 interface SectionListBoxProps {
   title: string;
-  content: string | number | React.ReactElement;
+  content?: string | number | React.ReactElement;
   detail?: boolean;
   icon?: IconType;
   button?: boolean;
+  onClick?: () => void;
 }
 
-export default function SectionListBox({ title, content, detail, icon: Icon, button = false }: SectionListBoxProps) {
+export default function SectionListBox({
+  title,
+  content,
+  detail,
+  icon: Icon,
+  button = false,
+  onClick,
+}: SectionListBoxProps) {
   return (
-    <StyleListBox button={button}>
+    <StyleListBox onClick={onClick} button={button}>
       <div style={{ display: 'flex' }}>
         {Icon && <Icon style={{ marginRight: '1rem' }} size={35} />}
         <div>

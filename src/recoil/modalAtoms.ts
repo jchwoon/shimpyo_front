@@ -34,3 +34,13 @@ export const alarmAtoms = atom<boolean>({
   key: 'alarmAtoms',
   default: false,
 });
+
+export const guestManageModalAtom = atom<boolean>({
+  key: 'guestManageModalAtom',
+  default: false,
+});
+
+export const reservationCancelModalAtom = atom<boolean>({
+  key: 'reservationCancelModalAtom',
+  default: false,
+});

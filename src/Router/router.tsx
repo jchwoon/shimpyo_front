@@ -11,9 +11,9 @@ const Detail = lazy(() => import('../pages/detail'));
 const Accommodation = lazy(() => import('../pages/Accommodation'));
 const NotFound = lazy(() => import('../pages/404'));
 const CheckReservation = lazy(() => import('../pages/CheckReservation'));
-const Interest = lazy(() => import('../pages/Interest'));
 const SocialAddInfo = lazy(() => import('../pages/SocialAddInfo'));
 const CheckReservationDetail = lazy(() => import('../pages/CheckReservationDetail'));
+const WishList = lazy(() => import('../pages/WishList'));
 
 const onlyLogin = 'ONLY_LOGIN';
 const onlyLogout = 'ONLY_LOGOUT';
@@ -22,13 +22,19 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <NotFound />,
+    errorElement: (
+      <Suspense fallback={<Loading />}>
+        <NotFound />
+      </Suspense>
+    ),
     children: [
       {
         path: '',
         element: (
           <Suspense fallback={<Loading />}>
-            <AuthCheck Component={Main} option={null} />
+            <AuthCheck option={null}>
+              <Main />
+            </AuthCheck>
           </Suspense>
         ),
       },
@@ -36,7 +42,9 @@ const router = createBrowserRouter([
         path: 'hosting',
         element: (
           <Suspense fallback={<Loading />}>
-            <AuthCheck Component={Hosting} option={onlyLogin} />
+            <AuthCheck option={onlyLogin}>
+              <Hosting />
+            </AuthCheck>
           </Suspense>
         ),
       },
@@ -44,7 +52,9 @@ const router = createBrowserRouter([
         path: 'detail',
         element: (
           <Suspense fallback={<Loading />}>
-            <AuthCheck Component={Detail} option={null} />
+            <AuthCheck option={null}>
+              <Detail />
+            </AuthCheck>
           </Suspense>
         ),
       },
@@ -55,40 +65,42 @@ const router = createBrowserRouter([
             path: '',
             element: (
               <Suspense fallback={<Loading />}>
-                <AuthCheck Component={CheckReservation} option={onlyLogin} />
+                <AuthCheck option={onlyLogin}>
+                  <CheckReservation />
+                </AuthCheck>
               </Suspense>
             ),
           },
           {
-            path: 'detail',
+            path: 'detail/:reservationId',
             element: (
               <Suspense fallback={<Loading />}>
-                <AuthCheck Component={CheckReservationDetail} option={onlyLogin} />
+                <AuthCheck option={onlyLogin}>
+                  <CheckReservationDetail />
+                </AuthCheck>
               </Suspense>
             ),
           },
         ],
       },
       {
-        path: 'interest_lists',
-        element: (
-          <Suspense fallback={<Loading />}>
-            <AuthCheck Component={Interest} option={onlyLogin} />
-          </Suspense>
-        ),
-      },
-      {
         path: 'social',
         children: [
           {
             path: 'login',
-            element: <AuthCheck Component={SocialLogin} option={onlyLogout} />,
+            element: (
+              <AuthCheck option={onlyLogout}>
+                <SocialLogin />
+              </AuthCheck>
+            ),
           },
           {
             path: 'add_info',
             element: (
               <Suspense fallback={<Loading />}>
-                <AuthCheck Component={SocialAddInfo} option={onlyLogout} />
+                <AuthCheck option={onlyLogout}>
+                  <SocialAddInfo />
+                </AuthCheck>
               </Suspense>
             ),
           },
@@ -98,7 +110,19 @@ const router = createBrowserRouter([
         path: 'accommodation',
         element: (
           <Suspense fallback={<Loading />}>
-            <AuthCheck Component={Accommodation} option={onlyLogin} />
+            <AuthCheck option={onlyLogin}>
+              <Accommodation />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'wishlists',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={null}>
+              <WishList />
+            </AuthCheck>
           </Suspense>
         ),
       },

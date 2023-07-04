@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import ImageBox from './ImageBox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SectionListBox from '../../ReUse/SectionListBox';
 import Section from '../../ReUse/Section';
 import { BsHouseDoor } from 'react-icons/bs';
 import { GrUserManager } from 'react-icons/gr';
+import { changeDateType, formatDate } from '../../../../utils/changeFormat';
+import { useNavigate } from 'react-router-dom';
 
 interface ImageSectionProps {
   imageList: string[];
@@ -12,9 +14,37 @@ interface ImageSectionProps {
   checkOut: string;
   houseId: number;
   hostname: string;
+  houseOwnerId: number;
 }
 
-export default function ImageSection({ imageList, checkIn, checkOut, houseId, hostname }: ImageSectionProps) {
+export default function ImageSection({
+  imageList,
+  checkIn,
+  checkOut,
+  houseId,
+  hostname,
+  houseOwnerId,
+}: ImageSectionProps) {
+  const navigation = useNavigate();
+  const [changeCheckIn, setChangeCheckIn] = useState('');
+  const [changeCheckOut, setChangeCheckOut] = useState('');
+
+  const toHouseDetailPage = () => {
+    navigation(`/detail/${houseId}`);
+  };
+
+  const toHostPage = () => {
+    navigation(`/users/${houseOwnerId}`);
+  };
+
+  useEffect(() => {
+    if (!checkIn || !checkOut) return;
+    const changeCheckInToDateType = changeDateType(checkIn);
+    const changeCheckOutToDateType = changeDateType(checkOut);
+
+    setChangeCheckIn(formatDate(changeCheckInToDateType));
+    setChangeCheckOut(formatDate(changeCheckOutToDateType));
+  }, [checkIn, checkOut]);
   return (
     <StyleSection>
       <ImageBox imageList={imageList} />
@@ -22,17 +52,19 @@ export default function ImageSection({ imageList, checkIn, checkOut, houseId, ho
         <StyleDateBox>
           <div style={{ borderRight: '1px solid rgb(200, 200, 200)' }}>
             <div style={{ marginBottom: '1rem', fontSize: '16px', fontWeight: 'bold' }}>체크인</div>
-            <div>{checkIn}</div>
+            <div style={{ marginBottom: '1rem' }}>{changeCheckIn.split(' ').slice(0, 3).join(' ')}</div>
+            <div>{changeCheckIn.split(' ').slice(3, 5).join(' ')}</div>
           </div>
           <div>
             <div style={{ marginBottom: '1rem', fontSize: '16px', fontWeight: 'bold' }}>체크아웃</div>
-            <div>{checkOut}</div>
+            <div style={{ marginBottom: '1rem' }}>{changeCheckOut.split(' ').slice(0, 3).join(' ')}</div>
+            <div>{changeCheckOut.split(' ').slice(3, 5).join(' ')}</div>
           </div>
         </StyleDateBox>
         <StyleLine />
-        <SectionListBox button icon={BsHouseDoor} content="숙소 상세 보기" title="숙소" />
+        <SectionListBox onClick={toHouseDetailPage} button icon={BsHouseDoor} content="숙소 상세 보기" title="숙소" />
         <StyleLine />
-        <SectionListBox button icon={GrUserManager} content={hostname} title="호스트 정보 보기" />
+        <SectionListBox onClick={toHostPage} button icon={GrUserManager} content={hostname} title="호스트 정보 보기" />
       </Section>
     </StyleSection>
   );

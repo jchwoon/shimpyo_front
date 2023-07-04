@@ -4,33 +4,62 @@ import SectionListBox from '../ReUse/SectionListBox';
 import SectionMenuListBox from '../ReUse/SectionMenuListBox';
 import { FaUserFriends } from 'react-icons/fa';
 import { TiCancel } from 'react-icons/ti';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { guestManageModalAtom, reservationCancelModalAtom } from '../../../recoil/modalAtoms';
+import { isOverCheckInAtom } from '../../../recoil/reservationAtom';
+import { useParams } from 'react-router-dom';
 
 interface DetailSectionProps {
   peopleCount: string;
-  reservationNumber: number;
 }
 
-export default function DetailSection({ peopleCount, reservationNumber }: DetailSectionProps) {
+export default function DetailSection({ peopleCount }: DetailSectionProps) {
+  const { reservationId } = useParams();
+  const setGuestManageModal = useSetRecoilState(guestManageModalAtom);
+  const setReservationCancelModal = useSetRecoilState(reservationCancelModalAtom);
+  const isOverCheckIn = useRecoilValue(isOverCheckInAtom);
+
   return (
     <Section title="예약 세부정보">
       <SectionListBox title="게스트" content={`게스트 ${peopleCount}명`} />
       <StyleLine />
-      <SectionListBox title="예약번호" content={reservationNumber} />
+      <SectionListBox title="예약번호" content={reservationId} />
       <StyleLine />
       <SectionListBox
         title="환불정책"
         content={
-          <ol>
-            <li>1. 당일 예약 건 입실 시간 전에 한에서만 90% 환불</li>
-            <li>2. 당일 예약 건 아닐 경우 100% 환불 가능</li>
-            <li>3. 입실 시간 초과 시 환불 불가능</li>
+          <ol style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <li>1. 체크인 기준 1일 전까지 100% 환불 가능합니다.</li>
+            <li>2. 체크인 기준 1일 전부터는 90% 환불 가능합니다.</li>
+            <li>3. 입실 시간 초과 시 환불 불가능합니다.</li>
+            <li>4. 숙소 사정에 의한 취소 시 100% 환불 가능합니다.</li>
           </ol>
         }
       />
       <StyleLine />
-      <SectionMenuListBox icon={FaUserFriends} content="게스트 관리하기" />
+      <SectionMenuListBox
+        disable={isOverCheckIn}
+        onClick={() => {
+          if (isOverCheckIn) {
+            return;
+          }
+          setGuestManageModal(true);
+        }}
+        icon={FaUserFriends}
+        content="게스트 관리하기"
+      />
       <StyleLine />
-      <SectionMenuListBox icon={TiCancel} content="예약 취소" />
+      <SectionMenuListBox
+        disable={isOverCheckIn}
+        onClick={() => {
+          if (isOverCheckIn) {
+            return;
+          }
+          setReservationCancelModal(true);
+        }}
+        icon={TiCancel}
+        content="예약 취소"
+      />
     </Section>
   );
 }

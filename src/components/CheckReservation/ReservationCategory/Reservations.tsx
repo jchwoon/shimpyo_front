@@ -29,21 +29,10 @@ interface IResultData {
 export default function Reservations() {
   const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
 
-  const [totalPage, setTotalPage] = useState<number>(3);
-  const [totalItem, setTotalItem] = useState<number>(25);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [contentsArray, setContentsArray] = useState<ListType[]>([
-    {
-      reservationId: 1,
-      checkInDate: '2023.06.19.09',
-      houseOwnerName: '정채운',
-      houseType: '펜션',
-      checkOutDate: '2023.06.19.09',
-      houseImageUrl: '/images/image.png',
-      reservationStatus: '예약확정',
-      houseName: '럭셔리 호텔',
-    },
-  ]);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const [totalItem, setTotalItem] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [contentsArray, setContentsArray] = useState<ListType[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const { changeClickedPage, changeNextPage, changePrevPage } = usePagination({
     category: 'reservation',
@@ -66,12 +55,14 @@ export default function Reservations() {
 
   useEffect(() => {
     const getData = async () => {
-      await sendRequest({ url: `/user/reservations?page=${currentPage}&reservationStatus=COMPLETE` });
+      if (!currentPage) return;
+      if (currentPage > totalPage || currentPage <= 0) return;
+      await sendRequest({ url: `/user/reservations?reservationStatus=COMPLETE&page=${currentPage - 1}` });
     };
 
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [currentPage, totalPage]);
 
   const header = (
     <StyleHeaderBox>

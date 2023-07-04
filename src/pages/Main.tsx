@@ -12,9 +12,14 @@ import JoinModal from '../components/shared/Modal/JoinModal';
 import LoginModal from '../components/shared/Modal/LoginModal';
 import IdFindModal from '../components/Main/Modal/IdFindModal';
 import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
+import { useSearchParams } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { loginModalAtom } from '../recoil/modalAtoms';
 
 export default function Main() {
+  const [searchParams] = useSearchParams();
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
+  const setLoginModal = useSetRecoilState(loginModalAtom);
 
   useEffect(() => {
     const handleResize = () => {
@@ -27,6 +32,12 @@ export default function Main() {
     };
   }, []);
 
+  useEffect(() => {
+    if (searchParams.has('redirect_url')) {
+      setLoginModal(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
   return (
     <>
       <CssBaseline />
