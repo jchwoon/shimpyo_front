@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
 import { passwordValueAtom } from './userAtoms';
-import { stepState } from './atoms';
+import { stepState } from './accommodationAtoms';
 import { PAGE_NUMBERS } from '../constants/accommodation';
 
 export const passwordSelector = selector({
