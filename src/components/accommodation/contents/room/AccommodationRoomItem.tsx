@@ -4,12 +4,7 @@ import { TbPhotoPlus } from 'react-icons/tb';
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
 import { useRecoilState } from 'recoil';
 
-import {
-  disabledState,
-  imageDataState,
-  accommodationState,
-  roomImageListState,
-} from '../../../../recoil/accommodationAtoms';
+import { imageDataState, accommodationState, roomImageListState } from '../../../../recoil/accommodationAtoms';
 import DeleteCheckModal from '../reuse/DeleteCheckModal';
 import imageReader from '../../../../utils/imageReader';
 import AccommodationRoomOption from './AccommodationRoomOption';
@@ -20,7 +15,6 @@ export interface RoomDataProps {
 }
 
 export default function AccommodationRoomItem({ idx, setIsClicked }: RoomDataProps) {
-  const [disabled, setDisabled] = useRecoilState(disabledState);
   const [imageData, setImageData] = useRecoilState(imageDataState);
   const [accommodation, setAccommodation] = useRecoilState(accommodationState);
   const [roomImageList, setRoomImageList] = useRecoilState(roomImageListState);
@@ -152,49 +146,51 @@ export default function AccommodationRoomItem({ idx, setIsClicked }: RoomDataPro
   };
 
   return (
-    <>
-      <StyledImageContainer>
-        {roomImageList[idx].length === 0 ? (
-          <StyledNoImageContainer>
-            <StyledImgIcon />
-            <StyledLabel htmlFor="file"></StyledLabel>
-            <StyledInput onChange={handleOnChange} id="file" type="file" accept="image/*"></StyledInput>
-          </StyledNoImageContainer>
-        ) : (
-          <StyledContainer>
-            <StyledImage src={roomImageList[idx][0]} alt="이미지" />
-          </StyledContainer>
-        )}
-        <StyledCarouselDiv>
-          {roomImageList[idx].map((item, index) => {
-            if (index === 0) {
-              return null;
-            } else {
-              return (
-                <StyledPlusContainer key={`image ${index}`}>
-                  <StyledImage src={item} alt="이미지" />
-                </StyledPlusContainer>
-              );
-            }
-          })}
-          {roomImageList[idx].length !== 0 && roomImageList[idx].length < 5 && (
-            <StyledPlusContainer>
-              <StyledLastImgIcon />
-              <StyledPlusLabel htmlFor={`fileLast ${idx}`}></StyledPlusLabel>
-              <StyledPlusInput
-                ref={inputRef}
-                onChange={handleOnChange}
-                id={`fileLast ${idx}`}
-                type="file"
-                accept="image/*"
-                onClick={resetFileInput}
-              />
-            </StyledPlusContainer>
+    <StyledContainer>
+      <StyledFlexDiv>
+        <StyledImageContainer>
+          {roomImageList[idx].length === 0 ? (
+            <StyledNoImageContainer>
+              <StyledImgIcon />
+              <StyledLabel htmlFor="file"></StyledLabel>
+              <StyledInput onChange={handleOnChange} id="file" type="file" accept="image/*"></StyledInput>
+            </StyledNoImageContainer>
+          ) : (
+            <StyledCoverImageContainer>
+              <StyledImage src={roomImageList[idx][0]} alt="이미지" />
+            </StyledCoverImageContainer>
           )}
-        </StyledCarouselDiv>
-      </StyledImageContainer>
+          <StyledCarouselDiv>
+            {roomImageList[idx].map((item, index) => {
+              if (index === 0) {
+                return null;
+              } else {
+                return (
+                  <StyledPlusImageContainer key={`image ${index}`}>
+                    <StyledImage src={item} alt="이미지" />
+                  </StyledPlusImageContainer>
+                );
+              }
+            })}
+            {roomImageList[idx].length !== 0 && roomImageList[idx].length < 5 && (
+              <StyledPlusImageContainer>
+                <StyledLastImgIcon />
+                <StyledPlusLabel htmlFor={`fileLast ${idx}`}></StyledPlusLabel>
+                <StyledPlusInput
+                  ref={inputRef}
+                  onChange={handleOnChange}
+                  id={`fileLast ${idx}`}
+                  type="file"
+                  accept="image/*"
+                  onClick={resetFileInput}
+                />
+              </StyledPlusImageContainer>
+            )}
+          </StyledCarouselDiv>
+        </StyledImageContainer>
 
-      <AccommodationRoomOption idx={idx} setIsClicked={setIsClicked} />
+        <AccommodationRoomOption idx={idx} setIsClicked={setIsClicked} />
+      </StyledFlexDiv>
 
       <StyledCloseIcon onClick={openModal}></StyledCloseIcon>
 
@@ -207,9 +203,30 @@ export default function AccommodationRoomItem({ idx, setIsClicked }: RoomDataPro
           handleOnButton={deleteRoomItem}
         />
       )}
-    </>
+    </StyledContainer>
   );
 }
+const StyledContainer = styled.div`
+  width: 100%;
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @media (min-width: 635px) {
+    flex-direction: row;
+    align-items: normal;
+  }
+`;
+
+const StyledFlexDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @media (min-width: 635px) {
+    flex-direction: row;
+  }
+`;
 
 const StyledCloseIcon = styled(AiOutlineClose)`
   padding: 10px;
@@ -220,12 +237,25 @@ const StyledCloseIcon = styled(AiOutlineClose)`
   }
 `;
 
+const StyledImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  padding: 20px;
+  box-sizing: content-box;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+
+  @media (min-width: 635px) {
+    width: 300px;
+  }
+`;
 const StyledNoImageContainer = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 300px;
+  width: 100%;
   height: 100%;
   z-index: 1;
   border: 2px dotted rgba(0, 0, 0, 0.2);
@@ -234,29 +264,23 @@ const StyledNoImageContainer = styled.div`
   }
 `;
 
-const StyledContainer = styled.div`
+const StyledCoverImageContainer = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 300px;
-  height: 200px;
+  width: 100%;
+  height: 230px;
   z-index: 1;
   &:hover {
     border: 2px solid black;
   }
 `;
 
-const StyledImageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-`;
-
 const StyledLabel = styled.label`
   z-index: 10;
-  width: 600px;
-  height: 330px;
+  width: 100%;
+  height: 310px;
 `;
 
 const StyledInput = styled.input`
@@ -272,14 +296,15 @@ const StyledImgIcon = styled(TbPhotoPlus)`
 
 const StyledCarouselDiv = styled.div`
   display: flex;
+  justify-content: center;
 `;
 
-const StyledPlusContainer = styled.div`
+const StyledPlusImageContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100px;
+  width: 100%;
   height: 90px;
   align-items: center;
   z-index: 10;
@@ -287,11 +312,15 @@ const StyledPlusContainer = styled.div`
   &:hover {
     border: 2px solid black;
   }
+
+  @media (min-width: 635px) {
+    width: 100px;
+  }
 `;
 
 const StyledPlusLabel = styled.label`
   z-index: 10;
-  width: 100px;
+  width: 100%;
   height: 90px;
 `;
 

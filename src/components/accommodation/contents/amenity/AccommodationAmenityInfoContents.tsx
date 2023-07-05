@@ -1,15 +1,24 @@
-import ContentsTitle from '../ContentsTitle';
-import ContentsSubText from '../ContentsSubText';
+import ContentsTitle from '../reuse/ContentsTitle';
+import ContentsSubText from '../reuse/ContentsSubText';
 import { AmenityType } from '../../../../constants/amenityType';
 
 import AccommodationAmenityInfoItem from './AccommodationAmenityInfoItem';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { disabledState } from '../../../../recoil/accommodationAtoms';
+import { useEffect } from 'react';
 
 export default function AccommodationAmenityInfoContents() {
+  const [disabled, setDisabled] = useRecoilState(disabledState);
+
   const amenityList: (keyof AmenityType)[] = ['wifi', 'parking', 'bbq', 'pc'];
 
+  useEffect(() => {
+    setDisabled(false);
+  }, []);
+
   return (
-    <StyledFlexContainer>
+    <StyledContainer>
       <ContentsTitle>숙소 편의시설 정보를 추가하세요.</ContentsTitle>
       <ContentsSubText>
         여기에 추가하려는 편의시설이 보이지 않더라도 걱정하지 마세요! 숙소를 등록한 후에 편의시설을 추가할 수 있습니다.
@@ -19,17 +28,21 @@ export default function AccommodationAmenityInfoContents() {
           return <AccommodationAmenityInfoItem key={amenity} amenity={amenity} />;
         })}
       </StyledItemContainer>
-    </StyledFlexContainer>
+    </StyledContainer>
   );
 }
 
-const StyledFlexContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+const StyledContainer = styled.div`
+  padding: 10px;
 `;
 
 const StyledItemContainer = styled.div`
   display: flex;
-  width: 700px;
   flex-wrap: wrap;
+  justify-content: center;
+
+  @media (min-width: 780px) {
+    width: 700px;
+    justify-content: normal;
+  }
 `;

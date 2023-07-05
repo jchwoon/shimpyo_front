@@ -1,11 +1,19 @@
 import styled from 'styled-components';
 import { stepContent, stepConstants, stepContentVideo } from '../../../../constants/stepContent';
+import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { accommodationState, disabledState } from '../../../../recoil/accommodationAtoms';
 
 interface StepContentProps {
   step: keyof stepConstants;
 }
 
 export default function StepStartContents({ step }: StepContentProps) {
+  const [disabled, setDisabled] = useRecoilState(disabledState);
+  useEffect(() => {
+    setDisabled(false);
+  }, []);
+
   return (
     <StyledStepElement>
       <StyledTextContainer>
@@ -16,20 +24,22 @@ export default function StepStartContents({ step }: StepContentProps) {
       <StyledVideo autoPlay>
         <source src={stepContentVideo[step]} type="video/mp4"></source>
       </StyledVideo>
-      {/* <StyledImage src="/hotel5.jpg" alt="이미지" /> */}
     </StyledStepElement>
   );
 }
 
 const StyledStepElement = styled.li`
   display: flex;
-  width: 900px;
-  height: 324px;
-  justify-content: space-between;
+  flex-direction: column-reverse;
+  padding: 1rem 1rem 4rem 1rem;
+
+  @media (min-width: 780px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 const StyledTextContainer = styled.div`
-  width: 380px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -42,10 +52,13 @@ const StyledStep = styled.div`
 `;
 
 const StyledStepTitle = styled.h2`
-  font-size: 36px;
+  font-size: 30px;
   font-weight: 600;
   margin-bottom: 10px;
   line-height: 45px;
+  @media (min-width: 780px) {
+    font-size: 36px;
+  }
 `;
 
 const StyledStepContent = styled.p`
@@ -54,10 +67,9 @@ const StyledStepContent = styled.p`
   line-height: 25px;
 `;
 
-const StyledImage = styled.img`
-  width: 600px;
-`;
-
 const StyledVideo = styled.video`
-  /* width: 1000px; */
+  width: 100%;
+  @media (min-width: 780px) {
+    width: 400px;
+  }
 `;
