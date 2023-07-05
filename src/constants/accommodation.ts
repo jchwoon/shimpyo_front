@@ -2,6 +2,10 @@ export const PAGE_NUMBERS = [5, 5, 2, 2];
 
 export const ALL_STEP_NUMBER = 14;
 
+export const NAME_TEXT_LIMIT = 32;
+
+export const CONTENTS_TEXT_LIMIT = 500;
+
 export interface Room {
   name: string;
   price: number;
@@ -20,7 +24,7 @@ export interface Accommodation {
   name: string;
   type: string;
   option: { wifi: boolean; pc: boolean; parking: boolean; bbq: boolean };
-  room: Room[];
+  rooms: Room[];
   address: { postCode: string; sido: string; sigungu: string; fullAddress: string; lat: number; lng: number };
   contents: string;
 }
