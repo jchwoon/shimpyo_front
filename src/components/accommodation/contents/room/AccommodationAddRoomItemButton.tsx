@@ -49,7 +49,7 @@ const StyledButton = styled.button`
   font-size: 50px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   background-color: #00adb5;
-  opacity: 0.4;
+  opacity: 0.3;
 
   cursor: pointer;
 
