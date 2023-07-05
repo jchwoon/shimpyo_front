@@ -4,7 +4,7 @@ import 'moment/locale/ko'
 import styled from '@emotion/styled';
 import "./styles.css"
 import { useRecoilState, useRecoilValue } from "recoil";
-import { FirstPickedDate, SecondPickedDate } from "../../../recoil/atoms";
+import { FirstPickedDate, SecondPickedDate } from "../../../recoil/navBarAtoms";
 
 interface HeaderProps {
     currentDate: string;
@@ -137,7 +137,7 @@ export const Cells: React.FC<HeaderProps> = ({ currentDate }) => {
                         style={{ fontSize: "12px" }}
                         className={`${moment(day).isSame(moment(monthStart), 'month')
                             ?
-                            moment(cloneDay).isAfter(moment())
+                            moment(cloneDay).isSameOrAfter(moment(), 'day')
                                 ?
                                 "visible"
                                 :

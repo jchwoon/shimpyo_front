@@ -11,6 +11,9 @@ import { CustomizedTextfield } from './Navbar.styled';
 
 import { CustomziedClearIcon, CustomizedDeleteIconButtonInSearchField } from './Navbar.styled';
 
+import { ThemeProvider } from '@mui/material';
+import NavbarTheme from '../OverrideTheme/NavbarTheme';
+
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyA5ADsk4mK_A2hZuC2dSIHLpHGKFbixz88';
 
@@ -154,113 +157,114 @@ const MuiSearchField: React.FC<GoogleMapsProps> = ({
 
 
     return (
-        <Autocomplete
-            id="google-map-demo"
-            sx={{
-                width: 300, borderColor: "white", "& .MuiAutocomplete-clearIndicator": {
-                    display: "none", '& .MuiAutocomplete-endAdornment': {
-                        display: 'none',
+        <ThemeProvider theme={NavbarTheme}>
+            <Autocomplete
+                id="google-map-demo"
+                sx={{
+                    width: 300, borderColor: "white", "& .MuiAutocomplete-clearIndicator": {
+                        display: "none", '& .MuiAutocomplete-endAdornment': {
+                            display: 'none',
+                        },
                     },
-                },
-            }}
-            getOptionLabel={(option) =>
-                typeof option === 'string' ? option : option.description
-            }
-            filterOptions={(x) => x}
-            options={options}
-            autoComplete
-            includeInputInList
-            filterSelectedOptions
-            value={value}
-            noOptionsText={ObjectPlaceholder.description ?
-                <Grid container alignItems="center" >
-                    <Grid item sx={{ display: 'flex', width: 44 }}>
-                        <LocationOnIcon sx={{ color: 'text.secondary' }} />
-                    </Grid>
-                    <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
-                        <Box
-                            component="span"
-                            sx={{ fontWeight: 'bold' }}
-                        >
-                            {ObjectPlaceholder.structured_formatting.main_text}
-                        </Box>
-                        <Typography variant="body2" color="text.secondary">
-                            {ObjectPlaceholder.structured_formatting.secondary_text}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                :
-                <Typography sx={{ fontFamily: "Noto Sans KR" }}>여행지가 없습니다.</Typography>}
-            PaperComponent={({ children }) => {
-                return <Paper sx={{ marginTop: "22px !important" }} >
-                    {ObjectPlaceholder.description !== ''
-                        ?
-                        <CustomizedDeleteIconButtonInSearchField onMouseDown={resetFunctionInSearchField} top={5} left={-10}>
-                            <CustomziedClearIcon />
-                        </CustomizedDeleteIconButtonInSearchField>
-                        :
-                        null}
-                    {children}
-                </Paper>
-            }}
-
-            onChange={(event: any, newValue: PlaceType | null) => {
-                setOptions(newValue ? [newValue, ...options] : options);
-                setValue(newValue);
-                if (newValue !== null) setObjectPlaceholder(newValue)
-            }}
-
-            onInputChange={(event, value) => {
-                setInputValue(value);
-            }}
-
-            renderInput={(params) => (
-                <CustomizedTextfield
-                    {...params}
-                    variant="outlined"
-                    fullWidth
-                    InputProps={{
-                        ...params.InputProps,
-                        endAdornment: null
-                    }}
-                    placeholder={ObjectPlaceholder.description ? ObjectPlaceholder.description : "여행지 검색"}
-                    sx={{ padding: "0px !important" }}
-                />
-            )}
-            renderOption={(props, option) => {
-                const matches =
-                    option.structured_formatting.main_text_matched_substrings || [];
-
-                const parts = parse(
-                    option.structured_formatting.main_text,
-                    matches.map((match: any) => [match.offset, match.offset + match.length]),
-                );
-
-                return (
-                    <li {...props} >
-                        <Grid container alignItems="center" >
-                            <Grid item sx={{ display: 'flex', width: 44 }}>
-                                <LocationOnIcon sx={{ color: 'text.secondary' }} />
-                            </Grid>
-                            <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
-                                {parts.map((part, index) => (
-                                    <Box
-                                        key={index}
-                                        component="span"
-                                        sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
-                                    >
-                                        {part.text}
-                                    </Box>
-                                ))}
-                                <Typography variant="body2" color="text.secondary">
-                                    {option.structured_formatting.secondary_text}
-                                </Typography>
-                            </Grid>
+                }}
+                getOptionLabel={(option) =>
+                    typeof option === 'string' ? option : option.description
+                }
+                filterOptions={(x) => x}
+                options={options}
+                autoComplete
+                includeInputInList
+                filterSelectedOptions
+                value={value}
+                noOptionsText={ObjectPlaceholder.description ?
+                    <Grid container alignItems="center" >
+                        <Grid item sx={{ display: 'flex', width: 44 }}>
+                            <LocationOnIcon sx={{ color: 'text.secondary' }} />
                         </Grid>
-                    </li>
-                );
-            }}
-        />
+                        <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
+                            <Box
+                                component="span"
+                                sx={{ fontWeight: 'bold' }}
+                            >
+                                {ObjectPlaceholder.structured_formatting.main_text}
+                            </Box>
+                            <Typography variant="body2" color="text.secondary">
+                                {ObjectPlaceholder.structured_formatting.secondary_text}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    :
+                    <Typography sx={{ fontFamily: "Noto Sans KR" }}>여행지가 없습니다.</Typography>}
+                PaperComponent={({ children }) => {
+                    return <Paper sx={{ marginTop: "22px" }} >
+                        {ObjectPlaceholder.description !== ''
+                            ?
+                            <CustomizedDeleteIconButtonInSearchField onMouseDown={resetFunctionInSearchField} top={5} left={-10}>
+                                <CustomziedClearIcon />
+                            </CustomizedDeleteIconButtonInSearchField>
+                            :
+                            null}
+                        {children}
+                    </Paper>
+                }}
+
+                onChange={(event: any, newValue: PlaceType | null) => {
+                    setOptions(newValue ? [newValue, ...options] : options);
+                    setValue(newValue);
+                    if (newValue !== null) setObjectPlaceholder(newValue)
+                }}
+
+                onInputChange={(event, value) => {
+                    setInputValue(value);
+                }}
+
+                renderInput={(params) => (
+                    <CustomizedTextfield
+                        {...params}
+                        variant="outlined"
+                        fullWidth
+                        InputProps={{
+                            ...params.InputProps,
+                            endAdornment: null
+                        }}
+                        placeholder={ObjectPlaceholder.description ? ObjectPlaceholder.description : "여행지 검색"}
+                    />
+                )}
+                renderOption={(props, option) => {
+                    const matches =
+                        option.structured_formatting.main_text_matched_substrings || [];
+
+                    const parts = parse(
+                        option.structured_formatting.main_text,
+                        matches.map((match: any) => [match.offset, match.offset + match.length]),
+                    );
+
+                    return (
+                        <li {...props} >
+                            <Grid container alignItems="center" >
+                                <Grid item sx={{ display: 'flex', width: 44 }}>
+                                    <LocationOnIcon sx={{ color: 'text.secondary' }} />
+                                </Grid>
+                                <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
+                                    {parts.map((part, index) => (
+                                        <Box
+                                            key={index}
+                                            component="span"
+                                            sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
+                                        >
+                                            {part.text}
+                                        </Box>
+                                    ))}
+                                    <Typography variant="body2" color="text.secondary">
+                                        {option.structured_formatting.secondary_text}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        </li>
+                    );
+                }}
+            />
+        </ThemeProvider>
     );
 }
 

@@ -17,22 +17,22 @@ const MobileNavbarTheme = createTheme({
                 listbox: {
                     maxHeight: "150px"
                 },
-                inputRoot : {
+                inputRoot: {
                     paddingLeft: "0px",
-                    paddingTop:"0px",
-                    paddingBottom:"0px"
+                    paddingTop: "0px",
+                    paddingBottom: "0px"
                 }
             },
         },
-        // MuiBottomNavigation: {
-        //     styleOverrides: {
-        //         root: {
-        //             '&.Mui-selected': {
-        //                 color: 'red', // 선택된 아이템의 색을 변경합니다.
-        //             },
-        //         }
-        //     }
-        // }
+        MuiBottomNavigationAction: {
+            styleOverrides: {
+                root: {
+                    '&.Mui-selected': {
+                        color: '#00adb5'
+                    },
+                }
+            }
+        }
     },
 });
 
