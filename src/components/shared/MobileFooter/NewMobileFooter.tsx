@@ -11,9 +11,10 @@ interface MobileFooterProps {
   Action0: ReactElement;
   Action1: ReactElement;
   Action2: ReactElement;
+  Action3?: ReactElement;
 }
 
-export default function MobileFooter({ defaultValue, Action0, Action1, Action2 }: MobileFooterProps) {
+export default function MobileFooter({ defaultValue, Action0, Action1, Action2, Action3 }: MobileFooterProps) {
   const [value, setValue] = useState(defaultValue);
 
   const setValueNullTimeout = () => {
@@ -32,6 +33,10 @@ export default function MobileFooter({ defaultValue, Action0, Action1, Action2 }
 
   const handleAction2Click = () => {
     setValue(2);
+  };
+
+  const handleAction3Click = () => {
+    setValue(3);
   };
 
   const Action0WithClick = cloneElement(Action0, {
@@ -67,6 +72,17 @@ export default function MobileFooter({ defaultValue, Action0, Action1, Action2 }
     label: <Typography fontFamily='Noto Sans KR' fontWeight="500" fontSize="12px">{Action2.props.label} </Typography>
   });
 
+  const Action3WithClick = Action3 ? cloneElement(Action3, {
+    onClick: (event: React.MouseEvent) => {
+      if (Action3.props.onClick) {
+        Action3.props.onClick(event);
+      }
+      handleAction3Click();
+      setValueNullTimeout();
+    },
+    label: <Typography fontFamily='Noto Sans KR' fontWeight="500" fontSize="12px">{Action2.props.label} </Typography>
+  }) : null
+
   return (
     <>
       <Box sx={{ width: 500 }}>
@@ -82,6 +98,7 @@ export default function MobileFooter({ defaultValue, Action0, Action1, Action2 }
               {Action0WithClick}
               {Action1WithClick}
               {Action2WithClick}
+              {Action3WithClick}
             </BottomNavigation>
           </ThemeProvider>
         </Paper>

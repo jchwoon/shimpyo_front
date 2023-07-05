@@ -247,7 +247,7 @@ export default function Navbar() {
               <>
                 <CustomizedWhereActiveSearchButton elevation={2} style={{ paddingLeft: '20px' }}>
                   <CustomizedWhereVerticalWrapperDiv >
-                    <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" textAlign="left">
+                    <CustomizedTypography fontFamily="Noto Sans KR" fontWeight="500" textAlign="left" >
                       여행지
                     </CustomizedTypography>
                     <MuiSearchField
