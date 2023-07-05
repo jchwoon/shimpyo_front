@@ -77,7 +77,6 @@ export default function Main() {
   const value0 = <BottomNavigationAction icon={<CustomIcon />} label="홈" onClick={() => navigate('/')} />
   const value1 = <BottomNavigationAction icon={<FavoriteIcon />} label="관심 숙소" onClick={() => console.log("hi im value1")} />
   const value2 = <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
-  const value3 = <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
 
 
   return (

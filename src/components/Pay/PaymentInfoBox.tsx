@@ -22,6 +22,82 @@ interface PaymentInfoBoxProp {
     price: number | null
 }
 
+declare const window: typeof globalThis & {
+    IMP: any;
+};
+
+interface RequestPayAdditionalParams {
+    digital?: boolean;
+    vbank_due?: string;
+    m_redirect_url?: string;
+    app_scheme?: string;
+    biz_num?: string;
+}
+
+interface Display {
+    card_quota?: number[];
+}
+
+interface RequestPayParams extends RequestPayAdditionalParams {
+    pg?: string;
+    pay_method: string;
+    escrow?: boolean;
+    merchant_uid: string;
+    name?: string;
+    amount: number;
+    custom_data?: any;
+    tax_free?: number;
+    currency?: string;
+    language?: string;
+    buyer_name?: string;
+    buyer_tel: string;
+    buyer_email?: string;
+    buyer_addr?: string;
+    buyer_postcode?: string;
+    notice_url?: string | string[];
+    display?: Display;
+}
+
+interface RequestPayAdditionalResponse {
+    apply_num?: string;
+    vbank_num?: string;
+    vbank_name?: string;
+    vbank_holder?: string | null;
+    vbank_date?: number;
+}
+
+interface RequestPayResponse extends RequestPayAdditionalResponse {
+    success: boolean;
+    error_code: string;
+    error_msg: string;
+    imp_uid: string | null;
+    merchant_uid: string;
+    pay_method?: string;
+    paid_amount?: number;
+    status?: string;
+    name?: string;
+    pg_provider?: string;
+    pg_tid?: string;
+    buyer_name?: string;
+    buyer_email?: string;
+    buyer_tel?: string;
+    buyer_addr?: string;
+    buyer_postcode?: string;
+    custom_data?: any;
+    paid_at?: number;
+    receipt_url?: string;
+}
+
+type RequestPayResponseCallback = (response: RequestPayResponse) => void;
+
+export interface Iamport {
+    init: (accountID: string) => void;
+    request_pay: (
+        params: RequestPayParams,
+        callback?: RequestPayResponseCallback
+    ) => void;
+}
+
 const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDate, price }) => {
 
     const DaysDifference = moment(checkOutDate).diff(moment(checkInDate), "days")
@@ -42,6 +118,41 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
         if (value === '') { setPaymentRadioSelectedValue(value) }
         else if (value === paymentRadioSelectedValue) { setPaymentRadioSelectedValue('') }
         else { setPaymentRadioSelectedValue(value) }
+    }
+
+
+
+    function requestPay() {
+        const { IMP } = window;
+        IMP.init("imp08502640");
+
+        const data = {
+            pg: "html5_inicis",
+            pay_method: "card",
+            merchant_uid: "57008833-33004",
+            name: "당근 10kg",
+            amount: 1004,
+            buyer_email: "Iamport@chai.finance",
+            buyer_name: "포트원 기술지원팀",
+            buyer_tel: "010-1234-5678",
+            buyer_addr: "서울특별시 강남구 삼성동",
+            buyer_postcode: "123-456",
+        }
+
+        function callback(response: RequestPayResponse) {
+            const {
+                success,
+                error_msg,
+            } = response;
+
+            if (success) {
+                alert('결제 성공');
+            } else {
+                alert(`결제 실패: ${error_msg}`);
+            }
+        }
+
+        IMP.request_pay(data, callback);
     }
 
     return (
@@ -141,7 +252,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
             {/* <BookingBtn disabled={paymentRadioSelectedValue === ''}>
                 <Typography fontFamily='Noto Sans KR' fontSize="17px">결제</Typography>
             </BookingBtn> */}
-            <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={() => console.log("hello")} />
+            <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={requestPay} />
             {/* </div> */}
 
         </PaymentInfoWrapper >
