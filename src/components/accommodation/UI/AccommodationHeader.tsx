@@ -1,29 +1,10 @@
-import { startTransition } from 'react';
-import styled from 'styled-components';
 import Header from '../../layout/Header';
-import { useNavigate } from 'react-router-dom';
+import Logo from '../../shared/Logo';
 
 export default function AccommodationHeader() {
-  const navigate = useNavigate();
-
-  const handleOnClick = () => {
-    startTransition(() => {
-      navigate('/');
-    });
-  };
-
   return (
     <Header>
-      <StyledLogoImg src="images/logo.png" alt="logo" onClick={handleOnClick}></StyledLogoImg>
+      <Logo path="/" width="90px" heihgt="40px" />
     </Header>
   );
 }
-
-const StyledLogoImg = styled.img`
-  width: 90px;
-  height: 40px;
-  cursor: pointer;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
-  }
-`;
