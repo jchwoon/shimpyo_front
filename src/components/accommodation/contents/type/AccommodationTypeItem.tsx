@@ -23,19 +23,24 @@ export default function AccommodationTypeItem({ type, isSelected, onClick }: Acc
 }
 
 const StyledButtonDiv = styled.div`
-  padding: 20px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 15px;
+  @media (min-width: 780px) {
+    padding: 20px;
+    width: 50%;
+  }
 `;
 
 const StyledItemButton = styled.button`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 200px;
-  height: 110px;
+  align-items: center;
+  width: 100%;
   border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  padding-left: 10px;
   background-color: white;
+  padding: 15px;
 
   &:hover {
     border: 3px solid black;
@@ -52,12 +57,26 @@ const StyledItemButton = styled.button`
       return `
       background-color: rgba(0, 0, 0, 0.05);
       border: 3px solid black;
-    `;
+      `;
     }
   }}
+
+  @media (min-width: 780px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    width: 200px;
+    height: 110px;
+    padding-left: 10px;
+  }
 `;
 
 const StyledItemName = styled.span`
-  font-size: 15px;
-  margin: 10px 0 0 10px;
+  font-size: 17px;
+  margin-left: 1rem;
+
+  @media (min-width: 780px) {
+    font-size: 15px;
+    margin: 10px 0 0 10px;
+  }
 `;
