@@ -2,7 +2,7 @@ import { MdError } from 'react-icons/md';
 import { AiOutlineClose } from 'react-icons/ai';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { addressCheckState, errorModalState, stepState } from '../../../../recoil/atoms';
+import { addressCheckState, errorModalState, stepState } from '../../../../recoil/accommodationAtoms';
 
 interface ErrorMessageModalProps {
   isOpen: boolean;
@@ -50,19 +50,24 @@ const StyledFlexDiv = styled.div<ErrorMessageModalProps>`
   background-color: white;
   justify-content: space-between;
   padding: 20px;
-  margin-left: 120px;
-  width: 500px;
+  width: 100%;
   height: 120px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   border-radius: 15px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  bottom: 30%;
   z-index: 9999;
   opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
   transform: translateY(${({ isOpen }) => (isOpen ? '80%' : '100%')});
   transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s ease;
 
   ${({ isOpen }) => (!isOpen ? 'overflow: hidden;' : '')}
+
+  bottom: 140%;
+
+  @media (min-width: 780px) {
+    width: 42%;
+    left: 30%;
+  }
 `;
 
 const StyledErrorIcon = styled(MdError)`
@@ -72,6 +77,7 @@ const StyledErrorIcon = styled(MdError)`
 const StyledContentDiv = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: 10px;
 `;
 
 const StyledTextDiv = styled.p`
@@ -102,7 +108,6 @@ const StyledButtonDiv = styled.div`
 
 const StyledButton = styled.button`
   font-size: 12px;
-  width: 160px;
   padding: 10px;
   text-align: center;
   cursor: pointer;

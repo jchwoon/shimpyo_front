@@ -1,20 +1,26 @@
-import { useRef, ChangeEvent, useState } from 'react';
+import { useRef, ChangeEvent, useState, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { TbPhotoPlus } from 'react-icons/tb';
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
 import { useRecoilState } from 'recoil';
 
-import { isPassedState, imageDataState, accommodationState, roomImageListState } from '../../../../recoil/atoms';
-import DeleteCheckModal from '../DeleteCheckModal';
+import {
+  disabledState,
+  imageDataState,
+  accommodationState,
+  roomImageListState,
+} from '../../../../recoil/accommodationAtoms';
+import DeleteCheckModal from '../reuse/DeleteCheckModal';
 import imageReader from '../../../../utils/imageReader';
 import AccommodationRoomOption from './AccommodationRoomOption';
 
 export interface RoomDataProps {
   idx: number;
+  setIsClicked: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function AccommodationRoomItem({ idx }: RoomDataProps) {
-  const [isPassed, setIsPassed] = useRecoilState(isPassedState);
+export default function AccommodationRoomItem({ idx, setIsClicked }: RoomDataProps) {
+  const [disabled, setDisabled] = useRecoilState(disabledState);
   const [imageData, setImageData] = useRecoilState(imageDataState);
   const [accommodation, setAccommodation] = useRecoilState(accommodationState);
   const [roomImageList, setRoomImageList] = useRecoilState(roomImageListState);
@@ -24,7 +30,8 @@ export default function AccommodationRoomItem({ idx }: RoomDataProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const openModal = () => {
-    if (accommodation.room.length === 1) {
+    setIsClicked(true);
+    if (accommodation.rooms.length === 1) {
       alert('최소 1개의 객실이 존재해야합니다.');
     } else {
       setIsOpenModal(true);
@@ -69,8 +76,8 @@ export default function AccommodationRoomItem({ idx }: RoomDataProps) {
     }
 
     const newAccommodation = { ...accommodation };
-    newAccommodation.room = [...accommodation.room];
-    newAccommodation.room.splice(idx, 1);
+    newAccommodation.rooms = [...accommodation.rooms];
+    newAccommodation.rooms.splice(idx, 1);
     newRoomImageList.splice(idx, 1);
 
     setImageData(newImageData);
@@ -88,11 +95,11 @@ export default function AccommodationRoomItem({ idx }: RoomDataProps) {
         newRoomImageList[idx] = [...roomImageList[idx], result];
 
         const newAccommodation = { ...accommodation };
-        const newRoom = { ...newAccommodation.room[idx], imageCount: newAccommodation.room[idx].imageCount + 1 };
-        newAccommodation.room = [
-          ...newAccommodation.room.slice(0, idx),
-          newRoom,
-          ...newAccommodation.room.slice(idx + 1),
+        const newRooms = { ...newAccommodation.rooms[idx], imageCount: newAccommodation.rooms[idx].imageCount + 1 };
+        newAccommodation.rooms = [
+          ...newAccommodation.rooms.slice(0, idx),
+          newRooms,
+          ...newAccommodation.rooms.slice(idx + 1),
         ];
 
         const newImageData = new FormData();
@@ -110,7 +117,7 @@ export default function AccommodationRoomItem({ idx }: RoomDataProps) {
           const changeIndex = newRoomImageList[idx].length;
 
           const imageDataValue = newImageData.getAll('roomImages');
-          imageDataValue.splice(addStartIndex - 1 + changeIndex, 0, result);
+          imageDataValue.splice(addStartIndex - 1 + changeIndex, 0, file[0]);
 
           newImageData.delete('roomImages');
           imageDataValue.forEach(value => {
@@ -120,7 +127,7 @@ export default function AccommodationRoomItem({ idx }: RoomDataProps) {
           const changeIndex = newRoomImageList[idx].length - 1;
 
           const imageDataValue = newImageData.getAll('roomImages');
-          imageDataValue.splice(changeIndex, 0, result);
+          imageDataValue.splice(changeIndex, 0, file[0]);
 
           newImageData.delete('roomImages');
           imageDataValue.forEach(value => {
@@ -186,7 +193,11 @@ export default function AccommodationRoomItem({ idx }: RoomDataProps) {
           )}
         </StyledCarouselDiv>
       </StyledImageContainer>
-      <AccommodationRoomOption idx={idx} />
+
+      <AccommodationRoomOption idx={idx} setIsClicked={setIsClicked} />
+
+      <StyledCloseIcon onClick={openModal}></StyledCloseIcon>
+
       {isOpenModal && (
         <DeleteCheckModal
           label="해당 객실을 제거하시겠습니까?"
@@ -196,7 +207,6 @@ export default function AccommodationRoomItem({ idx }: RoomDataProps) {
           handleOnButton={deleteRoomItem}
         />
       )}
-      <StyledCloseIcon onClick={openModal}></StyledCloseIcon>
     </>
   );
 }

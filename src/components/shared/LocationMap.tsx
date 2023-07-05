@@ -52,6 +52,6 @@ export default function LocationMap({ latitude, longitude, width, height }: Loca
 }
 
 const MapContainer = styled.div<sizeProps>`
-  ${({ width, height }) => `width: ${width}; height: ${height}`};
+  ${({ width, height }) => `width: ${width}; height: ${height};`};
   border-radius: 20px;
 `;
