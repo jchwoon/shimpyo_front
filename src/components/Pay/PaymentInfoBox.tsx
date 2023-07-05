@@ -130,7 +130,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
             pg: "html5_inicis",
             pay_method: "card",
             merchant_uid: "57008833-33004",
-            name: "당근 10kg",
+            name: "당근 1kg",
             amount: 1004,
             buyer_email: "Iamport@chai.finance",
             buyer_name: "포트원 기술지원팀",
