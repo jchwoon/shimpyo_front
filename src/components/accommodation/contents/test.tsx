@@ -76,9 +76,9 @@ export default function Test() {
 
       console.log(response.data);
 
-      for (let value of formData.values()) {
-        console.log(value);
-      }
+      // for (let value of formData.values()) {
+      //   console.log(value);
+      // }
     } catch (err) {
       console.log(err);
     }

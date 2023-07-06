@@ -15,11 +15,100 @@ import ListItemText from '@mui/material/ListItemText';
 import ColorButton from "../shared/UI/ColorButton";
 import Radio from '@mui/material/Radio';
 
+import { merchantUid } from '../../recoil/detailPageAtoms';
+import { useRecoilValue } from "recoil";
+import useAuthorizedRequest from "../../hooks/useAuthorizedRequest";
+import { accessTokenAtom } from "../../recoil/userAtoms";
+import { loginStateAtom } from "../../recoil/userAtoms";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { AxiosError } from 'axios';
+import { RESERVATION_API_PATH } from "../../constants/api/reservationApi";
+
+interface ResultData {
+    accessToken: string;
+}
 
 interface PaymentInfoBoxProp {
     checkInDate: string | null,
     checkOutDate: string | null,
     price: number | null
+}
+
+declare const window: typeof globalThis & {
+    IMP: any;
+};
+
+interface RequestPayAdditionalParams {
+    digital?: boolean;
+    vbank_due?: string;
+    m_redirect_url?: string;
+    app_scheme?: string;
+    biz_num?: string;
+}
+
+interface Display {
+    card_quota?: number[];
+}
+
+interface RequestPayParams extends RequestPayAdditionalParams {
+    pg?: string;
+    pay_method: string;
+    escrow?: boolean;
+    merchant_uid: string;
+    name?: string;
+    amount: number;
+    custom_data?: any;
+    tax_free?: number;
+    currency?: string;
+    language?: string;
+    buyer_name?: string;
+    buyer_tel: string;
+    buyer_email?: string;
+    buyer_addr?: string;
+    buyer_postcode?: string;
+    notice_url?: string | string[];
+    display?: Display;
+}
+
+interface RequestPayAdditionalResponse {
+    apply_num?: string;
+    vbank_num?: string;
+    vbank_name?: string;
+    vbank_holder?: string | null;
+    vbank_date?: number;
+}
+
+interface RequestPayResponse extends RequestPayAdditionalResponse {
+    success: boolean;
+    error_code: string;
+    error_msg: string;
+    imp_uid: string | null;
+    merchant_uid: string;
+    pay_method?: string;
+    paid_amount?: number;
+    status?: string;
+    name?: string;
+    pg_provider?: string;
+    pg_tid?: string;
+    buyer_name?: string;
+    buyer_email?: string;
+    buyer_tel?: string;
+    buyer_addr?: string;
+    buyer_postcode?: string;
+    custom_data?: any;
+    paid_at?: number;
+    receipt_url?: string;
+}
+
+type RequestPayResponseCallback = (response: RequestPayResponse) => void;
+
+export interface Iamport {
+    init: (accountID: string) => void;
+    request_pay: (
+        params: RequestPayParams,
+        callback?: RequestPayResponseCallback
+    ) => void;
 }
 
 const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDate, price }) => {
@@ -43,6 +132,77 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
         else if (value === paymentRadioSelectedValue) { setPaymentRadioSelectedValue('') }
         else { setPaymentRadioSelectedValue(value) }
     }
+
+    const navigation = useNavigate();
+    const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
+    const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginStateAtom);
+
+    const handleUnAutorization = (error: AxiosError) => {
+        setIsLoggedIn(false);
+        navigation('/');
+        console.error(error.message);
+    };
+
+    const { responseData, sendRequest } = useAuthorizedRequest<ResultData>({
+        onUnauthorized: handleUnAutorization,
+    });
+
+    const uid = useRecoilValue(merchantUid)
+
+    function requestPay() {
+        const { IMP } = window;
+        IMP.init("imp62564523");
+
+        const data = {
+            pg: "html5_inicis",
+            pay_method: "card",
+            merchant_uid: `${uid}`,
+            name: "당근 11kg",
+            amount: 100,
+            buyer_email: "Iamport@chai.finance",
+            buyer_name: "포트원 기술지원팀",
+            buyer_tel: "010-1234-5678",
+            buyer_addr: "서울특별시 강남구 삼성동",
+            buyer_postcode: "123-456",
+        }
+
+        async function callback(response: RequestPayResponse) {
+            const {
+                success,
+                error_msg,
+                imp_uid,
+                merchant_uid,
+            } = response;
+
+            if (success) {
+                await sendRequest({
+                    url: `${RESERVATION_API_PATH}`,
+                    method: "POST",
+                    withCredentials: true,
+                    body: {
+                        impUid: imp_uid,
+                        roomId: 80001,
+                        merchantUid: merchant_uid,
+                        payMethod: "KGINICIS",
+                        peopleCount: 3,
+                        checkInDate: "2023.07.08",
+                        checkOutDate: "2023.07.09"
+                    }
+                });
+                if (responseData) {
+                    console.log("finalResponseData:", responseData)
+                }
+            } else {
+                alert(`결제 실패: ${error_msg}`);
+            }
+        }
+
+        console.log("data:", data)
+
+        IMP.request_pay(data, callback);
+    }
+
+
 
     return (
         <PaymentInfoWrapper>
@@ -141,7 +301,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
             {/* <BookingBtn disabled={paymentRadioSelectedValue === ''}>
                 <Typography fontFamily='Noto Sans KR' fontSize="17px">결제</Typography>
             </BookingBtn> */}
-            <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={() => console.log("hello")} />
+            <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={requestPay} />
             {/* </div> */}
 
         </PaymentInfoWrapper >

@@ -10,6 +10,11 @@ import ToggleFavorite from './ToggleFavorite';
 import { useRecoilState } from "recoil";
 import { Height, Display, Change } from '../../../recoil/navBarAtoms';
 
+import useHttpRequest from '../../../hooks/useHttpRequest';
+import { MAIN_PAGE_HOME_LIST_API_PATH } from '../../../constants/api/homeListApi'
+
+import { useEffect } from 'react'
+
 export default function Cards() {
 
     const [appbarheight, setAppBarHeight] = useRecoilState(Height);
@@ -20,6 +25,21 @@ export default function Cards() {
         setCustomDisplay(false)
         setChange(false);
     }
+
+    interface ResultData {
+        houseList: JSON;
+    }
+
+    const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
+
+    // useEffect(() => {
+    //     sendRequest({
+    //         url: `${MAIN_PAGE_HOME_LIST_API_PATH}`,
+    //         method: 'GET',
+    //     });
+    // }, [])
+
+    // console.log("responseData:", responseData)
 
     return (
         <>

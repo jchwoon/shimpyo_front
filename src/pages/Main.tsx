@@ -40,6 +40,7 @@ export default function Main() {
   const setLoginModal = useSetRecoilState(loginModalAtom);
   const [loginState, setLoginState] = useState(false);
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
+  const navigate = useNavigate();
 
   const menuItems = (
     <div>
@@ -78,16 +79,12 @@ export default function Main() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
-  const navigate = useNavigate();
 
   const value0 = <BottomNavigationAction icon={<CustomIcon />} label="홈" onClick={() => navigate('/')} />;
   const value1 = (
     <BottomNavigationAction icon={<FavoriteIcon />} label="관심 숙소" onClick={() => console.log('hi im value1')} />
   );
   const value2 = (
-    <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
-  );
-  const value3 = (
     <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
   );
 

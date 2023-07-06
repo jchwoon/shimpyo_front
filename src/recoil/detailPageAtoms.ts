@@ -15,3 +15,7 @@ export const activeRoomName = atom<string>({
     default: '',
 });
 
+export const merchantUid = atom<string>({
+    key: 'merchantUid',
+    default: '',
+})
