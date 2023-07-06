@@ -1,8 +1,6 @@
 import styled, { css } from 'styled-components';
 import Header from '../layout/Header';
-import { useRecoilState } from 'recoil';
-import { loginStateAtom } from '../../recoil/userAtoms';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import UserMenu from '../Hosting/Menu/UserMenu';
 import Logo from '../shared/Logo';
 import MenuItem from '../Hosting/Menu/MenuItem';
@@ -18,12 +16,14 @@ import Button from '../shared/UI/Button';
 import { IoMdSettings } from 'react-icons/io';
 import { useRef } from 'react';
 import useMenuBar from '../../hooks/useMenuBar';
+import useLogout from '../../hooks/useLogout';
 
 export default function ReservationHeader() {
-  const [loginState, setLoginState] = useRecoilState(loginStateAtom);
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigation = useNavigate();
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
+  const { logoutHandler } = useLogout();
   const { isOpen, setIsOpen } = useMenuBar({ initialState: false, menuRef, buttonRef });
 
   const toReservationCategory = () => {
@@ -64,26 +64,26 @@ export default function ReservationHeader() {
         />
       </MenuBlock>
       <MenuBlock label="메뉴">
-        <MenuItem icon={BsHouseHeartFill} bold label="관심 숙소" />
+        <MenuItem onClick={() => navigation('/wishlists')} icon={BsHouseHeartFill} bold label="관심 숙소" />
       </MenuBlock>
       <MenuBlock label="계정">
-        <MenuItem icon={BsHouseGearFill} bold label="숙소관리" />
-        <MenuItem icon={IoMdSettings} bold label="계정" />
+        <MenuItem onClick={() => navigation('/hosting')} icon={BsHouseGearFill} bold label="숙소관리" />
+        <MenuItem onClick={() => navigation('/account')} icon={IoMdSettings} bold label="계정" />
       </MenuBlock>
-      <Button label="로그아웃" />
+      <Button onClick={() => logoutHandler()} label="로그아웃" />
     </>
   );
 
   const menuItems = (
     <div>
       <>
-        <MenuItem bold onClick={() => {}} label="여행" />
-        <MenuItem bold onClick={() => {}} label="위시리스트" />
+        <MenuItem bold onClick={() => navigation('/reservations?category=reservation')} label="여행" />
+        <MenuItem bold onClick={() => navigation('/wishlists')} label="위시리스트" />
         <Underline />
-        <MenuItem onClick={() => {}} label="숙소관리" />
-        <MenuItem onClick={() => {}} label="계정" />
+        <MenuItem onClick={() => navigation('/hosting')} label="숙소관리" />
+        <MenuItem onClick={() => navigation('/account')} label="계정" />
         <Underline />
-        <MenuItem onClick={() => {}} label="로그아웃" />
+        <MenuItem onClick={() => logoutHandler()} label="로그아웃" />
       </>
     </div>
   );
@@ -133,7 +133,7 @@ const StyleCategoryMenu = styled.div`
   font-size: 15px;
   font-weight: bold;
 
-  @media only screen and (min-width: 1024px) {
+  @media only screen and (min-width: 768px) {
     display: flex;
   }
 `;

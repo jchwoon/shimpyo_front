@@ -25,7 +25,7 @@ export default function UserMenu({ menuItems, slideMenuItems, buttonRef, menuRef
     <Menu>
       <StyleFlexBox>
         <StyleMenuButton ref={buttonRef}>
-          {viewPortWidth > 1024 ? (
+          {viewPortWidth > 768 ? (
             <div
               style={{
                 display: 'flex',
@@ -45,12 +45,12 @@ export default function UserMenu({ menuItems, slideMenuItems, buttonRef, menuRef
           )}
         </StyleMenuButton>
       </StyleFlexBox>
-      {isOpen && viewPortWidth > 1024 && (
+      {isOpen && viewPortWidth > 768 && (
         <StyleUserMenuList ref={menuRef}>
           <StyleFlexMenuList>{menuItems}</StyleFlexMenuList>
         </StyleUserMenuList>
       )}
-      {isOpen && viewPortWidth <= 1024 && (
+      {isOpen && viewPortWidth <= 768 && (
         <StyleTotalContainer ref={menuRef} showMenu={isOpen}>
           <StyleTotalMenuBox>{slideMenuItems}</StyleTotalMenuBox>
         </StyleTotalContainer>

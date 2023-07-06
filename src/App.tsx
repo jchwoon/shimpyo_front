@@ -2,7 +2,6 @@ import './App.css';
 import './fonts.css';
 import { useRecoilState } from 'recoil';
 import { Outlet, useNavigate } from 'react-router-dom';
-
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import useAuthorizedRequest from './hooks/useAuthorizedRequest';

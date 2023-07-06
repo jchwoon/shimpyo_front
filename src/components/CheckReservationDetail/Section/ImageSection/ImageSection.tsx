@@ -15,6 +15,7 @@ interface ImageSectionProps {
   houseId: number;
   hostname: string;
   houseOwnerId: number;
+  isOver?: boolean;
 }
 
 export default function ImageSection({
@@ -24,6 +25,7 @@ export default function ImageSection({
   houseId,
   hostname,
   houseOwnerId,
+  isOver,
 }: ImageSectionProps) {
   const navigation = useNavigate();
   const [changeCheckIn, setChangeCheckIn] = useState('');
@@ -49,19 +51,23 @@ export default function ImageSection({
     <StyleSection>
       <ImageBox imageList={imageList} />
       <Section>
-        <StyleDateBox>
-          <div style={{ borderRight: '1px solid rgb(200, 200, 200)' }}>
-            <div style={{ marginBottom: '1rem', fontSize: '16px', fontWeight: 'bold' }}>체크인</div>
-            <div style={{ marginBottom: '1rem' }}>{changeCheckIn.split(' ').slice(0, 3).join(' ')}</div>
-            <div>{changeCheckIn.split(' ').slice(3, 5).join(' ')}</div>
-          </div>
-          <div>
-            <div style={{ marginBottom: '1rem', fontSize: '16px', fontWeight: 'bold' }}>체크아웃</div>
-            <div style={{ marginBottom: '1rem' }}>{changeCheckOut.split(' ').slice(0, 3).join(' ')}</div>
-            <div>{changeCheckOut.split(' ').slice(3, 5).join(' ')}</div>
-          </div>
-        </StyleDateBox>
-        <StyleLine />
+        {!isOver && (
+          <>
+            <StyleDateBox>
+              <div style={{ borderRight: '1px solid rgb(200, 200, 200)' }}>
+                <div style={{ marginBottom: '1rem', fontSize: '16px', fontWeight: 'bold' }}>체크인</div>
+                <div style={{ marginBottom: '1rem' }}>{changeCheckIn.split(' ').slice(0, 3).join(' ')}</div>
+                <div>{changeCheckIn.split(' ').slice(3, 5).join(' ')}</div>
+              </div>
+              <div>
+                <div style={{ marginBottom: '1rem', fontSize: '16px', fontWeight: 'bold' }}>체크아웃</div>
+                <div style={{ marginBottom: '1rem' }}>{changeCheckOut.split(' ').slice(0, 3).join(' ')}</div>
+                <div>{changeCheckOut.split(' ').slice(3, 5).join(' ')}</div>
+              </div>
+            </StyleDateBox>
+            <StyleLine />
+          </>
+        )}
         <SectionListBox onClick={toHouseDetailPage} button icon={BsHouseDoor} content="숙소 상세 보기" title="숙소" />
         <StyleLine />
         <SectionListBox onClick={toHostPage} button icon={GrUserManager} content={hostname} title="호스트 정보 보기" />

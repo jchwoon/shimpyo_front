@@ -57,6 +57,7 @@ export default function ReservationCancelModal({ price, checkIn }: ReservationCa
     if (responseData.isSuccess) {
       navigation('/reservations?category=reservation');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);
 
   const title = <div>{`지금 예약 취소 시 취소 수수료 ${formatCurrency(commission)}원이 발생합니다.`}</div>;

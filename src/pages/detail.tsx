@@ -1,4 +1,3 @@
-
 import styled from 'styled-components';
 import { AiFillHeart } from 'react-icons/ai';
 
@@ -21,9 +20,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import ToggleFavorite from '../components/detail/Container/ToggleFavorite';
 
 import MobileFooter from '../components/Main/MobileFooter/MobileFooter';
+import LoginModal from '../components/shared/Modal/LoginModal';
 
 export default function Detail() {
-
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -41,14 +40,14 @@ export default function Detail() {
   const [customDisplay, setCustomDisplay] = useRecoilState(Display);
   const [change, setChange] = useRecoilState(Change);
   const handleClick = () => {
-    setAppBarHeight("80px")
-    setCustomDisplay(false)
+    setAppBarHeight('80px');
+    setCustomDisplay(false);
     setChange(false);
-  }
+  };
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
         <CssBaseline />
         {isLargeScreen ? (
           <ThemeProvider theme={NavbarTheme}>
@@ -79,8 +78,9 @@ export default function Detail() {
           <MobileFooter defaultValue={null} />
         </ThemeProvider>
       )}
+      <LoginModal />
     </>
-  )
+  );
 }
 
 const Container = styled.div`
@@ -99,40 +99,39 @@ const Container = styled.div`
   }
 `;
 
-const TitleWrapper = styled.div`
-`
+const TitleWrapper = styled.div``;
 
 const ToggleButtonWrapper = styled.div`
-display:flex;
-align-items: flex-end;
-margin-bottom:10px;
-`
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 10px;
+`;
 
 const Title = styled.div`
   font-size: 26px;
   font-weight: bold;
-  font-family: "Noto Sans KR";
+  font-family: 'Noto Sans KR';
 `;
 
 const Description = styled.div`
-display:flex;
-justify-content: space-between;
-margin-top:20px;
-margin-bottom:20px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 20px;
 `;
 
 const DescriptionLocation = styled.div`
   text-decoration: underline;
 `;
 
-const CustomizedDarkDiv = styled.div < { customDisplay: boolean }> `
-height: 100%;
-width: 100%;
-background-color: #000000b3;
-position: fixed;
-top:0px;
-left:0px;
-visibility:${({ customDisplay }) => (customDisplay ? "visible" : "hidden")};
-transition: 0.2s ease;
-z-index:3;
-`
+const CustomizedDarkDiv = styled.div<{ customDisplay: boolean }>`
+  height: 100%;
+  width: 100%;
+  background-color: #000000b3;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  visibility: ${({ customDisplay }) => (customDisplay ? 'visible' : 'hidden')};
+  transition: 0.2s ease;
+  z-index: 3;
+`;

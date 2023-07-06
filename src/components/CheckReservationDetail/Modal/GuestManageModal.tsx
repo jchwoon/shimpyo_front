@@ -14,20 +14,26 @@ const IconStyle = {
   borderRadius: '100%',
 };
 
-export default function GuestManageModal({ peopleCount }: { peopleCount: string }) {
+interface GuestManageModalProps {
+  maxPeople: number;
+  minPeople: number;
+  peopleCount: number;
+}
+
+export default function GuestManageModal({ peopleCount, minPeople, maxPeople }: GuestManageModalProps) {
   const [guestModalState, setGuestModalState] = useRecoilState(guestManageModalAtom);
   const [guestCount, setGuestCount] = useState(peopleCount);
   const { responseData, sendRequest } = useAuthorizedRequest({});
   const { reservationId } = useParams();
 
   const plustGuestCount = () => {
-    if (guestCount === '5') return;
-    setGuestCount(prev => String(+prev + 1));
+    if (guestCount === maxPeople) return;
+    setGuestCount(prev => prev + 1);
   };
 
   const minusGuestCount = () => {
-    if (guestCount === '1') return;
-    setGuestCount(prev => String(+prev - 1));
+    if (guestCount === minPeople) return;
+    setGuestCount(prev => prev - 1);
   };
 
   const initialState = () => {
@@ -36,7 +42,7 @@ export default function GuestManageModal({ peopleCount }: { peopleCount: string 
 
   const submitFixGuestNumber = async () => {
     if (peopleCount === guestCount) return;
-
+    console.log(peopleCount, guestCount);
     await sendRequest({
       url: `/user/reservations/${reservationId}/people-count`,
       body: { peopleCount: guestCount },
@@ -61,14 +67,14 @@ export default function GuestManageModal({ peopleCount }: { peopleCount: string 
 
   const body = (
     <div>
-      <div style={{ paddingTop: '10px' }}>최대 숙박 가능 인원: 5</div>
+      <div style={{ paddingTop: '10px' }}>{`최대 숙박 가능 인원: ${maxPeople}`}</div>
       <StyleButtonBox>
         <div>{`인원 ${guestCount}명`}</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <StyleButton disabled={guestCount === '1'}>
+          <StyleButton disabled={guestCount === minPeople}>
             <AiOutlineMinus onClick={minusGuestCount} style={{ ...IconStyle }} />
           </StyleButton>
-          <StyleButton disabled={guestCount === '5'}>
+          <StyleButton disabled={guestCount === maxPeople}>
             <AiOutlinePlus onClick={plustGuestCount} style={{ ...IconStyle }} />
           </StyleButton>
         </div>

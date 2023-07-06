@@ -47,6 +47,7 @@ export default function LoginModal() {
       withcredential: true,
     });
   };
+
   const submitHandler = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key !== 'Enter') return;
 

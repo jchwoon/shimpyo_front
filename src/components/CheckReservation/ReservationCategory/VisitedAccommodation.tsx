@@ -8,6 +8,8 @@ import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import usePagination from '../../../hooks/usePagination';
 import CategoryFooter from '../CategoryFooter';
 
+type State = 'COMPLETE' | 'USING' | 'FINISHED' | 'CANCEL';
+
 type ListType = {
   reservationId: number;
   houseImageUrl: string;
@@ -16,7 +18,7 @@ type ListType = {
   houseType: string;
   checkInDate: string;
   checkOutDate: string;
-  reservationStatus?: string;
+  reservationStatus: State;
   existReview: boolean;
 };
 
@@ -29,7 +31,6 @@ interface IResultData {
 
 export default function VisitedAccommodation() {
   const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
-  // const { isOpen, toggleShowButton } = useReservationCategoryToggle('visited');
 
   const [totalPage, setTotalPage] = useState<number>(1);
   const [totalItem, setTotalItem] = useState<number>(0);

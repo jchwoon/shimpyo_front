@@ -8,6 +8,8 @@ import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import usePagination from '../../../hooks/usePagination';
 import CategoryFooter from '../CategoryFooter';
 
+type State = 'COMPLETE' | 'USING' | 'FINISHED' | 'CANCEL';
+
 type ListType = {
   reservationId: number;
   houseImageUrl: string;
@@ -16,7 +18,7 @@ type ListType = {
   houseType: string;
   checkInDate: string;
   checkOutDate: string;
-  reservationStatus: string;
+  reservationStatus: State;
 };
 
 interface IResultData {

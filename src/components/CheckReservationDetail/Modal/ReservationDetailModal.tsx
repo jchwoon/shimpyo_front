@@ -1,15 +1,13 @@
-import styled from 'styled-components';
-import LocationMap from '../../shared/LocationMap';
+import { useRecoilState } from 'recoil';
+import Modal from '../../shared/Modal';
+import { reservationDetailModalAtom } from '../../../recoil/modalAtoms';
+import { useSearchParams } from 'react-router-dom';
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import ImageSection from '../Section/ImageSection/ImageSection';
 import DetailSection from '../Section/DetailSection';
-import GuideSection from '../Section/GuideSection';
 import PaySection from '../Section/PaySection';
-import GuestManageModal from '../Modal/GuestManageModal';
-import ReservationCancelModal from '../Modal/ReservationCancelModal';
-import NotFound from '../../../pages/404';
 
 interface IResultData {
   houseId: number;
@@ -33,9 +31,9 @@ interface IResultData {
   houseOwnerId: number;
 }
 
-export default function CheckReservationDetailMain() {
-  const { reservationId } = useParams();
-  const [isValidReservationId, setIsValidReservationId] = useState(true);
+export default function ReservationDetailModal() {
+  const [reservationDetailModal, setReservationDetailModal] = useRecoilState(reservationDetailModalAtom);
+  const [searchParams] = useSearchParams();
   const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
   const [detailData, setDetailData] = useState<IResultData>({
     address: '',
@@ -64,26 +62,18 @@ export default function CheckReservationDetailMain() {
 
     if (responseData.isSuccess) {
       setDetailData(responseData.result);
-    } else {
-      // if (responseData.code === 3100)
-      setIsValidReservationId(false);
     }
   }, [responseData]);
 
   useEffect(() => {
     const getData = async () => {
-      await sendRequest({ url: `/user/reservations/${reservationId}` });
+      await sendRequest({ url: `/user/reservations/${searchParams.get('reservationId')}` });
     };
 
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (!isValidReservationId) {
-    return <NotFound />;
-  }
-  return (
-    <>
+  }, [searchParams]);
+  const body = (
+    <div>
       <StyleMainBox>
         <StyleFlexBox>
           <StyleLeftBox>
@@ -96,30 +86,29 @@ export default function CheckReservationDetailMain() {
                   checkOut={detailData.checkOutDate}
                   houseId={detailData.houseId}
                   hostname={detailData.houseOwnerName}
+                  isOver={true}
                 />
-                <DetailSection peopleCount={detailData.peopleCount} />
-                <GuideSection address={detailData.address} lat={detailData.lat} lng={detailData.lng} />
+                <DetailSection isOver={true} peopleCount={detailData.peopleCount} />
                 <PaySection price={detailData.price} />
               </StyleFlexColumnBox>
             </StyleLeftContents>
           </StyleLeftBox>
-          <StyleRightBox>
-            <LocationMap latitude={detailData?.lat} longitude={detailData?.lng} height="100%" width="100%" />
-          </StyleRightBox>
         </StyleFlexBox>
       </StyleMainBox>
-      <GuestManageModal
-        minPeople={detailData.minPeople}
-        maxPeople={detailData.maxPeople}
-        peopleCount={detailData.peopleCount}
-      />
-      <ReservationCancelModal price={detailData.price} checkIn={detailData.checkInDate} />
-    </>
+    </div>
+  );
+  return (
+    <Modal
+      body={body}
+      label="예약 세부 정보"
+      isOpen={reservationDetailModal}
+      onClose={() => setReservationDetailModal(false)}
+      nonPadding
+    />
   );
 }
 
 const StyleMainBox = styled.div`
-  margin-top: 30px;
   background-color: hsl(0, 0%, 90%);
 `;
 
@@ -135,29 +124,9 @@ const StyleFlexColumnBox = styled.div`
 
 const StyleLeftBox = styled.div`
   background-color: white;
-  margin-top: 17px;
   border-radius: 5px;
-  width: 100%;
-
-  @media only screen and (min-width: 738px) {
-    width: 400px;
-    margin: 1.7rem 0.7rem 0.7rem 0.7rem;
-    height: calc(100vh - 105px);
-    overflow-y: scroll;
-  }
-  @media only screen and (min-width: 1130px) {
-    width: 600px;
-    margin: 1.7rem 0.7rem 0.7rem 0.7rem;
-    height: calc(100vh - 105px);
-    overflow-y: scroll;
-  }
+  width: 520px;
 `;
-const StyleRightBox = styled.div`
-  margin-top: 1.1rem;
-  height: calc(100vh - 80px);
-  flex-grow: 1;
-`;
-
 const StyleLeftContents = styled.div`
   height: auto;
   background-color: hsl(0, 0%, 90%);

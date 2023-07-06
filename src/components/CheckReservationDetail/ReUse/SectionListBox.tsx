@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 
 interface SectionListBoxProps {
   title: string;
-  content?: string | number | React.ReactElement;
+  content?: string | number | React.ReactElement | null;
   detail?: boolean;
   icon?: IconType;
   button?: boolean;

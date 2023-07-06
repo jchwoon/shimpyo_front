@@ -5,7 +5,7 @@ import { AiFillCopy } from 'react-icons/ai';
 import { MdLocationOn } from 'react-icons/md';
 import SectionMenuListBox from '../ReUse/SectionMenuListBox';
 import { useSetRecoilState } from 'recoil';
-import { alarmAtoms } from '../../../recoil/modalAtoms';
+import { copyAddressAlarmAtoms } from '../../../recoil/alarmAtoms';
 
 interface GuideSectionProps {
   address: string;
@@ -14,14 +14,14 @@ interface GuideSectionProps {
 }
 
 export default function GuideSection({ address, lat, lng }: GuideSectionProps) {
-  const setAlarmOpen = useSetRecoilState(alarmAtoms);
+  const setCopyAddressAlarmOpen = useSetRecoilState(copyAddressAlarmAtoms);
 
   const handleCopyAddress = () => {
     const copy = address;
     navigator.clipboard
       .writeText(copy)
       .then(() => {
-        setAlarmOpen(true);
+        setCopyAddressAlarmOpen(true);
       })
       .catch(error => {
         console.error('복사 에러:', error);
