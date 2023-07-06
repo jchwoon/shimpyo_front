@@ -19,9 +19,9 @@ export default function MobileFooter({ defaultValue, Action0, Action1, Action2, 
 
   const setValueNullTimeout = () => {
     setTimeout(() => {
-      setValue(defaultValue)
+      setValue(defaultValue);
     }, 500) as NodeJS.Timeout;
-  }
+  };
 
   const handleAction0Click = () => {
     setValue(0);
@@ -47,7 +47,11 @@ export default function MobileFooter({ defaultValue, Action0, Action1, Action2, 
       handleAction0Click();
       setValueNullTimeout();
     },
-    label: <Typography fontFamily='Noto Sans KR' fontWeight="500" fontSize="12px">{Action0.props.label} </Typography>
+    label: (
+      <Typography fontFamily="Noto Sans KR" fontWeight="500" fontSize="12px">
+        {Action0.props.label}{' '}
+      </Typography>
+    ),
   });
 
   const Action1WithClick = cloneElement(Action1, {
@@ -58,7 +62,11 @@ export default function MobileFooter({ defaultValue, Action0, Action1, Action2, 
       handleAction1Click();
       setValueNullTimeout();
     },
-    label: <Typography fontFamily='Noto Sans KR' fontWeight="500" fontSize="12px">{Action1.props.label} </Typography>
+    label: (
+      <Typography fontFamily="Noto Sans KR" fontWeight="500" fontSize="12px">
+        {Action1.props.label}{' '}
+      </Typography>
+    ),
   });
 
   const Action2WithClick = cloneElement(Action2, {
@@ -69,19 +77,29 @@ export default function MobileFooter({ defaultValue, Action0, Action1, Action2, 
       handleAction2Click();
       setValueNullTimeout();
     },
-    label: <Typography fontFamily='Noto Sans KR' fontWeight="500" fontSize="12px">{Action2.props.label} </Typography>
+    label: (
+      <Typography fontFamily="Noto Sans KR" fontWeight="500" fontSize="12px">
+        {Action2.props.label}{' '}
+      </Typography>
+    ),
   });
 
-  const Action3WithClick = Action3 ? cloneElement(Action3, {
-    onClick: (event: React.MouseEvent) => {
-      if (Action3.props.onClick) {
-        Action3.props.onClick(event);
-      }
-      handleAction3Click();
-      setValueNullTimeout();
-    },
-    label: <Typography fontFamily='Noto Sans KR' fontWeight="500" fontSize="12px">{Action2.props.label} </Typography>
-  }) : null
+  const Action3WithClick = Action3
+    ? cloneElement(Action3, {
+        onClick: (event: React.MouseEvent) => {
+          if (Action3.props.onClick) {
+            Action3.props.onClick(event);
+          }
+          handleAction3Click();
+          setValueNullTimeout();
+        },
+        label: (
+          <Typography fontFamily="Noto Sans KR" fontWeight="500" fontSize="12px">
+            {Action3.props.label}{' '}
+          </Typography>
+        ),
+      })
+    : null;
 
   return (
     <>

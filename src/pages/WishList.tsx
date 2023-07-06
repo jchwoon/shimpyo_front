@@ -1,6 +1,6 @@
-import WishListFooter from '../components/WishList/WishListFooter';
-import WishListHeader from '../components/WishList/WishListHeader';
-import WishListMain from '../components/WishList/WishListMain';
+import WishListFooter from '../components/WishList/Footer/WishListFooter';
+import WishListHeader from '../components/WishList/Header/WishListHeader';
+import WishListMain from '../components/WishList/Main/WishListMain';
 
 export default function WishList() {
   return (

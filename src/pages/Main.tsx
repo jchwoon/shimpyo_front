@@ -18,11 +18,15 @@ import LoginModal from '../components/shared/Modal/LoginModal';
 import IdFindModal from '../components/Main/Modal/IdFindModal';
 import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
 import { useSearchParams } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 import { loginModalAtom } from '../recoil/modalAtoms';
+
 import UserMenuItem from '../components/shared/UserMenu/UserMenuItem';
+
 import SearchBar from '../components/Main/Navbar/SearchBar';
+
 import { Height } from '../recoil/navBarAtoms';
+
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -33,6 +37,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Main() {
   const [searchParams] = useSearchParams();
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
+  const setLoginModal = useSetRecoilState(loginModalAtom);
   const [loginState, setLoginState] = useState(false);
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
 
@@ -48,7 +53,7 @@ export default function Main() {
         </div>
       ) : (
         <div>
-          <UserMenuItem label="로그인" onClick={() => console.log('hi')} />
+          <UserMenuItem label="로그인" onClick={() => setLoginModal(true)} />
           <UserMenuItem divide label="회원가입" onClick={() => console.log('hi')} />
           <UserMenuItem label="호스트가 되어보세요" onClick={() => console.log('hi')} />
         </div>
@@ -67,8 +72,13 @@ export default function Main() {
     };
   }, []);
 
+  useEffect(() => {
+    if (searchParams.has('redirect_url')) {
+      setLoginModal(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
   const navigate = useNavigate();
-  const setLoginModal = useSetRecoilState(loginModalAtom);
 
   const value0 = <BottomNavigationAction icon={<CustomIcon />} label="홈" onClick={() => navigate('/')} />;
   const value1 = (

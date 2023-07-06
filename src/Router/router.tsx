@@ -120,7 +120,7 @@ const router = createBrowserRouter([
         path: 'wishlists',
         element: (
           <Suspense fallback={<Loading />}>
-            <AuthCheck option={null}>
+            <AuthCheck option={onlyLogin}>
               <WishList />
             </AuthCheck>
           </Suspense>

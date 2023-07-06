@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-import Main from '../layout/Main';
+import Main from '../../layout/Main';
 import { useEffect, useState } from 'react';
 
 import ImageBox from './ImageBox';
-import useAuthorizedRequest from '../../hooks/useAuthorizedRequest';
-import WishListDeleteConfirmModal from './Modal/WishListDeleteConfirmModal';
+import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 
-type Item = {
+export type Item = {
   id: number;
   detailId: number;
   mainImage: string;
@@ -48,26 +47,30 @@ export default function WishListMain() {
         <StyleTitle>관심 숙소</StyleTitle>
         <StyleGridBox>
           {wishList.map(item => (
-            <ImageBox key={item.id} fetchWishListsData={fetchWishListsData} item={item} />
+            <ImageBox fetchWishListsData={fetchWishListsData} key={item.id} item={item} />
           ))}
         </StyleGridBox>
       </Main>
-      <WishListDeleteConfirmModal />
     </>
   );
 }
 
 const StyleTitle = styled.h1`
-  margin-top: 100px;
   margin-bottom: 50px;
   font-size: 30px;
   font-weight: bold;
+  margin-top: 30px;
+
+  @media only screen and (min-width: 764px) {
+    margin-top: 100px;
+  }
 `;
 
 const StyleGridBox = styled.div`
   display: grid;
   gap: 20px;
   grid-template-columns: 1fr;
+  margin-bottom: 80px;
 
   @media only screen and (min-width: 644px) {
     grid-template-columns: 1fr 1fr;
