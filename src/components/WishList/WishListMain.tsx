@@ -1,43 +1,59 @@
 import styled from 'styled-components';
 import Main from '../layout/Main';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+import ImageBox from './ImageBox';
+import useAuthorizedRequest from '../../hooks/useAuthorizedRequest';
+import WishListDeleteConfirmModal from './Modal/WishListDeleteConfirmModal';
+
+type Item = {
+  id: number;
+  detailId: number;
+  mainImage: string;
+};
+
+interface wishListData {
+  list: Item[];
+}
 
 export default function WishListMain() {
-  const navigation = useNavigate();
+  const { responseData, sendRequest } = useAuthorizedRequest<wishListData>({});
+
   const [wishList, setWishList] = useState([
-    { id: 1, mainImage: '/images/image.png', secondImage: '/images/image.png', thirdImage: '/images/image.png' },
-    { id: 2, mainImage: '/images/image.png', secondImage: '/images/image.png', thirdImage: '/images/image.png' },
-    { id: 3, mainImage: '/images/image.png', secondImage: '/images/image.png', thirdImage: '/images/image.png' },
-    { id: 4, mainImage: '/images/image.png', secondImage: '/images/image.png', thirdImage: '/images/image.png' },
+    { id: 1, mainImage: '/images/image.png', detailId: 1 },
+    { id: 2, mainImage: '/images/image.png', detailId: 2 },
+    { id: 3, mainImage: '/images/image.png', detailId: 3 },
+    { id: 4, mainImage: '/images/image.png', detailId: 4 },
   ]);
 
+  const fetchWishListsData = async () => {
+    await sendRequest({ url: '/wishlists' });
+  };
+
+  useEffect(() => {
+    fetchWishListsData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!responseData) return;
+
+    if (responseData.isSuccess) {
+      setWishList(responseData.result.list);
+    }
+  }, [responseData]);
   return (
-    <Main>
-      <StyleTitle>관심 숙소</StyleTitle>
-      <StyleGridBox>
-        {wishList.map(item => (
-          <ImageBox
-            onClick={() => {
-              navigation(`/detail/1`);
-            }}
-            key={item.id}
-          >
-            <StyleMainImageBox>
-              <MainImage src={item.mainImage} style={{ borderRadius: '20px 0 0 20px' }} />
-            </StyleMainImageBox>
-            <SideImageBox>
-              <div style={{ height: '50%', width: '100%' }}>
-                <SideImage src={item.secondImage} style={{ borderRadius: '0 20px 0 0' }} />
-              </div>
-              <div style={{ height: '50%', width: '100%' }}>
-                <SideImage src={item.thirdImage} style={{ borderRadius: '0 0 20px 0' }} />
-              </div>
-            </SideImageBox>
-          </ImageBox>
-        ))}
-      </StyleGridBox>
-    </Main>
+    <>
+      <Main>
+        <StyleTitle>관심 숙소</StyleTitle>
+        <StyleGridBox>
+          {wishList.map(item => (
+            <ImageBox key={item.id} fetchWishListsData={fetchWishListsData} item={item} />
+          ))}
+        </StyleGridBox>
+      </Main>
+      <WishListDeleteConfirmModal />
+    </>
   );
 }
 
@@ -58,43 +74,6 @@ const StyleGridBox = styled.div`
   }
 
   @media only screen and (min-width: 1096px) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
-`;
-
-const ImageBox = styled.div`
-  display: grid;
-  cursor: pointer;
-  grid-template-columns: 2fr 1fr;
-  gap: 1px;
-  position: relative;
-  height: 200px;
-`;
-
-const StyleMainImageBox = styled.div`
-  height: 200px;
-  width: 100%;
-`;
-
-const MainImage = styled.img`
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 20px 0 0 20px;
-`;
-
-const SideImageBox = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1px;
-  height: 200px;
-  width: 100%;
-`;
-
-const SideImage = styled.img`
-  object-position: center;
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
 `;

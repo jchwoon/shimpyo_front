@@ -49,3 +49,8 @@ export const reservationDetailModalAtom = atom<boolean>({
   key: 'reservationDetailModalAtom',
   default: false,
 });
+
+export const wishListDeleteConfirmModalAtom = atom<boolean>({
+  key: 'wishListDeleteConfirmModalAtom',
+  default: false,
+});
