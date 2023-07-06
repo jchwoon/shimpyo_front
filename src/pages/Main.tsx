@@ -39,6 +39,8 @@ export default function Main() {
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
   const [loginState, setLoginState] = useState(false);
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
+  const navigate = useNavigate()
+  const setLoginModal = useSetRecoilState(loginModalAtom);
 
   const menuItems = (
     <div>
@@ -52,7 +54,7 @@ export default function Main() {
         </div>
       ) : (
         <div>
-          <UserMenuItem label="로그인" onClick={() => console.log('hi')} />
+          <UserMenuItem label="로그인" onClick={() => setLoginModal(true)} />
           <UserMenuItem divide label="회원가입" onClick={() => console.log('hi')} />
           <UserMenuItem label="호스트가 되어보세요" onClick={() => console.log('hi')} />
         </div>
@@ -70,9 +72,6 @@ export default function Main() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-  const navigate = useNavigate()
-  const setLoginModal = useSetRecoilState(loginModalAtom);
 
   const value0 = <BottomNavigationAction icon={<CustomIcon />} label="홈" onClick={() => navigate('/')} />
   const value1 = <BottomNavigationAction icon={<FavoriteIcon />} label="관심 숙소" onClick={() => console.log("hi im value1")} />

@@ -15,6 +15,19 @@ import ListItemText from '@mui/material/ListItemText';
 import ColorButton from "../shared/UI/ColorButton";
 import Radio from '@mui/material/Radio';
 
+import { merchantUid } from '../../recoil/detailPageAtoms';
+import { useRecoilValue } from "recoil";
+import useAuthorizedRequest from "../../hooks/useAuthorizedRequest";
+import { accessTokenAtom } from "../../recoil/userAtoms";
+import { loginStateAtom } from "../../recoil/userAtoms";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { AxiosError } from 'axios';
+import { RESERVATION_API_PATH } from "../../constants/api/reservationApi";
+
+interface ResultData {
+    accessToken: string;
+}
 
 interface PaymentInfoBoxProp {
     checkInDate: string | null,
@@ -120,18 +133,32 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
         else { setPaymentRadioSelectedValue(value) }
     }
 
+    const navigation = useNavigate();
+    const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
+    const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginStateAtom);
 
+    const handleUnAutorization = (error: AxiosError) => {
+        setIsLoggedIn(false);
+        navigation('/');
+        console.error(error.message);
+    };
+
+    const { responseData, sendRequest } = useAuthorizedRequest<ResultData>({
+        onUnauthorized: handleUnAutorization,
+    });
+
+    const uid = useRecoilValue(merchantUid)
 
     function requestPay() {
         const { IMP } = window;
-        IMP.init("imp08502640");
+        IMP.init("imp62564523");
 
         const data = {
             pg: "html5_inicis",
             pay_method: "card",
-            merchant_uid: "57008833-33004",
+            merchant_uid: `${uid}`,
             name: "당근 11kg",
-            amount: 1000,
+            amount: 100,
             buyer_email: "Iamport@chai.finance",
             buyer_name: "포트원 기술지원팀",
             buyer_tel: "010-1234-5678",
@@ -139,21 +166,43 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
             buyer_postcode: "123-456",
         }
 
-        function callback(response: RequestPayResponse) {
+        async function callback(response: RequestPayResponse) {
             const {
                 success,
                 error_msg,
+                imp_uid,
+                merchant_uid,
             } = response;
 
             if (success) {
-                alert('결제 성공');
+                await sendRequest({
+                    url: `${RESERVATION_API_PATH}`,
+                    method: "POST",
+                    withCredentials: true,
+                    body: {
+                        impUid: imp_uid,
+                        roomId: 80001,
+                        merchantUid: merchant_uid,
+                        payMethod: "KGINICIS",
+                        peopleCount: 3,
+                        checkInDate: "2023.07.08",
+                        checkOutDate: "2023.07.09"
+                    }
+                });
+                if (responseData) {
+                    console.log("finalResponseData:", responseData)
+                }
             } else {
                 alert(`결제 실패: ${error_msg}`);
             }
         }
 
+        console.log("data:", data)
+
         IMP.request_pay(data, callback);
     }
+
+
 
     return (
         <PaymentInfoWrapper>
