@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { AiOutlineRight } from 'react-icons/ai';
 import { BiBed } from 'react-icons/bi';
 import Divider from '@mui/material/Divider';
-import { Typography, Card } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import { useState } from 'react';
 import { ClickAwayListener } from '@mui/material';
 
@@ -10,12 +10,18 @@ import { Wifi, PC, Barbeque, Parking } from './Options';
 import { RoomCard } from './RoomCard';
 import LocationMap from '../../shared/LocationMap';
 
+import { useRecoilState } from "recoil";
+import { activeRoom } from '../../../recoil/detailPageAtoms';
+
+
 export default function SideContainer() {
 
-  const [activeCard, setActiveCard] = useState<string | null>(null);
+  const [activeRecoilCard, setActiveRecoilCard] = useRecoilState(activeRoom)
 
   const handleCardClick = (cardName: string) => {
-    setActiveCard(cardName);
+    if (activeRecoilCard === null) { setActiveRecoilCard(cardName) }
+    else if (activeRecoilCard === cardName) { setActiveRecoilCard(null) }
+    else if (activeRecoilCard !== cardName) { setActiveRecoilCard(cardName) }
   };
 
   const [linelimit, setLineLimit] = useState<number>(3);
@@ -35,19 +41,23 @@ export default function SideContainer() {
       <HotelDescription linelimit={linelimit}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
       </HotelDescription>
-      <SeeMore onClick={handleHSeeMore}>
-        {linelimit === 3 ? "자세히 보기" : "간략히"} <AiOutlineRight />
-      </SeeMore>
+      <div>
+        <SeeMore onClick={handleHSeeMore} disableRipple>
+          {linelimit === 3 ? "자세히 보기" : "간략히"} <AiOutlineRight />
+        </SeeMore>
+      </div>
       <Divider />
       <MainTitle >객실 안내</MainTitle >
       <RoomCardContainer>
-        <RoomCard name={"디럭스룸"} doubleBed={1} bedroom={1} shower={1} person={4} price={50000} onClick={() => handleCardClick('디럭스룸')} active={activeCard === '디럭스룸'} />
-        <RoomCard name={"스위트룸"} doubleBed={1} bedroom={2} shower={2} person={6} price={70000} onClick={() => handleCardClick('스위트룸')} active={activeCard === '스위트룸'} />
-        <RoomCard name={"스탠다드룸"} doubleBed={1} bedroom={1} shower={1} person={2} price={60000} onClick={() => handleCardClick('스탠다드룸')} active={activeCard === '스탠다드룸'} />
+        <RoomCard name={"디럭스룸"} doubleBed={1} bedroom={1} shower={1} person={4} price={50000} onClick={() => handleCardClick('디럭스룸')} active={activeRecoilCard === '디럭스룸'} />
+        <RoomCard name={"스위트룸"} doubleBed={1} bedroom={2} shower={2} person={6} price={70000} onClick={() => handleCardClick('스위트룸')} active={activeRecoilCard === '스위트룸'} />
+        <RoomCard name={"스탠다드룸"} doubleBed={1} bedroom={1} shower={1} person={2} price={60000} onClick={() => handleCardClick('스탠다드룸')} active={activeRecoilCard === '스탠다드룸'} />
       </RoomCardContainer>
       <Divider />
       <MainTitle >위치</MainTitle >
-      <LocationMap latitude={38.715133} longitude={126.734086} width={"100"} height={"300"} />
+      <div style={{ width: "100%", height: "300px" }}>
+        <LocationMap latitude={38.715133} longitude={126.734086} width={"100%"} height={"100%"} />
+      </div>
     </Container>
   );
 }
@@ -80,16 +90,19 @@ const HotelDescription = styled(Typography) <{ linelimit: number }>`
   text-overflow: ellipsis;
 `;
 
-const SeeMore = styled(Typography)`
+const SeeMore = styled(Button)`
   font-family: Noto Sans KR;
   font-weight: 400;
   display: flex;
   align-items: center;
   text-align: center;
   margin-top: 12px;
-  padding-bottom: 30px;
+  margin-bottom: 30px;
   cursor: pointer;
   color:#acacac;
+  &:hover{
+    background-color:white;
+  }
 `;
 
 const RoomCardContainer = styled.div`
@@ -104,3 +117,11 @@ const MainTitle = styled(Typography)`
   font-weight: 600;
   font-family: Noto Sans KR;
 `;
+
+  // const [activeCard, setActiveCard] = useState<string | null>(null);
+
+  // const handleCardClick = (cardName: string) => {
+  //   if (activeCard === null) { setActiveCard(cardName) }
+  //   else if (activeCard === cardName) { setActiveCard(null) }
+  //   else if (activeCard !== cardName) { setActiveCard(cardName) }
+  // };

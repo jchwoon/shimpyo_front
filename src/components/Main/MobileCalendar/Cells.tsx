@@ -4,7 +4,7 @@ import 'moment/locale/ko'
 import styled from '@emotion/styled';
 import { useState } from "react"
 import { useRecoilState, useRecoilValue } from "recoil";
-import { FirstPickedDate, SecondPickedDate } from "../../../recoil/atoms";
+import { FirstPickedDate, SecondPickedDate } from "../../../recoil/navBarAtoms";
 
 interface HeaderProps {
     currentDate: string;
@@ -112,8 +112,9 @@ export const Cells: React.FC<HeaderProps> = ({ currentDate }) => {
     while (moment(day).isSameOrBefore(moment(endDate))) {
 
         for (let i = 0; i < 7; i++) {
-            formattedDate = moment(day).format('D')
             const cloneDay = day
+            formattedDate = moment(day).format('D')
+
             days.push(
                 <StyledDaysSquareDiv
                     key={day}
@@ -129,7 +130,7 @@ export const Cells: React.FC<HeaderProps> = ({ currentDate }) => {
                         onClick={() => handleClicked(cloneDay)}
                         className={`${moment(day).isSame(moment(monthStart), 'month')
                             ?
-                            moment(cloneDay).isAfter(moment())
+                            moment(cloneDay).isSameOrAfter(moment(), 'day')
                                 ?
                                 "visible"
                                 :

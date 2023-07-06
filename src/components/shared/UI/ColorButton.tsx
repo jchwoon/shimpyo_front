@@ -25,4 +25,6 @@ const StyleColorButton = styled(StyleButton)`
     display: block;
     width: 100%;
   }
+  font-weight: 500;
+  font-size: 16px;
 `;

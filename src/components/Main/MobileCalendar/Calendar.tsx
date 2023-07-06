@@ -14,8 +14,6 @@ padding:10px;
 
 export const Calendar = () => {
     const [currentDate, setCurrentDate] = useState(moment().format());
-    const [selectedDate, setSelectedDate] = useState(moment().format());
-
 
     return (
         <StyledCalendarDiv>

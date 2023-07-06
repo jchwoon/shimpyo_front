@@ -4,27 +4,48 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import { Box } from '@mui/material';
+import { Card } from '@mui/material';
 
 
-export const CustomizedCard = styled.div
-  <{ active: boolean }>
-  `
-height: 100%;
+// export const CustomizedCard = styled.div`
+// height: 200px;
+// display: flex; 
+// flex-direction: row; 
+// box-shadow: none;
+// position: absolute;
+// align-items: center;
+// border-radius: 10px;
+// padding-left: 15px;
+// background-color: white;
+// top: 150px;
+// `
+
+// export const HotelImage = styled.img`
+//   width: calc(100% - 20px);
+//   height: 150px;
+//   object-fit: cover;
+//   border-radius: 20px 20px 20px 0px;
+//   margin-left:20px;
+// `;
+
+export const CustomizedCard = styled(Card)`
+height: 150px;
+width: calc(100% - 40px);
 display: flex; 
 flex-direction: row; 
 box-shadow: none;
-position: relative;
+position: absolute;
+// position: relative;
 align-items: center;
 border-radius: 10px;
 padding-left: 15px;
-transition: 0.2s all ease;
-${({ active }) =>
-    active &&
-    `
-  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
-  padding-left: 13px;
-  `}
+background-color: white;
+transition: 0.3s ease;
+// top:50px;
 `
+
+
+
 
 export const CustomizedLogoTypography = styled(Typography)`
 font-size: 15px;

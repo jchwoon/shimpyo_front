@@ -50,6 +50,7 @@ flex-direction: column;
 justify-content: center;
 align-items: flex-start;
 width: 200px;
+margin-left:10px;
 `
 
 export const CustomizedWhenVerticalWrapperDiv = styled.div`
