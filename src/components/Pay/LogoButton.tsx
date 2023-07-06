@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
+import logo2 from '../../logo2.svg';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,7 +23,7 @@ const LogoButton: React.FC<LogoButtonProp> = ({ path, imageHeight, fontSize }) =
 
     return (
         <LogoNavigationButton disableRipple onClick={() => Navigation(path)}>
-            <img src="images/logo2.svg" alt="website logo" style={{ height: imageHeight, marginBottom: 5 }} />
+            <img src={logo2} alt="website logo" style={{ height: imageHeight, marginBottom: 5 }} />
             <Typography sx={{ color: "#00ADB5", fontFamily: "sunflower", fontSize: fontSize }}>쉼표</Typography>
         </LogoNavigationButton>
     )

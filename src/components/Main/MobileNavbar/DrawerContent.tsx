@@ -23,16 +23,15 @@ import {
     Height,
     Display,
     Change,
-    AdultGuest,
-    ChildGuest,
-    InfantGuest,
     FirstPickedDate,
     SecondPickedDate,
     googleMapsPlaceholder,
     PlaceholderChanged,
-    objectPlaceholder
-} from "../../../recoil/atoms";
-
+    objectPlaceholder,
+    AdultGuest,
+    ChildGuest,
+    InfantGuest
+} from "../../../recoil/navBarAtoms";
 import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount";
 import { Divider, Collapse } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';

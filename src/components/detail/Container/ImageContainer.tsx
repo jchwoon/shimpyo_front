@@ -4,12 +4,9 @@ export default function ImageContainer() {
   return (
     <ImageBox>
       <MainImageBox>
-        <HoverDiv
-          style={{ borderRadius: "20px 0 0 20px" }}
-        />
+        <MainHoverDiv />
         <MainImage
           src="https://source.unsplash.com/random?wallpapers"
-        // style={{ borderRadius: "20px 0 0 20px" }}
         />
       </MainImageBox>
       <SideImageBox>
@@ -91,6 +88,24 @@ const HoverDiv = styled.div`
   :hover{
     opacity:0.3;
   }
+`
+
+const MainHoverDiv = styled.div`
+borderRadius: "20px 0 0 20px"
+z-index: 2;
+position: absolute;
+width:100%;
+height:100%;
+transition: 0.2s all ease;
+opacity:0;
+background-color: rgba(0, 0, 0, 0.5);
+cursor:pointer;
+:hover{
+  opacity:0.3;
+}
+@media screen and (max-width: 750px){
+  border-radius: 20px 20px 20px 20px;
+};
 `
 
 const SideImageBox = styled.div`
