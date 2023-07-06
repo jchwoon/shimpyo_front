@@ -1,6 +1,8 @@
 import { Menu, MenuProps, alpha, styled } from '@mui/material';
 import { useState } from 'react';
 import { CustomizedAccountCircleIcon, CustomizedLoginButton, CustomizedMenuIcon } from './UserMenu.style';
+import { navbarMenuControl } from '../../../recoil/navBarAtoms';
+import { useRecoilState } from "recoil";
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -44,13 +46,19 @@ interface MenuBarProps {
 }
 
 export default function MenuBar({ menuItems }: MenuBarProps) {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+
+  const [navbarMenu, setNavbarMenu] = useRecoilState(navbarMenuControl);
+
+  // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  // const open = Boolean(anchorEl);
+  const open = Boolean(navbarMenu);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    // setAnchorEl(event.currentTarget);
+    setNavbarMenu(event.currentTarget)
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    // setAnchorEl(null);
+    setNavbarMenu(null)
   };
 
   return (
@@ -66,7 +74,8 @@ export default function MenuBar({ menuItems }: MenuBarProps) {
         MenuListProps={{
           'aria-labelledby': 'demo-customized-button',
         }}
-        anchorEl={anchorEl}
+        // anchorEl={anchorEl}
+        anchorEl={navbarMenu}
         open={open}
         onClose={handleClose}
       >

@@ -75,3 +75,8 @@ export const objectPlaceholder = atom<PlaceType>({
         },
     },
 });
+
+export const navbarMenuControl = atom<null | HTMLElement>({
+    key: 'navbarMenuControl',
+    default: null
+})

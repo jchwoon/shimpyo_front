@@ -40,6 +40,18 @@ import Box from '@mui/material/Box';
 
 import ColorButton from '../../shared/UI/ColorButton';
 
+import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
+import { RESERVATION_PREPARE_API_PATH } from '../../../constants/api/reservationApi';
+import { accessTokenAtom, loginStateAtom } from "../../../recoil/userAtoms"
+import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { merchantUid } from '../../../recoil/detailPageAtoms';
+
+interface ResultData {
+  accessToken: string;
+  merchantUid: string;
+}
+
 export default function NewSideBox() {
   const room = useRecoilValue(activeRoom)
   const price = useRecoilValue(activeRoomPrice)
@@ -50,6 +62,8 @@ export default function NewSideBox() {
   const [AdultGuestNumber, setAdultGuestNumber] = useRecoilState(AdultGuest);
   const [ChildGuestNumber, setChildGuestNumber] = useRecoilState(ChildGuest);
   const [InfantGuestNumber, setInfantGuestNumber] = useRecoilState(InfantGuest);
+
+  const [MerchantUid, setMerchantUid] = useRecoilState(merchantUid);
 
   const TotalGuestNumber = AdultGuestNumber + ChildGuestNumber;
   if (InfantGuestNumber > 0 && AdultGuestNumber === 0) {
@@ -63,6 +77,10 @@ export default function NewSideBox() {
   const DaysDifference = moment(secondPickedDate).diff(moment(firstPickedDate), "days")
   const TotalPrice = price ? price * DaysDifference : null
 
+  const navigation = useNavigate();
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginStateAtom);
+
   const resetFunction = () => {
     setFirstPickedDate('');
     setSecondPickedDate('');
@@ -74,8 +92,27 @@ export default function NewSideBox() {
     setInfantGuestNumber(0);
   };
 
+  const handleUnAutorization = (error: AxiosError) => {
+    setIsLoggedIn(false);
+    navigation('/');
+    console.error(error.message);
+  };
+
+
+  const { responseData, sendRequest } = useAuthorizedRequest<ResultData>({
+    onUnauthorized: handleUnAutorization,
+  });
+
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+
+  const handleOpen = async () => {
+    await sendRequest({ url: `${RESERVATION_PREPARE_API_PATH}`, withCredentials: true });
+
+    if (responseData && responseData.result) {
+      setMerchantUid(responseData.result.merchantUid)
+    }
+    setOpen(true);
+  }
   const handleClose = () => setOpen(false);
 
   const style = {
