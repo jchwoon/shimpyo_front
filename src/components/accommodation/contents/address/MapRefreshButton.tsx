@@ -6,18 +6,18 @@ import { IoMdRefreshCircle } from 'react-icons/io';
 import { useState } from 'react';
 
 interface StyledMapRefreshButtonProps {
-  isClicked: boolean;
+  isClick: boolean;
 }
 
 export default function MapRefreshButton() {
   const [accommodation, setAccommodation] = useRecoilState(accommodationState);
-  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [isClick, setIsClick] = useState<boolean>(false);
 
   const newAccommodation = { ...accommodation };
 
   const RefreshButton = async () => {
     try {
-      setIsClicked(true);
+      setIsClick(true);
       const latlng = await getLatLngFromAddress(newAccommodation.address.fullAddress);
 
       newAccommodation.address = {
@@ -30,11 +30,11 @@ export default function MapRefreshButton() {
     } catch (err) {
       console.log(err);
     } finally {
-      setIsClicked(false);
+      setIsClick(false);
     }
   };
 
-  return <StyledMapRefreshButton isClicked={isClicked} size={'40px'} onClick={RefreshButton}></StyledMapRefreshButton>;
+  return <StyledMapRefreshButton isClick={isClick} size={'40px'} onClick={RefreshButton}></StyledMapRefreshButton>;
 }
 
 const StyledMapRefreshButton = styled(IoMdRefreshCircle)<StyledMapRefreshButtonProps>`
@@ -45,8 +45,8 @@ const StyledMapRefreshButton = styled(IoMdRefreshCircle)<StyledMapRefreshButtonP
     color: rgba(0, 0, 0, 0.4);
   }
 
-  ${({ isClicked }) =>
-    !isClicked &&
+  ${({ isClick }) =>
+    !isClick &&
     `
     transform: scale(1.2);
     transition: transform 0.5s ease-in-out;

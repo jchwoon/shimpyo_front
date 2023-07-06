@@ -14,7 +14,7 @@ import AccommodationAddPictureContents from '../components/accommodation/content
 import AccommodationNameContents from '../components/accommodation/contents/text/AccommodationNameContents';
 import AccommodationDetailContents from '../components/accommodation/contents/text/AccommodationDetailContents';
 import AccommodationRoomContents from '../components/accommodation/contents/room/AccommodationRoomContents';
-import { slideUp } from '../components/accommodation/animation/slideUp';
+import { fadeIn } from '../components/accommodation/animation/fadeIn';
 import DetailStaticContents from '../components/accommodation/contents/preview/DetailStaticContents';
 import AccommodationCompleteContents from '../components/accommodation/contents/complete/AccommodationCompleteContents';
 
@@ -82,7 +82,7 @@ const StyledMain = styled.main`
   }
   > * {
     opacity: 0;
-    animation: ${slideUp} 0.9s ease-in-out forwards;
+    animation: ${fadeIn} 0.9s ease-in-out forwards;
   }
 
   @media (min-width: 780px) {
