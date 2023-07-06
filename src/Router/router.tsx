@@ -14,6 +14,8 @@ const CheckReservation = lazy(() => import('../pages/CheckReservation'));
 const SocialAddInfo = lazy(() => import('../pages/SocialAddInfo'));
 const CheckReservationDetail = lazy(() => import('../pages/CheckReservationDetail'));
 const WishList = lazy(() => import('../pages/WishList'));
+const Account = lazy(() => import('../pages/Account'));
+const Users = lazy(() => import('../pages/Users'));
 
 const onlyLogin = 'ONLY_LOGIN';
 const onlyLogout = 'ONLY_LOGOUT';
@@ -122,6 +124,26 @@ const router = createBrowserRouter([
           <Suspense fallback={<Loading />}>
             <AuthCheck option={onlyLogin}>
               <WishList />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'users/:userId',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={null}>
+              <Users />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'account-settings',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={null}>
+              <Account />
             </AuthCheck>
           </Suspense>
         ),
