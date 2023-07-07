@@ -106,11 +106,11 @@ export default function NewSideBox() {
   const [open, setOpen] = useState(false);
 
   const handleOpen = async () => {
-    await sendRequest({ url: `${RESERVATION_PREPARE_API_PATH}`, withCredentials: true });
+    // await sendRequest({ url: `${RESERVATION_PREPARE_API_PATH}`, withCredentials: true });
 
-    if (responseData && responseData.result) {
-      setMerchantUid(responseData.result.merchantUid)
-    }
+    // if (responseData && responseData.result) {
+    //   setMerchantUid(responseData.result.merchantUid)
+    // }
     setOpen(true);
   }
   const handleClose = () => setOpen(false);

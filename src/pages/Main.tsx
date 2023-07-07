@@ -33,7 +33,7 @@ import { CustomIcon } from '../components/shared/MobileFooter/CustomIcon';
 
 import { useNavigate } from 'react-router-dom';
 
-import { loginModalAtom } from '../recoil/modalAtoms';
+import { loginModalAtom, joinModalAtom } from '../recoil/modalAtoms';
 
 export default function Main() {
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
@@ -41,6 +41,7 @@ export default function Main() {
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
   const navigate = useNavigate()
   const setLoginModal = useSetRecoilState(loginModalAtom);
+  const setJoinModal = useSetRecoilState(joinModalAtom);
 
   const menuItems = (
     <div>
@@ -55,7 +56,7 @@ export default function Main() {
       ) : (
         <div>
           <UserMenuItem label="로그인" onClick={() => setLoginModal(true)} />
-          <UserMenuItem divide label="회원가입" onClick={() => console.log('hi')} />
+          <UserMenuItem divide label="회원가입" onClick={() => setJoinModal(true)} />
           <UserMenuItem label="호스트가 되어보세요" onClick={() => console.log('hi')} />
         </div>
       )}

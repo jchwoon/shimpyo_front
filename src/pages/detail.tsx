@@ -18,7 +18,7 @@ import MobileNavbar from '../components/Main/MobileNavbar/MobileNavbar';
 
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { Height, Display, Change } from '../recoil/navBarAtoms';
-import { loginModalAtom } from '../recoil/modalAtoms';
+import { loginModalAtom, joinModalAtom } from '../recoil/modalAtoms';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import ToggleFavorite from '../components/detail/Container/ToggleFavorite';
@@ -29,6 +29,7 @@ import UserMenuItem from '../components/shared/UserMenu/UserMenuItem';
 
 import SearchBar from '../components/Main/Navbar/SearchBar'
 
+import JoinModal from '../components/shared/Modal/JoinModal';
 import LoginModal from '../components/shared/Modal/LoginModal';
 
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -60,6 +61,7 @@ export default function Detail() {
   const [loginState, setLoginState] = useState(false);
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
   const setLoginModal = useSetRecoilState(loginModalAtom);
+  const setJoinModal = useSetRecoilState(joinModalAtom);
 
   const menuItems = (
     <div>
@@ -74,7 +76,7 @@ export default function Detail() {
       ) : (
         <div>
           <UserMenuItem label="로그인" onClick={() => setLoginModal(true)} />
-          <UserMenuItem divide label="회원가입" onClick={() => console.log('hi!')} />
+          <UserMenuItem divide label="회원가입" onClick={() => setJoinModal(true)} />
           <UserMenuItem label="호스트가 되어보세요" onClick={() => console.log('hi')} />
         </div>
       )}
@@ -132,6 +134,7 @@ export default function Detail() {
         />
       )}
       <LoginModal />
+      <JoinModal />
     </>
   )
 }
