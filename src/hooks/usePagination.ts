@@ -8,6 +8,7 @@ interface usePaginationProps {
   currentPage: number;
   setCurrentPage: SetFunction<number>;
   category: string;
+  totalPage: number;
   setSearchParams: SetURLSearchParams;
   searchParams: URLSearchParams;
 }
@@ -18,6 +19,7 @@ export default function usePagination({
   setCurrentPage,
   category,
   setSearchParams,
+  totalPage,
 }: usePaginationProps) {
   const changeClickedPage = (e: MouseEvent<HTMLSpanElement>) => {
     const clickedPage = e.currentTarget.textContent;
@@ -34,8 +36,17 @@ export default function usePagination({
   };
 
   useEffect(() => {
-    const getPage = searchParams.get(`${category}Page`);
-    setCurrentPage(Number(getPage));
+    const getPage = searchParams.get(`page`);
+    const changeNumber = Number(getPage);
+
+    if (changeNumber >= totalPage) {
+      setCurrentPage(totalPage);
+    } else if (changeNumber >= 1 && changeNumber <= totalPage) {
+      setCurrentPage(changeNumber);
+    } else {
+      setCurrentPage(1);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
@@ -43,7 +54,7 @@ export default function usePagination({
     if (!currentPage) return;
 
     setSearchParams(searchParams => {
-      searchParams.set(`${category}Page`, `${currentPage}`);
+      searchParams.set(`page`, `${currentPage}`);
       return searchParams;
     });
   }, [currentPage, setSearchParams, category]);

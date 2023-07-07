@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import { useState, FocusEvent, useEffect, ChangeEvent } from 'react';
 import { MdError } from 'react-icons/md';
 
-import { accommodationState, addressCheckState, isPassedState } from '../../../../recoil/atoms';
+import { accommodationState, addressCheckState, disabledState } from '../../../../recoil/accommodationAtoms';
 import { useRecoilState } from 'recoil';
 import LocationMap from '../../../shared/LocationMap';
-import ErrorMessageModal from './ErrorMessageModal';
+import MapRefreshButton from './MapRefreshButton';
 
 interface Focused {
   focused: boolean;
@@ -30,7 +30,7 @@ export default function AddressInputContents() {
   });
 
   const [accommodation, setAccommodation] = useRecoilState(accommodationState);
-  const [isPassed, setIsPassed] = useRecoilState(isPassedState);
+  const [disabled, setDisabled] = useRecoilState(disabledState);
   const [addressCheck, setAddressCheck] = useRecoilState(addressCheckState);
 
   const [restAddress, setRestAddress] = useState(accommodation.address.fullAddress.split(' ').slice(3).join(' '));
@@ -51,7 +51,7 @@ export default function AddressInputContents() {
     }
   };
 
-  const handleOnChangeAddress = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleOnChangeAddress = async (e: ChangeEvent<HTMLInputElement>) => {
     const newAccommodation = { ...accommodation };
 
     if (e.target.id === 'address') {
@@ -67,6 +67,7 @@ export default function AddressInputContents() {
           ' ' +
           detailAddress.trim(),
       };
+
       return setAccommodation(newAccommodation);
     }
 
@@ -98,6 +99,7 @@ export default function AddressInputContents() {
         ' ' +
         detailAddress.trim(),
     };
+
     setAccommodation(newAccommodation);
   };
 
@@ -119,21 +121,21 @@ export default function AddressInputContents() {
 
   useEffect(() => {
     if (accommodation.address.sido && accommodation.address.sigungu && accommodation.address.postCode && restAddress) {
-      setIsPassed(false);
+      setDisabled(false);
     } else {
-      setIsPassed(true);
+      setDisabled(true);
     }
   }, [
     accommodation.address.sido,
     accommodation.address.sigungu,
     accommodation.address.postCode,
     restAddress,
-    setIsPassed,
+    setDisabled,
   ]);
 
   return (
-    <div>
-      <StyledContainer>
+    <StyledContainer>
+      <StyledInputContainer>
         <StyledRowContainer>
           <StyledLabel htmlFor="sido" focused={isFocused.sido}>
             도/특별･광역시
@@ -194,7 +196,7 @@ export default function AddressInputContents() {
             onChange={handleOnChangeAddress}
           />
         </StyledRowContainer>
-      </StyledContainer>
+      </StyledInputContainer>
       {!addressCheck && (
         <StyledErrorMessage>
           <MdError />
@@ -202,23 +204,35 @@ export default function AddressInputContents() {
         </StyledErrorMessage>
       )}
       <StyledMapContainer>
-        <StyledTitle>지도에서 위치 확인하기</StyledTitle>
-        <StyledsubText>위치에 대한 오차가 있을 수 있습니다. 대략적인 위치를 확인하실 수 있습니다.</StyledsubText>
+        <StyledFlexDiv>
+          <div>
+            <StyledTitle>지도에서 위치 확인하기</StyledTitle>
+            <StyledsubText>위치에 대한 오차가 있을 수 있습니다. 대략적인 위치를 확인하실 수 있습니다.</StyledsubText>
+          </div>
+          <div>
+            <MapRefreshButton />
+          </div>
+        </StyledFlexDiv>
+
         <LocationMap
-          width={'600px'}
-          height={'400px'}
+          width={'80%'}
+          height={'300px'}
+          radius={'20px'}
           latitude={accommodation.address.lat}
           longitude={accommodation.address.lng}
         />
       </StyledMapContainer>
-      <ErrorMessageModal />
-    </div>
+    </StyledContainer>
   );
 }
 
-const StyledContainer = styled.div`
-  width: 700px;
-  margin: 20px;
+const StyledContainer = styled.div``;
+const StyledFlexDiv = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const StyledInputContainer = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 `;
 
@@ -226,7 +240,7 @@ const StyledRowContainer = styled.div`
   display: flex;
   justify-content: center;
   height: 70px;
-  width: 700px;
+  width: 100%;
   position: relative;
   border-top: 1px solid rgba(0, 0, 0, 0.2);
   border-left: 1px solid rgba(0, 0, 0, 0.2);
@@ -236,7 +250,7 @@ const StyledRowContainer = styled.div`
 const StyledInput = styled.input`
   display: flex;
   align-items: center;
-  width: 800px;
+  width: 100%;
   border: none;
   padding: 20px;
 `;
@@ -262,6 +276,7 @@ const StyledLabel = styled.label<Focused>`
 
 const StyledMapContainer = styled.div`
   margin-top: 30px;
+  padding-bottom: 20px;
   border-top: 2px solid rgba(0, 0, 0, 0.1);
 `;
 
@@ -279,5 +294,5 @@ const StyledsubText = styled.p`
 
 const StyledErrorMessage = styled.p`
   color: #df1a1a;
-  text-indent: 20px;
+  margin-top: 1rem;
 `;

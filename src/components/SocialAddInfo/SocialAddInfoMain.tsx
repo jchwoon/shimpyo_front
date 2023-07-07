@@ -37,11 +37,13 @@ export default function SocialAddInfoMain() {
 
   const handleSubmitUserInfo = async () => {
     const userId = searchParams.get('user_id');
-    await sendRequest({
-      url: `${SOCIAL_ADDITIONAL_INFO_API_PATH}`,
-      body: { id: userId, nickname: nicknameValue, phoneNumber: phoneValue },
-      method: 'POST',
-    });
+    if (userId) {
+      await sendRequest({
+        url: `${SOCIAL_ADDITIONAL_INFO_API_PATH}`,
+        body: { id: userId, nickname: nicknameValue, phoneNumber: phoneValue },
+        method: 'POST',
+      });
+    }
   };
 
   const initialState = () => {
@@ -53,9 +55,10 @@ export default function SocialAddInfoMain() {
     if (!responseData) return;
 
     if (responseData.isSuccess) {
+      console.log('here');
       initialState();
       setAccessToken(responseData.result.accessToken);
-      window.location.href = '/';
+      navigation('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);

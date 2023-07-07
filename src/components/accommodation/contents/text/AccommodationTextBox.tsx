@@ -4,7 +4,7 @@ import { MdError } from 'react-icons/md';
 
 import debounce from '../../../../utils/debounce';
 import { useRecoilState } from 'recoil';
-import { accommodationState } from '../../../../recoil/atoms';
+import { accommodationState } from '../../../../recoil/accommodationAtoms';
 
 interface TextBoxProps {
   title: string;
@@ -17,7 +17,8 @@ interface TextBoxProps {
 
 export default function AccommodationTextBox({ title, limit, width, height, row }: TextBoxProps) {
   const [accommodation, setAccommodation] = useRecoilState(accommodationState);
-  const [lengthError, setLengthError] = useState<boolean>(false);
+  const [nameLengthError, setNameLengthError] = useState<boolean>(false);
+  const [contentsLengthError, setContentsLengthError] = useState<boolean>(false);
 
   const handleOnChange = debounce((e: ChangeEvent<HTMLTextAreaElement>) => {
     if (title === 'name') {
@@ -32,10 +33,16 @@ export default function AccommodationTextBox({ title, limit, width, height, row 
   }, 10);
 
   useEffect(() => {
-    if (accommodation.name.length > limit || accommodation.contents.length > limit) {
-      setLengthError(true);
+    if (accommodation.name.length > limit) {
+      setNameLengthError(true);
     } else {
-      setLengthError(false);
+      setNameLengthError(false);
+    }
+
+    if (accommodation.contents.length > limit) {
+      setContentsLengthError(true);
+    } else {
+      setContentsLengthError(false);
     }
   }, [accommodation.name, accommodation.contents, limit]);
 
@@ -46,15 +53,21 @@ export default function AccommodationTextBox({ title, limit, width, height, row 
         limit={limit}
         width={width}
         height={height}
-        lengthError={lengthError}
+        lengthError={title === 'name' ? nameLengthError : contentsLengthError}
         rows={row}
         onChange={handleOnChange}
         defaultValue={title === 'name' ? accommodation.name : accommodation.contents}
       ></StyledTextBox>
       <StyledLimitLength>
-        {accommodation.name.length}/{limit}
+        {title === 'name' ? accommodation.name.length : accommodation.contents.length}/{limit}
       </StyledLimitLength>
-      <StyledFlexDiv title={title} limit={limit} width={width} height={height} lengthError={lengthError}>
+      <StyledFlexDiv
+        title={title}
+        limit={limit}
+        width={width}
+        height={height}
+        lengthError={title === 'name' ? nameLengthError : contentsLengthError}
+      >
         <StyledErrorIcon />
         <StyledErrorText>{limit}자까지 입력하실 수 있습니다.</StyledErrorText>
       </StyledFlexDiv>
@@ -63,7 +76,8 @@ export default function AccommodationTextBox({ title, limit, width, height, row 
 }
 
 const StyledTextBox = styled.textarea<TextBoxProps>`
-  ${({ width, height }) => `width: ${width}px; min-height: ${height}px;`}
+  width: 85%;
+  min-height: 70px;
   resize: vertical;
   text-overflow: ellipsis;
   padding: 24px;
@@ -79,10 +93,15 @@ const StyledTextBox = styled.textarea<TextBoxProps>`
     lengthError &&
     `background-color: rgba(232,227,213,0.3);
   border:1.5px solid rgb(133,117,72);`}
+
+  @media (min-width: 780px) {
+    ${({ width, height }) => `width: ${width}px; min-height: ${height}px;`}
+  }
 `;
 
 const StyledContainer = styled.div`
   margin-top: 25px;
+  width: 100%;
 `;
 
 const StyledLimitLength = styled.div`

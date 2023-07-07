@@ -53,7 +53,7 @@ export default function IdFindModal() {
   const getEmailValueHandler = async () => {
     const isCodeOk = handleSubmitConfirmNumber();
     if (!isCodeOk) return;
-    await emailSendRequest({ url: FIND_EMAIL_API_PATH, body: { phoneNumber: phoneValue } });
+    await emailSendRequest({ url: `${FIND_EMAIL_API_PATH}?phoneNumber=${phoneValue}` });
   };
 
   const initialState = () => {

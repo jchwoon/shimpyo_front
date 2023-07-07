@@ -3,28 +3,41 @@ import { lazy, Suspense } from 'react';
 import App from '../App';
 import Loading from '../components/shared/Loading';
 import SocialLogin from '../pages/SocialLogin';
+import AuthCheck from '../components/AuthCheck/AuthCheck';
 
 const Hosting = lazy(() => import('../pages/Hosting'));
 const Main = lazy(() => import('../pages/Main'));
 const Detail = lazy(() => import('../pages/detail'));
 const Accommodation = lazy(() => import('../pages/Accommodation'));
 const NotFound = lazy(() => import('../pages/404'));
-const Reservation = lazy(() => import('../pages/Reservation'));
-const Interest = lazy(() => import('../pages/Interest'));
+const CheckReservation = lazy(() => import('../pages/CheckReservation'));
 const SocialAddInfo = lazy(() => import('../pages/SocialAddInfo'));
-const ReservationDetail = lazy(() => import('../pages/ReservationDetail'));
+const CheckReservationDetail = lazy(() => import('../pages/CheckReservationDetail'));
+const WishList = lazy(() => import('../pages/WishList'));
+const Account = lazy(() => import('../pages/Account'));
+const Users = lazy(() => import('../pages/Users'));
+const CheckNonMember = lazy(() => import('../pages/CheckNonMember'));
+
+const onlyLogin = 'ONLY_LOGIN';
+const onlyLogout = 'ONLY_LOGOUT';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <NotFound />,
+    errorElement: (
+      <Suspense fallback={<Loading />}>
+        <NotFound />
+      </Suspense>
+    ),
     children: [
       {
         path: '',
         element: (
           <Suspense fallback={<Loading />}>
-            <Main />
+            <AuthCheck option={null}>
+              <Main />
+            </AuthCheck>
           </Suspense>
         ),
       },
@@ -32,7 +45,9 @@ const router = createBrowserRouter([
         path: 'hosting',
         element: (
           <Suspense fallback={<Loading />}>
-            <Hosting />
+            <AuthCheck option={onlyLogin}>
+              <Hosting />
+            </AuthCheck>
           </Suspense>
         ),
       },
@@ -40,7 +55,9 @@ const router = createBrowserRouter([
         path: 'detail',
         element: (
           <Suspense fallback={<Loading />}>
-            <Detail />
+            <AuthCheck option={null}>
+              <Detail />
+            </AuthCheck>
           </Suspense>
         ),
       },
@@ -51,40 +68,42 @@ const router = createBrowserRouter([
             path: '',
             element: (
               <Suspense fallback={<Loading />}>
-                <Reservation />
+                <AuthCheck option={onlyLogin}>
+                  <CheckReservation />
+                </AuthCheck>
               </Suspense>
             ),
           },
           {
-            path: 'detail',
+            path: 'detail/:reservationId',
             element: (
               <Suspense fallback={<Loading />}>
-                <ReservationDetail />
+                <AuthCheck option={onlyLogin}>
+                  <CheckReservationDetail />
+                </AuthCheck>
               </Suspense>
             ),
           },
         ],
       },
       {
-        path: 'interest_lists',
-        element: (
-          <Suspense fallback={<Loading />}>
-            <Interest />
-          </Suspense>
-        ),
-      },
-      {
         path: 'social',
         children: [
           {
             path: 'login',
-            element: <SocialLogin />,
+            element: (
+              <AuthCheck option={onlyLogout}>
+                <SocialLogin />
+              </AuthCheck>
+            ),
           },
           {
             path: 'add_info',
             element: (
               <Suspense fallback={<Loading />}>
-                <SocialAddInfo />
+                <AuthCheck option={onlyLogout}>
+                  <SocialAddInfo />
+                </AuthCheck>
               </Suspense>
             ),
           },
@@ -92,7 +111,53 @@ const router = createBrowserRouter([
       },
       {
         path: 'accommodation',
-        element: <Accommodation />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={onlyLogin}>
+              <Accommodation />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'wishlists',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={onlyLogin}>
+              <WishList />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'users/:userId',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={null}>
+              <Users />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'account-settings',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={null}>
+              <Account />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'check/non-member',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={onlyLogout}>
+              <CheckNonMember />
+            </AuthCheck>
+          </Suspense>
+        ),
       },
     ],
   },

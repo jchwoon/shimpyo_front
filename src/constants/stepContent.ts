@@ -17,8 +17,15 @@ export const stepContent: stepConstants = {
 };
 
 export const stepContentVideo = {
-  ONE: 'video1.mp4',
-  TWO: 'video2.mp4',
-  THR: 'video2.mp4',
-  FOR: 'video3.mp4',
+  ONE: '/videos/video1.mp4',
+  TWO: '/videos/video2.mp4',
+  THR: '/videos/video2.mp4',
+  FOR: '/videos/video3.mp4',
+};
+
+export const stepContentImage = {
+  ONE: '/images/start1.png',
+  TWO: '/images/start2.png',
+  THR: '/images/start3.png',
+  FOR: '/images/start4.png',
 };

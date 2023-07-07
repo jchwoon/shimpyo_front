@@ -13,13 +13,20 @@ import { LOGIN_API_PATH } from '../../../constants/api/userApi';
 import KakaoLogin from '../../Main/SocialLogin/KakaoLogin';
 import NaverLogin from '../../Main/SocialLogin/NaverLogin';
 import GoogleSocialLogin from '../../Main/SocialLogin/GoogleSocialLogin';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ResultData {
   accessToken: string;
 }
 
-export default function LoginModal() {
+interface LoginModalProps {
+  isToReservationCheck?: boolean;
+}
+
+export default function LoginModal({ isToReservationCheck }: LoginModalProps) {
   const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
+  const location = useLocation();
+  const navigation = useNavigate();
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -63,6 +70,8 @@ export default function LoginModal() {
       setAccessToken(responseData.result.accessToken);
       setIsLoggedIn(true);
       setIsLoginModalOpen(false);
+      window.history.replaceState(null, '', '/');
+      navigation(location?.state?.redirectedFrom?.pathname || '/');
     } else {
       setIsLoginError(true);
       setLoginErrorMessage('이메일과 비밀번호를 다시 한번 확인해주세요.');
@@ -103,7 +112,15 @@ export default function LoginModal() {
           </span>
         </StyleAccountInfoFind>
         <ColorButton disabled={isLoading} onClick={handleLoginButtonClick} label="로그인" />
+        {isToReservationCheck && (
+          <div style={{ textAlign: 'center' }}>
+            <span style={{ fontSize: '13px', cursor: 'pointer' }} onClick={() => navigation('/check/non-member')}>
+              비회원 예약 내역 조회 &rarr;
+            </span>
+          </div>
+        )}
       </StyleLoginBody>
+
       <hr />
     </>
   );

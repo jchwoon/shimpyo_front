@@ -34,7 +34,6 @@ export default function useHttpRequest<T>() {
         url: `${API_URL}${url}`,
         method,
         data: body,
-        withCredentials: withcredential,
       });
       setResponseData(response.data);
     } catch (error: any) {

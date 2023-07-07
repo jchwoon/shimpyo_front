@@ -125,13 +125,14 @@ const StyledBarContainer = styled.div`
 
 const StyledFlexDiv = styled.div`
   display: flex;
+  width: 90%;
 `;
 
 const StyledInput = styled.input`
   border: none;
   padding: none;
   margin-left: 10px;
-  width: 390px;
+  width: 100%;
   border-radius: 10px;
   &:focus {
     outline: none;

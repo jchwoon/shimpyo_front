@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { isPassedState, stepState } from '../recoil/atoms';
+import { useRecoilValue } from 'recoil';
+import { stepState } from '../recoil/accommodationAtoms';
 
 import AccommodationHeader from '../components/accommodation/UI/AccommodationHeader';
 import AccommodationFooter from '../components/accommodation/UI/AccommodationFooter';
@@ -14,18 +13,13 @@ import AccommodationAmenityInfoContents from '../components/accommodation/conten
 import AccommodationAddPictureContents from '../components/accommodation/contents/picture/AccommodationAddPictureContents';
 import AccommodationNameContents from '../components/accommodation/contents/text/AccommodationNameContents';
 import AccommodationDetailContents from '../components/accommodation/contents/text/AccommodationDetailContents';
-import StepFreePass from '../components/accommodation/contents/StepFreePass';
-import StepLimitPass from '../components/accommodation/contents/StepLimitPass';
 import AccommodationRoomContents from '../components/accommodation/contents/room/AccommodationRoomContents';
+import { fadeIn } from '../components/accommodation/animation/fadeIn';
+import DetailStaticContents from '../components/accommodation/contents/preview/DetailStaticContents';
+import AccommodationCompleteContents from '../components/accommodation/contents/complete/AccommodationCompleteContents';
 
 export default function Accommodation() {
   const stepNumber = useRecoilValue(stepState);
-
-  const [isPassed, setIsPassed] = useRecoilState(isPassedState); // isPassed 상태와 설정 함수 추가
-
-  useEffect(() => {
-    setIsPassed(false);
-  }, [stepNumber]);
 
   return (
     <StyledContainer>
@@ -60,9 +54,9 @@ export default function Accommodation() {
             case 12:
               return <StepStartContents step="FOR"></StepStartContents>;
             case 13:
-              return <></>;
+              return <DetailStaticContents></DetailStaticContents>;
             case 14:
-              return <></>;
+              return <AccommodationCompleteContents></AccommodationCompleteContents>;
             default:
               return null;
           }
@@ -81,10 +75,17 @@ const StyledContainer = styled.div`
 `;
 
 const StyledMain = styled.main`
-  margin: 10px auto;
-
+  padding: 10px;
   overflow-y: auto;
   &::-webkit-scrollbar {
     display: none;
+  }
+  > * {
+    opacity: 0;
+    animation: ${fadeIn} 0.9s ease-in-out forwards;
+  }
+
+  @media (min-width: 780px) {
+    margin: 10px auto;
   }
 `;

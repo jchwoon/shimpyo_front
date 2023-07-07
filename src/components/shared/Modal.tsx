@@ -9,9 +9,10 @@ interface ModalProps {
   label?: string;
   title?: string | ReactElement;
   onClose?: () => void;
+  nonPadding?: boolean;
 }
 
-export default function Modal({ isOpen, label, title, body, footer, onClose }: ModalProps) {
+export default function Modal({ isOpen, label, title, body, footer, onClose, nonPadding = false }: ModalProps) {
   if (!isOpen) {
     return null;
   }
@@ -31,8 +32,9 @@ export default function Modal({ isOpen, label, title, body, footer, onClose }: M
           <div>{label}</div>
         </StyleModalHead>
         <ParentContainer>
-          <StyleModalBody>
+          <StyleModalBody nonPadding={nonPadding}>
             <div style={{ fontWeight: 'bold', fontSize: '20px' }}>{title}</div>
+
             <div>{body}</div>
             {footer}
           </StyleModalBody>
@@ -94,8 +96,8 @@ const StyleModalHead = styled.div`
   font-weight: bold;
 `;
 
-const StyleModalBody = styled.div`
-  padding: 1.5rem;
+const StyleModalBody = styled.div<{ nonPadding: boolean }>`
+  padding: ${props => (props.nonPadding ? '' : '1.5rem')};
 `;
 
 const ParentContainer = styled.div`

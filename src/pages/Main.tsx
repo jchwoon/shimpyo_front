@@ -17,14 +17,15 @@ import JoinModal from '../components/shared/Modal/JoinModal';
 import LoginModal from '../components/shared/Modal/LoginModal';
 import IdFindModal from '../components/Main/Modal/IdFindModal';
 import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
+import { useSearchParams } from 'react-router-dom';
+import { useSetRecoilState, useRecoilState } from 'recoil';
+import { loginModalAtom } from '../recoil/modalAtoms';
 
 import UserMenuItem from '../components/shared/UserMenu/UserMenuItem';
 
-import SearchBar from '../components/Main/Navbar/SearchBar'
+import SearchBar from '../components/Main/Navbar/SearchBar';
 
 import { Height } from '../recoil/navBarAtoms';
-
-import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -36,11 +37,13 @@ import { useNavigate } from 'react-router-dom';
 import { loginModalAtom, joinModalAtom } from '../recoil/modalAtoms';
 
 export default function Main() {
+  const [searchParams] = useSearchParams();
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
+  const setLoginModal = useSetRecoilState(loginModalAtom);
   const [loginState, setLoginState] = useState(false);
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
-  const navigate = useNavigate()
-  const setLoginModal = useSetRecoilState(loginModalAtom);
+  const [isToReservationCheck, setIsToReservationCheck] = useState(false);
+  const navigate = useNavigate();
   const setJoinModal = useSetRecoilState(joinModalAtom);
 
   const menuItems = (
@@ -74,10 +77,24 @@ export default function Main() {
     };
   }, []);
 
-  const value0 = <BottomNavigationAction icon={<CustomIcon />} label="홈" onClick={() => navigate('/')} />
-  const value1 = <BottomNavigationAction icon={<FavoriteIcon />} label="관심 숙소" onClick={() => console.log("hi im value1")} />
-  const value2 = <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
+  useEffect(() => {
+    if (searchParams.get('redirect_url')?.includes('/reservations')) {
+      setIsToReservationCheck(true);
+    }
 
+    if (searchParams.has('redirect_url')) {
+      setLoginModal(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  const value0 = <BottomNavigationAction icon={<CustomIcon />} label="홈" onClick={() => navigate('/')} />;
+  const value1 = (
+    <BottomNavigationAction icon={<FavoriteIcon />} label="관심 숙소" onClick={() => console.log('hi im value1')} />
+  );
+  const value2 = (
+    <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
+  );
 
   return (
     <>
@@ -92,15 +109,8 @@ export default function Main() {
         </ThemeProvider>
       )}
       <Cards />
-      {isLargeScreen ? null : (
-        <NewMobileFooter
-          defaultValue={0}
-          Action0={value0}
-          Action1={value1}
-          Action2={value2}
-        />
-      )}
-      <LoginModal />
+      {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />}
+      <LoginModal isToReservationCheck={isToReservationCheck} />
       <JoinModal />
       <AdditionalInfoModal />
       <IdFindModal />
