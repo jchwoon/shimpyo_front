@@ -44,7 +44,6 @@ export default function usePhoneCertification({ phoneValue, codeValue, isUser }:
   };
 
   const handleValidityPhone = async () => {
-    console.log(phoneValue);
     if (phoneValue === undefined || !phoneRule.test(phoneValue)) {
       setPhoneError(true);
       setPhoneErrorMessage('휴대폰 번호를 올바르게 입력했는지 확인해주세요.');
@@ -53,6 +52,7 @@ export default function usePhoneCertification({ phoneValue, codeValue, isUser }:
     await sendRequest({
       url: `${isUser ? PHONE_AUTHENTICATION_ONLY_USER_API_PATH : PHONE_AUTHENTICATION_API_PATH}`,
       body: { phoneNumber: phoneValue },
+      method: 'POST',
       withcredential: true,
     });
   };

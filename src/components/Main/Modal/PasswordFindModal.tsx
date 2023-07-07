@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Modal from '../../shared/Modal';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { passwordValueAtom } from '../../../recoil/userAtoms';
+import { confirmPasswordValueAtom, passwordValueAtom } from '../../../recoil/userAtoms';
 import { passwordFindModalAtom } from '../../../recoil/modalAtoms';
 import { StyleBody } from '../../shared/Modal/JoinModal';
 import Input from '../../shared/UI/Input';
@@ -35,7 +35,8 @@ export default function PasswordFindModal() {
   const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
 
   const [isPasswordFindModalOpen, setIsPasswordFindModalOpen] = useRecoilState(passwordFindModalAtom);
-  const passwordValue = useRecoilValue(passwordValueAtom);
+  const [passwordValue, setPasswordValue] = useRecoilState(passwordValueAtom);
+  const [confirmPasswordValue, setConfirmPasswordValue] = useRecoilState(confirmPasswordValueAtom);
 
   const isValid = isPasswordValid && isConfirmPasswordValid;
 
@@ -79,6 +80,8 @@ export default function PasswordFindModal() {
     setPhoneValue('');
     setCodeValue('');
     hookStateInitial();
+    setPasswordValue('');
+    setConfirmPasswordValue('');
   };
 
   useEffect(() => {
@@ -92,7 +95,7 @@ export default function PasswordFindModal() {
 
   const title = (
     <StyleTap>
-      <div>비밀번호 찾기</div>
+      <div>비밀번호 초기화</div>
     </StyleTap>
   );
   const body = (

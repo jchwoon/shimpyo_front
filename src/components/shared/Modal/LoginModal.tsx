@@ -19,7 +19,11 @@ interface ResultData {
   accessToken: string;
 }
 
-export default function LoginModal() {
+interface LoginModalProps {
+  isToReservationCheck?: boolean;
+}
+
+export default function LoginModal({ isToReservationCheck }: LoginModalProps) {
   const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
   const location = useLocation();
   const navigation = useNavigate();
@@ -108,7 +112,15 @@ export default function LoginModal() {
           </span>
         </StyleAccountInfoFind>
         <ColorButton disabled={isLoading} onClick={handleLoginButtonClick} label="로그인" />
+        {isToReservationCheck && (
+          <div style={{ textAlign: 'center' }}>
+            <span style={{ fontSize: '13px', cursor: 'pointer' }} onClick={() => navigation('/check/non-member')}>
+              비회원 예약 내역 조회 &rarr;
+            </span>
+          </div>
+        )}
       </StyleLoginBody>
+
       <hr />
     </>
   );
