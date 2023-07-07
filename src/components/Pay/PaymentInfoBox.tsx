@@ -159,7 +159,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
             merchant_uid: `${uid}`,
             name: "당근 11kg",
             amount: 100,
-            buyer_email: "Iamport@chai.finance",
+            buyer_email: "i2pss@naver.com",
             buyer_name: "포트원 기술지원팀",
             buyer_tel: "010-1234-5678",
             buyer_addr: "서울특별시 강남구 삼성동",
