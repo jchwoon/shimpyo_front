@@ -16,7 +16,7 @@ import { BsPersonPlus } from 'react-icons/bs';
 import { Typography } from '@mui/material';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { activeRoomPrice, activeRoomName } from '../../../../../recoil/atoms';
+import { activeRoomPrice, activeRoomName } from '../../../../../recoil/detailPageAtoms';
 import { roomImageListState } from '../../../../../recoil/accommodationAtoms';
 
 interface RommCardProps {

@@ -4,15 +4,15 @@ import { Typography, Button, IconButton } from '@mui/material';
 import styled from '@emotion/styled';
 
 import { useRecoilValue, useRecoilState } from 'recoil';
+import { activeRoomPrice, activeRoomName } from '../../../../../recoil/detailPageAtoms';
+
 import {
-  activeRoomPrice,
-  activeRoomName,
-  FirstPickedDate,
-  SecondPickedDate,
   AdultGuest,
   ChildGuest,
   InfantGuest,
-} from '../../../../../recoil/atoms';
+  FirstPickedDate,
+  SecondPickedDate,
+} from '../../../../../recoil/navBarAtoms';
 
 import { Calendar } from '../../../../Main/MobileCalendar/Calendar';
 
