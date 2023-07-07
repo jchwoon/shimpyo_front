@@ -56,12 +56,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 const StyleLabel = styled.label<{ $error?: boolean }>`
   position: relative;
   padding: 0.75rem 0.5rem;
-  border: ${props => (props.$error ? '2px solid red' : '1.5px solid rgb(200, 200, 200)')};
+  outline: ${props => (props.$error ? '2px solid red' : '1.5px solid rgb(200, 200, 200)')};
   border-radius: 0.5rem;
   margin-top: 0.5rem;
 
   :focus-within {
-    border: 2px solid black;
+    outline: 2px solid black;
     div {
       transform: translateY(-17px) translateX(-8px) scale(0.8);
     }

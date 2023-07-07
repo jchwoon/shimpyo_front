@@ -6,7 +6,7 @@ export default function NotFound() {
     <NotFoundContainer>
       <div>
         <Link to="/">
-          <Image src={'./images/logo.png'} alt="404" />
+          <Image src={'/images/logo.png'} alt="404" />
         </Link>
       </div>
       <NotFoundTitle>404 - Page Not Found</NotFoundTitle>

@@ -3,11 +3,12 @@ import GridContents from '../GridContents';
 import HeaderContents from '../HeaderContents';
 import ReservationCategory from '../ReservationCategory';
 import styled from 'styled-components';
-import useReservationCategoryToggle from '../../../hooks/useReservationCategoryToggle';
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { useSearchParams } from 'react-router-dom';
 import CategoryFooter from '../CategoryFooter';
 import usePagination from '../../../hooks/usePagination';
+
+type State = 'COMPLETE' | 'USING' | 'FINISHED' | 'CANCEL';
 
 type ListType = {
   reservationId: number;
@@ -17,7 +18,7 @@ type ListType = {
   houseType: string;
   checkInDate: string;
   checkOutDate: string;
-  reservationStatus?: string;
+  reservationStatus: State;
 };
 
 interface IResultData {
@@ -29,22 +30,10 @@ interface IResultData {
 
 export default function ReservationCancel() {
   const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
-  const { isOpen, toggleShowButton } = useReservationCategoryToggle('reservationCancel');
-
-  const [totalPage, setTotalPage] = useState<number>(3);
-  const [totalItem, setTotalItem] = useState<number>(25);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [contentsArray, setContentsArray] = useState<ListType[]>([
-    {
-      reservationId: 1,
-      checkInDate: '2023.06.19.09',
-      houseOwnerName: '정채운',
-      houseType: '펜션',
-      checkOutDate: '2023.06.19.09',
-      houseImageUrl: '/images/image.png',
-      houseName: '럭셔리 호텔',
-    },
-  ]);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const [totalItem, setTotalItem] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [contentsArray, setContentsArray] = useState<ListType[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const { changeClickedPage, changeNextPage, changePrevPage } = usePagination({
     category: 'reservationCancel',
@@ -52,6 +41,7 @@ export default function ReservationCancel() {
     searchParams,
     setCurrentPage,
     setSearchParams,
+    totalPage,
   });
 
   useEffect(() => {
@@ -68,33 +58,22 @@ export default function ReservationCancel() {
     const getData = async () => {
       if (!currentPage) return;
       if (currentPage > totalPage || currentPage <= 0) return;
-      await sendRequest({ url: `/user/reservations?page=${currentPage}` });
+      await sendRequest({ url: `/user/reservations?page=${currentPage - 1}&reservationStatus=CANCEL` });
     };
 
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [currentPage, totalPage]);
   const header = (
     <StyleHeaderBox>
-      <HeaderContents
-        isOpen={isOpen}
-        onClick={() => {
-          toggleShowButton();
-        }}
-        title="취소 내역"
-      />
-      <span style={{ position: 'absolute', left: '190px', top: '20px' }}>{`(${totalItem})`}</span>
+      <HeaderContents title="취소 내역" />
+      <span style={{ position: 'absolute', left: '130px', top: '18px' }}>{`(${totalItem})`}</span>
     </StyleHeaderBox>
   );
-
   const main = (
-    <>
-      {isOpen && (
-        <StyleGridBox>
-          <GridContents contentsArray={contentsArray} />
-        </StyleGridBox>
-      )}
-    </>
+    <StyleGridBox>
+      <GridContents contentsArray={contentsArray} />
+    </StyleGridBox>
   );
 
   const footer = (
@@ -103,7 +82,6 @@ export default function ReservationCancel() {
       changeNextPage={changeNextPage}
       changePrevPage={changePrevPage}
       currentPage={currentPage}
-      isOpen={isOpen}
       totalPage={totalPage}
     />
   );

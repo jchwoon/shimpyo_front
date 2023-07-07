@@ -1,15 +1,14 @@
 import { useEffect, useRef } from 'react';
-import { useRecoilState } from 'recoil';
+import { SetterOrUpdater } from 'recoil';
 import styled, { keyframes } from 'styled-components';
-import { alarmAtoms } from '../../recoil/modalAtoms';
 
 interface AlarmProps {
   message: string;
+  setAlarmState: SetterOrUpdater<boolean>;
 }
 
-export default function Alarm({ message }: AlarmProps) {
+export default function Alarm({ message, setAlarmState }: AlarmProps) {
   const alarmRef = useRef<HTMLDivElement>(null);
-  const [alarmState, setAlarmState] = useRecoilState(alarmAtoms);
 
   useEffect(() => {
     const showAndHide = setTimeout(() => {
@@ -17,8 +16,7 @@ export default function Alarm({ message }: AlarmProps) {
     }, 2000);
 
     return () => clearTimeout(showAndHide);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [alarmState]);
+  }, [setAlarmState]);
 
   useEffect(() => {
     if (alarmRef.current) {
