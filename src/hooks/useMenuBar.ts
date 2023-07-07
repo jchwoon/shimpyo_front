@@ -14,7 +14,7 @@ interface UseMenuBarProps {
  * @returns {object} - isOpen: 메뉴 열림 여부를 나타내는 상태값
  */
 export default function useMenuBar({ initialState, menuRef, buttonRef }: UseMenuBarProps) {
-  const [isOpen, setIsOpen] = useState(initialState);
+  const [isOpen, setIsOpen] = useState<boolean>(initialState);
 
   const onClick = useCallback(
     (e: MouseEvent) => {
@@ -37,14 +37,14 @@ export default function useMenuBar({ initialState, menuRef, buttonRef }: UseMenu
   }, [isOpen]);
 
   useEffect(() => {
-    window.addEventListener('click', onClick);
+    window.addEventListener('click', e => onClick(e));
     window.addEventListener('blur', onBlur);
 
     return () => {
-      window.removeEventListener('click', onClick);
+      window.removeEventListener('click', e => onClick(e));
       window.removeEventListener('blur', onBlur);
     };
   }, [buttonRef, menuRef, isOpen, onClick, onBlur]);
 
-  return { isOpen };
+  return { isOpen, setIsOpen };
 }

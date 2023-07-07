@@ -30,7 +30,27 @@ export const reviewModalAtom = atom<boolean>({
   default: false,
 });
 
-export const alarmAtoms = atom<boolean>({
-  key: 'alarmAtoms',
+export const reviewManageModalAtom = atom<boolean>({
+  key: 'reviewManageModalAtom',
+  default: false,
+});
+
+export const guestManageModalAtom = atom<boolean>({
+  key: 'guestManageModalAtom',
+  default: false,
+});
+
+export const reservationCancelModalAtom = atom<boolean>({
+  key: 'reservationCancelModalAtom',
+  default: false,
+});
+
+export const reservationDetailModalAtom = atom<boolean>({
+  key: 'reservationDetailModalAtom',
+  default: false,
+});
+
+export const wishListDeleteConfirmModalAtom = atom<boolean>({
+  key: 'wishListDeleteConfirmModalAtom',
   default: false,
 });

@@ -217,6 +217,7 @@ export default function AddressInputContents() {
         <LocationMap
           width={'80%'}
           height={'300px'}
+          radius={'20px'}
           latitude={accommodation.address.lat}
           longitude={accommodation.address.lng}
         />

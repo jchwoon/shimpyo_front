@@ -1,33 +1,43 @@
 import styled, { keyframes } from 'styled-components';
-import UserMenuItem from './MenuItem';
 import Avatar from '../../shared/Avatar';
 import { BiMenu } from 'react-icons/bi';
-import { RiMailOpenLine, RiGlobalLine } from 'react-icons/ri';
-import { MdCalendarToday, MdClose } from 'react-icons/md';
-import { SlHandbag } from 'react-icons/sl';
-import { IoMdSettings } from 'react-icons/io';
-import { BsHouseAdd, BsCreditCard2Back, BsHouseDoor } from 'react-icons/bs';
-import { CgProfile } from 'react-icons/cg';
-import { useRef } from 'react';
-import MenuBlock from './MenuBlock';
+import { MdClose } from 'react-icons/md';
+import { Dispatch, SetStateAction } from 'react';
 import Menu from '../Menu';
+import { FiMenu } from 'react-icons/fi';
 import { StyleMenuList } from '../../style/shareStyle';
-import Button from '../../shared/UI/Button';
-import useMenuBar from '../../../hooks/useMenuBar';
+
 import useResponseToViewPort from '../../../hooks/useResponseToViewPort';
 
-export default function UserMenu() {
-  const menuRef = useRef(null);
-  const buttonRef = useRef(null);
-  const { isOpen } = useMenuBar({ initialState: false, menuRef, buttonRef });
+interface UserMenuProps {
+  menuRef: React.RefObject<HTMLDivElement>;
+  buttonRef: React.RefObject<HTMLDivElement>;
+  isOpen: boolean;
+  menuItems: React.ReactElement;
+  slideMenuItems: React.ReactElement;
+  openState?: (set: Dispatch<SetStateAction<boolean>>) => void;
+}
+
+export default function UserMenu({ menuItems, slideMenuItems, buttonRef, menuRef, isOpen }: UserMenuProps) {
   const { viewPortWidth } = useResponseToViewPort();
 
   return (
     <Menu>
       <StyleFlexBox>
         <StyleMenuButton ref={buttonRef}>
-          {viewPortWidth > 1024 ? (
-            <Avatar width="30px" height="30px" />
+          {viewPortWidth > 768 ? (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}
+            >
+              <FiMenu size={20} />
+              <Avatar width="30px" height="30px" />
+            </div>
           ) : isOpen ? (
             <MdClose size={20} />
           ) : (
@@ -35,41 +45,14 @@ export default function UserMenu() {
           )}
         </StyleMenuButton>
       </StyleFlexBox>
-      {isOpen && viewPortWidth > 1024 && (
+      {isOpen && viewPortWidth > 768 && (
         <StyleUserMenuList ref={menuRef}>
-          <StyleFlexMenuList>
-            <UserMenuItem bold label="프로필" />
-            <UserMenuItem bold label="계정" />
-            <Underline />
-            <UserMenuItem label="언어 및 번역" />
-            <UserMenuItem label="KRW" />
-            <Underline />
-            <UserMenuItem label="게스트 모드로 전환" />
-            <UserMenuItem label="로그아웃" />
-          </StyleFlexMenuList>
+          <StyleFlexMenuList>{menuItems}</StyleFlexMenuList>
         </StyleUserMenuList>
       )}
-      {isOpen && viewPortWidth <= 1024 && (
+      {isOpen && viewPortWidth <= 768 && (
         <StyleTotalContainer ref={menuRef} showMenu={isOpen}>
-          <StyleTotalMenuBox>
-            <MenuBlock label="메뉴">
-              <UserMenuItem icon={RiMailOpenLine} bold label="투데이" />
-              <UserMenuItem icon={MdCalendarToday} bold label="달력" />
-              <UserMenuItem icon={BsHouseDoor} bold label="숙소" />
-              <UserMenuItem icon={SlHandbag} bold label="예약" />
-            </MenuBlock>
-            <MenuBlock label="계정">
-              <UserMenuItem icon={CgProfile} bold label="프로필" />
-              <UserMenuItem icon={IoMdSettings} bold label="계정 관리" />
-              <UserMenuItem icon={BsHouseAdd} bold label="새로운 숙소 등록하기" />
-            </MenuBlock>
-            <MenuBlock label="설정">
-              <UserMenuItem icon={RiGlobalLine} bold label="언어 및 번역" />
-              <UserMenuItem icon={BsCreditCard2Back} bold label="KRW" />
-            </MenuBlock>
-            <Button label="게스트 모드로 전환" />
-            <Button label="로그아웃" />
-          </StyleTotalMenuBox>
+          <StyleTotalMenuBox>{slideMenuItems}</StyleTotalMenuBox>
         </StyleTotalContainer>
       )}
     </Menu>
@@ -95,8 +78,8 @@ const StyleFlexBox = styled.div`
 const StyleMenuButton = styled.div`
   cursor: pointer;
   padding: 0.5rem;
-  border: 0.5px solid rgb(235, 235, 235);
-  border-radius: 100%;
+  border: 0.5px solid rgb(200, 200, 200);
+  border-radius: 30px;
 `;
 
 export const StyleUserMenuList = styled(StyleMenuList)`
@@ -110,7 +93,6 @@ const StyleFlexMenuList = styled.div`
 `;
 
 const StyleTotalContainer = styled.div<{ showMenu: boolean }>`
-  border-top: 1px solid rgb(200, 200, 200);
   background-color: white;
   width: 100%;
   height: 100%;
@@ -125,10 +107,4 @@ const StyleTotalContainer = styled.div<{ showMenu: boolean }>`
 const StyleTotalMenuBox = styled.div`
   margin: 50px 0;
   padding: 0 30px 130px 30px;
-`;
-
-const Underline = styled.hr`
-  border: none;
-  border-top: 1px solid rgb(180, 180, 180);
-  margin: 10px 0;
 `;

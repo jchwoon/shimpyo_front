@@ -1,8 +1,7 @@
 import './App.css';
 import './fonts.css';
-import { RecoilRoot, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { Outlet, useNavigate } from 'react-router-dom';
-
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import useAuthorizedRequest from './hooks/useAuthorizedRequest';
@@ -31,7 +30,6 @@ function App() {
 
   useEffect(() => {
     const sendRefreshToken = async () => {
-      if (!isLoggedIn) return;
       await sendRequest({ url: `${REGENERATION_REFRESH_API_PATH}`, withCredentials: true });
 
       if (responseData && responseData.result) {
@@ -41,14 +39,8 @@ function App() {
     };
     sendRefreshToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
-  return (
-    <>
-      <RecoilRoot>
-        <Outlet />
-      </RecoilRoot>
-    </>
-  );
+  }, [accessToken, isLoggedIn]);
+  return <Outlet />;
 }
 
 export default App;

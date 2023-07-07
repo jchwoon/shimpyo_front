@@ -2,7 +2,6 @@ import { MouseEvent } from 'react';
 import styled from 'styled-components';
 
 interface CategoryFooterProps {
-  isOpen: boolean;
   totalPage: number;
   currentPage: number;
   changePrevPage: () => void;
@@ -11,7 +10,6 @@ interface CategoryFooterProps {
 }
 
 export default function CategoryFooter({
-  isOpen,
   totalPage,
   currentPage,
   changePrevPage,
@@ -20,7 +18,7 @@ export default function CategoryFooter({
 }: CategoryFooterProps) {
   return (
     <>
-      {isOpen && (
+      {totalPage >= 1 && (
         <StyleFlexFooterBox>
           <div style={{ display: 'flex', gap: '1rem', flexDirection: 'row', justifyContent: 'center' }}>
             <StylePageNumber disabled={currentPage === 1} onClick={changePrevPage}>

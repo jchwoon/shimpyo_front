@@ -14,6 +14,6 @@ export default function Main({ children }: MainProps) {
 }
 
 const StyleMainBox = styled.main`
-  width: 100%;
+  /* width: 100%; */
   height: auto;
 `;
