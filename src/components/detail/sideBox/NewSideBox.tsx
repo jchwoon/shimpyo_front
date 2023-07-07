@@ -138,10 +138,10 @@ export default function NewSideBox() {
   const customizedSearchButton = document.getElementsByClassName("activeRoomCard")
   // console.log("activeRoomCard:", customizedSearchButton[0].props.price)
 
-  const [isPhoneValid, setIsPhoneValid] = useState(false);
-    const getPhoneValid = (valid: boolean) => {
-        setIsPhoneValid(valid);
-    };
+  // const [isPhoneValid, setIsPhoneValid] = useState(false);
+  //   const getPhoneValid = (valid: boolean) => {
+  //       setIsPhoneValid(valid);
+  //   };
 
   const [swipePage, setSwipePage] = useRecoilState(swipePageState);
 
@@ -257,10 +257,12 @@ export default function NewSideBox() {
               position:"relative",
               // right:"360px"
               right: swipePage === 2 ? "330px" : "0px",
-              transition: "0.5s ease",
+              transition: "0.3s ease",
               backgroundColor:"white"
             }}>
-            <NoneMemberPhoneInput getValid={getPhoneValid} />
+            <NoneMemberPhoneInput
+            //  getValid={getPhoneValid} 
+             />
             <PaymentInfoBox checkInDate={firstPickedDate} checkOutDate={secondPickedDate} price={price} />
             </div>
             </div>

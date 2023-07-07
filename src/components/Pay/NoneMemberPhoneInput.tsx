@@ -1,26 +1,26 @@
 import Input from '../shared/UI/Input';
-import SharedColorButton from '../shared/UI/ColorButton';
 import { useState, useCallback, ChangeEvent } from 'react';
 import styled from '@emotion/styled';
-import { StyleNumberTypeInput } from '../style/shareStyle';
 import usePhoneCertification from '../../hooks/usePhoneCertification';
 import { useRecoilState } from 'recoil';
 import { phoneValueAtom } from '../../recoil/userAtoms';
 
 import { swipePageState } from '../../recoil/detailPageAtoms';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import 'swiper/css';
+// import 'swiper/css/pagination';
 // import './styles.css';
-import { Pagination } from 'swiper/modules';
+// import { Pagination } from 'swiper/modules';
+
 import Typography from '@mui/material/Typography';
 
 import { Divider } from '@mui/material';
+import { boolean } from 'yargs';
 
-interface PhoneInputProps {
-    getValid: (valid: boolean) => void;
-}
+// interface PhoneInputProps {
+//     getValid: (valid: boolean) => void;
+// }
 
 interface ColorButtonProps {
     label: string;
@@ -44,9 +44,17 @@ function ExtendedColorButton({ label, disabled = false, onClick }: ColorButtonPr
     );
 }
 
-export default function NoneMemberPhoneInput({ getValid }: PhoneInputProps) {
+export default function NoneMemberPhoneInput(
+    // { getValid }: PhoneInputProps
+    ) {
+    const [nameValue, setNameValue] = useState('')
     const [phoneValue, setPhoneValue] = useRecoilState(phoneValueAtom);
     const [codeValue, setCodeValue] = useState('');
+
+    const [isPhoneValid, setIsPhoneValid] = useState(false);
+    const getPhoneValid = (valid: boolean) => {
+        setIsPhoneValid(valid);
+    };
 
     const {
         codeNumberError,
@@ -61,11 +69,16 @@ export default function NoneMemberPhoneInput({ getValid }: PhoneInputProps) {
         initialState,
     } = usePhoneCertification({ codeValue, phoneValue, isUser: false });
 
+    const onNameValueChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        setNameValue(value);
+    }
+
     const onPhoneValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         setPhoneValue(value);
         initialState();
-        getValid(false);
+        getPhoneValid(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -80,8 +93,12 @@ export default function NoneMemberPhoneInput({ getValid }: PhoneInputProps) {
 
     const handleCheckCodeNumber = async () => {
         const isCodeOkay = handleSubmitConfirmNumber();
-        getValid(isCodeOkay);
+        getPhoneValid(isCodeOkay);
     };
+
+    const inputChange = Boolean(nameValue!=='' || phoneValue)
+
+    const isValid = Boolean(nameValue!=='' && isPhoneValid)
 
     const [swipePage, setSwipePage] = useRecoilState(swipePageState);
 
@@ -95,6 +112,7 @@ export default function NoneMemberPhoneInput({ getValid }: PhoneInputProps) {
                     <Input
                         type="text"
                         placeholder="예약자 성함"
+                        onChange={onNameValueChange}
                     />
                 </div>
                 <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", marginBottom: "10px" }}>
@@ -108,22 +126,37 @@ export default function NoneMemberPhoneInput({ getValid }: PhoneInputProps) {
                         type="number"
                         onChange={onCodeValueChange}
                         placeholder="인증번호 입력"
-                        disabled={!isPhoneOk}
+                        disabled={isLoading}
+                        error={codeNumberError}
+                        errorMessage={codeNumberErrorMessage}
                     />
                     <StyledColorButtonWrapper>
                         <ColorButton 
-                        // disabled={!isPhoneOk} 
+                        disabled={!isPhoneOk} 
                         label="확인" 
-                        // onClick={handleCheckCodeNumber} 
-                        onClick={()=>setSwipePage(2)}
+                        onClick={handleCheckCodeNumber} 
+                        // onClick={()=>setSwipePage(2)}
                         />
                     </StyledColorButtonWrapper>
                 </div>
                 <Divider/>
-                <Typography fontFamily='Noto Sans KR' color="#cccccc" fontWeight="400" fontSize="12px" align='center' sx={{marginTop:"15px", marginBottom:"10px"}}>
-                    회원에게는 쿠폰 및 여러 혜택이 주어집니다
-                </Typography>
-                <ExtendedColorButton label="로그인" onClick={()=>{}}/>
+                    <div style={{height:"99px", width:"282px", overflow:"hidden"}}>
+                        <div style={{height:"198px", width:"282px", display:"flex", flexDirection:"column", position:"relative", transition: "0.3s ease",
+                        bottom: inputChange ? "99px" : "0px"}}>
+                            <div style={{height:"99px", width:"282px"}}>
+                                <Typography fontFamily='Noto Sans KR' color="#cccccc" fontWeight="400" fontSize="12px" align='center' sx={{marginTop:"15px", marginBottom:"10px"}}>
+                                회원에게는 쿠폰 및 여러 혜택이 주어집니다
+                                </Typography>
+                                <ExtendedColorButton label="로그인" onClick={()=>{}}/>
+                            </div>
+                            <div style={{height:"99px", width:"282px"}}>
+                                <Typography fontFamily='Noto Sans KR' color="#cccccc" fontWeight="400" fontSize="12px" align='center' sx={{marginTop:"15px", marginBottom:"10px"}}>
+                                비회원으로 예약을 진행합니다
+                                </Typography>
+                                <ExtendedColorButton disabled={!isValid || isLoading} label="확인" onClick={()=>setSwipePage(2)}/>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </div>
     );
