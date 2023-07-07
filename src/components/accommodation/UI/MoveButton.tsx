@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 
-import { buttonConstants } from '../../constants/buttonContent';
-import buttonContent from '../../constants/buttonContent';
-import { accommodationState, addressCheckState, errorModalState, stepState } from '../../recoil/atoms';
+import { buttonConstants } from '../../../constants/buttonContent';
+import buttonContent from '../../../constants/buttonContent';
+import { accommodationState, addressCheckState, errorModalState, stepState } from '../../../recoil/accommodationAtoms';
 
 interface buttonProps {
   step: keyof buttonConstants;
@@ -36,7 +36,7 @@ export default function MoveButton({ step, isDisabled }: buttonProps) {
     }
   };
 
-  const CheckAddress = () => {
+  const checkAddress = () => {
     if (step === 'PREV') {
       setStepNumber(stepNumber - 1);
       setAddressCheck(true);
@@ -105,7 +105,7 @@ export default function MoveButton({ step, isDisabled }: buttonProps) {
   if (stepNumber === 4) {
     return (
       <>
-        <StyledBtn disabled={isDisabled} step={step} onClick={CheckAddress}>
+        <StyledBtn disabled={isDisabled} step={step} onClick={checkAddress}>
           {buttonContent[step]}
         </StyledBtn>
       </>

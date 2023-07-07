@@ -10,7 +10,11 @@ export default function ContentsTitle({ children }: ContentsTitleProps) {
 }
 
 const StyledTitle = styled.h2`
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 600;
   margin-bottom: 20px;
+
+  @media (min-width: 780px) {
+    font-size: 30px;
+  }
 `;

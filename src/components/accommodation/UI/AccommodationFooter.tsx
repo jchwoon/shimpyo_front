@@ -1,13 +1,14 @@
 import styled from 'styled-components';
-import StepBar from '../StepBar';
-import MoveButton from '../MoveButton';
+import StepBar from './StepBar';
+import MoveButton from './MoveButton';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { isPassedState, stepState } from '../../../recoil/atoms';
+import { disabledState, stepState } from '../../../recoil/accommodationAtoms';
 import { ALL_STEP_NUMBER } from '../../../constants/accommodation';
+import ErrorMessageModal from '../contents/address/AddressErrorMessageModal';
 
 export default function AccommodationFooter() {
   const stepNumber = useRecoilValue(stepState);
-  const [isPassed, setIsPassed] = useRecoilState(isPassedState);
+  const [disabled, setDisabled] = useRecoilState(disabledState);
 
   return (
     <StyledFooter>
@@ -21,7 +22,7 @@ export default function AccommodationFooter() {
       {stepNumber !== 0 && stepNumber !== ALL_STEP_NUMBER && (
         <StyledFlexButtonContainer>
           <MoveButton step="PREV" />
-          <MoveButton step="NEXT" isDisabled={isPassed} />
+          <MoveButton step="NEXT" isDisabled={disabled} />
         </StyledFlexButtonContainer>
       )}
       {stepNumber === ALL_STEP_NUMBER && (
@@ -30,6 +31,7 @@ export default function AccommodationFooter() {
           <MoveButton step="FIN" />
         </StyledFlexButtonContainer>
       )}
+      <ErrorMessageModal />
     </StyledFooter>
   );
 }
@@ -38,6 +40,7 @@ const StyledFooter = styled.footer`
   display: flex;
   flex-direction: column;
   min-width: 360px;
+  position: relative;
 `;
 
 const StyledFlexButtonContainer = styled.div`

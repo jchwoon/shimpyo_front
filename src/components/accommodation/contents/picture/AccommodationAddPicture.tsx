@@ -1,4 +1,4 @@
-import { useRef, ChangeEvent } from 'react';
+import { useRef, ChangeEvent, useEffect } from 'react';
 import styled from 'styled-components';
 import { TbPhotoPlus } from 'react-icons/tb';
 import { AiOutlinePicture, AiOutlinePlus } from 'react-icons/ai';
@@ -6,10 +6,10 @@ import { AiOutlinePicture, AiOutlinePlus } from 'react-icons/ai';
 import ImageOption from './ImageOption';
 import imageReader from '../../../../utils/imageReader';
 import { useRecoilState } from 'recoil';
-import { imageDataState, imageListState, isPassedState } from '../../../../recoil/atoms';
+import { imageDataState, imageListState, disabledState } from '../../../../recoil/accommodationAtoms';
 
 export default function AccommodationAddPicture() {
-  const [isPassed, setIsPassed] = useRecoilState(isPassedState);
+  const [disabled, setDisabled] = useRecoilState(disabledState);
   const [imageData, setImageData] = useRecoilState(imageDataState);
   const [imageList, setImageList] = useRecoilState(imageListState);
 
@@ -38,9 +38,9 @@ export default function AccommodationAddPicture() {
         }
 
         if (newImageList[0].image?.length !== 0) {
-          setIsPassed(false);
+          setDisabled(false);
         } else {
-          setIsPassed(true);
+          setDisabled(true);
         }
 
         setImageList(newImageList);
@@ -122,18 +122,22 @@ export default function AccommodationAddPicture() {
 
 const StyledFlexDiv = styled.div`
   display: flex;
-  width: 600px;
+  width: 100%;
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 20px;
+
+  @media (min-width: 780px) {
+    width: 600px;
+  }
 `;
 
 const StyledContainer = styled.div`
   position: relative;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 600px;
   height: 330px;
   border: 2px dotted rgba(0, 0, 0, 0.2);
   z-index: 1;
@@ -182,7 +186,7 @@ const StyledPlusContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 290px;
+  width: 100%;
   height: 200px;
   align-items: center;
   border: 2px dotted rgba(0, 0, 0, 0.2);
@@ -192,6 +196,11 @@ const StyledPlusContainer = styled.div`
 
   &:hover {
     border: 2px solid black;
+  }
+
+  @media (min-width: 780px) {
+    width: 290px;
+    height: 200px;
   }
 `;
 

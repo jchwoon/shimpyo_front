@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { type ImageItem } from '../../../../constants/accommodation';
 import imageReader from '../../../../utils/imageReader';
 import { useRecoilState } from 'recoil';
-import { imageDataState, isPassedState } from '../../../../recoil/atoms';
+import { imageDataState, disabledState } from '../../../../recoil/accommodationAtoms';
 
 interface ImageOptionProps {
   index: number;
@@ -14,7 +14,7 @@ interface ImageOptionProps {
 }
 
 export default function ImageOption({ index, setImageList, imageList }: ImageOptionProps) {
-  const [isPassed, setIsPassed] = useRecoilState(isPassedState);
+  const [disabled, setDisabled] = useRecoilState(disabledState);
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [imageData, setImageData] = useRecoilState(imageDataState);
 
@@ -42,9 +42,9 @@ export default function ImageOption({ index, setImageList, imageList }: ImageOpt
     }
 
     if (newImageList[0].image?.length !== 0) {
-      setIsPassed(false);
+      setDisabled(false);
     } else {
-      setIsPassed(true);
+      setDisabled(true);
     }
 
     newImageData.delete('houseImages');

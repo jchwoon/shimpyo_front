@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import AddressSearchItem from './AddressSearchItem';
 import { FaLocationArrow } from 'react-icons/fa';
 import { useRecoilState } from 'recoil';
-import { accommodationState, stepState } from '../../../../recoil/atoms';
+import { accommodationState, stepState } from '../../../../recoil/accommodationAtoms';
 import { getAddressFromLatLng } from '../../../../utils/getAddressFromLatLng';
 
 export interface Prediction {
@@ -100,7 +100,7 @@ const StyledListContainer = styled.ul<AddressSearchListProps>`
   overflow-y: auto;
 
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
-  height: ${props => (props.searchResult.predictions && props.searchResult.predictions.length > 0 ? '200px' : '80px')};
+  height: ${props => props.searchResult.predictions && props.searchResult.predictions.length > 1 && '200px'};
   visibility: ${props => (props.focus === false ? 'hidden' : 'visible')};
 `;
 

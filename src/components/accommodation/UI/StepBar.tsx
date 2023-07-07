@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { stepGaugeSelector } from '../../recoil/selector';
+import { stepGaugeSelector } from '../../../recoil/selector';
 
 interface StepProps {
   stepOne?: number;

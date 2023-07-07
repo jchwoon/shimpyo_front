@@ -1,5 +1,5 @@
-import ContentsTitle from '../ContentsTitle';
-import ContentsSubText from '../ContentsSubText';
+import ContentsTitle from '../reuse/ContentsTitle';
+import ContentsSubText from '../reuse/ContentsSubText';
 import AccommodationSettingFeeBox from './AccommodationSettingFeeBox';
 
 export default function AccommodationFeeContents() {
