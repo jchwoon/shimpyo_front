@@ -40,6 +40,7 @@ export default function Main() {
   const setLoginModal = useSetRecoilState(loginModalAtom);
   const [loginState, setLoginState] = useState(false);
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
+  const [isToReservationCheck, setIsToReservationCheck] = useState(false);
   const navigate = useNavigate();
 
   const menuItems = (
@@ -74,6 +75,10 @@ export default function Main() {
   }, []);
 
   useEffect(() => {
+    if (searchParams.get('redirect_url')?.includes('/reservations')) {
+      setIsToReservationCheck(true);
+    }
+
     if (searchParams.has('redirect_url')) {
       setLoginModal(true);
     }
@@ -102,7 +107,7 @@ export default function Main() {
       )}
       <Cards />
       {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />}
-      <LoginModal />
+      <LoginModal isToReservationCheck={isToReservationCheck} />
       <JoinModal />
       <AdditionalInfoModal />
       <IdFindModal />
