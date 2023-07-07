@@ -19,8 +19,6 @@ import IdFindModal from '../components/Main/Modal/IdFindModal';
 import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
 import { useSearchParams } from 'react-router-dom';
 import { useSetRecoilState, useRecoilState } from 'recoil';
-import { loginModalAtom } from '../recoil/modalAtoms';
-
 import UserMenuItem from '../components/shared/UserMenu/UserMenuItem';
 
 import SearchBar from '../components/Main/Navbar/SearchBar';
