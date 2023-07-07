@@ -1,5 +1,5 @@
 import Input from '../shared/UI/Input';
-// import ColorButton from '../shared/UI/ColorButton';
+import SharedColorButton from '../shared/UI/ColorButton';
 import { useState, useCallback, ChangeEvent } from 'react';
 import styled from '@emotion/styled';
 import { StyleNumberTypeInput } from '../style/shareStyle';
@@ -7,6 +7,7 @@ import usePhoneCertification from '../../hooks/usePhoneCertification';
 import { useRecoilState } from 'recoil';
 import { phoneValueAtom } from '../../recoil/userAtoms';
 
+import { swipePageState } from '../../recoil/detailPageAtoms';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -14,6 +15,8 @@ import 'swiper/css/pagination';
 // import './styles.css';
 import { Pagination } from 'swiper/modules';
 import Typography from '@mui/material/Typography';
+
+import { Divider } from '@mui/material';
 
 interface PhoneInputProps {
     getValid: (valid: boolean) => void;
@@ -28,6 +31,14 @@ interface ColorButtonProps {
 function ColorButton({ label, disabled = false, onClick }: ColorButtonProps) {
     return (
         <StyleColorButton onClick={onClick} disabled={disabled}>
+            {label}
+        </StyleColorButton>
+    );
+}
+
+function ExtendedColorButton({ label, disabled = false, onClick }: ColorButtonProps) {
+    return (
+        <StyleColorButton onClick={onClick} disabled={disabled} style={{width:"100%"}}>
             {label}
         </StyleColorButton>
     );
@@ -72,11 +83,13 @@ export default function NoneMemberPhoneInput({ getValid }: PhoneInputProps) {
         getValid(isCodeOkay);
     };
 
+    const [swipePage, setSwipePage] = useRecoilState(swipePageState);
+
     return (
-        <div style={{ width: "336px", height: "364px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <div>
-                <Typography fontFamily='Noto Sans KR' fontWeight="300" fontSize="14px">
-                    비회원 정보 입력
+        <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center",backgroundColor:"white" }}>
+            <div style={{width:"100%", height:"100%", padding:"24px", display: "flex", flexDirection:"column", justifyContent: "center",}}>
+                <Typography fontFamily='Noto Sans KR' color="#cccccc" fontWeight="400" fontSize="12px" align='center' sx={{marginBottom:"10px"}}>
+                    비회원인 경우 예약 필수 정보를 입력해주세요
                 </Typography>
                 <div style={{ marginBottom: "10px" }}>
                     <Input
@@ -98,9 +111,19 @@ export default function NoneMemberPhoneInput({ getValid }: PhoneInputProps) {
                         disabled={!isPhoneOk}
                     />
                     <StyledColorButtonWrapper>
-                        <ColorButton disabled={!isPhoneOk} label="확인" onClick={handleCheckCodeNumber} />
+                        <ColorButton 
+                        // disabled={!isPhoneOk} 
+                        label="확인" 
+                        // onClick={handleCheckCodeNumber} 
+                        onClick={()=>setSwipePage(2)}
+                        />
                     </StyledColorButtonWrapper>
                 </div>
+                <Divider/>
+                <Typography fontFamily='Noto Sans KR' color="#cccccc" fontWeight="400" fontSize="12px" align='center' sx={{marginTop:"15px", marginBottom:"10px"}}>
+                    회원에게는 쿠폰 및 여러 혜택이 주어집니다
+                </Typography>
+                <ExtendedColorButton label="로그인" onClick={()=>{}}/>
             </div>
         </div>
     );

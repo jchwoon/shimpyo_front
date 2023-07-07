@@ -47,6 +47,10 @@ import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { merchantUid } from '../../../recoil/detailPageAtoms';
 
+import NoneMemberPhoneInput from '../../Pay/NoneMemberPhoneInput';
+
+import { swipePageState } from '../../../recoil/detailPageAtoms';
+
 interface ResultData {
   accessToken: string;
   merchantUid: string;
@@ -120,15 +124,26 @@ export default function NewSideBox() {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    // width: 400,
+    width: '360px',
+    overflow:'hidden',
     // bgcolor: 'background.paper',
     // border: '2px solid #000',
     // boxShadow: 24,
     p: 4,
+    display:'flex',
+    // flex-direction:'row'
   };
 
   const customizedSearchButton = document.getElementsByClassName("activeRoomCard")
   // console.log("activeRoomCard:", customizedSearchButton[0].props.price)
+
+  const [isPhoneValid, setIsPhoneValid] = useState(false);
+    const getPhoneValid = (valid: boolean) => {
+        setIsPhoneValid(valid);
+    };
+
+  const [swipePage, setSwipePage] = useRecoilState(swipePageState);
 
   return (
     <Main >
@@ -225,9 +240,31 @@ export default function NewSideBox() {
       >
 
         <Fade in={open}>
-          <Box sx={style}>
+          {/* <Box sx={style}> */}
+            <div style={{
+              position: 'absolute' as 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '330px',
+              height:'auto',
+              overflow:'hidden',
+              borderRadius:"10px",
+              display:'flex'
+            }}>
+            <div style={{
+              display:"flex",
+              position:"relative",
+              // right:"360px"
+              right: swipePage === 2 ? "330px" : "0px",
+              transition: "0.5s ease",
+              backgroundColor:"white"
+            }}>
+            <NoneMemberPhoneInput getValid={getPhoneValid} />
             <PaymentInfoBox checkInDate={firstPickedDate} checkOutDate={secondPickedDate} price={price} />
-          </Box>
+            </div>
+            </div>
+          {/* </Box> */}
         </Fade>
 
       </Modal>

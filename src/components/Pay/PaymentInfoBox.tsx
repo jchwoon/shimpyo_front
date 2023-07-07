@@ -29,11 +29,6 @@ import { RESERVATION_API_PATH } from "../../constants/api/reservationApi";
 import NoneMemberPhoneInput from "./NoneMemberPhoneInput";
 import { useState } from 'react'
 
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "./styles.css";
-
 interface ResultData {
     accessToken: string;
 }
@@ -219,15 +214,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
     };
 
     return (
-        <>
-            <Swiper className="mySwiper">
-                <SwiperSlide>
-                    <NoneMemberPhoneInput getValid={getPhoneValid} />
-                </SwiperSlide>
-                <SwiperSlide>
+        <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection:"column" }}>
                     <PaymentInfoWrapper>
-
-                        {/* <Divider /> */}
                         <TitleBookingInfo loginState={loginState}>
                             <Typography fontFamily='Noto Sans KR'>호텔 이름</Typography>
                             <Typography fontFamily='Noto Sans KR' sx={{ marginLeft: "10px", marginRight: "10px" }}>/</Typography>
@@ -321,17 +309,10 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
                             <TotalDetail>청구액</TotalDetail>
                             <TotalAmount>₩ {(TotalPrice - DiscountPrice).toLocaleString()}</TotalAmount>
                         </BookingTotal>
-                        {/* <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}> */}
-                        {/* <BookingBtn disabled={paymentRadioSelectedValue === ''}>
-                <Typography fontFamily='Noto Sans KR' fontSize="17px">결제</Typography>
-            </BookingBtn> */}
                         <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={requestPay} />
-                        {/* </div> */}
-
                     </PaymentInfoWrapper >
-                </SwiperSlide>
-            </Swiper>
-        </>
+                </div>
+        // </SwipableWrapper>
     )
 }
 
@@ -341,14 +322,20 @@ const CustomizedExpandMoreIcon = styled(ExpandMoreIcon)`
 color:#d9d9d9;
 `
 
+const SwipableWrapper = styled.div`
+display:flex;
+flex-direction: row;
+`
+
 const PaymentInfoWrapper = styled.div`
 display:flex;
 flex-direction: column;
 align-self:flex-start;
 position:relative;
 width:330px;
-border-radius: 10px;
+// border-radius: 10px;
 padding: 24px;
+background-color:white;
 `
 
 
