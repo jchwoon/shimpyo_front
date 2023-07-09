@@ -14,3 +14,8 @@ export const copyAddressAlarmAtoms = atom<boolean>({
   key: 'copyAddressAlarmAtoms',
   default: false,
 });
+
+export const accountDeactivationRejectedAlarmAtom = atom<boolean>({
+  key: 'rejectedAccountDeactivationAlarmAtoms',
+  default: false,
+});

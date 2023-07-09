@@ -143,7 +143,7 @@ const router = createBrowserRouter([
         path: 'account-settings',
         element: (
           <Suspense fallback={<Loading />}>
-            <AuthCheck option={null}>
+            <AuthCheck option={onlyLogin}>
               <Account />
             </AuthCheck>
           </Suspense>
