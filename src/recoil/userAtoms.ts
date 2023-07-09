@@ -30,9 +30,18 @@ export const accessTokenAtom = atom<string>({
   default: '',
 });
 
+const storedProfileImage = localStorage.getItem('profileImage');
+const defaultProfileImage = storedProfileImage !== null ? JSON.parse(storedProfileImage) : '';
 export const profileImageAtom = atom<string>({
   key: 'profileImageAtom',
-  default: '',
+  default: defaultProfileImage,
+});
+
+const storedNickname = localStorage.getItem('nickname');
+const defaultNickname = storedNickname !== null ? JSON.parse(storedNickname) : '';
+export const nicknameAtom = atom<string>({
+  key: 'nicknameAtom',
+  default: defaultNickname,
 });
 
 export const loginStateAtom = atom<boolean>({

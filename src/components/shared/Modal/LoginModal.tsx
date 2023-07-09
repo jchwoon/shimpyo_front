@@ -2,7 +2,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import Modal from '../Modal';
 import { useRef, useEffect, useState, KeyboardEvent } from 'react';
 import { idFindModalAtom, joinModalAtom, loginModalAtom, passwordFindModalAtom } from '../../../recoil/modalAtoms';
-import { loginStateAtom, accessTokenAtom } from '../../../recoil/userAtoms';
+import { loginStateAtom, accessTokenAtom, nicknameAtom, profileImageAtom } from '../../../recoil/userAtoms';
 import styled from 'styled-components';
 import { StyleBody, StyleFooter, StyleSwitchToLoginButton } from './JoinModal';
 import ColorButton from '../UI/ColorButton';
@@ -17,6 +17,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ResultData {
   accessToken: string;
+  nickname: string;
+  profileImage: string;
 }
 
 interface LoginModalProps {
@@ -40,6 +42,8 @@ export default function LoginModal({ isToReservationCheck }: LoginModalProps) {
   const setIsPasswordFindModalOpen = useSetRecoilState(passwordFindModalAtom);
   const setIsJoinModalOpen = useSetRecoilState(joinModalAtom);
   const setAccessToken = useSetRecoilState(accessTokenAtom);
+  const setUserNickname = useSetRecoilState(nicknameAtom);
+  const setUserProfileImage = useSetRecoilState(profileImageAtom);
 
   const handleLoginButtonClick = async () => {
     const emailValue = emailRef.current?.value;
@@ -68,6 +72,10 @@ export default function LoginModal({ isToReservationCheck }: LoginModalProps) {
 
     if (responseData?.isSuccess) {
       setAccessToken(responseData.result.accessToken);
+      localStorage.setItem('nickname', JSON.stringify(responseData.result.nickname));
+      localStorage.setItem('profileImage', JSON.stringify(responseData.result.profileImage));
+      setUserProfileImage(responseData.result.profileImage);
+      setUserNickname(responseData.result.nickname);
       setIsLoggedIn(true);
       setIsLoginModalOpen(false);
       window.history.replaceState(null, '', '/');
