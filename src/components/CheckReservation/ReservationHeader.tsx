@@ -81,7 +81,7 @@ export default function ReservationHeader() {
         <MenuItem bold onClick={() => navigation('/wishlists')} label="위시리스트" />
         <Underline />
         <MenuItem onClick={() => navigation('/hosting')} label="숙소관리" />
-        <MenuItem onClick={() => navigation('/account')} label="계정" />
+        <MenuItem onClick={() => navigation('/account-settings')} label="계정" />
         <Underline />
         <MenuItem onClick={() => logoutHandler()} label="로그아웃" />
       </>

@@ -23,9 +23,10 @@ interface ResultData {
 
 interface LoginModalProps {
   isToReservationCheck?: boolean;
+  redirectPath?: string;
 }
 
-export default function LoginModal({ isToReservationCheck }: LoginModalProps) {
+export default function LoginModal({ isToReservationCheck, redirectPath }: LoginModalProps) {
   const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
   const location = useLocation();
   const navigation = useNavigate();
@@ -85,7 +86,7 @@ export default function LoginModal({ isToReservationCheck }: LoginModalProps) {
       setIsLoggedIn(true);
       setIsLoginModalOpen(false);
       window.history.replaceState(null, '', '/');
-      navigation(location?.state?.redirectedFrom?.pathname || '/');
+      navigation(location?.state?.redirectedFrom?.pathname || redirectPath || '/');
     } else {
       setIsLoginError(true);
       setLoginErrorMessage('이메일과 비밀번호를 다시 한번 확인해주세요.');
@@ -95,7 +96,7 @@ export default function LoginModal({ isToReservationCheck }: LoginModalProps) {
 
   const title = (
     <div>
-      <img width={50} height={20} alt="logo" src="images/logo.png" />
+      <img width={50} height={20} alt="logo" src="/images/logo.png" />
       <span>에 오신것을 환영합니다.</span>
     </div>
   );

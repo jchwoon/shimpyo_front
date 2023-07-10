@@ -15,7 +15,7 @@ interface ReservationCancelModalProps {
 }
 
 export default function ReservationCancelModal({ price, checkIn }: ReservationCancelModalProps) {
-  const { reservationId } = useParams();
+  const { codeNumber } = useParams();
   const [commission, setCommission] = useState(0);
   const setIsOverCheckIn = useSetRecoilState(isOverCheckInAtom);
   const [reservationCancelModal, setReservationCancelModal] = useRecoilState(reservationCancelModalAtom);
@@ -24,7 +24,7 @@ export default function ReservationCancelModal({ price, checkIn }: ReservationCa
 
   const cancelReservationHandler = async () => {
     await sendRequest({
-      url: `/user/reservations/${reservationId}`,
+      url: `/api/non-member-reservations/${codeNumber}`,
       method: 'PATCH',
       body: { refundAmount: +price - commission },
     });

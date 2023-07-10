@@ -3,17 +3,19 @@ import UserMenuItem from '../../shared/UserMenu/UserMenuItem';
 import useResponseToViewPort from '../../../hooks/useResponseToViewPort';
 import Header from '../../layout/Header';
 import Navbar from '../../shared/Navbar/Navbar';
+import useLogout from '../../../hooks/useLogout';
 
 export default function AccountHeader() {
   const navigation = useNavigate();
+  const { logoutHandler } = useLogout();
 
   const menuItems = (
     <div>
       <UserMenuItem label="예약 내역" onClick={() => navigation('/reservations?category=reservation')} />
-      <UserMenuItem divide label="관심 숙소" onClick={() => navigation('/reservations?category=reservation')} />
-      <UserMenuItem label="숙소 관리" onClick={() => navigation('/reservations?category=reservation')} />
-      <UserMenuItem divide label="계정" onClick={() => navigation('/reservations?category=reservation')} />
-      <UserMenuItem label="로그아웃" onClick={() => navigation('/reservations?category=reservation')} />
+      <UserMenuItem divide label="관심 숙소" onClick={() => navigation('/wishlists')} />
+      <UserMenuItem label="숙소 관리" onClick={() => navigation('/hosting')} />
+      <UserMenuItem divide label="계정" onClick={() => navigation('/account-settings')} />
+      <UserMenuItem label="로그아웃" onClick={() => logoutHandler()} />
     </div>
   );
   const { viewPortWidth } = useResponseToViewPort();

@@ -26,7 +26,7 @@ export default function LoginStateNavi({ intersectionWidthValue }: { intersectio
   );
 
   const profileNavi = (
-    <BottomNavigationAction icon={<AccountCircleIcon />} label="프로필" onClick={() => navigation('/users')} />
+    <BottomNavigationAction icon={<AccountCircleIcon />} label="계정" onClick={() => navigation('/account-settings')} />
   );
   return (
     <div>

@@ -37,14 +37,15 @@ export default function useMenuBar({ initialState, menuRef, buttonRef }: UseMenu
   }, [isOpen]);
 
   useEffect(() => {
-    window.addEventListener('click', e => onClick(e));
+    window.addEventListener('click', onClick);
     window.addEventListener('blur', onBlur);
 
     return () => {
-      window.removeEventListener('click', e => onClick(e));
+      window.removeEventListener('click', onClick);
       window.removeEventListener('blur', onBlur);
     };
-  }, [buttonRef, menuRef, isOpen, onClick, onBlur]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [buttonRef, menuRef, isOpen]);
 
   return { isOpen, setIsOpen };
 }

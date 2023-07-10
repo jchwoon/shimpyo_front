@@ -2,10 +2,11 @@ import styled from 'styled-components';
 import { MdOutlineArrowForwardIos, MdOutlineArrowBackIos, MdArrowBack } from 'react-icons/md';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { State } from '../../NonMemberReservationDetailMain';
 
 interface ImageBoxProps {
   imageList: string[];
-  isOver?: boolean;
+  reservationStatus: State;
 }
 
 const iconStyle = {
@@ -17,8 +18,24 @@ const iconStyle = {
   boxShadow: '3px 3px 6px -1px rgb(0 0 0 / 0.3)',
 };
 
-export default function ImageBox({ imageList, isOver }: ImageBoxProps) {
+function getStateMessage(state: State): string {
+  switch (state) {
+    case 'COMPLETE':
+      return '예약완료';
+    case 'USING':
+      return '이용중';
+    case 'FINISHED':
+      return '이용완료';
+    case 'CANCEL':
+      return '취소됨';
+    default:
+      return '';
+  }
+}
+
+export default function ImageBox({ imageList, reservationStatus }: ImageBoxProps) {
   const processRef = useRef<HTMLDivElement>(null);
+  const reservationStatuseRef = useRef<HTMLDivElement>(null);
   const [currentIdx, setCurrentIdx] = useState(0);
   const navigation = useNavigate();
 
@@ -45,6 +62,14 @@ export default function ImageBox({ imageList, isOver }: ImageBoxProps) {
       processRef.current.style.left = left;
     }
   }, []);
+
+  useEffect(() => {
+    if (reservationStatuseRef.current) {
+      const width = reservationStatuseRef.current.offsetWidth;
+      const left = `calc(50% - ${width / 2}px)`;
+      reservationStatuseRef.current.style.left = left;
+    }
+  }, []);
   return (
     <StyleImageContainer>
       <StyleHouseImageBox imageLength={imageList.length}>
@@ -61,19 +86,17 @@ export default function ImageBox({ imageList, isOver }: ImageBoxProps) {
           ))}
         </StyleProcess>
       </StyleProcessContainer>
-      {!isOver && (
-        <MdArrowBack
-          onClick={() => {
-            navigation(-1);
-          }}
-          style={{
-            ...iconStyle,
-            top: '20px',
-            left: '20px',
-          }}
-          size={15}
-        />
-      )}
+      <MdArrowBack
+        onClick={() => {
+          navigation(-1);
+        }}
+        style={{
+          ...iconStyle,
+          top: '20px',
+          left: '20px',
+        }}
+        size={15}
+      />
       <MdOutlineArrowBackIos
         onClick={prevImage}
         style={{
@@ -92,6 +115,7 @@ export default function ImageBox({ imageList, isOver }: ImageBoxProps) {
         }}
         size={15}
       />
+      <StyleReservationStatus ref={reservationStatuseRef}>{getStateMessage(reservationStatus)}</StyleReservationStatus>
     </StyleImageContainer>
   );
 }
@@ -158,4 +182,14 @@ const StyleProcessList = styled.li<{ currentIdx: number; index: number }>`
   height: 7px;
   border-radius: 100%;
   background-color: ${props => (props.currentIdx === props.index ? 'white' : 'rgba(200, 200, 200, 0.7)')};
+`;
+
+const StyleReservationStatus = styled.div`
+  position: absolute;
+  top: 20px;
+  padding: 0.5rem;
+  border-radius: 3px;
+  font-size: 15px;
+  color: white;
+  background-color: #009ca6;
 `;

@@ -1,4 +1,6 @@
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import { profileImageAtom } from '../../recoil/userAtoms';
 
 interface AvatarProps {
   src?: string;
@@ -7,7 +9,16 @@ interface AvatarProps {
 }
 
 export default function Avatar({ src, width, height }: AvatarProps) {
-  return <StyleAvatar width={width} height={height} alt="avatar" src={src || '/images/basicProfile.jpg'} />;
+  const userPofileImage = useRecoilValue(profileImageAtom);
+  console.log(userPofileImage);
+  return (
+    <StyleAvatar
+      width={width}
+      height={height}
+      alt="avatar"
+      src={src || userPofileImage || '/images/basicProfile.jpg'}
+    />
+  );
 }
 
 const StyleAvatar = styled.img<{ width: string; height: string }>`
