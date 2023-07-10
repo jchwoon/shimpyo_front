@@ -1,10 +1,10 @@
 import { ChangeEvent, useState, useCallback, useEffect } from 'react';
 import { emailValidation } from '../../../utils/validation';
 import Input from '../../shared/UI/Input';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import useHttpRequest from '../../../hooks/useHttpRequest';
 import { EMAIL_OVERLAP_CHECK_API_PATH } from '../../../constants/api/userApi';
-import { emailValueAtom } from '../../../recoil/userAtoms';
+import { emailValueAtom, nicknameAtom, profileImageAtom } from '../../../recoil/userAtoms';
 
 interface EmailInputProps {
   getValid: (valid: boolean) => void;
@@ -19,6 +19,8 @@ export default function EmailInput({ getValid }: EmailInputProps) {
 
   const validationCheck = emailValidation.test(emailValue);
   const isValid = emailValue !== '' && !emailError;
+  const nickname = useRecoilValue(nicknameAtom);
+  const profile = useRecoilValue(profileImageAtom);
 
   const validateEmail = useCallback(() => {
     if (!validationCheck) {
@@ -66,13 +68,17 @@ export default function EmailInput({ getValid }: EmailInputProps) {
     getValid(isValid);
   }, [emailValue, validateEmail, getValid, isValid]);
   return (
-    <Input
-      value={emailValue}
-      error={emailError}
-      errorMessage={emailErrorMessage}
-      onChange={handleEmailChange}
-      placeholder="이메일"
-      type="email"
-    />
+    <>
+      <img alt="profile" src={profile} />
+      <span>{nickname}</span>
+      <Input
+        value={emailValue}
+        error={emailError}
+        errorMessage={emailErrorMessage}
+        onChange={handleEmailChange}
+        placeholder="이메일"
+        type="email"
+      />
+    </>
   );
 }

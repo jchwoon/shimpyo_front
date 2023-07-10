@@ -72,10 +72,16 @@ export default function LoginModal({ isToReservationCheck }: LoginModalProps) {
 
     if (responseData?.isSuccess) {
       setAccessToken(responseData.result.accessToken);
-      localStorage.setItem('nickname', JSON.stringify(responseData.result.nickname));
-      localStorage.setItem('profileImage', JSON.stringify(responseData.result.profileImage));
-      setUserProfileImage(responseData.result.profileImage);
-      setUserNickname(responseData.result.nickname);
+      localStorage.setItem(
+        'nickname',
+        responseData.result.nickname ? JSON.stringify(responseData.result.nickname) : '',
+      );
+      localStorage.setItem(
+        'profileImage',
+        responseData.result.profileImage ? JSON.stringify(responseData.result.profileImage) : '',
+      );
+      setUserProfileImage(responseData.result.profileImage || '/images/basicProfile.jpg');
+      setUserNickname(responseData.result.nickname || '');
       setIsLoggedIn(true);
       setIsLoginModalOpen(false);
       window.history.replaceState(null, '', '/');
