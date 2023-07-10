@@ -213,105 +213,107 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
         setIsPhoneValid(valid);
     };
 
+    console.log("loginState:", loginState)
+
     return (
-        <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection:"column" }}>
-                    <PaymentInfoWrapper>
-                        <TitleBookingInfo loginState={loginState}>
-                            <Typography fontFamily='Noto Sans KR'>호텔 이름</Typography>
-                            <Typography fontFamily='Noto Sans KR' sx={{ marginLeft: "10px", marginRight: "10px" }}>/</Typography>
-                            <Typography fontFamily='Noto Sans KR'>디럭스 룸</Typography>
-                        </TitleBookingInfo>
-                        <BookingInfo>
-                            <Typography fontFamily='Noto Sans KR'>{moment(checkInDate).format('M월 D일')} - {moment(checkOutDate).format('M월 D일')}</Typography>
-                            <Typography fontFamily='Noto Sans KR' sx={{ textDecoration: "underline" }}>₩ {price ? price.toLocaleString() : 0} x {DaysDifference}박</Typography>
-                        </BookingInfo>
-                        <BookingInfo style={{ marginBottom: "20px" }}>
-                            <Typography fontFamily='Noto Sans KR'>총 합계</Typography>
-                            <Typography fontFamily='Noto Sans KR' sx={{ textDecoration: "underline" }}>₩ {TotalPrice ? TotalPrice.toLocaleString() : null}</Typography>
-                        </BookingInfo>
+        <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+            <PaymentInfoWrapper>
+                <TitleBookingInfo loginState={loginState}>
+                    <Typography fontFamily='Noto Sans KR'>호텔 이름</Typography>
+                    <Typography fontFamily='Noto Sans KR' sx={{ marginLeft: "10px", marginRight: "10px" }}>/</Typography>
+                    <Typography fontFamily='Noto Sans KR'>디럭스 룸</Typography>
+                </TitleBookingInfo>
+                <BookingInfo>
+                    <Typography fontFamily='Noto Sans KR'>{moment(checkInDate).format('M월 D일')} - {moment(checkOutDate).format('M월 D일')}</Typography>
+                    <Typography fontFamily='Noto Sans KR' sx={{ textDecoration: "underline" }}>₩ {price ? price.toLocaleString() : 0} x {DaysDifference}박</Typography>
+                </BookingInfo>
+                <BookingInfo style={{ marginBottom: "20px" }}>
+                    <Typography fontFamily='Noto Sans KR'>총 합계</Typography>
+                    <Typography fontFamily='Noto Sans KR' sx={{ textDecoration: "underline" }}>₩ {TotalPrice ? TotalPrice.toLocaleString() : null}</Typography>
+                </BookingInfo>
 
-                        <Divider />
+                <Divider />
 
-                        {loginState ?
-                            <CustomizedAccordion elevation={0} sx={{ marginTop: "10px" }}>
-                                <CustomizedAccordionSummary
-                                    expandIcon={<CustomizedExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header"
-                                >
-                                    <Typography fontFamily='Noto Sans KR'>쿠폰 할인</Typography>
-                                    <Typography fontFamily='Noto Sans KR' sx={{ marginRight: "10px", color: couponRadioSelectedValue === 0 ? "#d9d9d9" : "#000000" }}>₩ {couponRadioSelectedValue === 0 ? 0 : DiscountPrice.toLocaleString()}</Typography>
-                                </CustomizedAccordionSummary>
-                                <CustomizedAccordionDetails>
-                                    <List>
-                                        <ListItem disablePadding>
-                                            <CustomizedListItemButton onClick={() => handleCouponRadio(5)}>
-                                                <CustomizedRadio
-                                                    checked={couponRadioSelectedValue === 5}
-                                                    name="radio-buttons"
-                                                    inputProps={{ 'aria-label': 'A' }}
-                                                />
-                                                <ListItemText primary="회원가입 5% 할인" />
-                                            </CustomizedListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <CustomizedListItemButton onClick={() => handleCouponRadio(3)}>
-                                                <CustomizedRadio
-                                                    checked={couponRadioSelectedValue === 3}
-                                                    name="radio-buttons"
-                                                    inputProps={{ 'aria-label': 'B' }}
-                                                />
-                                                <ListItemText primary="리뷰 작성 3% 할인" />
-                                            </CustomizedListItemButton>
-                                        </ListItem>
-                                    </List>
-                                </CustomizedAccordionDetails>
-                            </CustomizedAccordion>
-                            : null}
+                {loginState ?
+                    <CustomizedAccordion elevation={0} sx={{ marginTop: "10px" }}>
+                        <CustomizedAccordionSummary
+                            expandIcon={<CustomizedExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography fontFamily='Noto Sans KR'>쿠폰 할인</Typography>
+                            <Typography fontFamily='Noto Sans KR' sx={{ marginRight: "10px", color: couponRadioSelectedValue === 0 ? "#d9d9d9" : "#000000" }}>₩ {couponRadioSelectedValue === 0 ? 0 : DiscountPrice.toLocaleString()}</Typography>
+                        </CustomizedAccordionSummary>
+                        <CustomizedAccordionDetails>
+                            <List>
+                                <ListItem disablePadding>
+                                    <CustomizedListItemButton onClick={() => handleCouponRadio(5)}>
+                                        <CustomizedRadio
+                                            checked={couponRadioSelectedValue === 5}
+                                            name="radio-buttons"
+                                            inputProps={{ 'aria-label': 'A' }}
+                                        />
+                                        <ListItemText primary="회원가입 5% 할인" />
+                                    </CustomizedListItemButton>
+                                </ListItem>
+                                <ListItem disablePadding>
+                                    <CustomizedListItemButton onClick={() => handleCouponRadio(3)}>
+                                        <CustomizedRadio
+                                            checked={couponRadioSelectedValue === 3}
+                                            name="radio-buttons"
+                                            inputProps={{ 'aria-label': 'B' }}
+                                        />
+                                        <ListItemText primary="리뷰 작성 3% 할인" />
+                                    </CustomizedListItemButton>
+                                </ListItem>
+                            </List>
+                        </CustomizedAccordionDetails>
+                    </CustomizedAccordion>
+                    : null}
 
-                        <CustomizedAccordion elevation={0} sx={{ marginTop: "10px", marginBottom: "10px" }}>
-                            <CustomizedAccordionSummary
-                                expandIcon={<CustomizedExpandMoreIcon />}
-                                aria-controls="panel1a-content"
-                                id="panel1a-header"
-                            >
-                                <Typography fontFamily='Noto Sans KR'>결제 수단</Typography>
-                                <Typography fontFamily='Noto Sans KR' sx={{ fontSize: paymentRadioSelectedValue ? "16px" : "14px", marginRight: "10px", color: paymentRadioSelectedValue ? "#000000" : "#d9d9d9" }}>{paymentRadioSelectedValue ? paymentRadioSelectedValue : "결제 수단을 선택해주세요"}</Typography>
-                            </CustomizedAccordionSummary>
-                            <CustomizedAccordionDetails>
-                                <List>
-                                    <ListItem disablePadding onClick={() => handlePaymentRadio('신용카드')}>
-                                        <CustomizedListItemButton>
-                                            <CustomizedRadio
-                                                checked={paymentRadioSelectedValue === '신용카드'}
-                                                name="radio-buttons"
-                                                inputProps={{ 'aria-label': 'A' }}
-                                            />
-                                            <ListItemText primary="신용카드" />
-                                        </CustomizedListItemButton>
-                                    </ListItem>
-                                    <ListItem disablePadding onClick={() => handlePaymentRadio('카카오 페이')}>
-                                        <CustomizedListItemButton>
-                                            <CustomizedRadio
-                                                checked={paymentRadioSelectedValue === '카카오 페이'}
-                                                name="radio-buttons"
-                                                inputProps={{ 'aria-label': 'B' }}
-                                            />
-                                            <ListItemText primary="카카오 페이" />
-                                        </CustomizedListItemButton>
-                                    </ListItem>
-                                </List>
-                            </CustomizedAccordionDetails>
-                        </CustomizedAccordion>
+                <CustomizedAccordion elevation={0} sx={{ marginTop: "10px", marginBottom: "10px" }}>
+                    <CustomizedAccordionSummary
+                        expandIcon={<CustomizedExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography fontFamily='Noto Sans KR'>결제 수단</Typography>
+                        <Typography fontFamily='Noto Sans KR' sx={{ fontSize: paymentRadioSelectedValue ? "16px" : "14px", marginRight: "10px", color: paymentRadioSelectedValue ? "#000000" : "#d9d9d9" }}>{paymentRadioSelectedValue ? paymentRadioSelectedValue : "결제 수단을 선택해주세요"}</Typography>
+                    </CustomizedAccordionSummary>
+                    <CustomizedAccordionDetails>
+                        <List>
+                            <ListItem disablePadding onClick={() => handlePaymentRadio('신용카드')}>
+                                <CustomizedListItemButton>
+                                    <CustomizedRadio
+                                        checked={paymentRadioSelectedValue === '신용카드'}
+                                        name="radio-buttons"
+                                        inputProps={{ 'aria-label': 'A' }}
+                                    />
+                                    <ListItemText primary="신용카드" />
+                                </CustomizedListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding onClick={() => handlePaymentRadio('카카오 페이')}>
+                                <CustomizedListItemButton>
+                                    <CustomizedRadio
+                                        checked={paymentRadioSelectedValue === '카카오 페이'}
+                                        name="radio-buttons"
+                                        inputProps={{ 'aria-label': 'B' }}
+                                    />
+                                    <ListItemText primary="카카오 페이" />
+                                </CustomizedListItemButton>
+                            </ListItem>
+                        </List>
+                    </CustomizedAccordionDetails>
+                </CustomizedAccordion>
 
-                        <Divider />
-                        <BookingTotal>
-                            <TotalDetail>청구액</TotalDetail>
-                            <TotalAmount>₩ {(TotalPrice - DiscountPrice).toLocaleString()}</TotalAmount>
-                        </BookingTotal>
-                        <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={requestPay} />
-                    </PaymentInfoWrapper >
-                </div>
+                <Divider />
+                <BookingTotal>
+                    <TotalDetail>청구액</TotalDetail>
+                    <TotalAmount>₩ {(TotalPrice - DiscountPrice).toLocaleString()}</TotalAmount>
+                </BookingTotal>
+                <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={requestPay} />
+            </PaymentInfoWrapper >
+        </div>
         // </SwipableWrapper>
     )
 }
