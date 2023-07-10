@@ -10,7 +10,7 @@ interface AvatarProps {
 
 export default function Avatar({ src, width, height }: AvatarProps) {
   const userPofileImage = useRecoilValue(profileImageAtom);
-  console.log(userPofileImage);
+
   return (
     <StyleAvatar
       width={width}

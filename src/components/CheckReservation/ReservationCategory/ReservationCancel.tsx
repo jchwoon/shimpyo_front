@@ -7,6 +7,7 @@ import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { useSearchParams } from 'react-router-dom';
 import CategoryFooter from '../CategoryFooter';
 import usePagination from '../../../hooks/usePagination';
+import ReservationDetailModal from '../../CheckReservationDetail/Modal/ReservationDetailModal';
 
 type State = 'COMPLETE' | 'USING' | 'FINISHED' | 'CANCEL';
 
@@ -52,7 +53,7 @@ export default function ReservationCancel() {
       setTotalPage(responseData.result.totalPage);
       setTotalItem(responseData.result.totalElements);
     }
-  }, [responseData, totalPage]);
+  }, [responseData]);
 
   useEffect(() => {
     const getData = async () => {
@@ -63,7 +64,7 @@ export default function ReservationCancel() {
 
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, totalPage]);
+  }, [currentPage]);
   const header = (
     <StyleHeaderBox>
       <HeaderContents title="취소 내역" />
@@ -86,7 +87,12 @@ export default function ReservationCancel() {
     />
   );
 
-  return <ReservationCategory header={header} main={main} footer={footer} />;
+  return (
+    <>
+      <ReservationCategory header={header} main={main} footer={footer} />
+      <ReservationDetailModal />
+    </>
+  );
 }
 
 const StyleGridBox = styled.div`

@@ -27,7 +27,11 @@ const getLeftValue = (score: AverageScore) => {
   }
 };
 
-export default function ReviewModal() {
+interface ReviewModalProps {
+  getData: () => void;
+}
+
+export default function ReviewModal({ getData }: ReviewModalProps) {
   const [isReviewModalOpen, setIsReviewModalOpen] = useRecoilState(reviewModalAtom);
   const setCompleteAlarmOpen = useSetRecoilState(reviewCompleteAlarmAtoms);
   const [searchParams] = useSearchParams();
@@ -58,7 +62,7 @@ export default function ReviewModal() {
     if (responseData.isSuccess) {
       setCompleteAlarmOpen(true);
       setReviewModal(false);
-      window.location.reload();
+      getData();
     } else {
       setErrorMessage(responseData.message);
     }

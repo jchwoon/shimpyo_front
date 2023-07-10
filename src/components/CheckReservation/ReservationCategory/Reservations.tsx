@@ -45,7 +45,10 @@ export default function Reservations() {
     totalPage,
   });
 
+  console.log(window.history);
+
   useEffect(() => {
+    console.log('response');
     if (!responseData) return;
 
     if (responseData?.isSuccess) {
@@ -53,18 +56,19 @@ export default function Reservations() {
       setTotalPage(responseData.result.totalPage);
       setTotalItem(responseData.result.totalElements);
     }
-  }, [responseData, totalPage]);
+  }, [responseData]);
 
   useEffect(() => {
     const getData = async () => {
       if (!currentPage) return;
       if (currentPage > totalPage || currentPage <= 0) return;
+
       await sendRequest({ url: `/user/reservations?reservationStatus=COMPLETE&page=${currentPage - 1}` });
     };
 
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, totalPage]);
+  }, [currentPage]);
 
   const header = (
     <StyleHeaderBox>

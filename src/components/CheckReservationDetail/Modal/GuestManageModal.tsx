@@ -42,7 +42,6 @@ export default function GuestManageModal({ peopleCount, minPeople, maxPeople }: 
 
   const submitFixGuestNumber = async () => {
     if (peopleCount === guestCount) return;
-    console.log(peopleCount, guestCount);
     await sendRequest({
       url: `/user/reservations/${reservationId}/people-count`,
       body: { peopleCount: guestCount },
