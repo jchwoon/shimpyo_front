@@ -101,6 +101,7 @@ const Input = forwardRef<HTMLInputElement, TextFieldProps>(
                         error={error}
                         onChange={onChange}
                         onBlur={onBlur}
+                        inputRef={ref}
                     />
                     {error && <FormHelperText error>{errorMessage}</FormHelperText>}
                 </StyledFormControl>
@@ -113,6 +114,7 @@ const Input = forwardRef<HTMLInputElement, TextFieldProps>(
                     value={value}
                     onChange={onChange}
                     onBlur={onBlur}
+                    inputRef={ref}
                 />
 
         )

@@ -18,16 +18,18 @@ import Radio from '@mui/material/Radio';
 import { merchantUid } from '../../recoil/detailPageAtoms';
 import { useRecoilValue } from "recoil";
 import useAuthorizedRequest from "../../hooks/useAuthorizedRequest";
+import useHttpRequest from "../../hooks/useHttpRequest";
 import { accessTokenAtom } from "../../recoil/userAtoms";
 import { loginStateAtom } from "../../recoil/userAtoms";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { AxiosError } from 'axios';
-import { RESERVATION_API_PATH } from "../../constants/api/reservationApi";
-
+import { MEMBER_RESERVATION_API_PATH, NON_MEMBER_RESERVATION_API_PATH } from "../../constants/api/reservationApi";
 
 import NoneMemberPhoneInput from "./NoneMemberPhoneInput";
 import { useState } from 'react'
+
+import { v4 as uuidv4 } from 'uuid';
 
 interface ResultData {
     accessToken: string;
@@ -149,21 +151,24 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
         console.error(error.message);
     };
 
-    const { responseData, sendRequest } = useAuthorizedRequest<ResultData>({
+    const { responseData: memberPaymentResponseData, sendRequest: sendMemberPaymentRequest } = useAuthorizedRequest<ResultData>({
         onUnauthorized: handleUnAutorization,
     });
 
-    const uid = useRecoilValue(merchantUid)
+    const { responseData: noneMemberPaymentResponseData, sendRequest: sendNoneMemberPaymentRequest } = useHttpRequest();
 
-    function requestPay() {
+    const memberUid = useRecoilValue(merchantUid)
+    const noneMemberUid = uuidv4()
+
+    function memberRequestPay() {
         const { IMP } = window;
         IMP.init("imp62564523");
 
         const data = {
             pg: "html5_inicis",
             pay_method: "card",
-            merchant_uid: `${uid}`,
-            name: "당근 11kg",
+            merchant_uid: `${memberUid}`,
+            name: "회원구매",
             amount: 100,
             buyer_email: "i2pss@naver.com",
             buyer_name: "포트원 기술지원팀",
@@ -181,8 +186,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
             } = response;
 
             if (success) {
-                await sendRequest({
-                    url: `${RESERVATION_API_PATH}`,
+                await sendMemberPaymentRequest({
+                    url: `${MEMBER_RESERVATION_API_PATH}`,
                     method: "POST",
                     withCredentials: true,
                     body: {
@@ -195,8 +200,62 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
                         checkOutDate: "2023.07.09"
                     }
                 });
-                if (responseData) {
-                    console.log("finalResponseData:", responseData)
+                if (memberPaymentResponseData) {
+                    console.log("finalResponseData:", memberPaymentResponseData)
+                }
+            } else {
+                alert(`결제 실패: ${error_msg}`);
+            }
+        }
+
+        console.log("data:", data)
+
+        IMP.request_pay(data, callback);
+    }
+
+    function noneMemberRequestPay() {
+        const { IMP } = window;
+        IMP.init("imp62564523");
+
+        const data = {
+            pg: "html5_inicis",
+            pay_method: "card",
+            merchant_uid: `${noneMemberUid}`,
+            name: "비회원구매",
+            amount: 100,
+            buyer_email: "i2pss@naver.com",
+            buyer_name: "포트원 기술지원팀",
+            buyer_tel: "010-1234-5678",
+            buyer_addr: "서울특별시 강남구 삼성동",
+            buyer_postcode: "123-456",
+        }
+
+        async function callback(response: RequestPayResponse) {
+            const {
+                success,
+                error_msg,
+                imp_uid,
+                merchant_uid,
+            } = response;
+
+            if (success) {
+                await sendNoneMemberPaymentRequest({
+                    url: `${NON_MEMBER_RESERVATION_API_PATH}`,
+                    method: "POST",
+                    body: {
+                        impUid: imp_uid,
+                        roomId: 80001,
+                        merchantUid: merchant_uid,
+                        payMethod: "KGINICIS",
+                        name: "박현준",
+                        phoneNumber: "01029991157",
+                        peopleCount: 3,
+                        checkInDate: "2023.07.11",
+                        checkOutDate: "2023.07.12"
+                    }
+                });
+                if (noneMemberPaymentResponseData) {
+                    console.log("finalResponseData:", noneMemberPaymentResponseData)
                 }
             } else {
                 alert(`결제 실패: ${error_msg}`);
@@ -213,7 +272,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
         setIsPhoneValid(valid);
     };
 
-    console.log("loginState:", loginState)
+    console.log("isLoggedIn:", isLoggedIn)
 
     return (
         <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
@@ -234,7 +293,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
 
                 <Divider />
 
-                {loginState ?
+                {isLoggedIn ?
                     <CustomizedAccordion elevation={0} sx={{ marginTop: "10px" }}>
                         <CustomizedAccordionSummary
                             expandIcon={<CustomizedExpandMoreIcon />}
@@ -311,10 +370,9 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
                     <TotalDetail>청구액</TotalDetail>
                     <TotalAmount>₩ {(TotalPrice - DiscountPrice).toLocaleString()}</TotalAmount>
                 </BookingTotal>
-                <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={requestPay} />
+                <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={isLoggedIn ? memberRequestPay : noneMemberRequestPay} />
             </PaymentInfoWrapper >
         </div>
-        // </SwipableWrapper>
     )
 }
 

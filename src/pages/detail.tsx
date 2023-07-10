@@ -14,9 +14,10 @@ import { useState, useEffect } from 'react';
 import Navbar from '../components/shared/Navbar/Navbar';
 import MobileNavbar from '../components/Main/MobileNavbar/MobileNavbar';
 
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { Height, Display, Change } from '../recoil/navBarAtoms';
 import { loginModalAtom, joinModalAtom } from '../recoil/modalAtoms';
+import { loginStateAtom } from '../recoil/userAtoms';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import ToggleFavorite from '../components/detail/Container/ToggleFavorite';
@@ -55,10 +56,11 @@ export default function Detail() {
     };
   }, []);
 
-  const [loginState, setLoginState] = useState(false);
+  // const [loginState, setLoginState] = useState(false);
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
   const setLoginModal = useSetRecoilState(loginModalAtom);
   const setJoinModal = useSetRecoilState(joinModalAtom);
+  const loginState = useRecoilValue(loginStateAtom)
 
   const menuItems = (
     <div>
