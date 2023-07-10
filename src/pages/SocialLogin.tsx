@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import useHttpRequest from '../hooks/useHttpRequest';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SOCIAL_SILENT_LOGIN_API_PATH } from '../constants/api/userApi';
 import { useSetRecoilState } from 'recoil';
 import { accessTokenAtom } from '../recoil/userAtoms';
@@ -12,6 +12,7 @@ interface IResultData {
 export default function SocialLogin() {
   const { responseData, sendRequest } = useHttpRequest<IResultData>();
   const [searchParams] = useSearchParams();
+  const navigation = useNavigate();
   const setAccessToken = useSetRecoilState(accessTokenAtom);
 
   const getSilentToken = async () => {
@@ -24,7 +25,7 @@ export default function SocialLogin() {
 
     if (responseData.isSuccess) {
       setAccessToken(responseData.result.accessToken);
-      //리다이렉트
+      navigation('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);

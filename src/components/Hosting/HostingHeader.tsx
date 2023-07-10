@@ -71,7 +71,7 @@ export default function HostingHeader() {
   return (
     <Header>
       <FlexBox>
-        <Logo heihgt="25px" path="/hosting" width="50" />
+        <Logo height="25px" path="/hosting" width="50" />
         <StyleHeaderMenuBox hidden>
           <MotelManageMenu />
         </StyleHeaderMenuBox>

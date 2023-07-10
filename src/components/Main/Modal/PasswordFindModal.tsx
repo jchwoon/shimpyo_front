@@ -95,7 +95,7 @@ export default function PasswordFindModal() {
 
   const title = (
     <StyleTap>
-      <div>비밀번호 초기화</div>
+      <div>비밀번호 재설정</div>
     </StyleTap>
   );
   const body = (

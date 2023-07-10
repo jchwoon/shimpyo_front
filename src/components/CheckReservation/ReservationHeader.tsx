@@ -90,7 +90,7 @@ export default function ReservationHeader() {
   return (
     <Header>
       <FlexBox>
-        <Logo heihgt="25px" path="/" width="50" />
+        <Logo height="25px" path="/" width="50" />
         <StyleCategoryMenu hidden style={{ color: 'black' }}>
           <StyleCategoryMenuItem
             $target={searchParams.get('category') === 'reservation'}
