@@ -48,7 +48,7 @@ export default function usePagination({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [searchParams.get('page')]);
 
   useEffect(() => {
     if (!currentPage) return;

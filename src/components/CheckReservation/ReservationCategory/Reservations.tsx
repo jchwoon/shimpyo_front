@@ -45,10 +45,7 @@ export default function Reservations() {
     totalPage,
   });
 
-  console.log(window.history);
-
   useEffect(() => {
-    console.log('response');
     if (!responseData) return;
 
     if (responseData?.isSuccess) {

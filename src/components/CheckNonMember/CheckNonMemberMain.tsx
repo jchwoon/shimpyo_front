@@ -16,8 +16,11 @@ export default function CheckNonMemberMain() {
   const handleCheckNonMemberInfo = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    navigation(`/non-member/reservation-detail/${reservationCodeNumber}?phone=${reservationPhoneNumber}`);
-    await sendRequest({ url: '/api/check/non-member/reservationcode' });
+    await sendRequest({
+      url: '/api/check/non-member/reservationcode',
+      method: 'POST',
+      body: { phoneNumber: reservationPhoneNumber, reservationCode: reservationCodeNumber },
+    });
   };
 
   useEffect(() => {
