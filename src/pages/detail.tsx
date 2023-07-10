@@ -131,7 +131,7 @@ export default function Detail() {
       {isLargeScreen ? null : (
         <NewMobileFooter defaultValue={null} Action0={value0} Action1={value1} Action2={value2} />
       )}
-      <LoginModal />
+      <LoginModal redirectPath='/detail'/>
       <JoinModal />
     </>
   );

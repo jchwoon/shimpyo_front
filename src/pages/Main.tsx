@@ -18,7 +18,7 @@ import LoginModal from '../components/shared/Modal/LoginModal';
 import IdFindModal from '../components/Main/Modal/IdFindModal';
 import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
 import { useSearchParams } from 'react-router-dom';
-import { useSetRecoilState, useRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
 import UserMenuItem from '../components/shared/UserMenu/UserMenuItem';
 
 import SearchBar from '../components/Main/Navbar/SearchBar';
@@ -33,16 +33,18 @@ import { CustomIcon } from '../components/shared/MobileFooter/CustomIcon';
 import { useNavigate } from 'react-router-dom';
 
 import { loginModalAtom, joinModalAtom } from '../recoil/modalAtoms';
+import {loginStateAtom}from '../recoil/userAtoms';
 
 export default function Main() {
   const [searchParams] = useSearchParams();
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
   const setLoginModal = useSetRecoilState(loginModalAtom);
-  const [loginState, setLoginState] = useState(false);
+  // const [loginState, setLoginState] = useState(false);
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
   const [isToReservationCheck, setIsToReservationCheck] = useState(false);
   const navigate = useNavigate();
   const setJoinModal = useSetRecoilState(joinModalAtom);
+  const loginState = useRecoilValue(loginStateAtom)
 
   const menuItems = (
     <div>
