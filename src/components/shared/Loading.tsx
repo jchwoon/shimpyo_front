@@ -5,7 +5,7 @@ import Logo from './Logo';
 export default function Loading() {
   return (
     <StyleLoadingBox>
-      <Logo heihgt="50" width="100" path="" />
+      <Logo height="50" width="100" path="" />
       <div className={classes.ldsEllipsis}>
         <div></div>
         <div></div>

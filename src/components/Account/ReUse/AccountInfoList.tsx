@@ -1,15 +1,21 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 
 export interface AccountInfoListProps {
   title: string;
   infoContent: string;
   editComponent: React.ReactNode;
+  isEditMode: boolean;
+  setIsEditMode: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function AccountInfoList({ title, infoContent, editComponent }: AccountInfoListProps) {
-  const [isEditMode, setIsEditMode] = useState<boolean>(false);
-
+export default function AccountInfoList({
+  title,
+  infoContent,
+  editComponent,
+  isEditMode,
+  setIsEditMode,
+}: AccountInfoListProps) {
   return (
     <StyleListBox>
       <StyleListContents>

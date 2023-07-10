@@ -54,3 +54,8 @@ export const wishListDeleteConfirmModalAtom = atom<boolean>({
   key: 'wishListDeleteConfirmModalAtom',
   default: false,
 });
+
+export const accountDeActivationModalAtom = atom<boolean>({
+  key: 'accountDeActivationModalAtom',
+  default: false,
+});

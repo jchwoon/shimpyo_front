@@ -46,10 +46,12 @@ export default function useAuthorizedRequest<T>({ onUnauthorized }: useAuthorize
       //리다이렉트 -> 구글쪽에서 회원 데이터가 오기까지 기다린다 -> 성공적으로 갖고 와지면 응답으로 엑세스, 리프레쉬 준다
     } catch (error: any) {
       if (error.response) {
+        console.log(error);
         if (error.response?.status === 401 && onUnauthorized) {
           onUnauthorized(error);
           setErrorMessage(error.message);
         }
+        setErrorMessage(error.message);
       } else {
         setErrorMessage(error.message);
         console.error(error.message);
