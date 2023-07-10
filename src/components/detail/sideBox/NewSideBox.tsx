@@ -119,30 +119,6 @@ export default function NewSideBox() {
   }
   const handleClose = () => setOpen(false);
 
-  const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    // width: 400,
-    width: '360px',
-    overflow:'hidden',
-    // bgcolor: 'background.paper',
-    // border: '2px solid #000',
-    // boxShadow: 24,
-    p: 4,
-    display:'flex',
-    // flex-direction:'row'
-  };
-
-  const customizedSearchButton = document.getElementsByClassName("activeRoomCard")
-  // console.log("activeRoomCard:", customizedSearchButton[0].props.price)
-
-  // const [isPhoneValid, setIsPhoneValid] = useState(false);
-  //   const getPhoneValid = (valid: boolean) => {
-  //       setIsPhoneValid(valid);
-  //   };
-
   const [swipePage, setSwipePage] = useRecoilState(swipePageState);
 
   return (
@@ -222,9 +198,6 @@ export default function NewSideBox() {
       </CustomizedGuestAccordion>
 
       <ColorButton disabled={!room || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} label="예약" />
-      {/* <BookingBtn disabled={!Name || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} >
-        <Typography fontFamily='Noto Sans KR' fontSize="17px">예약</Typography>
-      </BookingBtn> */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -240,33 +213,28 @@ export default function NewSideBox() {
       >
 
         <Fade in={open}>
-          {/* <Box sx={style}> */}
+          <div style={{
+            position: 'absolute' as 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '330px',
+            height: 'auto',
+            overflow: 'hidden',
+            borderRadius: "10px",
+            display: 'flex'
+          }}>
             <div style={{
-              position: 'absolute' as 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '330px',
-              height:'auto',
-              overflow:'hidden',
-              borderRadius:"10px",
-              display:'flex'
-            }}>
-            <div style={{
-              display:"flex",
-              position:"relative",
-              // right:"360px"
+              display: "flex",
+              position: "relative",
               right: swipePage === 2 ? "330px" : "0px",
               transition: "0.3s ease",
-              backgroundColor:"white"
+              backgroundColor: "white"
             }}>
-            <NoneMemberPhoneInput
-            //  getValid={getPhoneValid} 
-             />
-            <PaymentInfoBox checkInDate={firstPickedDate} checkOutDate={secondPickedDate} price={price} />
+              <NoneMemberPhoneInput />
+              <PaymentInfoBox checkInDate={firstPickedDate} checkOutDate={secondPickedDate} price={price} />
             </div>
-            </div>
-          {/* </Box> */}
+          </div>
         </Fade>
 
       </Modal>
@@ -381,25 +349,6 @@ flex-direction:row;
 justify-content: space-between;
 `;
 
-const BookingBtn = styled(Button)`
-background-color:#00adb5;
-color: #ffffff;
-  width: 100%;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 25px;
-  margin: 20px auto;
-  cursor: pointer;
-  :hover {
-    background-color: #00c5cf;
-  }
-  &:disabled{
-    background-color: #00959c;
-    color:#d9d9d9;
-  }
-`;
 
 const BookingInfo = styled.div``;
 
