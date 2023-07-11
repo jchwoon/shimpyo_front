@@ -21,10 +21,10 @@ interface GuestManageModalProps {
 }
 
 export default function GuestManageModal({ peopleCount, minPeople, maxPeople }: GuestManageModalProps) {
+  const { codeNumber } = useParams();
   const [guestModalState, setGuestModalState] = useRecoilState(guestManageModalAtom);
   const [guestCount, setGuestCount] = useState(peopleCount);
   const { responseData, sendRequest } = useAuthorizedRequest({});
-  const { reservationId } = useParams();
 
   const plustGuestCount = () => {
     if (guestCount === maxPeople) return;
@@ -42,8 +42,9 @@ export default function GuestManageModal({ peopleCount, minPeople, maxPeople }: 
 
   const submitFixGuestNumber = async () => {
     if (peopleCount === guestCount) return;
+
     await sendRequest({
-      url: `/user/reservations/${reservationId}/people-count`,
+      url: `/api/non-member-reservations/${codeNumber}`,
       body: { peopleCount: guestCount },
       method: 'PATCH',
     });

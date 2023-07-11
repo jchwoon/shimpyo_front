@@ -7,6 +7,7 @@ import { BsHouseDoor } from 'react-icons/bs';
 import { GrUserManager } from 'react-icons/gr';
 import { changeDateType, formatDate } from '../../../../utils/changeFormat';
 import { useNavigate } from 'react-router-dom';
+import { State } from '../../NonMemberReservationDetailMain';
 
 interface ImageSectionProps {
   imageList: string[];
@@ -16,6 +17,7 @@ interface ImageSectionProps {
   hostname: string;
   houseOwnerId: number;
   isOver?: boolean;
+  reservationStatus: State;
 }
 
 export default function ImageSection({
@@ -26,6 +28,7 @@ export default function ImageSection({
   hostname,
   houseOwnerId,
   isOver,
+  reservationStatus,
 }: ImageSectionProps) {
   const navigation = useNavigate();
   const [changeCheckIn, setChangeCheckIn] = useState('');
@@ -49,7 +52,7 @@ export default function ImageSection({
   }, [checkIn, checkOut]);
   return (
     <StyleSection>
-      <ImageBox isOver={isOver} imageList={imageList} />
+      <ImageBox reservationStatus={reservationStatus} imageList={imageList} />
       <Section>
         {!isOver && (
           <>

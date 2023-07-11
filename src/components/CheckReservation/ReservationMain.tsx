@@ -4,7 +4,6 @@ import Reservations from './ReservationCategory/Reservations';
 import VisitedAccommodation from './ReservationCategory/VisitedAccommodation';
 import ReservationCancel from './ReservationCategory/ReservationCancel';
 import { useSearchParams } from 'react-router-dom';
-import ReservationDetailModal from '../CheckReservationDetail/Modal/ReservationDetailModal';
 
 export default function ReservationMain() {
   const [searchParams] = useSearchParams();
@@ -20,7 +19,6 @@ export default function ReservationMain() {
           </StyleFlexBox>
         </StyleListBox>
       </Main>
-      <ReservationDetailModal />
     </>
   );
 }

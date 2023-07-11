@@ -1,19 +1,24 @@
-import styled from 'styled-components';
-import LocationMap from '../../shared/LocationMap';
-import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ImageSection from '../Section/ImageSection/ImageSection';
-import DetailSection from '../Section/DetailSection';
-import GuideSection from '../Section/GuideSection';
-import PaySection from '../Section/PaySection';
-import GuestManageModal from '../Modal/GuestManageModal';
-import ReservationCancelModal from '../Modal/ReservationCancelModal';
-import NotFound from '../../../pages/404';
+
+import LocationMap from '../shared/LocationMap';
+import NotFound from '../../pages/404';
+import { useEffect, useState } from 'react';
+import useAuthorizedRequest from '../../hooks/useAuthorizedRequest';
+import styled from 'styled-components';
+import ImageSection from './Section/ImageSection/ImageSection';
+import DetailSection from './Section/DetailSection';
+import GuideSection from './Section/GuideSection';
+import PaySection from './Section/PaySection';
+import GuestManageModal from './Modal/GuestManageModal';
+import ReservationCancelModal from './Modal/ReservationCancelModal';
+import LoginModal from '../shared/Modal/LoginModal';
+import JoinModal from '../shared/Modal/JoinModal';
+
+export type State = 'COMPLETE' | 'USING' | 'FINISHED' | 'CANCEL';
 
 interface IResultData {
   houseId: number;
-  reservationStatus: string;
+  reservationStatus: State;
   houseImageUrl: string[];
   houseName: string;
   houseOwnerName: string;
@@ -31,32 +36,34 @@ interface IResultData {
   remainPrice: string;
   existReview: boolean;
   houseOwnerId: number;
+  reservationId: number;
 }
 
-export default function CheckReservationDetailMain() {
-  const { reservationId } = useParams();
-  const [isValidReservationId, setIsValidReservationId] = useState(true);
+export default function NonMemberReservationDetailMain() {
+  const { codeNumber } = useParams();
+  const [isValidCodeNumber, setIsValidCodeNumber] = useState(true);
   const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
   const [detailData, setDetailData] = useState<IResultData>({
-    address: '',
-    checkInDate: '',
-    checkOutDate: '',
+    address: '서울 마포구 마포대로 58',
+    checkInDate: '2023.08.19.09',
+    checkOutDate: '2023.08.20.13',
     existReview: false,
-    houseId: 0,
-    houseImageUrl: [''],
-    houseName: '',
-    houseOwnerId: 0,
-    houseOwnerName: '',
-    lat: 0,
-    lng: 0,
-    peopleCount: 0,
-    price: '',
-    remainPrice: '',
-    reservationStatus: '',
-    roomId: '',
-    roomName: '',
-    maxPeople: 0,
-    minPeople: 0,
+    houseId: 12,
+    houseImageUrl: ['/images/image.png'],
+    houseName: '파주 하늘펜션',
+    houseOwnerId: 20,
+    houseOwnerName: '루비즈',
+    lat: 35.366701,
+    lng: 127.651615,
+    peopleCount: 3,
+    price: '120000',
+    remainPrice: '50000',
+    reservationStatus: 'CANCEL',
+    roomId: '180',
+    roomName: '202호',
+    maxPeople: 5,
+    minPeople: 3,
+    reservationId: 15,
   });
 
   useEffect(() => {
@@ -66,20 +73,20 @@ export default function CheckReservationDetailMain() {
       setDetailData(responseData.result);
     } else {
       // if (responseData.code === 3100)
-      setIsValidReservationId(false);
+      setIsValidCodeNumber(false);
     }
   }, [responseData]);
 
   useEffect(() => {
     const getData = async () => {
-      await sendRequest({ url: `/user/reservations/${reservationId}` });
+      await sendRequest({ url: `/api/non-member-reservations/${codeNumber}` });
     };
 
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!isValidReservationId) {
+  if (!isValidCodeNumber) {
     return <NotFound />;
   }
   return (
@@ -90,6 +97,7 @@ export default function CheckReservationDetailMain() {
             <StyleLeftContents>
               <StyleFlexColumnBox>
                 <ImageSection
+                  reservationStatus={detailData.reservationStatus}
                   houseOwnerId={detailData.houseOwnerId}
                   imageList={detailData.houseImageUrl}
                   checkIn={detailData.checkInDate}
@@ -97,8 +105,15 @@ export default function CheckReservationDetailMain() {
                   houseId={detailData.houseId}
                   hostname={detailData.houseOwnerName}
                 />
-                <DetailSection peopleCount={detailData.peopleCount} />
-                <GuideSection address={detailData.address} lat={detailData.lat} lng={detailData.lng} />
+                <DetailSection
+                  reservationStatus={detailData.reservationStatus}
+                  peopleCount={detailData.peopleCount}
+                  reservationId={detailData.reservationId}
+                  isOver={detailData.reservationStatus === 'FINISHED' || detailData.reservationStatus === 'CANCEL'}
+                />
+                {(detailData.reservationStatus === 'COMPLETE' || detailData.reservationStatus === 'USING') && (
+                  <GuideSection address={detailData.address} lat={detailData.lat} lng={detailData.lng} />
+                )}
                 <PaySection price={detailData.price} />
               </StyleFlexColumnBox>
             </StyleLeftContents>
@@ -114,6 +129,8 @@ export default function CheckReservationDetailMain() {
         peopleCount={detailData.peopleCount}
       />
       <ReservationCancelModal price={detailData.price} checkIn={detailData.checkInDate} />
+      <LoginModal />
+      <JoinModal />
     </>
   );
 }

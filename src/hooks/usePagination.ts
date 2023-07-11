@@ -48,7 +48,7 @@ export default function usePagination({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [searchParams.get('page')]);
 
   useEffect(() => {
     if (!currentPage) return;
@@ -57,7 +57,8 @@ export default function usePagination({
       searchParams.set(`page`, `${currentPage}`);
       return searchParams;
     });
-  }, [currentPage, setSearchParams, category]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, category]);
 
   return { changeClickedPage, changePrevPage, changeNextPage };
 }
