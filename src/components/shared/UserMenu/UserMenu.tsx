@@ -2,7 +2,9 @@ import { Menu, MenuProps, alpha, styled } from '@mui/material';
 import { useState } from 'react';
 import { CustomizedAccountCircleIcon, CustomizedLoginButton, CustomizedMenuIcon } from './UserMenu.style';
 import { navbarMenuControl } from '../../../recoil/navBarAtoms';
-import { useRecoilState } from "recoil";
+import { loginStateAtom, profileImageAtom } from '../../../recoil/userAtoms';
+import { useRecoilState, useRecoilValue } from "recoil";
+import Avatar from '@mui/material/Avatar';
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -48,6 +50,8 @@ interface MenuBarProps {
 export default function MenuBar({ menuItems }: MenuBarProps) {
 
   const [navbarMenu, setNavbarMenu] = useRecoilState(navbarMenuControl);
+  const loginState = useRecoilValue(loginStateAtom)
+  const profileImage = useRecoilValue(profileImageAtom)
 
   // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   // const open = Boolean(anchorEl);
@@ -66,7 +70,7 @@ export default function MenuBar({ menuItems }: MenuBarProps) {
       <div>
         <CustomizedLoginButton onClick={handleClick} variant="contained" id="demo-customized-button" disableRipple>
           <CustomizedMenuIcon />
-          <CustomizedAccountCircleIcon sx={{ height: 35, width: 35 }} />
+          <Avatar alt="user" src={profileImage} sx={{ height: 30, width: 30, marginRight: "2px" }} />
         </CustomizedLoginButton>
       </div>
       <StyledMenu
@@ -74,7 +78,6 @@ export default function MenuBar({ menuItems }: MenuBarProps) {
         MenuListProps={{
           'aria-labelledby': 'demo-customized-button',
         }}
-        // anchorEl={anchorEl}
         anchorEl={navbarMenu}
         open={open}
         onClose={handleClose}

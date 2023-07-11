@@ -33,7 +33,7 @@ import { CustomIcon } from '../components/shared/MobileFooter/CustomIcon';
 import { useNavigate } from 'react-router-dom';
 
 import { loginModalAtom, joinModalAtom } from '../recoil/modalAtoms';
-import {loginStateAtom}from '../recoil/userAtoms';
+import { loginStateAtom } from '../recoil/userAtoms';
 
 export default function Main() {
   const [searchParams] = useSearchParams();
@@ -110,7 +110,7 @@ export default function Main() {
       )}
       <Cards />
       {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />}
-      <LoginModal isToReservationCheck={isToReservationCheck} />
+      <LoginModal isToReservationCheck={isToReservationCheck} redirectPath='/' />
       <JoinModal />
       <AdditionalInfoModal />
       <IdFindModal />

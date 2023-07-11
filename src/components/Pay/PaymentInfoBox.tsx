@@ -1,6 +1,7 @@
 import styled from "@emotion/styled"
 import { Typography, Divider, Button, Card } from "@mui/material"
 import React from "react"
+import { useEffect } from "react"
 import moment from "moment";
 import 'moment/locale/ko'
 
@@ -21,12 +22,11 @@ import useAuthorizedRequest from "../../hooks/useAuthorizedRequest";
 import useHttpRequest from "../../hooks/useHttpRequest";
 import { accessTokenAtom } from "../../recoil/userAtoms";
 import { loginStateAtom } from "../../recoil/userAtoms";
-import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { AxiosError } from 'axios';
 import { MEMBER_RESERVATION_API_PATH, NON_MEMBER_RESERVATION_API_PATH } from "../../constants/api/reservationApi";
 
-import NoneMemberPhoneInput from "./NoneMemberPhoneInput";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from 'react'
 
 import { v4 as uuidv4 } from 'uuid';
@@ -117,8 +117,6 @@ export interface Iamport {
     ) => void;
 }
 
-const loginState = false
-
 const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDate, price }) => {
 
     const DaysDifference = moment(checkOutDate).diff(moment(checkInDate), "days")
@@ -200,18 +198,18 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
                         checkOutDate: "2023.07.09"
                     }
                 });
-                if (memberPaymentResponseData) {
-                    console.log("finalResponseData:", memberPaymentResponseData)
-                }
             } else {
-                alert(`결제 실패: ${error_msg}`);
+                console.log("회원 INCISC 결제 실패")
             }
         }
-
-        console.log("data:", data)
-
         IMP.request_pay(data, callback);
     }
+
+    useEffect(() => {
+        if (!memberPaymentResponseData) return;
+        if (memberPaymentResponseData.isSuccess) { navigation('/reservations?category=reservation'); }
+    }, [memberPaymentResponseData])
+
 
     function noneMemberRequestPay() {
         const { IMP } = window;
@@ -254,30 +252,22 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
                         checkOutDate: "2023.07.12"
                     }
                 });
-                if (noneMemberPaymentResponseData) {
-                    console.log("finalResponseData:", noneMemberPaymentResponseData)
-                }
             } else {
                 alert(`결제 실패: ${error_msg}`);
             }
         }
-
-        console.log("data:", data)
-
         IMP.request_pay(data, callback);
     }
 
-    const [isPhoneValid, setIsPhoneValid] = useState(false);
-    const getPhoneValid = (valid: boolean) => {
-        setIsPhoneValid(valid);
-    };
-
-    console.log("isLoggedIn:", isLoggedIn)
+    useEffect(() => {
+        if (!noneMemberPaymentResponseData) return;
+        if (noneMemberPaymentResponseData.isSuccess) { navigation('/check/non-member'); }
+    }, [noneMemberPaymentResponseData])
 
     return (
         <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
             <PaymentInfoWrapper>
-                <TitleBookingInfo loginState={loginState}>
+                <TitleBookingInfo loginState={isLoggedIn}>
                     <Typography fontFamily='Noto Sans KR'>호텔 이름</Typography>
                     <Typography fontFamily='Noto Sans KR' sx={{ marginLeft: "10px", marginRight: "10px" }}>/</Typography>
                     <Typography fontFamily='Noto Sans KR'>디럭스 룸</Typography>

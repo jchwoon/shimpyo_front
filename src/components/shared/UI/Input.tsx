@@ -80,7 +80,7 @@ const Input = forwardRef<HTMLInputElement, TextFieldProps>(
         return (
             type === "password" ?
                 <StyledFormControl sx={{ m: 1, width: '100%' }} variant="outlined" error={error}>
-                    <InputLabel htmlFor="outlined-adornment-password">{placeholder}</InputLabel>
+                    <InputLabel htmlFor="outlined-adornment-password" sx={{ backgroundColor: "white" }}>{placeholder}</InputLabel>
                     <OutlinedInput
                         id="outlined-adornment-password"
                         type={showPassword ? 'text' : 'password'}
@@ -122,6 +122,7 @@ const Input = forwardRef<HTMLInputElement, TextFieldProps>(
 )
 
 const StyledTextfield = styled(TextField) <{ error: boolean | undefined }>`
+margin-top:10px;
 width:100%;
 .MuiInputLabel-root.Mui-focused {
     ${props => props.error ? 'color: #d32f2f' : 'color: #00adb5'}
@@ -132,6 +133,7 @@ width:100%;
 `
 
 const StyledFormControl = styled(FormControl) <{ error: boolean | undefined }>`
+margin-top:10px;
 .MuiInputLabel-root.Mui-focused {
     ${props => props.error ? 'color: #d32f2f' : 'color: #00adb5'}
   }
