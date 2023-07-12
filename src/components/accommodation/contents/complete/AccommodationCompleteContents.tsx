@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import useAuthorizedRequest from '../../../../hooks/useAuthorizedRequest';
 import { accommodationState, imageDataState } from '../../../../recoil/accommodationAtoms';
 import Loading from '../reuse/Loading';
-import { ACCOMMODATION_CREATE_API } from '../../../../constants/api/accommodationApi';
+import { ACCOMMODATION_API } from '../../../../constants/api/accommodationApi';
 
 interface CompleteResult {
   isSuccess: boolean;
@@ -29,7 +29,7 @@ export default function AccommodationCompleteContents() {
   useEffect(() => {
     const fetchData = async () => {
       await sendRequest({
-        url: `${ACCOMMODATION_CREATE_API}`,
+        url: `${ACCOMMODATION_API}`,
         method: 'POST',
         body: accommodationData,
         withCredentials: true,

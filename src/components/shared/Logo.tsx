@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 interface LogoProps {
   path: string;
   width: string;
-  heihgt: string;
+  height: string;
 }
 
-export default function Logo({ path, width, heihgt }: LogoProps) {
+export default function Logo({ path, width, height }: LogoProps) {
   return (
     <Link to={path}>
-      <img width={width} height={heihgt} alt="logo" src="/images/logo.png" />
+      <img width={width} height={height} alt="logo" src="/images/logo.png" />
     </Link>
   );
 }

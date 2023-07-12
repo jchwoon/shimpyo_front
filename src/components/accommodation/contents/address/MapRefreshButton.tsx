@@ -6,7 +6,7 @@ import { IoMdRefreshCircle } from 'react-icons/io';
 import { useState } from 'react';
 
 interface StyledMapRefreshButtonProps {
-  isClick: boolean;
+  isclick: boolean;
 }
 
 export default function MapRefreshButton() {
@@ -34,7 +34,7 @@ export default function MapRefreshButton() {
     }
   };
 
-  return <StyledMapRefreshButton isClick={isClick} size={'40px'} onClick={RefreshButton}></StyledMapRefreshButton>;
+  return <StyledMapRefreshButton isclick={isClick} size={'40px'} onClick={RefreshButton}></StyledMapRefreshButton>;
 }
 
 const StyledMapRefreshButton = styled(IoMdRefreshCircle)<StyledMapRefreshButtonProps>`
@@ -45,8 +45,8 @@ const StyledMapRefreshButton = styled(IoMdRefreshCircle)<StyledMapRefreshButtonP
     color: rgba(0, 0, 0, 0.4);
   }
 
-  ${({ isClick }) =>
-    !isClick &&
+  ${({ isclick }) =>
+    !isclick &&
     `
     transform: scale(1.2);
     transition: transform 0.5s ease-in-out;
