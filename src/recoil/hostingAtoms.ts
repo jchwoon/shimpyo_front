@@ -16,6 +16,11 @@ export const originalRoomListState = atom<RoomDataType[]>({
   default: [],
 });
 
+export const originalRoomListTotalPageState = atom<number>({
+  key: 'originalRoomListTotalPageState',
+  default: 0,
+});
+
 export const roomListTotalPageState = atom<number>({
   key: 'roomListTotalPageState',
   default: 0,

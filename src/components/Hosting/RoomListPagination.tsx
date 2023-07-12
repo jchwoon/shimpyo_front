@@ -25,11 +25,11 @@ export default function RoomListPagination({ setRoomList }: RoomListPaginationPr
 
   const { responseData, sendRequest } = useAuthorizedRequest<any>({});
 
-  const totalPage = useRecoilValue(roomListTotalPageState);
+  const [roomListTotalPage, setRoomListTotalPage] = useRecoilState(roomListTotalPageState);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [currentPageRange, setCurrentPageRange] = useState<number[]>([]);
 
-  const pageArr = Array.from({ length: totalPage }).map((_, idx) => idx + 1);
+  const pageArr = Array.from({ length: roomListTotalPage }).map((_, idx) => idx + 1);
 
   const getPageRange = (start: number, end: number, arr: number[]) => {
     return arr.slice(start, end);
@@ -67,7 +67,7 @@ export default function RoomListPagination({ setRoomList }: RoomListPaginationPr
   };
 
   const getNextPageNumber = async () => {
-    if (currentPage === totalPage - 1) return;
+    if (currentPage === roomListTotalPage - 1) return;
     if ((currentPage + 1) % 10 === 0) {
       setCurrentPageRange(getPageRange(currentPage + 1, currentPage + 10, pageArr));
     }
@@ -86,11 +86,14 @@ export default function RoomListPagination({ setRoomList }: RoomListPaginationPr
 
   useEffect(() => {
     setCurrentPageRange(getPageRange(0, 10, pageArr));
-  }, [totalPage]);
+  }, [roomListTotalPage]);
 
   useEffect(() => {
     if (!responseData) return;
-    if (responseData?.isSuccess) return setRoomList(responseData.result.reservationList);
+    if (responseData?.isSuccess) {
+      setRoomListTotalPage(responseData.result.totalPage);
+      return setRoomList(responseData.result.reservationList);
+    }
   }, [currentPage, responseData, setRoomList]);
 
   return (

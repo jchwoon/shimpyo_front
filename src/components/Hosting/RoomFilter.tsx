@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import StatusBadge from './StatusBadge';
 import CheckMark from './CheckMark';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   originalRoomListState,
+  originalRoomListTotalPageState,
   roomListPageState,
+  roomListTotalElementState,
   roomListTotalPageState,
   roomReservationStatusState,
   selectedAccommodationIdState,
@@ -26,6 +28,8 @@ export default function RoomFilter({ setRoomList }: RoomFilterProps) {
   const selectedHouseId = useRecoilValue(selectedAccommodationIdState);
   const roomListPageNumber = useRecoilValue(roomListPageState);
   const [roomListTotalPage, setRoomListTotalPage] = useRecoilState(roomListTotalPageState);
+  const [roomListTotalElement, setRoomListTotalElement] = useRecoilState(roomListTotalElementState);
+  const originalRoomListTotalPage = useRecoilValue(originalRoomListTotalPageState);
 
   const { responseData, sendRequest } = useAuthorizedRequest<any>({});
 
@@ -35,19 +39,15 @@ export default function RoomFilter({ setRoomList }: RoomFilterProps) {
     if (roomReservationStatus === status) {
       setRoomList(originalRoomList);
       setRoomReservationStatus('USING');
+      setRoomListTotalPage(originalRoomListTotalPage);
     } else {
       setRoomReservationStatus(status);
-
-      if (status !== 'USING') {
-        try {
-          await sendRequest({
-            url: `/user/reservations/houses/${selectedHouseId}?page=${roomListPageNumber}&reservationStatus=${status}`,
-          });
-        } catch (err) {
-          console.log(err);
-        }
-      } else {
-        setRoomList(originalRoomList);
+      try {
+        await sendRequest({
+          url: `/user/reservations/houses/${selectedHouseId}?page=${roomListPageNumber}&reservationStatus=${status}`,
+        });
+      } catch (err) {
+        console.log(err);
       }
     }
   };
@@ -59,6 +59,7 @@ export default function RoomFilter({ setRoomList }: RoomFilterProps) {
     if (responseData.isSuccess) {
       setRoomList(responseData.result.reservationList);
       setRoomListTotalPage(responseData.result.totalPage);
+      setRoomListTotalElement(responseData.result.totalElements);
     }
   }, [responseData]);
 

@@ -6,6 +6,7 @@ import useAuthorizedRequest from '../../hooks/useAuthorizedRequest';
 import { useRecoilState } from 'recoil';
 import {
   originalRoomListState,
+  originalRoomListTotalPageState,
   roomListTotalElementState,
   roomListTotalPageState,
   roomReservationStatusState,
@@ -24,6 +25,7 @@ export default function AccommodationList({ data, setRoomList }: AccommodationLi
   const [selectedAccommodationId, setSelectedAccommodationId] = useRecoilState(selectedAccommodationIdState);
   const [roomListTotalPage, setRoomListTotalPage] = useRecoilState(roomListTotalPageState);
   const [roomListTotalElement, setRoomListTotalElement] = useRecoilState(roomListTotalElementState);
+  const [originalRoomListTotalPage, setOriginalRoomListTotalPage] = useRecoilState(originalRoomListTotalPageState);
 
   const getRoomInfo = (id: number) => async () => {
     setSelectedAccommodationId(id);
@@ -38,6 +40,7 @@ export default function AccommodationList({ data, setRoomList }: AccommodationLi
       setOriginalRoomList(roomResponseData.result.reservationList);
       setRoomListTotalPage(roomResponseData.result.totalPage);
       setRoomListTotalElement(roomResponseData.result.totalElements);
+      setOriginalRoomListTotalPage(roomResponseData.result.totalPage);
     }
   }, [roomResponseData]);
 
