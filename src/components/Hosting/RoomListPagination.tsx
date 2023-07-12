@@ -20,13 +20,13 @@ interface PageNumberProps {
 
 export default function RoomListPagination({ setRoomList }: RoomListPaginationProps) {
   const selectedHouseId = useRecoilValue(selectedAccommodationIdState);
-  const [roomListPageNumber, setRoomListPageNumber] = useRecoilState(roomListPageState);
   const roomReservationStatus = useRecoilValue(roomReservationStatusState);
 
   const { responseData, sendRequest } = useAuthorizedRequest<any>({});
 
   const [roomListTotalPage, setRoomListTotalPage] = useRecoilState(roomListTotalPageState);
-  const [currentPage, setCurrentPage] = useState<number>(0);
+
+  const [roomListPageNumber, setRoomListPageNumber] = useRecoilState(roomListPageState);
   const [currentPageRange, setCurrentPageRange] = useState<number[]>([]);
 
   const pageArr = Array.from({ length: roomListTotalPage }).map((_, idx) => idx + 1);
@@ -36,17 +36,16 @@ export default function RoomListPagination({ setRoomList }: RoomListPaginationPr
   };
 
   const getPrevPageNumber = async () => {
-    if (currentPage === 0) return;
-    if (currentPage % 10 === 0) {
-      setCurrentPageRange(getPageRange(currentPage - 10, currentPage, pageArr));
+    if (roomListPageNumber === 0) return;
+    if (roomListPageNumber % 10 === 0) {
+      setCurrentPageRange(getPageRange(roomListPageNumber - 10, roomListPageNumber, pageArr));
     }
-    setCurrentPage(preState => preState - 1);
     setRoomListPageNumber(preState => preState - 1);
 
     try {
       await sendRequest({
         url: `/user/reservations/houses/${selectedHouseId}?page=${
-          currentPage - 1
+          roomListPageNumber - 1
         }&reservationStatus=${roomReservationStatus}`,
       });
     } catch (err) {
@@ -55,7 +54,6 @@ export default function RoomListPagination({ setRoomList }: RoomListPaginationPr
   };
 
   const getCurrentPageNumber = (value: number) => async () => {
-    setCurrentPage(value);
     setRoomListPageNumber(value);
     try {
       await sendRequest({
@@ -67,16 +65,15 @@ export default function RoomListPagination({ setRoomList }: RoomListPaginationPr
   };
 
   const getNextPageNumber = async () => {
-    if (currentPage === roomListTotalPage - 1) return;
-    if ((currentPage + 1) % 10 === 0) {
-      setCurrentPageRange(getPageRange(currentPage + 1, currentPage + 10, pageArr));
+    if (roomListPageNumber === roomListTotalPage - 1) return;
+    if ((roomListPageNumber + 1) % 10 === 0) {
+      setCurrentPageRange(getPageRange(roomListPageNumber + 1, roomListPageNumber + 10, pageArr));
     }
-    setCurrentPage(preState => preState + 1);
     setRoomListPageNumber(preState => preState + 1);
     try {
       await sendRequest({
         url: `/user/reservations/houses/${selectedHouseId}?page=${
-          currentPage + 1
+          roomListPageNumber + 1
         }&reservationStatus=${roomReservationStatus}`,
       });
     } catch (err) {
@@ -94,7 +91,7 @@ export default function RoomListPagination({ setRoomList }: RoomListPaginationPr
       setRoomListTotalPage(responseData.result.totalPage);
       return setRoomList(responseData.result.reservationList);
     }
-  }, [currentPage, responseData, setRoomList]);
+  }, [roomListPageNumber, responseData, setRoomList]);
 
   return (
     <StyledPaginationContainer>
@@ -102,7 +99,7 @@ export default function RoomListPagination({ setRoomList }: RoomListPaginationPr
 
       {currentPageRange.map((value, idx) => {
         return (
-          <StyledPageNumber onClick={getCurrentPageNumber(idx)} isSelected={currentPage === idx} key={idx}>
+          <StyledPageNumber onClick={getCurrentPageNumber(idx)} isSelected={roomListPageNumber === idx} key={idx}>
             {value}
           </StyledPageNumber>
         );

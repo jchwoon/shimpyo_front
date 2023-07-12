@@ -26,13 +26,13 @@ interface RoomFilterProps {
 export default function RoomFilter({ setRoomList }: RoomFilterProps) {
   const originalRoomList = useRecoilValue(originalRoomListState);
   const selectedHouseId = useRecoilValue(selectedAccommodationIdState);
-  const roomListPageNumber = useRecoilValue(roomListPageState);
   const [roomListTotalPage, setRoomListTotalPage] = useRecoilState(roomListTotalPageState);
   const [roomListTotalElement, setRoomListTotalElement] = useRecoilState(roomListTotalElementState);
   const originalRoomListTotalPage = useRecoilValue(originalRoomListTotalPageState);
 
   const { responseData, sendRequest } = useAuthorizedRequest<any>({});
 
+  const [roomListPageNumber, setRoomListPageNumber] = useRecoilState(roomListPageState);
   const [roomReservationStatus, setRoomReservationStatus] = useRecoilState(roomReservationStatusState);
 
   const handleBadgeClick = async (status: string) => {
@@ -40,11 +40,13 @@ export default function RoomFilter({ setRoomList }: RoomFilterProps) {
       setRoomList(originalRoomList);
       setRoomReservationStatus('USING');
       setRoomListTotalPage(originalRoomListTotalPage);
+      setRoomListPageNumber(0);
     } else {
       setRoomReservationStatus(status);
+      setRoomListPageNumber(0);
       try {
         await sendRequest({
-          url: `/user/reservations/houses/${selectedHouseId}?page=${roomListPageNumber}&reservationStatus=${status}`,
+          url: `/user/reservations/houses/${selectedHouseId}?page=0&reservationStatus=${status}`,
         });
       } catch (err) {
         console.log(err);

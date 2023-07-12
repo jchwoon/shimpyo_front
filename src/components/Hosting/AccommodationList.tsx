@@ -7,6 +7,7 @@ import { useRecoilState } from 'recoil';
 import {
   originalRoomListState,
   originalRoomListTotalPageState,
+  roomListPageState,
   roomListTotalElementState,
   roomListTotalPageState,
   roomReservationStatusState,
@@ -22,15 +23,21 @@ export default function AccommodationList({ data, setRoomList }: AccommodationLi
   const { responseData: roomResponseData, sendRequest: roomRequest } = useAuthorizedRequest<any>({});
   const [originalRoomList, setOriginalRoomList] = useRecoilState(originalRoomListState);
   const [roomReservationStatus, setRoomReservationStatus] = useRecoilState(roomReservationStatusState);
-  const [selectedAccommodationId, setSelectedAccommodationId] = useRecoilState(selectedAccommodationIdState);
   const [roomListTotalPage, setRoomListTotalPage] = useRecoilState(roomListTotalPageState);
   const [roomListTotalElement, setRoomListTotalElement] = useRecoilState(roomListTotalElementState);
   const [originalRoomListTotalPage, setOriginalRoomListTotalPage] = useRecoilState(originalRoomListTotalPageState);
+  const [roomListPageNumber, setRoomListPageNumber] = useRecoilState(roomListPageState);
+
+  const [selectedAccommodationId, setSelectedAccommodationId] = useRecoilState(selectedAccommodationIdState);
 
   const getRoomInfo = (id: number) => async () => {
     setSelectedAccommodationId(id);
     setRoomReservationStatus('USING');
-    await roomRequest({ url: `user/reservations/houses/${id}?page=0/reservationStatus=USING` });
+    try {
+      await roomRequest({ url: `user/reservations/houses/${id}?page=0/reservationStatus=USING` });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -41,6 +48,7 @@ export default function AccommodationList({ data, setRoomList }: AccommodationLi
       setRoomListTotalPage(roomResponseData.result.totalPage);
       setRoomListTotalElement(roomResponseData.result.totalElements);
       setOriginalRoomListTotalPage(roomResponseData.result.totalPage);
+      setRoomListPageNumber(0);
     }
   }, [roomResponseData]);
 
