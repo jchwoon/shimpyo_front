@@ -12,7 +12,7 @@ export const formatDate = (date: Date) => {
 };
 
 export const changeDateType = (date: string) => {
-  const [year, month, day, hour = 12] = date.split('.').map(str => parseInt(str, 10));
+  const [year, month, day, hour = 24] = date.split('.').map(str => parseInt(str, 10));
 
   return new Date(year, month - 1, day, hour);
 };

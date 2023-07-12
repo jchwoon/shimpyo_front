@@ -55,7 +55,7 @@ export default function NicknameInfo({ infoContent }: NicknameInfoProps) {
       setIsEditMode={setIsEditMode}
       editComponent={editComponent}
       title="닉네임"
-      infoContent={currentNickname}
+      infoContent={infoContent}
     />
   );
 }
