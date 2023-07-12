@@ -3,12 +3,21 @@ import SideContainer from './SideContainer';
 import BottomContainer from './BottomContainer';
 import NewSideBox from '../sideBox/NewSideBox';
 
-export default function MainContainer() {
+interface MainContainerProps {
+  houseName: string,
+  houseContents: string;
+  options: Array<string>;
+  rooms: Array<Object>;
+  lat: number;
+  lng: number;
+}
+
+export default function MainContainer({ houseName, houseContents, options, rooms, lat, lng }: MainContainerProps) {
   return (
     <>
       <Main>
-        <SideContainer />
-        <NewSideBox />
+        <SideContainer houseContents={houseContents} options={options} rooms={rooms} lat={lat} lng={lng} />
+        <NewSideBox houseName={houseName} />
       </Main>
       <BottomContainer />
     </>

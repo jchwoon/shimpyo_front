@@ -16,13 +16,12 @@ import ListItemText from '@mui/material/ListItemText';
 import ColorButton from "../shared/UI/ColorButton";
 import Radio from '@mui/material/Radio';
 
-import { merchantUid } from '../../recoil/detailPageAtoms';
-import { useRecoilValue } from "recoil";
+import { merchantUid, activeRoomName } from '../../recoil/detailPageAtoms';
 import useAuthorizedRequest from "../../hooks/useAuthorizedRequest";
 import useHttpRequest from "../../hooks/useHttpRequest";
 import { accessTokenAtom } from "../../recoil/userAtoms";
 import { loginStateAtom } from "../../recoil/userAtoms";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { AxiosError } from 'axios';
 import { MEMBER_RESERVATION_API_PATH, NON_MEMBER_RESERVATION_API_PATH } from "../../constants/api/reservationApi";
 
@@ -36,6 +35,7 @@ interface ResultData {
 }
 
 interface PaymentInfoBoxProp {
+    houseName: string,
     checkInDate: string | null,
     checkOutDate: string | null,
     price: number | null
@@ -117,7 +117,7 @@ export interface Iamport {
     ) => void;
 }
 
-const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDate, price }) => {
+const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, checkOutDate, price }) => {
 
     const DaysDifference = moment(checkOutDate).diff(moment(checkInDate), "days")
     const TotalPrice = price ? price * DaysDifference : 0
@@ -157,6 +157,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
 
     const memberUid = useRecoilValue(merchantUid)
     const noneMemberUid = uuidv4()
+
+    const Name = useRecoilValue(activeRoomName)
 
     function memberRequestPay() {
         const { IMP } = window;
@@ -219,8 +221,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
             pg: "html5_inicis",
             pay_method: "card",
             merchant_uid: `${noneMemberUid}`,
-            name: "비회원구매",
-            amount: 100,
+            name: `${houseName} / ${Name}`,
+            amount: TotalPrice - DiscountPrice,
             buyer_email: "i2pss@naver.com",
             buyer_name: "포트원 기술지원팀",
             buyer_tel: "010-1234-5678",
@@ -268,9 +270,9 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
         <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
             <PaymentInfoWrapper>
                 <TitleBookingInfo loginState={isLoggedIn}>
-                    <Typography fontFamily='Noto Sans KR'>호텔 이름</Typography>
+                    <Typography fontFamily='Noto Sans KR'>{houseName}</Typography>
                     <Typography fontFamily='Noto Sans KR' sx={{ marginLeft: "10px", marginRight: "10px" }}>/</Typography>
-                    <Typography fontFamily='Noto Sans KR'>디럭스 룸</Typography>
+                    <Typography fontFamily='Noto Sans KR'>{Name}</Typography>
                 </TitleBookingInfo>
                 <BookingInfo>
                     <Typography fontFamily='Noto Sans KR'>{moment(checkInDate).format('M월 D일')} - {moment(checkOutDate).format('M월 D일')}</Typography>

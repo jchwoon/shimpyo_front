@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
 import { AiOutlineRight } from 'react-icons/ai';
-import { BiBed } from 'react-icons/bi';
 import Divider from '@mui/material/Divider';
 import { Typography, Button } from '@mui/material';
 import { useState } from 'react';
-import { ClickAwayListener } from '@mui/material';
+import { useEffect, useRef } from 'react';
 
 import { Wifi, PC, Barbeque, Parking } from './Options';
 import { RoomCard } from './RoomCard';
@@ -13,8 +12,17 @@ import LocationMap from '../../shared/LocationMap';
 import { useRecoilState } from "recoil";
 import { activeRoom } from '../../../recoil/detailPageAtoms';
 
+import HotelDescription from './HotelDescription';
 
-export default function SideContainer() {
+interface SideContainerProps {
+  houseContents: string;
+  options: Array<string>;
+  rooms: Array<any>;
+  lat: number;
+  lng: number;
+}
+
+export default function SideContainer({ houseContents, options, rooms, lat, lng }: SideContainerProps) {
 
   const [activeRecoilCard, setActiveRecoilCard] = useRecoilState(activeRoom)
 
@@ -24,39 +32,40 @@ export default function SideContainer() {
     else if (activeRecoilCard !== cardName) { setActiveRecoilCard(cardName) }
   };
 
-  const [linelimit, setLineLimit] = useState<number>(3);
-
-  const handleHSeeMore = () => {
-    if (linelimit === 3) { setLineLimit(10) } else { setLineLimit(3) }
-  }
   return (
     <Container>
       <OptionContainer>
-        <Wifi />
-        <PC />
-        <Barbeque />
-        <Parking />
+        {options.includes("wifi") ? <Wifi /> : null}
+        {options.includes("pc") ? <PC /> : null}
+        {options.includes("bbq") ? <Barbeque /> : null}
+        {options.includes("parking") ? <Parking /> : null}
       </OptionContainer>
       <Divider />
-      <HotelDescription linelimit={linelimit}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </HotelDescription>
-      <div>
-        <SeeMore onClick={handleHSeeMore} disableRipple>
-          {linelimit === 3 ? "자세히 보기" : "간략히"} <AiOutlineRight />
-        </SeeMore>
-      </div>
+      <HotelDescription houseContents={houseContents} />
       <Divider />
       <MainTitle >객실 안내</MainTitle >
       <RoomCardContainer>
-        <RoomCard name={"디럭스룸"} doubleBed={1} bedroom={1} shower={1} person={4} price={50000} onClick={() => handleCardClick('디럭스룸')} active={activeRecoilCard === '디럭스룸'} />
-        <RoomCard name={"스위트룸"} doubleBed={1} bedroom={2} shower={2} person={6} price={70000} onClick={() => handleCardClick('스위트룸')} active={activeRecoilCard === '스위트룸'} />
-        <RoomCard name={"스탠다드룸"} doubleBed={1} bedroom={1} shower={1} person={2} price={60000} onClick={() => handleCardClick('스탠다드룸')} active={activeRecoilCard === '스탠다드룸'} />
+        {rooms.map(room =>
+          <RoomCard
+            key={room.name}
+            image={room.roomImages}
+            name={room.name}
+            doubleBed={room.bedCount}
+            bedroom={room.bedroomCount}
+            shower={room.bathroomCount}
+            minPerson={room.minPeople}
+            maxPerson={room.maxPeople}
+            checkInTime={room.checkIn}
+            checkOutTime={room.checkOut}
+            price={room.price}
+            onClick={() => handleCardClick(room.name)}
+            active={activeRecoilCard === room.name} />)
+        }
       </RoomCardContainer>
       <Divider />
       <MainTitle >위치</MainTitle >
       <div style={{ width: "100%", height: "300px" }}>
-        <LocationMap latitude={38.715133} longitude={126.734086} width={"100%"} height={"100%"} />
+        <LocationMap latitude={lat} longitude={lng} width={"100%"} height={"100%"} />
       </div>
     </Container>
   );
@@ -78,32 +87,6 @@ flex-direction:row;
 margin-bottom:30px;
 flex-wrap:wrap;
 `
-
-
-const HotelDescription = styled(Typography) <{ linelimit: number }>`
-  margin-top: 30px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: ${({ linelimit }) => (linelimit)};
-  word-break: break-all;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const SeeMore = styled(Button)`
-  font-family: Noto Sans KR;
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin-top: 12px;
-  margin-bottom: 30px;
-  cursor: pointer;
-  color:#acacac;
-  &:hover{
-    background-color:white;
-  }
-`;
 
 const RoomCardContainer = styled.div`
   display: flex;

@@ -51,12 +51,16 @@ import NoneMemberPhoneInput from '../../Pay/NoneMemberPhoneInput';
 
 import { swipePageState } from '../../../recoil/detailPageAtoms';
 
+interface NewSideBoxProps {
+  houseName: string;
+}
+
 interface ResultData {
   accessToken: string;
   merchantUid: string;
 }
 
-export default function NewSideBox() {
+export default function NewSideBox({ houseName }: NewSideBoxProps) {
   const room = useRecoilValue(activeRoom)
   const price = useRecoilValue(activeRoomPrice)
   const Name = useRecoilValue(activeRoomName)
@@ -259,8 +263,8 @@ export default function NewSideBox() {
               transition: "0.3s ease",
               backgroundColor: "white"
             }}>
-              {isLoggedIn ? null : <NoneMemberPhoneInput />}
-              <PaymentInfoBox checkInDate={firstPickedDate} checkOutDate={secondPickedDate} price={price} />
+              {isLoggedIn ? null : <NoneMemberPhoneInput setModalOpen={setOpen} />}
+              <PaymentInfoBox houseName={houseName} checkInDate={firstPickedDate} checkOutDate={secondPickedDate} price={price} />
             </div>
 
           </div>

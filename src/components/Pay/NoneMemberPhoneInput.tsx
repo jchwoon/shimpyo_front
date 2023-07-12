@@ -1,12 +1,13 @@
 import Input from '../shared/UI/Input';
-import { useState, useCallback, ChangeEvent } from 'react';
+import { useState, useCallback, ChangeEvent, Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
 import usePhoneCertification from '../../hooks/usePhoneCertification';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { phoneValueAtom } from '../../recoil/userAtoms';
 
 import { swipePageState } from '../../recoil/detailPageAtoms';
 
+import { loginModalAtom } from '../../recoil/modalAtoms';
 // import { Swiper, SwiperSlide } from 'swiper/react';
 // import 'swiper/css';
 // import 'swiper/css/pagination';
@@ -18,9 +19,9 @@ import Typography from '@mui/material/Typography';
 import { Divider } from '@mui/material';
 import { boolean } from 'yargs';
 
-// interface PhoneInputProps {
-//     getValid: (valid: boolean) => void;
-// }
+interface PhoneInputProps {
+    setModalOpen: Dispatch<SetStateAction<boolean>>
+}
 
 interface ColorButtonProps {
     label: string;
@@ -38,15 +39,15 @@ function ColorButton({ label, disabled = false, onClick }: ColorButtonProps) {
 
 function ExtendedColorButton({ label, disabled = false, onClick }: ColorButtonProps) {
     return (
-        <StyleColorButton onClick={onClick} disabled={disabled} style={{width:"100%"}}>
+        <StyleColorButton onClick={onClick} disabled={disabled} style={{ width: "100%" }}>
             {label}
         </StyleColorButton>
     );
 }
 
 export default function NoneMemberPhoneInput(
-    // { getValid }: PhoneInputProps
-    ) {
+    { setModalOpen }: PhoneInputProps
+) {
     const [nameValue, setNameValue] = useState('')
     const [phoneValue, setPhoneValue] = useRecoilState(phoneValueAtom);
     const [codeValue, setCodeValue] = useState('');
@@ -96,16 +97,17 @@ export default function NoneMemberPhoneInput(
         getPhoneValid(isCodeOkay);
     };
 
-    const inputChange = Boolean(nameValue!=='' || phoneValue)
+    const inputChange = Boolean(nameValue !== '' || phoneValue)
 
-    const isValid = Boolean(nameValue!=='' && isPhoneValid)
+    const isValid = Boolean(nameValue !== '' && isPhoneValid)
 
     const [swipePage, setSwipePage] = useRecoilState(swipePageState);
+    const setLoginModal = useSetRecoilState(loginModalAtom);
 
     return (
-        <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center",backgroundColor:"white" }}>
-            <div style={{width:"100%", height:"100%", padding:"24px", display: "flex", flexDirection:"column", justifyContent: "center",}}>
-                <Typography fontFamily='Noto Sans KR' color="#cccccc" fontWeight="400" fontSize="12px" align='center' sx={{marginBottom:"10px"}}>
+        <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "white" }}>
+            <div style={{ width: "100%", height: "100%", padding: "24px", display: "flex", flexDirection: "column", justifyContent: "center", }}>
+                <Typography fontFamily='Noto Sans KR' color="#cccccc" fontWeight="400" fontSize="12px" align='center' sx={{ marginBottom: "10px" }}>
                     비회원인 경우 예약 필수 정보를 입력해주세요
                 </Typography>
                 <div style={{ marginBottom: "10px" }}>
@@ -131,32 +133,37 @@ export default function NoneMemberPhoneInput(
                         errorMessage={codeNumberErrorMessage}
                     />
                     <StyledColorButtonWrapper>
-                        <ColorButton 
-                        disabled={!isPhoneOk} 
-                        label="확인" 
-                        onClick={handleCheckCodeNumber} 
+                        <ColorButton
+                            disabled={!isPhoneOk}
+                            label="확인"
+                            onClick={handleCheckCodeNumber}
                         // onClick={()=>setSwipePage(2)}
                         />
                     </StyledColorButtonWrapper>
                 </div>
-                <Divider/>
-                    <div style={{height:"99px", width:"282px", overflow:"hidden"}}>
-                        <div style={{height:"198px", width:"282px", display:"flex", flexDirection:"column", position:"relative", transition: "0.3s ease",
-                        bottom: inputChange ? "99px" : "0px"}}>
-                            <div style={{height:"99px", width:"282px"}}>
-                                <Typography fontFamily='Noto Sans KR' color="#cccccc" fontWeight="400" fontSize="12px" align='center' sx={{marginTop:"15px", marginBottom:"10px"}}>
+                <Divider />
+                <div style={{ height: "99px", width: "282px", overflow: "hidden" }}>
+                    <div style={{
+                        height: "198px", width: "282px", display: "flex", flexDirection: "column", position: "relative", transition: "0.3s ease",
+                        bottom: inputChange ? "99px" : "0px"
+                    }}>
+                        <div style={{ height: "99px", width: "282px" }}>
+                            <Typography fontFamily='Noto Sans KR' color="#cccccc" fontWeight="400" fontSize="12px" align='center' sx={{ marginTop: "15px", marginBottom: "10px" }}>
                                 회원에게는 쿠폰 및 여러 혜택이 주어집니다
-                                </Typography>
-                                <ExtendedColorButton label="로그인" onClick={()=>{}}/>
-                            </div>
-                            <div style={{height:"99px", width:"282px"}}>
-                                <Typography fontFamily='Noto Sans KR' color="#cccccc" fontWeight="400" fontSize="12px" align='center' sx={{marginTop:"15px", marginBottom:"10px"}}>
+                            </Typography>
+                            <ExtendedColorButton label="로그인" onClick={() => {
+                                setModalOpen(false);
+                                setLoginModal(true);
+                            }} />
+                        </div>
+                        <div style={{ height: "99px", width: "282px" }}>
+                            <Typography fontFamily='Noto Sans KR' color="#cccccc" fontWeight="400" fontSize="12px" align='center' sx={{ marginTop: "15px", marginBottom: "10px" }}>
                                 비회원으로 예약을 진행합니다
-                                </Typography>
-                                <ExtendedColorButton disabled={!isValid || isLoading} label="확인" onClick={()=>setSwipePage(2)}/>
-                            </div>
+                            </Typography>
+                            <ExtendedColorButton disabled={!isValid || isLoading} label="확인" onClick={() => setSwipePage(2)} />
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     );

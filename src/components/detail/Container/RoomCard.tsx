@@ -9,27 +9,33 @@ import {
 import { LuBedDouble } from 'react-icons/lu'
 import { MdOutlineBedroomParent } from 'react-icons/md'
 import { LuShowerHead } from 'react-icons/lu'
-import { BsPersonPlus } from 'react-icons/bs'
+import { BsPerson, BsPersonPlus } from 'react-icons/bs'
 import { Typography } from '@mui/material';
 
 import { useRecoilState } from "recoil";
 import { activeRoomPrice, activeRoomName } from '../../../recoil/detailPageAtoms';
 import { useEffect } from 'react';
+import moment from "moment";
+import 'moment/locale/ko'
 
 
 interface RommCardProps {
+    image: Array<string>;
     name: string;
     doubleBed: number;
     bedroom: number;
     shower: number;
-    person: number;
+    minPerson: number;
+    maxPerson: number;
+    checkInTime: string;
+    checkOutTime: string;
     price: number;
     onClick: () => void;
     active: boolean;
 }
 
 
-export const RoomCard: React.FC<RommCardProps> = ({ name, doubleBed, bedroom, shower, person, price, onClick, active }) => {
+export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedroom, shower, minPerson, maxPerson, checkInTime, checkOutTime, price, onClick, active }) => {
 
     const [roomPrice, setRoomPrice] = useRecoilState(activeRoomPrice);
     const [roomName, setRoomName] = useRecoilState(activeRoomName);
@@ -39,6 +45,8 @@ export const RoomCard: React.FC<RommCardProps> = ({ name, doubleBed, bedroom, sh
             setRoomName(name);
         }
     }, [active]);
+
+    const momentCheckInTime = moment(checkInTime, "HH:mm:ss").format("hh:mm A")
 
 
     return (
@@ -53,7 +61,7 @@ export const RoomCard: React.FC<RommCardProps> = ({ name, doubleBed, bedroom, sh
                         width: "150px",
                         height: "120px",
                     }}
-                    image="https://source.unsplash.com/random?wallpapers"
+                    image={image[0]}
                 />
                 <CardContent sx={{ width: "100%" }}>
                     <CustomizedTitleRowBox>
@@ -76,22 +84,50 @@ export const RoomCard: React.FC<RommCardProps> = ({ name, doubleBed, bedroom, sh
                                 <Typography fontFamily='Noto Sans KR' fontSize="5px">침대 {doubleBed}개</Typography>
                             </OptionWrapper>
                             : null}
+
                         {shower ?
                             <OptionWrapper>
-
                                 <LuShowerHead size={25} />
-
-                                <Typography fontFamily='Noto Sans KR' fontSize="5px">샤워실 {shower}</Typography>
+                                <Typography fontFamily='Noto Sans KR' fontSize="5px">화장실 {shower}개</Typography>
                             </OptionWrapper>
                             : null}
-                        {person ?
+
+                        {minPerson ?
+                            <OptionWrapper>
+
+                                <BsPerson size={25} />
+
+                                <Typography fontFamily='Noto Sans KR' fontSize="5px">기준인원 {minPerson}명</Typography>
+                            </OptionWrapper>
+                            : null}
+                        {maxPerson ?
                             <OptionWrapper>
 
                                 <BsPersonPlus size={25} />
 
-                                <Typography fontFamily='Noto Sans KR' fontSize="5px">최대인원 {person}명</Typography>
+                                <Typography fontFamily='Noto Sans KR' fontSize="5px">최대인원 {maxPerson}명</Typography>
                             </OptionWrapper>
                             : null}
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "row", marginBottom: "10px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginLeft: "12px", marginRight: "10px" }}>
+                            <Typography fontFamily='sunflower' fontSize="12px" fontWeight="600">
+                                CHECK IN
+                            </Typography>
+                            <Typography fontFamily='Noto Sans KR' fontSize="5px" fontWeight="400">
+                                {moment(checkInTime, "HH:mm:ss").format("A h시 m분")}
+                            </Typography>
+                        </div>
+
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                            <Typography fontFamily='sunflower' fontSize="12px" fontWeight="600">
+                                CHECK OUT
+                            </Typography>
+                            <Typography fontFamily='Noto Sans KR' fontSize="5px" fontWeight="400">
+                                {moment(checkOutTime, "HH:mm:ss").format("A h시 m분")}
+                            </Typography>
+                        </div>
                     </div>
                     <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end", width: "100%" }}>
                         <CustomizedPricePerNightTypography fontFamily='Noto Sans KR'>
@@ -101,6 +137,7 @@ export const RoomCard: React.FC<RommCardProps> = ({ name, doubleBed, bedroom, sh
                             /박
                         </Typography>
                     </div>
+
                 </CardContent>
             </CustomizedCard >
         </div>
