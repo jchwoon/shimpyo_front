@@ -1,0 +1,104 @@
+import styled from 'styled-components';
+import AccommodationItem from './AccommodationItem';
+import { AccommodationDataType, RoomDataType } from './HostingMain';
+import { Dispatch, SetStateAction, useEffect } from 'react';
+import useAuthorizedRequest from '../../hooks/useAuthorizedRequest';
+import { useRecoilState } from 'recoil';
+import {
+  originalRoomListState,
+  roomListTotalElementState,
+  roomListTotalPageState,
+  roomReservationStatusState,
+  selectedAccommodationIdState,
+} from '../../recoil/hostingAtoms';
+
+interface AccommodationListProps {
+  data: AccommodationDataType[];
+  setRoomList: Dispatch<SetStateAction<RoomDataType[]>>;
+}
+
+export default function AccommodationList({ data, setRoomList }: AccommodationListProps) {
+  const { responseData: roomResponseData, sendRequest: roomRequest } = useAuthorizedRequest<any>({});
+  const [originalRoomList, setOriginalRoomList] = useRecoilState(originalRoomListState);
+  const [roomReservationStatus, setRoomReservationStatus] = useRecoilState(roomReservationStatusState);
+  const [selectedAccommodationId, setSelectedAccommodationId] = useRecoilState(selectedAccommodationIdState);
+  const [roomListTotalPage, setRoomListTotalPage] = useRecoilState(roomListTotalPageState);
+  const [roomListTotalElement, setRoomListTotalElement] = useRecoilState(roomListTotalElementState);
+
+  const getRoomInfo = (id: number) => async () => {
+    setSelectedAccommodationId(id);
+    setRoomReservationStatus('USING');
+    await roomRequest({ url: `user/reservations/houses/${id}?page=0/reservationStatus=USING` });
+  };
+
+  useEffect(() => {
+    if (!roomResponseData) return;
+    if (roomResponseData.isSuccess) {
+      setRoomList(roomResponseData.result.reservationList);
+      setOriginalRoomList(roomResponseData.result.reservationList);
+      setRoomListTotalPage(roomResponseData.result.totalPage);
+      setRoomListTotalElement(roomResponseData.result.totalElements);
+    }
+  }, [roomResponseData]);
+
+  return (
+    <>
+      {data && data.length > 1 ? (
+        <StyledAccommodationContainer>
+          {data?.map((accommodation, idx) => {
+            return (
+              <AccommodationItem
+                key={`accommodation${idx}`}
+                data={accommodation}
+                isSelected={selectedAccommodationId === accommodation.id}
+                onClick={getRoomInfo(accommodation.id)}
+              ></AccommodationItem>
+            );
+          })}
+        </StyledAccommodationContainer>
+      ) : (
+        <StyledDiv>
+          <StyledP>등록된 숙소가 없습니다.</StyledP>
+        </StyledDiv>
+      )}
+    </>
+  );
+}
+
+const StyledAccommodationContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  box-sizing: border-box;
+  padding: 25px;
+  gap: 25px;
+  width: 100%;
+  height: 300px;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.05);
+  margin-bottom: 50px;
+  resize: vertical;
+  overflow: auto;
+
+  @media (min-width: 550px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (min-width: 780px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+`;
+
+const StyledDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 25px;
+  width: 100%;
+  height: 300px;
+  background-color: rgba(0, 0, 0, 0.05);
+  margin-bottom: 50px;
+`;
+
+const StyledP = styled.p`
+  font-size: 20px;
+`;
