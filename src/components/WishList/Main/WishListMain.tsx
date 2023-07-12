@@ -37,12 +37,14 @@ export default function WishListMain() {
     <>
       <Main>
         <StyleTitle>관심 숙소</StyleTitle>
-        <StyleInfoMessage>
-          <h2 style={{ fontWeight: 'bold', fontSize: '20px' }}>관심이 가는 숙소를 저장해보세요</h2>
-          <span style={{ marginTop: '20px', display: 'block' }}>
-            검색 중에 마음에 드는 숙소를 관심숙소에 저장하려면 하트 아이콘을 클릭하세요.
-          </span>
-        </StyleInfoMessage>
+        {wishList.length === 0 && (
+          <StyleInfoMessage>
+            <h2 style={{ fontWeight: 'bold', fontSize: '20px' }}>관심이 가는 숙소를 저장해보세요</h2>
+            <span style={{ marginTop: '20px', display: 'block' }}>
+              검색 중에 마음에 드는 숙소를 관심숙소에 저장하려면 하트 아이콘을 클릭하세요.
+            </span>
+          </StyleInfoMessage>
+        )}
         <StyleGridBox>
           {wishList.map(item => (
             <ImageBox fetchWishListsData={fetchWishListsData} key={item.houseId} item={item} />
