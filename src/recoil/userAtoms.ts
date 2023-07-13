@@ -45,6 +45,13 @@ export const nicknameAtom = atom<string>({
   default: defaultNickname,
 });
 
+const storedUserId = localStorage.getItem('userId');
+const defaultUserId = storedUserId ? JSON.parse(storedUserId) : '';
+export const userIdAtom = atom<number>({
+  key: 'userIdAtom',
+  default: defaultUserId,
+});
+
 export const loginStateAtom = atom<boolean>({
   key: 'loginStateAtom',
   default: false,
