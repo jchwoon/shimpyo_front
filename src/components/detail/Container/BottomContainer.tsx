@@ -4,15 +4,25 @@ import { Typography, Divider } from '@mui/material';
 import { useState } from 'react';
 import CommentCard from './CommentCard';
 
-export default function BottomContainer() {
+interface BottomContainerProps {
+  reviewData?: Array<any>;
+}
+
+export default function BottomContainer({ reviewData }: BottomContainerProps) {
 
   return (
     <>
       <MainTitle>후기</MainTitle>
       <CommentCardContainer>
-        {[1, 2, 3, 4, 5].map(i => {
+        {reviewData && reviewData.map((review, index) => {
           return (
-            <CommentCard key={i} />
+            <CommentCard
+              key={index}
+              image={review.imageUrl}
+              name={review.name}
+              contents={review.contents}
+              date={review.reviewModifiedDate}
+            />
           );
         })}
       </CommentCardContainer>

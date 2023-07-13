@@ -8,7 +8,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import NavbarTheme from '../components/Main/OverrideTheme/NavbarTheme';
 import MobileNavbarTheme from '../components/Main/OverrideTheme/MobileNavbarTheme';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // import Navbar from '../components/Main/Navbar/Navbar';
 import Navbar from '../components/shared/Navbar/Navbar';
@@ -44,7 +44,7 @@ import { CustomIcon } from '../components/shared/MobileFooter/CustomIcon';
 
 import useHttpRequest from '../hooks/useHttpRequest';
 
-import { DETAIL_PAGE_API_PATH } from '../constants/api/homeListApi';
+import { DETAIL_PAGE_API_PATH, DETAIL_PAGE_REVIEWS_API_PATH } from '../constants/api/homeListApi';
 
 export default function Detail() {
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
@@ -104,33 +104,76 @@ export default function Detail() {
     <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
   );
 
+  //디테일 페이지 데이터 요청
+
   const { responseData, sendRequest, errorMessage, isLoading } = useHttpRequest();
 
   useEffect(() => {
     sendRequest({ url: DETAIL_PAGE_API_PATH })
   }, [])
 
-  console.log(responseData)
-
-  // interface Data {
-  //   house: {
-  //     name: string;
-  //   };
-  //   rooms: object[];
-  // }
-
-  // const [data, setData] = useState<Data | null>(null);
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
     if (!responseData) return;
     if (responseData.result) {
-      // setData(responseData.result as Data);
+      const newData = responseData.result
       setData(responseData.result);
     }
   }, [responseData]);
 
-  console.log("data:", data)
+  //리뷰 데이터 요청
+
+  const [reviewData, setReviewData] = useState([]);
+  const [nextReview, setNextReview] = useState(true)
+  const [page, setPage] = useState(0);
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  const { responseData: reviewResponseData, sendRequest: reviewSendRequest, errorMessage: ReviewErrorMessage, isLoading: reviewIsLoading } = useHttpRequest();
+
+
+  useEffect(() => {
+    if (nextReview) reviewSendRequest({ url: `${DETAIL_PAGE_REVIEWS_API_PATH}?page=${page}` })
+  }, [page])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1,
+    });
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, []);
+
+  const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+    const entry = entries[0];
+    if (entry.isIntersecting) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  useEffect(() => {
+    if (!reviewResponseData) return;
+    if (reviewResponseData.result) {
+      const newData: any = reviewResponseData.result;
+      console.log("newData:", newData)
+      const newDataReview: [] = newData.review;
+      const newDataNextReview = newData.hasNext;
+      if (newDataNextReview === false) setNextReview(false);
+      setReviewData((prevData) => [...prevData, ...newDataReview]);
+    }
+  }, [reviewResponseData]);
+
+  //리뷰 데이터 요청 끝
 
   function houseType(val: string) {
     let answer = ''
@@ -181,9 +224,18 @@ export default function Detail() {
             images={data ? data.house.houseImages : []}
           // images={["https://source.unsplash.com/random?wallpapers", "https://i.namu.wiki/i/OnaSlI8n5C7pATSH1A9ztgdn4t1lmRssYmw6XsfGlTUloiLzMnw7YpGvSP4UAaYuorD81rQBHDQWqROBFYen_Uf0zttLFSx2Oag9YHeRbEeC7SXHSTJWIUgHU72DNsTjxX3GTME2VEgyslR5DGJCjcnyyTeKIRyZ6vDS18O0svQ.svg", "https://source.unsplash.com/random?wallpapers", "https://source.unsplash.com/random?wallpapers", "https://shimpyo-image-bucket.s3.ap-northeast-2.amazonaws.com/230712/57929ed0-fb70-4481-9628-34c91bbdbe46.jpg"]}
           />
-          <MainContainer houseName={data ? data.house.name : ''} houseContents={data ? data.house.contents : ''} options={data ? data.house.options : []} rooms={data ? data.rooms : []} lat={data ? data.house.lat : null} lng={data ? data.house.lng : null} />
+          <MainContainer
+            houseName={data ? data.house.name : ''}
+            houseContents={data ? data.house.contents : ''}
+            options={data ? data.house.options : []}
+            rooms={data ? data.rooms : []}
+            lat={data ? data.house.lat : null}
+            lng={data ? data.house.lng : null}
+            reviewData={reviewData ? reviewData : []}
+          />
         </Container>
       </div>
+      <div ref={observerRef} style={{ height: '10px' }} />
       {isLargeScreen ? null : (
         <NewMobileFooter defaultValue={null} Action0={value0} Action1={value1} Action2={value2} />
       )}

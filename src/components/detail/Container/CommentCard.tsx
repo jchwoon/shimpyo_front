@@ -3,8 +3,18 @@ import { Typography, Button } from '@mui/material';
 import { useState } from 'react';
 import { AiOutlineRight } from 'react-icons/ai';
 import Grid from '@mui/material/Grid';
+import moment from 'moment';
+import 'moment/locale/ko';
+import ReviewContent from './ReviewContent';
 
-export default function CommentCard() {
+interface CommentCardProps {
+    contents?: string;
+    image?: string | null;
+    name?: string;
+    date?: string;
+}
+
+export default function CommentCard({ image, name, contents, date }: CommentCardProps) {
 
     const [linelimit, setLineLimit] = useState<number>(3);
     const handleHSeeMore = () => {
@@ -14,21 +24,21 @@ export default function CommentCard() {
     return <div>
         <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "10px" }}>
             <div style={{ marginRight: "10px", display: "flex", alignItems: "center" }}>
-                <UserImg src="https://jmagazine.joins.com/_data/photo/2015/02/3696639864_0BMtU3sK_44.jpg" />
+                <UserImg src={image ? image : "./images/basicProfile.jpg"} />
             </div>
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                <UserName>Name</UserName>
-                <CommentDate>YYYY년 M월 D일</CommentDate>
+                <UserName>{name}</UserName>
+                <CommentDate>{moment(date).format('M월 D일')}</CommentDate>
             </div>
         </div>
         <Grid container>
             <Grid item xs={12} md={9} >
-                <Comment linelimit={linelimit}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</Comment>
+                <ReviewContent
+                    contents={contents}
+                // contents={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
+                />
             </Grid>
         </Grid>
-        <SeeMore onClick={handleHSeeMore} disableRipple>
-            {linelimit === 3 ? "자세히 보기" : "간략히"} <AiOutlineRight />
-        </SeeMore>
     </div>
 }
 

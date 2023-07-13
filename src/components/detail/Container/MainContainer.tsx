@@ -10,16 +10,17 @@ interface MainContainerProps {
   rooms: Array<Object>;
   lat: number;
   lng: number;
+  reviewData?: Array<Object>;
 }
 
-export default function MainContainer({ houseName, houseContents, options, rooms, lat, lng }: MainContainerProps) {
+export default function MainContainer({ houseName, houseContents, options, rooms, lat, lng, reviewData }: MainContainerProps) {
   return (
     <>
       <Main>
         <SideContainer houseContents={houseContents} options={options} rooms={rooms} lat={lat} lng={lng} />
         <NewSideBox houseName={houseName} />
       </Main>
-      <BottomContainer />
+      <BottomContainer reviewData={reviewData} />
     </>
   );
 }

@@ -45,9 +45,9 @@ export default function SideContainer({ houseContents, options, rooms, lat, lng 
       <Divider />
       <MainTitle >객실 안내</MainTitle >
       <RoomCardContainer>
-        {rooms.map(room =>
+        {rooms.map((room, index) =>
           <RoomCard
-            key={room.name}
+            key={index}
             image={room.roomImages}
             name={room.name}
             doubleBed={room.bedCount}

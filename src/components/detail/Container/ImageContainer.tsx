@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import ModalImageBox from './ModalImageBox';
 
 interface ImageContainerProps {
   images: Array<string>
@@ -19,16 +20,16 @@ const style = {
 export default function ImageContainer1({ images }: ImageContainerProps) {
 
   const [open, setOpen] = useState(false);
-  const [modalPicture, setModalPicture] = useState('')
+  const [modalPicture, setModalPicture] = useState(0)
 
-  const handleOpen = (value: string) => {
+  const handleOpen = (value: number) => {
     setModalPicture(value)
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
 
   const newImage = new Image()
-  newImage.src = modalPicture
+  newImage.src = images[modalPicture]
   const originalWidth = newImage.naturalWidth;
   const originalHeight = newImage.naturalHeight;
 
@@ -50,21 +51,21 @@ export default function ImageContainer1({ images }: ImageContainerProps) {
     <>
       <ImageBox>
         <MainImageBox>
-          <MainHoverDiv onClick={() => handleOpen(images[0])} />
+          <MainHoverDiv onClick={() => handleOpen(0)} />
           <MainImage
             src={images[0]}
           />
         </MainImageBox>
         <SideImageBox>
           <SideImagePiece>
-            <HoverDiv onClick={() => handleOpen(images[1])} />
+            <HoverDiv onClick={() => handleOpen(1)} />
             <SideImage
               src={images[1]}
             />
           </SideImagePiece>
           <div style={{ height: "5px", width: "100%" }} />
           <SideImagePiece>
-            <HoverDiv onClick={() => handleOpen(images[2])} />
+            <HoverDiv onClick={() => handleOpen(2)} />
             <SideImage
               src={images[2]}
             />
@@ -74,7 +75,7 @@ export default function ImageContainer1({ images }: ImageContainerProps) {
           <SideImagePiece>
             <HoverDiv
               style={{ borderRadius: "0 20px 0 0" }}
-              onClick={() => handleOpen(images[3])}
+              onClick={() => handleOpen(3)}
             />
             <SideImage
               src={images[3]}
@@ -85,7 +86,7 @@ export default function ImageContainer1({ images }: ImageContainerProps) {
           <SideImagePiece>
             <HoverDiv
               style={{ borderRadius: "0 0 20px 0" }}
-              onClick={() => handleOpen(images[4])}
+              onClick={() => handleOpen(4)}
             />
             <SideImage
               src={images[4]}
@@ -101,14 +102,11 @@ export default function ImageContainer1({ images }: ImageContainerProps) {
         aria-describedby="modal-modal-description"
       >
         <div style={style}>
-          <ModalImage
-            // src={images[0]}
-            src={modalPicture}
-            style={{
-              width: windowWidth * 0.8 > originalWidth ? originalWidth : windowWidth * 0.8,
-              height: windowHeight * 0.8 > originalHeight ? originalHeight : windowHeight * 0.8,
-            }}
-          />
+          <ModalImageBox
+            imageList={images}
+            modalPicture={modalPicture}
+            width={windowWidth * 0.8 > originalWidth ? originalWidth : windowWidth * 0.8}
+            height={windowHeight * 0.9 > originalHeight ? originalHeight : windowHeight * 0.8} />
         </div>
       </Modal>
     </>

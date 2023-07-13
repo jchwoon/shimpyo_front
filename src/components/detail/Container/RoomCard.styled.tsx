@@ -9,7 +9,7 @@ import { Box } from '@mui/material';
 export const CustomizedCard = styled.div
   <{ active: boolean }>
   `
-height: 100%;
+// height: 100%;
 display: flex; 
 flex-direction: row; 
 box-shadow: none;
@@ -87,4 +87,19 @@ flex-direction: column;
 align-items: center; 
 margin-left: 15px; 
 margin-bottom: 10px;
+`
+
+export const HoverDiv = styled.div`
+border-radius: 10px;
+z-index: 2;
+position: absolute;
+width:100%;
+height:100%;
+transition: 0.2s all ease;
+opacity:0;
+background-color: rgba(0, 0, 0, 0.5);
+cursor:pointer;
+:hover{
+  opacity:0.3;
+}
 `
