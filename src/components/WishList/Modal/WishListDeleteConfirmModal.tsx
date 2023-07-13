@@ -17,7 +17,7 @@ export default function WishListDeleteConfirmModal({ fetchWishListsData, item }:
   const { responseData, sendRequest } = useAuthorizedRequest({});
 
   const deleteWishAccommodation = async (detailId: number) => {
-    await sendRequest({ url: `/wishLists/${detailId}`, method: 'DELETE' });
+    await sendRequest({ url: `/user/wish/${detailId}`, method: 'DELETE' });
   };
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function WishListDeleteConfirmModal({ fetchWishListsData, item }:
   const footer = (
     <div style={{ display: 'flex', width: '100%', gap: '1rem' }}>
       <Button label="취소" onClick={() => setWishListDeleteConfrimModal(false)} />
-      <ColorButton label="삭제하기" onClick={() => deleteWishAccommodation(item.detailId)} />
+      <ColorButton label="삭제하기" onClick={() => deleteWishAccommodation(item.houseId)} />
     </div>
   );
   return (

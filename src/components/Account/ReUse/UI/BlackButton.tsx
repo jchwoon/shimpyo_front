@@ -33,13 +33,13 @@ export default function BlackButton({ label, buttonType, onClick, disabled }: Bl
   );
 }
 
-const StyleSubmitButton = styled.button<{ isPressed: boolean }>`
-  background-color: black;
+const StyleSubmitButton = styled.button<{ isPressed: boolean; disabled: boolean }>`
+  background-color: ${props => (props.disabled ? 'rgb(200, 200, 200)' : 'black')};
   color: white;
   font-size: 15px;
   font-weight: bold;
   padding: 14px 24px;
-  cursor: pointer;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   border-radius: 0.5rem;
 
   scale: ${({ isPressed }) => isPressed && 0.9};

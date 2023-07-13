@@ -2,7 +2,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import Modal from '../Modal';
 import { useRef, useEffect, useState, KeyboardEvent } from 'react';
 import { idFindModalAtom, joinModalAtom, loginModalAtom, passwordFindModalAtom } from '../../../recoil/modalAtoms';
-import { loginStateAtom, accessTokenAtom, nicknameAtom, profileImageAtom } from '../../../recoil/userAtoms';
+import { loginStateAtom, accessTokenAtom, nicknameAtom, profileImageAtom, userIdAtom } from '../../../recoil/userAtoms';
 import styled from 'styled-components';
 import { StyleBody, StyleFooter, StyleSwitchToLoginButton } from './JoinModal';
 import ColorButton from '../UI/ColorButton';
@@ -19,11 +19,12 @@ interface ResultData {
   accessToken: string;
   nickname: string;
   profileImage: string;
+  userId: number;
 }
 
 interface LoginModalProps {
   isToReservationCheck?: boolean;
-  redirectPath?:string;
+  redirectPath?: string;
 }
 
 export default function LoginModal({ isToReservationCheck, redirectPath }: LoginModalProps) {
@@ -45,6 +46,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
   const setAccessToken = useSetRecoilState(accessTokenAtom);
   const setUserNickname = useSetRecoilState(nicknameAtom);
   const setUserProfileImage = useSetRecoilState(profileImageAtom);
+  const setUserId = useSetRecoilState(userIdAtom);
 
   const handleLoginButtonClick = async () => {
     const emailValue = emailRef.current?.value;
@@ -81,12 +83,17 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
         'profileImage',
         responseData.result.profileImage ? JSON.stringify(responseData.result.profileImage) : '',
       );
+      localStorage.setItem(
+        'userId',
+        responseData.result.userId ? JSON.stringify(responseData.result.profileImage) : '',
+      );
       setUserProfileImage(responseData.result.profileImage || '/images/basicProfile.jpg');
       setUserNickname(responseData.result.nickname || '');
+      setUserId(responseData.result.userId);
       setIsLoggedIn(true);
       setIsLoginModalOpen(false);
       window.history.replaceState(null, '', '/');
-      navigation(location?.state?.redirectedFrom?.pathname || redirectPath ||'/');
+      navigation(location?.state?.redirectedFrom?.pathname || redirectPath || '/');
     } else {
       setIsLoginError(true);
       setLoginErrorMessage('이메일과 비밀번호를 다시 한번 확인해주세요.');
@@ -96,7 +103,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
 
   const title = (
     <div>
-      <img width={50} height={20} alt="logo" src="images/logo.png" />
+      <img width={50} height={20} alt="logo" src="/images/logo.png" />
       <span>에 오신것을 환영합니다.</span>
     </div>
   );

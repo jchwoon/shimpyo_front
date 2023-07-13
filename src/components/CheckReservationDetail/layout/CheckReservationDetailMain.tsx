@@ -119,7 +119,6 @@ export default function CheckReservationDetailMain() {
 }
 
 const StyleMainBox = styled.div`
-  margin-top: 30px;
   background-color: hsl(0, 0%, 90%);
 `;
 
@@ -135,25 +134,23 @@ const StyleFlexColumnBox = styled.div`
 
 const StyleLeftBox = styled.div`
   background-color: white;
-  margin-top: 17px;
   border-radius: 5px;
   width: 100%;
 
   @media only screen and (min-width: 738px) {
     width: 400px;
-    margin: 1.7rem 0.7rem 0.7rem 0.7rem;
+    margin: 0.7rem 0.7rem 0.7rem 0.7rem;
     height: calc(100vh - 105px);
     overflow-y: scroll;
   }
   @media only screen and (min-width: 1130px) {
     width: 600px;
-    margin: 1.7rem 0.7rem 0.7rem 0.7rem;
+    margin: 0.7rem 0.7rem 0.7rem 0.7rem;
     height: calc(100vh - 105px);
     overflow-y: scroll;
   }
 `;
 const StyleRightBox = styled.div`
-  margin-top: 1.1rem;
   height: calc(100vh - 80px);
   flex-grow: 1;
 `;

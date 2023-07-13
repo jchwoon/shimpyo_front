@@ -49,7 +49,7 @@ export default function ImageSection({
   }, [checkIn, checkOut]);
   return (
     <StyleSection>
-      <ImageBox imageList={imageList} />
+      <ImageBox isOver={isOver} imageList={imageList} />
       <Section>
         {!isOver && (
           <>

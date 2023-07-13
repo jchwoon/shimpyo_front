@@ -9,6 +9,7 @@ import ChangePasswordInfo from './ChangePasswordInfo';
 import { useNavigate } from 'react-router-dom';
 import DeactivationAccount from './DeactivationAccount';
 import { USER_INFO_API_PATH } from '../../../constants/api/userApi';
+import CouponInfo from './CouponInfo';
 
 interface ResultUserInfoData {
   userId: number;
@@ -50,10 +51,13 @@ export default function AccountMain() {
         <StyleNavigationProfile onClick={() => navigation(`/users/${userInfoData.userId}`)}>
           프로필 정보 보기 &rarr;
         </StyleNavigationProfile>
+        <StyleSubTitle>개인정보</StyleSubTitle>
         <NicknameInfo infoContent={userInfoData.nickname} />
         <EmailInfo infoContent={userInfoData.email} />
         <PhoneInfo infoContent={userInfoData.phoneNumber} />
         <ChangePasswordInfo />
+        <StyleSubTitle>쿠폰</StyleSubTitle>
+        <CouponInfo />
         <DeactivationAccount />
       </StyleAccountBox>
     </Main>
@@ -68,6 +72,12 @@ const StyleTitle = styled.h1`
   @media only screen and (min-width: 764px) {
     margin-top: 100px;
   }
+`;
+
+const StyleSubTitle = styled.h2`
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 50px;
 `;
 
 const StyleNavigationProfile = styled.div`

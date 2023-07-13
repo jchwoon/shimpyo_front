@@ -20,6 +20,7 @@ export default function useLogout() {
     if (responseData.isSuccess) {
       setAccessToken('');
       setIsLoggedIn(false);
+      localStorage.clear();
       window.location.href = '/';
     }
 
