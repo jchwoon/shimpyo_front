@@ -122,7 +122,6 @@ const Input = forwardRef<HTMLInputElement, TextFieldProps>(
 )
 
 const StyledTextfield = styled(TextField) <{ error: boolean | undefined }>`
-margin-top:10px;
 width:100%;
 .MuiInputLabel-root.Mui-focused {
     ${props => props.error ? 'color: #d32f2f' : 'color: #00adb5'}
@@ -133,7 +132,6 @@ width:100%;
 `
 
 const StyledFormControl = styled(FormControl) <{ error: boolean | undefined }>`
-margin-top:10px;
 .MuiInputLabel-root.Mui-focused {
     ${props => props.error ? 'color: #d32f2f' : 'color: #00adb5'}
   }

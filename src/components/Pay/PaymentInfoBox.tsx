@@ -170,11 +170,11 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             merchant_uid: `${memberUid}`,
             name: "회원구매",
             amount: 100,
-            buyer_email: "i2pss@naver.com",
+            // buyer_email: "i2pss@naver.com",
             buyer_name: "포트원 기술지원팀",
             buyer_tel: "010-1234-5678",
-            buyer_addr: "서울특별시 강남구 삼성동",
-            buyer_postcode: "123-456",
+            // buyer_addr: "서울특별시 강남구 삼성동",
+            // buyer_postcode: "123-456",
         }
 
         async function callback(response: RequestPayResponse) {
@@ -222,12 +222,12 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             pay_method: "card",
             merchant_uid: `${noneMemberUid}`,
             name: `${houseName} / ${Name}`,
-            amount: TotalPrice - DiscountPrice,
-            buyer_email: "i2pss@naver.com",
+            amount: 100,
+            // amount: TotalPrice - DiscountPrice,
             buyer_name: "포트원 기술지원팀",
             buyer_tel: "010-1234-5678",
-            buyer_addr: "서울특별시 강남구 삼성동",
-            buyer_postcode: "123-456",
+            // buyer_addr: "서울특별시 강남구 삼성동",
+            // buyer_postcode: "123-456",
         }
 
         async function callback(response: RequestPayResponse) {
