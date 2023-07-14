@@ -1,17 +1,17 @@
 import React, { useRef, useEffect, RefObject, useState } from 'react';
 // import styled from 'styled-components';
 import styled from '@emotion/styled';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { AiOutlineRight } from 'react-icons/ai';
+import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
 
 interface ReviewContentsProps {
     contents?: string
 }
 
 const Description = styled.div <{ linelimit: number, seeMore: boolean }>`
-// margin-top: 30px;
-// margin-bottom:30px;
-margin-bottom:${({ seeMore }) => (seeMore ? '5px' : '30px')};
+margin-top: 10px;
+margin-bottom:10px;
 display: -webkit-box;
 -webkit-box-orient: vertical;
 -webkit-line-clamp: ${({ linelimit }) => (linelimit)};
@@ -27,7 +27,7 @@ font-weight: 400;
 display: flex;
 align-items: center;
 text-align: center;
-// margin-top: 12px;
+margin-left:10px;
 margin-bottom: 20px;
 cursor: pointer;
 color:#acacac;
@@ -63,17 +63,25 @@ const ReviewContent = ({ contents }: ReviewContentsProps) => {
     }, [contents]);
 
     return (
-        <>
-            <Description ref={ref} linelimit={linelimit} seeMore={seeMore}>
-                {contents}
-            </Description>
+        <div>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <div style={{ marginRight: "10px" }}><FaQuoteLeft size={8} color='#acacac' /></div>
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <Description ref={ref} linelimit={linelimit} seeMore={seeMore}>
+                        {contents}
+                    </Description>
+                </div>
+                <div style={{ display: "flex", alignItems: "flex-end", marginLeft: "10px" }}>
+                    <FaQuoteRight size={8} color='#acacac' />
+                </div>
+            </div>
             {seeMore ?
                 <SeeMore onClick={handleHSeeMore} disableRipple >
                     {linelimit === 3 ? "자세히 보기" : "간략히"} <AiOutlineRight />
                 </SeeMore>
                 :
                 null}
-        </>
+        </div>
     );
 };
 

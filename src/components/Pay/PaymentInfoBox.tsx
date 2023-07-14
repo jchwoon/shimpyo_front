@@ -19,8 +19,7 @@ import Radio from '@mui/material/Radio';
 import { merchantUid, activeRoomName } from '../../recoil/detailPageAtoms';
 import useAuthorizedRequest from "../../hooks/useAuthorizedRequest";
 import useHttpRequest from "../../hooks/useHttpRequest";
-import { accessTokenAtom } from "../../recoil/userAtoms";
-import { loginStateAtom } from "../../recoil/userAtoms";
+import { accessTokenAtom, loginStateAtom, phoneValueAtom, nameValueAtom } from "../../recoil/userAtoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { AxiosError } from 'axios';
 import { MEMBER_RESERVATION_API_PATH, NON_MEMBER_RESERVATION_API_PATH } from "../../constants/api/reservationApi";
@@ -160,6 +159,9 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
 
     const Name = useRecoilValue(activeRoomName)
 
+    const nonMemberName = useRecoilValue(nameValueAtom);
+    const nonMemberNumber = useRecoilValue(phoneValueAtom);
+
     function memberRequestPay() {
         const { IMP } = window;
         IMP.init("imp62564523");
@@ -170,11 +172,9 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             merchant_uid: `${memberUid}`,
             name: "회원구매",
             amount: 100,
-            // buyer_email: "i2pss@naver.com",
-            buyer_name: "포트원 기술지원팀",
-            buyer_tel: "010-1234-5678",
-            // buyer_addr: "서울특별시 강남구 삼성동",
-            // buyer_postcode: "123-456",
+            // amount: TotalPrice - DiscountPrice,
+            buyer_name: `${nonMemberName}`,
+            buyer_tel: `${nonMemberNumber}`,
         }
 
         async function callback(response: RequestPayResponse) {
@@ -226,8 +226,6 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             // amount: TotalPrice - DiscountPrice,
             buyer_name: "포트원 기술지원팀",
             buyer_tel: "010-1234-5678",
-            // buyer_addr: "서울특별시 강남구 삼성동",
-            // buyer_postcode: "123-456",
         }
 
         async function callback(response: RequestPayResponse) {
@@ -470,3 +468,31 @@ color: #ffffff;
     color:#d9d9d9;
   }
 `;
+
+// memberpay data
+// const data = {
+//     pg: "html5_inicis",
+//     pay_method: "card",
+//     merchant_uid: `${memberUid}`,
+//     name: "회원구매",
+//     amount: 100,
+//     buyer_email: "i2pss@naver.com",
+//     buyer_name: "포트원 기술지원팀",
+//     buyer_tel: "010-1234-5678",
+//     buyer_addr: "서울특별시 강남구 삼성동",
+//     buyer_postcode: "123-456",
+// }
+
+// nonmemberpay data
+// const data = {
+//     pg: "html5_inicis",
+//     pay_method: "card",
+//     merchant_uid: `${noneMemberUid}`,
+//     name: `${houseName} / ${Name}`,
+//     amount: 100,
+//     amount: TotalPrice - DiscountPrice,
+//     buyer_name: "포트원 기술지원팀",
+//     buyer_tel: "010-1234-5678",
+//     buyer_addr: "서울특별시 강남구 삼성동",
+//     buyer_postcode: "123-456",
+// }

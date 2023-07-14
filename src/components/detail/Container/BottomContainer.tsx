@@ -3,12 +3,14 @@ import styled from '@emotion/styled';
 import { Typography, Divider } from '@mui/material';
 import { useState } from 'react';
 import CommentCard from './CommentCard';
+import classes from './Loading.module.css'
 
 interface BottomContainerProps {
   reviewData?: Array<any>;
+  reviewIsLoading: boolean;
 }
 
-export default function BottomContainer({ reviewData }: BottomContainerProps) {
+export default function BottomContainer({ reviewData, reviewIsLoading }: BottomContainerProps) {
 
   return (
     <>
@@ -22,9 +24,18 @@ export default function BottomContainer({ reviewData }: BottomContainerProps) {
               name={review.name}
               contents={review.contents}
               date={review.reviewModifiedDate}
+              rating={review.reviewRating}
             />
           );
         })}
+        {reviewIsLoading ?
+          <div className={classes.ldsEllipsis}>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          : null}
       </CommentCardContainer>
     </>
   );
@@ -39,7 +50,7 @@ padding: 48px 0 24px 0;
 
 const CommentCardContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   padding-top: 20px;
   flex-direction:column;
 `;

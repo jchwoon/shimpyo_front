@@ -45,6 +45,7 @@ import { CustomIcon } from '../components/shared/MobileFooter/CustomIcon';
 import useHttpRequest from '../hooks/useHttpRequest';
 
 import { DETAIL_PAGE_API_PATH, DETAIL_PAGE_REVIEWS_API_PATH } from '../constants/api/homeListApi';
+import useLogout from '../hooks/useLogout';
 
 export default function Detail() {
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
@@ -66,21 +67,24 @@ export default function Detail() {
   const setJoinModal = useSetRecoilState(joinModalAtom);
   const loginState = useRecoilValue(loginStateAtom)
 
+  const navigate = useNavigate();
+  const { logoutHandler } = useLogout();
+
   const menuItems = (
     <div>
       {loginState ? (
         <div>
-          <UserMenuItem bold label="프로필" onClick={() => console.log('hi')} />
-          <UserMenuItem divide bold label="계정" onClick={() => console.log('hi')} />
-          <UserMenuItem divide label="언어 및 번역" onClick={() => console.log('hi')} />
-          <UserMenuItem label="게스트 모드로 전환" onClick={() => console.log('hi')} />
-          <UserMenuItem label="로그아웃" onClick={() => console.log('hi')} />
+          <UserMenuItem label="프로필" onClick={() => console.log('hi')} />
+          <UserMenuItem label="계정" onClick={() => navigate('/account-settings')} />
+          <UserMenuItem divide label="관심 숙소" onClick={() => navigate('/wishlists')} />
+          <UserMenuItem divide label="호스트가 되어보세요" onClick={() => navigate('/hosting')} />
+          <UserMenuItem label="로그아웃" onClick={() => logoutHandler()} />
         </div>
       ) : (
         <div>
           <UserMenuItem label="로그인" onClick={() => setLoginModal(true)} />
-          <UserMenuItem divide label="회원가입" onClick={() => setJoinModal(true)} />
-          <UserMenuItem label="호스트가 되어보세요" onClick={() => console.log('hi')} />
+          <UserMenuItem label="회원가입" onClick={() => setJoinModal(true)} />
+          <UserMenuItem label="예약내역" onClick={() => navigate('/check/non-member')} />
         </div>
       )}
     </div>
@@ -93,8 +97,6 @@ export default function Detail() {
     setCustomDisplay(false);
     setChange(false);
   };
-
-  const navigate = useNavigate();
 
   const value0 = <BottomNavigationAction icon={<CustomIcon />} label="홈" onClick={() => navigate('/')} />;
   const value1 = (
@@ -117,7 +119,6 @@ export default function Detail() {
   useEffect(() => {
     if (!responseData) return;
     if (responseData.result) {
-      const newData = responseData.result
       setData(responseData.result);
     }
   }, [responseData]);
@@ -134,14 +135,25 @@ export default function Detail() {
 
   useEffect(() => {
     if (nextReview) reviewSendRequest({ url: `${DETAIL_PAGE_REVIEWS_API_PATH}?page=${page}` })
+    // if (nextReview) reviewSendRequest({ url: `${DETAIL_PAGE_REVIEWS_API_PATH}?page=4` })
   }, [page])
 
   useEffect(() => {
-    const observer = new IntersectionObserver(handleIntersection, {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1,
-    });
+
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      const entry = entries[0];
+      if (entry.isIntersecting && nextReview) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      handleIntersection,
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1,
+      });
 
     if (observerRef.current) {
       observer.observe(observerRef.current);
@@ -152,14 +164,14 @@ export default function Detail() {
         observer.unobserve(observerRef.current);
       }
     };
-  }, []);
+  }, [nextReview]);
 
-  const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-    const entry = entries[0];
-    if (entry.isIntersecting) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  // const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+  //   const entry = entries[0];
+  //   if (entry.isIntersecting && nextReview) {
+  //     setPage((prevPage) => prevPage + 1);
+  //   }
+  // };
 
   useEffect(() => {
     if (!reviewResponseData) return;
@@ -172,6 +184,9 @@ export default function Detail() {
       setReviewData((prevData) => [...prevData, ...newDataReview]);
     }
   }, [reviewResponseData]);
+
+  console.log("nextReview:", nextReview)
+  console.log("page:", page)
 
   //리뷰 데이터 요청 끝
 
@@ -232,6 +247,7 @@ export default function Detail() {
             lat={data ? data.house.lat : null}
             lng={data ? data.house.lng : null}
             reviewData={reviewData ? reviewData : []}
+            reviewIsLoading={reviewIsLoading}
           />
         </Container>
       </div>

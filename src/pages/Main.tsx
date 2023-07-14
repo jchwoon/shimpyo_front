@@ -35,6 +35,8 @@ import { useNavigate } from 'react-router-dom';
 import { loginModalAtom, joinModalAtom } from '../recoil/modalAtoms';
 import { loginStateAtom } from '../recoil/userAtoms';
 
+import useLogout from '../hooks/useLogout';
+
 export default function Main() {
   const [searchParams] = useSearchParams();
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
@@ -45,22 +47,23 @@ export default function Main() {
   const navigate = useNavigate();
   const setJoinModal = useSetRecoilState(joinModalAtom);
   const loginState = useRecoilValue(loginStateAtom)
+  const { logoutHandler } = useLogout();
 
   const menuItems = (
     <div>
       {loginState ? (
         <div>
-          <UserMenuItem bold label="프로필" onClick={() => console.log('hi')} />
-          <UserMenuItem divide bold label="계정" onClick={() => console.log('hi')} />
-          <UserMenuItem divide label="언어 및 번역" onClick={() => console.log('hi')} />
-          <UserMenuItem label="게스트 모드로 전환" onClick={() => console.log('hi')} />
-          <UserMenuItem label="로그아웃" onClick={() => console.log('hi')} />
+          <UserMenuItem label="프로필" onClick={() => console.log('hi')} />
+          <UserMenuItem label="계정" onClick={() => navigate('/account-settings')} />
+          <UserMenuItem divide label="관심 숙소" onClick={() => navigate('/wishlists')} />
+          <UserMenuItem divide label="호스트가 되어보세요" onClick={() => navigate('/hosting')} />
+          <UserMenuItem label="로그아웃" onClick={() => logoutHandler()} />
         </div>
       ) : (
         <div>
           <UserMenuItem label="로그인" onClick={() => setLoginModal(true)} />
-          <UserMenuItem divide label="회원가입" onClick={() => setJoinModal(true)} />
-          <UserMenuItem label="호스트가 되어보세요" onClick={() => console.log('hi')} />
+          <UserMenuItem label="회원가입" onClick={() => setJoinModal(true)} />
+          <UserMenuItem label="예약내역" onClick={() => navigate('/check/non-member')} />
         </div>
       )}
     </div>

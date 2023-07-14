@@ -3,7 +3,7 @@ import { useState, useCallback, ChangeEvent, Dispatch, SetStateAction } from 're
 import styled from '@emotion/styled';
 import usePhoneCertification from '../../hooks/usePhoneCertification';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { phoneValueAtom } from '../../recoil/userAtoms';
+import { phoneValueAtom, nameValueAtom } from '../../recoil/userAtoms';
 
 import { swipePageState } from '../../recoil/detailPageAtoms';
 
@@ -48,7 +48,7 @@ function ExtendedColorButton({ label, disabled = false, onClick }: ColorButtonPr
 export default function NoneMemberPhoneInput(
     { setModalOpen }: PhoneInputProps
 ) {
-    const [nameValue, setNameValue] = useState('')
+    const [nameValue, setNameValue] = useRecoilState(nameValueAtom);
     const [phoneValue, setPhoneValue] = useRecoilState(phoneValueAtom);
     const [codeValue, setCodeValue] = useState('');
 

@@ -1,45 +1,68 @@
 import styled from '@emotion/styled';
 import { Typography, Button } from '@mui/material';
 import { useState } from 'react';
-import { AiOutlineRight } from 'react-icons/ai';
+import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
 import Grid from '@mui/material/Grid';
 import moment from 'moment';
 import 'moment/locale/ko';
 import ReviewContent from './ReviewContent';
+import { HiOutlineEmojiHappy, HiOutlineEmojiSad } from 'react-icons/hi'
 
 interface CommentCardProps {
     contents?: string;
     image?: string | null;
     name?: string;
     date?: string;
+    rating?: string;
 }
 
-export default function CommentCard({ image, name, contents, date }: CommentCardProps) {
+export default function CommentCard({ image, name, contents, date, rating }: CommentCardProps) {
 
-    const [linelimit, setLineLimit] = useState<number>(3);
-    const handleHSeeMore = () => {
-        if (linelimit === 3) { setLineLimit(100) } else { setLineLimit(3) }
-    }
+    return (
+        <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", paddingBottom: "20px" }}>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                <div style={{ marginRight: "10px", display: "flex", alignItems: "center" }}>
+                    <UserImg src={image ? image : "./images/basicProfile.jpg"} />
+                    {/* <UserImg src={"./images/basicProfile.jpg"} /> */}
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", marginRight: "20px" }}>
+                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                        <UserName noWrap>{name}</UserName>
+                    </div>
+                    <CommentDate noWrap>{moment(date).format('M월 D일')}</CommentDate>
+                </div>
+                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginRight: "20px" }}>
+                    {rating === "GOOD" ?
+                        <>
+                            <Typography fontFamily="Noto Sans KR" fontSize="15px" color="#00adb5" fontWeight="500" noWrap>좋아요</Typography>
+                            <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start" }}>
+                                <HiOutlineEmojiHappy style={{ color: "#00adb5", height: "20px", width: "20px" }} />
+                                <AiOutlinePlus style={{ color: "#00adb5", height: "8px", width: "8px" }} />
+                            </div>
+                        </>
+                        :
+                        <>
+                            <Typography fontFamily="Noto Sans KR" fontSize="15px" color="#e80a00" fontWeight="500" noWrap>싫어요</Typography>
+                            <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start" }}>
+                                <HiOutlineEmojiSad style={{ color: "#e80a00", height: "20px", width: "20px" }} />
+                                <AiOutlineMinus style={{ color: "#e80a00", height: "8px", width: "8px" }} />
+                            </div>
+                        </>
+                    }
+                </div>
+            </div>
+            <Grid container>
+                <Grid item xs={12} md={9} >
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
 
-    return <div>
-        <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "10px" }}>
-            <div style={{ marginRight: "10px", display: "flex", alignItems: "center" }}>
-                <UserImg src={image ? image : "./images/basicProfile.jpg"} />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                <UserName>{name}</UserName>
-                <CommentDate>{moment(date).format('M월 D일')}</CommentDate>
-            </div>
-        </div>
-        <Grid container>
-            <Grid item xs={12} md={9} >
-                <ReviewContent
-                    contents={contents}
-                // contents={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
-                />
+                        <ReviewContent
+                            contents={contents}
+                        />
+                    </div>
+                </Grid>
             </Grid>
-        </Grid>
-    </div>
+        </div>
+    )
 }
 
 const Comment = styled.div<{ linelimit: number }>`
@@ -54,6 +77,7 @@ const Comment = styled.div<{ linelimit: number }>`
 const UserName = styled(Typography)`
 font-family: Noto Sans KR;
 font-weight: 500;
+font-size: 12px;
 `;
 
 const CommentDate = styled(Typography)`
@@ -64,8 +88,8 @@ color:#c5c5c5;
 `;
 
 const UserImg = styled.img`
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
   border-radius: 100%;
   object-fit: cover;
 `;
