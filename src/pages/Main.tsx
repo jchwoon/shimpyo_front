@@ -37,6 +37,8 @@ import { loginStateAtom } from '../recoil/userAtoms';
 
 import useLogout from '../hooks/useLogout';
 
+import useHttpRequest from '../hooks/useHttpRequest';
+
 export default function Main() {
   const [searchParams] = useSearchParams();
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
@@ -98,6 +100,11 @@ export default function Main() {
   const value2 = (
     <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
   );
+
+  //메인 페이지 데이터 요청
+
+  const { responseData, sendRequest, errorMessage, isLoading } = useHttpRequest();
+
 
   return (
     <>
