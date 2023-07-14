@@ -1,95 +1,144 @@
+import styled from "@emotion/styled"
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { forwardRef, useCallback, useState, ChangeEvent, FocusEvent, ReactElement } from 'react';
-import styled from 'styled-components';
-import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
-import { StyleNumberTypeInput } from '../../style/shareStyle';
+import FormHelperText from '@mui/material/FormHelperText';
 
-interface InputProps extends React.HTMLProps<HTMLInputElement> {
-  type: string;
-  placeholder: string;
-  error?: boolean;
-  errorMessage?: string | ReactElement;
-  value?: string;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
+interface TextFieldProps extends React.HTMLProps<HTMLInputElement> {
+    type: string
+    placeholder: string,
+    error?: boolean;
+    errorMessage?: string | ReactElement;
+    value?: string,
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+    onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
 }
 
-interface ToggleTypeProps {
-  isShowPassword: boolean;
-  onClick: () => void;
-}
+// export default function CustomizedTextField({ type, placeholder, error, errorMessage, value, onChange, onBlur }: TextFieldProps) {
 
-const TogglePassword = ({ isShowPassword, onClick }: ToggleTypeProps) => {
-  const Icon = isShowPassword ? AiOutlineEyeInvisible : AiOutlineEye;
+//     const [showPassword, setShowPassword] = useState(false);
 
-  return (
-    <Icon onClick={onClick} style={{ position: 'absolute', right: '10px', top: '25%', cursor: 'pointer' }} size={25} />
-  );
-};
+//     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ type, placeholder, value, onChange, onBlur, errorMessage, error }, ref) => {
-    const [isShowPassword, setShowPassword] = useState(false);
+//     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+//         event.preventDefault();
+//     };
 
-    const toggleShowPassword = useCallback(() => {
-      setShowPassword(prev => !prev);
-    }, []);
-    return (
-      <>
-        <StyleLabel $error={error}>
-          <StyleInput
-            onBlur={onBlur}
-            onChange={onChange}
-            value={value}
-            placeholder=" "
-            ref={ref}
-            type={type === 'password' && isShowPassword ? 'text' : type}
-          />
-          <StylePlaceholder>{placeholder}</StylePlaceholder>
-          {type === 'password' && <TogglePassword isShowPassword={isShowPassword} onClick={toggleShowPassword} />}
-        </StyleLabel>
-        {error && <StyleErrorMessage>{errorMessage}</StyleErrorMessage>}
-      </>
-    );
-  },
-);
+//     return (
+//         type === "password" ?
+//             <StyledFormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+//                 <InputLabel htmlFor="outlined-adornment-password">비밀번호</InputLabel>
+//                 <OutlinedInput
+//                     id="outlined-adornment-password"
+//                     type={showPassword ? 'text' : 'password'}
+//                     endAdornment={
+//                         <InputAdornment position="end">
+//                             <IconButton
+//                                 aria-label="toggle password visibility"
+//                                 onClick={handleClickShowPassword}
+//                                 onMouseDown={handleMouseDownPassword}
+//                                 edge="end"
+//                             >
+//                                 {showPassword ? <VisibilityOff /> : <Visibility />}
+//                             </IconButton>
+//                         </InputAdornment>
+//                     }
+//                     label="password"
+//                 />
+//             </StyledFormControl>
+//             :
+//             <StyledTextfield
+//                 variant="outlined"
+//                 label={placeholder}
+//                 error={error}
+//                 helperText={errorMessage}
+//                 value={value}
+//                 onChange={onChange}
+//                 onBlur={onBlur}
+//             />
 
-const StyleLabel = styled.label<{ $error?: boolean }>`
-  position: relative;
-  padding: 0.75rem 0.5rem;
-  outline: ${props => (props.$error ? '2px solid red' : '1.5px solid rgb(200, 200, 200)')};
-  border-radius: 0.5rem;
-  margin-top: 0.5rem;
+//     )
+// }
 
-  :focus-within {
-    outline: 2px solid black;
-    div {
-      transform: translateY(-17px) translateX(-8px) scale(0.8);
+const Input = forwardRef<HTMLInputElement, TextFieldProps>(
+    function CustomizedTextField({ type, placeholder, error, errorMessage, value, onChange, onBlur }, ref) {
+
+        const [showPassword, setShowPassword] = useState(false);
+
+        const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+        const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+            event.preventDefault();
+        };
+
+        return (
+            type === "password" ?
+                <StyledFormControl sx={{ m: 1, width: '100%' }} variant="outlined" error={error}>
+                    <InputLabel htmlFor="outlined-adornment-password" sx={{ backgroundColor: "white" }}>{placeholder}</InputLabel>
+                    <OutlinedInput
+                        id="outlined-adornment-password"
+                        type={showPassword ? 'text' : 'password'}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                        label="password"
+                        value={value}
+                        error={error}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        inputRef={ref}
+                    />
+                    {error && <FormHelperText error>{errorMessage}</FormHelperText>}
+                </StyledFormControl>
+                :
+                <StyledTextfield
+                    variant="outlined"
+                    label={placeholder}
+                    error={error}
+                    helperText={errorMessage}
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    inputRef={ref}
+                />
+
+        )
     }
+)
+
+const StyledTextfield = styled(TextField) <{ error: boolean | undefined }>`
+width:100%;
+.MuiInputLabel-root.Mui-focused {
+    ${props => props.error ? 'color: #d32f2f' : 'color: #00adb5'}
   }
-`;
-
-const StylePlaceholder = styled.div`
-  color: rgb(100, 100, 100);
-  position: absolute;
-  top: 15px;
-  transition: transform 0.2s ease-in-out;
-`;
-
-const StyleInput = styled(StyleNumberTypeInput)`
-  width: 100%;
-  height: 1.5rem;
-  font-size: 15px;
-
-  &:not(:placeholder-shown) + div {
-    transform: translateY(-17px) translateX(-8px) scale(0.8);
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    ${props => props.error ? 'border-color: #d32f2f' : 'border-color: #00adb5'}
   }
-`;
+`
 
-const StyleErrorMessage = styled.span`
-  margin-top: 5px;
-  padding-left: 10px;
-  color: red;
-  font-weight: 200;
-  font-size: 12px;
-`;
+const StyledFormControl = styled(FormControl) <{ error: boolean | undefined }>`
+.MuiInputLabel-root.Mui-focused {
+    ${props => props.error ? 'color: #d32f2f' : 'color: #00adb5'}
+  }
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    ${props => props.error ? 'border-color: #d32f2f' : 'border-color: #00adb5'}
+  }
+margin-left:0px;
+`
+
 export default Input;

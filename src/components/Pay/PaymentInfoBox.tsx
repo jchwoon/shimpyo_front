@@ -1,6 +1,7 @@
 import styled from "@emotion/styled"
 import { Typography, Divider, Button, Card } from "@mui/material"
 import React from "react"
+import { useEffect } from "react"
 import moment from "moment";
 import 'moment/locale/ko'
 
@@ -15,21 +16,25 @@ import ListItemText from '@mui/material/ListItemText';
 import ColorButton from "../shared/UI/ColorButton";
 import Radio from '@mui/material/Radio';
 
-import { merchantUid } from '../../recoil/detailPageAtoms';
-import { useRecoilValue } from "recoil";
+import { merchantUid, activeRoomName } from '../../recoil/detailPageAtoms';
 import useAuthorizedRequest from "../../hooks/useAuthorizedRequest";
-import { accessTokenAtom } from "../../recoil/userAtoms";
-import { loginStateAtom } from "../../recoil/userAtoms";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import useHttpRequest from "../../hooks/useHttpRequest";
+import { accessTokenAtom, loginStateAtom, phoneValueAtom, nameValueAtom } from "../../recoil/userAtoms";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { AxiosError } from 'axios';
-import { RESERVATION_API_PATH } from "../../constants/api/reservationApi";
+import { MEMBER_RESERVATION_API_PATH, NON_MEMBER_RESERVATION_API_PATH } from "../../constants/api/reservationApi";
+
+import { Navigate, useNavigate } from "react-router-dom";
+import { useState } from 'react'
+
+import { v4 as uuidv4 } from 'uuid';
 
 interface ResultData {
     accessToken: string;
 }
 
 interface PaymentInfoBoxProp {
+    houseName: string,
     checkInDate: string | null,
     checkOutDate: string | null,
     price: number | null
@@ -111,7 +116,7 @@ export interface Iamport {
     ) => void;
 }
 
-const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDate, price }) => {
+const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, checkOutDate, price }) => {
 
     const DaysDifference = moment(checkOutDate).diff(moment(checkInDate), "days")
     const TotalPrice = price ? price * DaysDifference : 0
@@ -143,27 +148,33 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
         console.error(error.message);
     };
 
-    const { responseData, sendRequest } = useAuthorizedRequest<ResultData>({
+    const { responseData: memberPaymentResponseData, sendRequest: sendMemberPaymentRequest } = useAuthorizedRequest<ResultData>({
         onUnauthorized: handleUnAutorization,
     });
 
-    const uid = useRecoilValue(merchantUid)
+    const { responseData: noneMemberPaymentResponseData, sendRequest: sendNoneMemberPaymentRequest } = useHttpRequest();
 
-    function requestPay() {
+    const memberUid = useRecoilValue(merchantUid)
+    const noneMemberUid = uuidv4()
+
+    const Name = useRecoilValue(activeRoomName)
+
+    const nonMemberName = useRecoilValue(nameValueAtom);
+    const nonMemberNumber = useRecoilValue(phoneValueAtom);
+
+    function memberRequestPay() {
         const { IMP } = window;
         IMP.init("imp62564523");
 
         const data = {
             pg: "html5_inicis",
             pay_method: "card",
-            merchant_uid: `${uid}`,
-            name: "당근 11kg",
+            merchant_uid: `${memberUid}`,
+            name: "회원구매",
             amount: 100,
-            buyer_email: "Iamport@chai.finance",
-            buyer_name: "포트원 기술지원팀",
-            buyer_tel: "010-1234-5678",
-            buyer_addr: "서울특별시 강남구 삼성동",
-            buyer_postcode: "123-456",
+            // amount: TotalPrice - DiscountPrice,
+            buyer_name: `${nonMemberName}`,
+            buyer_tel: `${nonMemberNumber}`,
         }
 
         async function callback(response: RequestPayResponse) {
@@ -175,8 +186,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
             } = response;
 
             if (success) {
-                await sendRequest({
-                    url: `${RESERVATION_API_PATH}`,
+                await sendMemberPaymentRequest({
+                    url: `${MEMBER_RESERVATION_API_PATH}`,
                     method: "POST",
                     withCredentials: true,
                     body: {
@@ -189,122 +200,169 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ checkInDate, checkOutDat
                         checkOutDate: "2023.07.09"
                     }
                 });
-                if (responseData) {
-                    console.log("finalResponseData:", responseData)
-                }
+            } else {
+                console.log("회원 INCISC 결제 실패")
+            }
+        }
+        IMP.request_pay(data, callback);
+    }
+
+    useEffect(() => {
+        if (!memberPaymentResponseData) return;
+        if (memberPaymentResponseData.isSuccess) { navigation('/reservations?category=reservation'); }
+    }, [memberPaymentResponseData])
+
+
+    function noneMemberRequestPay() {
+        const { IMP } = window;
+        IMP.init("imp62564523");
+
+        const data = {
+            pg: "html5_inicis",
+            pay_method: "card",
+            merchant_uid: `${noneMemberUid}`,
+            name: `${houseName} / ${Name}`,
+            amount: 100,
+            // amount: TotalPrice - DiscountPrice,
+            buyer_name: "포트원 기술지원팀",
+            buyer_tel: "010-1234-5678",
+        }
+
+        async function callback(response: RequestPayResponse) {
+            const {
+                success,
+                error_msg,
+                imp_uid,
+                merchant_uid,
+            } = response;
+
+            if (success) {
+                await sendNoneMemberPaymentRequest({
+                    url: `${NON_MEMBER_RESERVATION_API_PATH}`,
+                    method: "POST",
+                    body: {
+                        impUid: imp_uid,
+                        roomId: 80001,
+                        merchantUid: merchant_uid,
+                        payMethod: "KGINICIS",
+                        name: "박현준",
+                        phoneNumber: "01029991157",
+                        peopleCount: 3,
+                        checkInDate: "2023.07.11",
+                        checkOutDate: "2023.07.12"
+                    }
+                });
             } else {
                 alert(`결제 실패: ${error_msg}`);
             }
         }
-
-        console.log("data:", data)
-
         IMP.request_pay(data, callback);
     }
 
-
+    useEffect(() => {
+        if (!noneMemberPaymentResponseData) return;
+        if (noneMemberPaymentResponseData.isSuccess) { navigation('/check/non-member'); }
+    }, [noneMemberPaymentResponseData])
 
     return (
-        <PaymentInfoWrapper>
-            <TitleBookingInfo>
-                <Typography fontFamily='Noto Sans KR'>호텔 이름</Typography>
-                <Typography fontFamily='Noto Sans KR' sx={{ marginLeft: "10px", marginRight: "10px" }}>/</Typography>
-                <Typography fontFamily='Noto Sans KR'>디럭스 룸</Typography>
-            </TitleBookingInfo>
-            <BookingInfo>
-                <Typography fontFamily='Noto Sans KR'>{moment(checkInDate).format('M월 D일')} - {moment(checkOutDate).format('M월 D일')}</Typography>
-                <Typography fontFamily='Noto Sans KR' sx={{ textDecoration: "underline" }}>₩ {price ? price.toLocaleString() : 0} x {DaysDifference}박</Typography>
-            </BookingInfo>
-            <BookingInfo style={{ marginBottom: "20px" }}>
-                <Typography fontFamily='Noto Sans KR'>총 합계</Typography>
-                <Typography fontFamily='Noto Sans KR' sx={{ textDecoration: "underline" }}>₩ {TotalPrice ? TotalPrice.toLocaleString() : null}</Typography>
-            </BookingInfo>
+        <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+            <PaymentInfoWrapper>
+                <TitleBookingInfo loginState={isLoggedIn}>
+                    <Typography fontFamily='Noto Sans KR'>{houseName}</Typography>
+                    <Typography fontFamily='Noto Sans KR' sx={{ marginLeft: "10px", marginRight: "10px" }}>/</Typography>
+                    <Typography fontFamily='Noto Sans KR'>{Name}</Typography>
+                </TitleBookingInfo>
+                <BookingInfo>
+                    <Typography fontFamily='Noto Sans KR'>{moment(checkInDate).format('M월 D일')} - {moment(checkOutDate).format('M월 D일')}</Typography>
+                    <Typography fontFamily='Noto Sans KR' sx={{ textDecoration: "underline" }}>₩ {price ? price.toLocaleString() : 0} x {DaysDifference}박</Typography>
+                </BookingInfo>
+                <BookingInfo style={{ marginBottom: "20px" }}>
+                    <Typography fontFamily='Noto Sans KR'>총 합계</Typography>
+                    <Typography fontFamily='Noto Sans KR' sx={{ textDecoration: "underline" }}>₩ {TotalPrice ? TotalPrice.toLocaleString() : null}</Typography>
+                </BookingInfo>
 
-            <Divider />
+                <Divider />
 
-            <CustomizedAccordion elevation={0} sx={{ marginTop: "10px" }}>
-                <CustomizedAccordionSummary
-                    expandIcon={<CustomizedExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <Typography fontFamily='Noto Sans KR'>쿠폰 할인</Typography>
-                    <Typography fontFamily='Noto Sans KR' sx={{ marginRight: "10px", color: couponRadioSelectedValue === 0 ? "#d9d9d9" : "#000000" }}>₩ {couponRadioSelectedValue === 0 ? 0 : DiscountPrice.toLocaleString()}</Typography>
-                </CustomizedAccordionSummary>
-                <CustomizedAccordionDetails>
-                    <List>
-                        <ListItem disablePadding>
-                            <CustomizedListItemButton onClick={() => handleCouponRadio(5)}>
-                                <CustomizedRadio
-                                    checked={couponRadioSelectedValue === 5}
-                                    name="radio-buttons"
-                                    inputProps={{ 'aria-label': 'A' }}
-                                />
-                                <ListItemText primary="회원가입 5% 할인" />
-                            </CustomizedListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <CustomizedListItemButton onClick={() => handleCouponRadio(3)}>
-                                <CustomizedRadio
-                                    checked={couponRadioSelectedValue === 3}
-                                    name="radio-buttons"
-                                    inputProps={{ 'aria-label': 'B' }}
-                                />
-                                <ListItemText primary="리뷰 작성 3% 할인" />
-                            </CustomizedListItemButton>
-                        </ListItem>
-                    </List>
-                </CustomizedAccordionDetails>
-            </CustomizedAccordion>
+                {isLoggedIn ?
+                    <CustomizedAccordion elevation={0} sx={{ marginTop: "10px" }}>
+                        <CustomizedAccordionSummary
+                            expandIcon={<CustomizedExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography fontFamily='Noto Sans KR'>쿠폰 할인</Typography>
+                            <Typography fontFamily='Noto Sans KR' sx={{ marginRight: "10px", color: couponRadioSelectedValue === 0 ? "#d9d9d9" : "#000000" }}>₩ {couponRadioSelectedValue === 0 ? 0 : DiscountPrice.toLocaleString()}</Typography>
+                        </CustomizedAccordionSummary>
+                        <CustomizedAccordionDetails>
+                            <List>
+                                <ListItem disablePadding>
+                                    <CustomizedListItemButton onClick={() => handleCouponRadio(5)}>
+                                        <CustomizedRadio
+                                            checked={couponRadioSelectedValue === 5}
+                                            name="radio-buttons"
+                                            inputProps={{ 'aria-label': 'A' }}
+                                        />
+                                        <ListItemText primary="회원가입 5% 할인" />
+                                    </CustomizedListItemButton>
+                                </ListItem>
+                                <ListItem disablePadding>
+                                    <CustomizedListItemButton onClick={() => handleCouponRadio(3)}>
+                                        <CustomizedRadio
+                                            checked={couponRadioSelectedValue === 3}
+                                            name="radio-buttons"
+                                            inputProps={{ 'aria-label': 'B' }}
+                                        />
+                                        <ListItemText primary="리뷰 작성 3% 할인" />
+                                    </CustomizedListItemButton>
+                                </ListItem>
+                            </List>
+                        </CustomizedAccordionDetails>
+                    </CustomizedAccordion>
+                    : null}
 
-            <CustomizedAccordion elevation={0} sx={{ marginBottom: "10px" }}>
-                <CustomizedAccordionSummary
-                    expandIcon={<CustomizedExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <Typography fontFamily='Noto Sans KR'>결제 수단</Typography>
-                    <Typography fontFamily='Noto Sans KR' sx={{ fontSize: paymentRadioSelectedValue ? "16px" : "14px", marginRight: "10px", color: paymentRadioSelectedValue ? "#000000" : "#d9d9d9" }}>{paymentRadioSelectedValue ? paymentRadioSelectedValue : "결제 수단을 선택해주세요"}</Typography>
-                </CustomizedAccordionSummary>
-                <CustomizedAccordionDetails>
-                    <List>
-                        <ListItem disablePadding onClick={() => handlePaymentRadio('신용카드')}>
-                            <CustomizedListItemButton>
-                                <CustomizedRadio
-                                    checked={paymentRadioSelectedValue === '신용카드'}
-                                    name="radio-buttons"
-                                    inputProps={{ 'aria-label': 'A' }}
-                                />
-                                <ListItemText primary="신용카드" />
-                            </CustomizedListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding onClick={() => handlePaymentRadio('카카오 페이')}>
-                            <CustomizedListItemButton>
-                                <CustomizedRadio
-                                    checked={paymentRadioSelectedValue === '카카오 페이'}
-                                    name="radio-buttons"
-                                    inputProps={{ 'aria-label': 'B' }}
-                                />
-                                <ListItemText primary="카카오 페이" />
-                            </CustomizedListItemButton>
-                        </ListItem>
-                    </List>
-                </CustomizedAccordionDetails>
-            </CustomizedAccordion>
+                <CustomizedAccordion elevation={0} sx={{ marginTop: "10px", marginBottom: "10px" }}>
+                    <CustomizedAccordionSummary
+                        expandIcon={<CustomizedExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography fontFamily='Noto Sans KR'>결제 수단</Typography>
+                        <Typography fontFamily='Noto Sans KR' sx={{ fontSize: paymentRadioSelectedValue ? "16px" : "14px", marginRight: "10px", color: paymentRadioSelectedValue ? "#000000" : "#d9d9d9" }}>{paymentRadioSelectedValue ? paymentRadioSelectedValue : "결제 수단을 선택해주세요"}</Typography>
+                    </CustomizedAccordionSummary>
+                    <CustomizedAccordionDetails>
+                        <List>
+                            <ListItem disablePadding onClick={() => handlePaymentRadio('신용카드')}>
+                                <CustomizedListItemButton>
+                                    <CustomizedRadio
+                                        checked={paymentRadioSelectedValue === '신용카드'}
+                                        name="radio-buttons"
+                                        inputProps={{ 'aria-label': 'A' }}
+                                    />
+                                    <ListItemText primary="신용카드" />
+                                </CustomizedListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding onClick={() => handlePaymentRadio('카카오 페이')}>
+                                <CustomizedListItemButton>
+                                    <CustomizedRadio
+                                        checked={paymentRadioSelectedValue === '카카오 페이'}
+                                        name="radio-buttons"
+                                        inputProps={{ 'aria-label': 'B' }}
+                                    />
+                                    <ListItemText primary="카카오 페이" />
+                                </CustomizedListItemButton>
+                            </ListItem>
+                        </List>
+                    </CustomizedAccordionDetails>
+                </CustomizedAccordion>
 
-            <Divider />
-            <BookingTotal>
-                <TotalDetail>청구액</TotalDetail>
-                <TotalAmount>₩ {(TotalPrice - DiscountPrice).toLocaleString()}</TotalAmount>
-            </BookingTotal>
-            {/* <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}> */}
-            {/* <BookingBtn disabled={paymentRadioSelectedValue === ''}>
-                <Typography fontFamily='Noto Sans KR' fontSize="17px">결제</Typography>
-            </BookingBtn> */}
-            <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={requestPay} />
-            {/* </div> */}
-
-        </PaymentInfoWrapper >
+                <Divider />
+                <BookingTotal>
+                    <TotalDetail>청구액</TotalDetail>
+                    <TotalAmount>₩ {(TotalPrice - DiscountPrice).toLocaleString()}</TotalAmount>
+                </BookingTotal>
+                <ColorButton disabled={paymentRadioSelectedValue === ''} label="결제" onClick={isLoggedIn ? memberRequestPay : noneMemberRequestPay} />
+            </PaymentInfoWrapper >
+        </div>
     )
 }
 
@@ -314,17 +372,26 @@ const CustomizedExpandMoreIcon = styled(ExpandMoreIcon)`
 color:#d9d9d9;
 `
 
-const PaymentInfoWrapper = styled(Card)`
+const SwipableWrapper = styled.div`
+display:flex;
+flex-direction: row;
+`
+
+const PaymentInfoWrapper = styled.div`
 display:flex;
 flex-direction: column;
 align-self:flex-start;
 position:relative;
 width:330px;
-border-radius: 10px;
+// border-radius: 10px;
 padding: 24px;
+background-color:white;
 `
 
-const TitleBookingInfo = styled.div`
+
+
+const TitleBookingInfo = styled.div<{ loginState: boolean }>`
+${props => props.loginState === true ? null : `margin-top: 20px;`}
 margin-bottom:10px;
 display:flex;
 flex-direction:row;
@@ -401,3 +468,31 @@ color: #ffffff;
     color:#d9d9d9;
   }
 `;
+
+// memberpay data
+// const data = {
+//     pg: "html5_inicis",
+//     pay_method: "card",
+//     merchant_uid: `${memberUid}`,
+//     name: "회원구매",
+//     amount: 100,
+//     buyer_email: "i2pss@naver.com",
+//     buyer_name: "포트원 기술지원팀",
+//     buyer_tel: "010-1234-5678",
+//     buyer_addr: "서울특별시 강남구 삼성동",
+//     buyer_postcode: "123-456",
+// }
+
+// nonmemberpay data
+// const data = {
+//     pg: "html5_inicis",
+//     pay_method: "card",
+//     merchant_uid: `${noneMemberUid}`,
+//     name: `${houseName} / ${Name}`,
+//     amount: 100,
+//     amount: TotalPrice - DiscountPrice,
+//     buyer_name: "포트원 기술지원팀",
+//     buyer_tel: "010-1234-5678",
+//     buyer_addr: "서울특별시 강남구 삼성동",
+//     buyer_postcode: "123-456",
+// }

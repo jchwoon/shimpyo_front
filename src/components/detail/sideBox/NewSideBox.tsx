@@ -47,12 +47,20 @@ import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { merchantUid } from '../../../recoil/detailPageAtoms';
 
+import NoneMemberPhoneInput from '../../Pay/NoneMemberPhoneInput';
+
+import { swipePageState } from '../../../recoil/detailPageAtoms';
+
+interface NewSideBoxProps {
+  houseName: string;
+}
+
 interface ResultData {
   accessToken: string;
   merchantUid: string;
 }
 
-export default function NewSideBox() {
+export default function NewSideBox({ houseName }: NewSideBoxProps) {
   const room = useRecoilValue(activeRoom)
   const price = useRecoilValue(activeRoomPrice)
   const Name = useRecoilValue(activeRoomName)
@@ -78,7 +86,6 @@ export default function NewSideBox() {
   const TotalPrice = price ? price * DaysDifference : null
 
   const navigation = useNavigate();
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginStateAtom);
 
   const resetFunction = () => {
@@ -106,11 +113,11 @@ export default function NewSideBox() {
   const [open, setOpen] = useState(false);
 
   const handleOpen = async () => {
-    await sendRequest({ url: `${RESERVATION_PREPARE_API_PATH}`, withCredentials: true });
+    // await sendRequest({ url: `${RESERVATION_PREPARE_API_PATH}`, withCredentials: true });
 
-    if (responseData && responseData.result) {
-      setMerchantUid(responseData.result.merchantUid)
-    }
+    // if (responseData && responseData.result) {
+    //   setMerchantUid(responseData.result.merchantUid)
+    // }
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
@@ -120,15 +127,26 @@ export default function NewSideBox() {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    // width: 400,
+    width: '360px',
+    overflow: 'hidden',
     // bgcolor: 'background.paper',
     // border: '2px solid #000',
     // boxShadow: 24,
     p: 4,
+    display: 'flex',
+    // flex-direction:'row'
   };
 
   const customizedSearchButton = document.getElementsByClassName("activeRoomCard")
   // console.log("activeRoomCard:", customizedSearchButton[0].props.price)
+
+  // const [isPhoneValid, setIsPhoneValid] = useState(false);
+  //   const getPhoneValid = (valid: boolean) => {
+  //       setIsPhoneValid(valid);
+  //   };
+
+  const [swipePage, setSwipePage] = useRecoilState(swipePageState);
 
   return (
     <Main >
@@ -225,9 +243,32 @@ export default function NewSideBox() {
       >
 
         <Fade in={open}>
-          <Box sx={style}>
-            <PaymentInfoBox checkInDate={firstPickedDate} checkOutDate={secondPickedDate} price={price} />
-          </Box>
+          {/* <Box sx={style}> */}
+          <div style={{
+            position: 'absolute' as 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '330px',
+            height: 'auto',
+            overflow: 'hidden',
+            borderRadius: "10px",
+            display: 'flex'
+          }}>
+            <div style={{
+              display: "flex",
+              position: "relative",
+              // right:"360px"
+              right: swipePage === 2 ? "330px" : "0px",
+              transition: "0.3s ease",
+              backgroundColor: "white"
+            }}>
+              {isLoggedIn ? null : <NoneMemberPhoneInput setModalOpen={setOpen} />}
+              <PaymentInfoBox houseName={houseName} checkInDate={firstPickedDate} checkOutDate={secondPickedDate} price={price} />
+            </div>
+
+          </div>
+          {/* </Box> */}
         </Fade>
 
       </Modal>
