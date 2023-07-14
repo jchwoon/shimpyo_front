@@ -9,6 +9,20 @@ import { Box } from '@mui/material';
 
 export const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
+export const MainCustomizedCard = styled(Card)`
+height: 100%; 
+display: flex; 
+flex-direction: column; 
+position: relative;
+border-radius:10px;
+padding:10px;
+box-shadow:none;
+cursor: pointer;
+&:hover {
+box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+}
+`
+
 export const CustomizedCard = styled(Card)`
 height: 100%; 
 display: flex; 

@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import {
     CustomizedCard, CustomizedDarkDiv, CustomizedDateTypography, CustomizedExplainTypography, CustomizedPercentageRowBox, CustomizedPercentageTypography, CustomizedPricePerNightTypography,
-    CustomizedThumbUpIcon, CustomizedTitleRowBox, CustomizedTitleTypography, cards
+    CustomizedThumbUpIcon, CustomizedTitleRowBox, CustomizedTitleTypography, cards, MainCustomizedCard
 } from "./Cards.styled"
 import ToggleFavorite from './ToggleFavorite';
 import { useRecoilState } from "recoil";
@@ -16,6 +16,8 @@ import { MAIN_PAGE_HOME_LIST_API_PATH } from '../../../constants/api/homeListApi
 import { useEffect } from 'react'
 
 import { useNavigate } from 'react-router-dom';
+
+import styled from '@emotion/styled';
 
 export default function Cards() {
 
@@ -33,12 +35,11 @@ export default function Cards() {
 
     return (
         <>
-            <Container sx={{ py: 13 }} maxWidth="xl">
+            <Container sx={{ paddingTop: 13 }} maxWidth="xl">
                 <Grid container spacing={4}>
                     {cards.map((card) => (
                         <Grid item key={card} xs={12} sm={6} md={4} lg={3}>
-                            <CustomizedCard
-                                sx={{ height: '100%', display: 'flex', flexDirection: 'column', boxShadow: "none", borderRadius: 0 }}
+                            <MainCustomizedCard
                                 onClick={() => navigate('/detail')}
                             >
                                 <CardMedia
@@ -50,7 +51,7 @@ export default function Cards() {
                                     image="https://source.unsplash.com/random?wallpapers"
                                 />
                                 <ToggleFavorite />
-                                <CardContent sx={{ flexGrow: 1 }}>
+                                <CustomizedCardContent sx={{ flexGrow: 1, paddingLeft: "0px", paddingRight: "0px", paddingBottom: "0px" }}>
                                     <CustomizedTitleRowBox>
                                         <CustomizedTitleTypography fontFamily='Noto Sans KR'>
                                             Title
@@ -72,8 +73,8 @@ export default function Cards() {
                                     <CustomizedPricePerNightTypography>
                                         ₩ Price /night
                                     </CustomizedPricePerNightTypography>
-                                </CardContent>
-                            </CustomizedCard>
+                                </CustomizedCardContent>
+                            </MainCustomizedCard>
                         </Grid>
                     ))}
                 </Grid>
@@ -82,3 +83,12 @@ export default function Cards() {
         </>
     )
 }
+
+const CustomizedCardContent = styled(CardContent)`
+padding-left:0px;
+padding-right:0px;
+:last-child{
+    padding-bottom:0px;
+}
+
+`

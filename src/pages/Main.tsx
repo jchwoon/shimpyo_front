@@ -38,6 +38,7 @@ import { loginStateAtom } from '../recoil/userAtoms';
 import useLogout from '../hooks/useLogout';
 
 import useHttpRequest from '../hooks/useHttpRequest';
+import { MAIN_PAGE_HOME_LIST_API_PATH } from '../constants/api/homeListApi';
 
 export default function Main() {
   const [searchParams] = useSearchParams();
@@ -105,6 +106,26 @@ export default function Main() {
 
   const { responseData, sendRequest, errorMessage, isLoading } = useHttpRequest();
 
+  useEffect(() => {
+    sendRequest({
+      url: `${MAIN_PAGE_HOME_LIST_API_PATH}`,
+      method: "GET",
+      body: {
+        page: 0
+      }
+    })
+  }, [])
+
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    if (!responseData) return;
+    if (responseData.result) {
+      setData(responseData.result);
+    }
+  }, [responseData]);
+
+  console.log("data:", data)
 
   return (
     <>

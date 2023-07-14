@@ -78,6 +78,18 @@ export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedr
         };
     }, []);
 
+    const momentCheckInTime = moment(checkInTime, "HH:mm:ss").format("A h시 m분").endsWith("0분")
+        ?
+        moment(checkInTime, "HH:mm:ss").format("A h시")
+        :
+        moment(checkInTime, "HH:mm:ss").format("A h시 m분")
+
+    const momentCheckOutTime = moment(checkOutTime, "HH:mm:ss").format("A h시 m분").endsWith("0분")
+        ?
+        moment(checkOutTime, "HH:mm:ss").format("A h시")
+        :
+        moment(checkOutTime, "HH:mm:ss").format("A h시 m분")
+
     return (
         <>
             <CustomizedCard onClick={onClick}
@@ -153,7 +165,7 @@ export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedr
                                 CHECK IN
                             </Typography>
                             <Typography fontFamily='Noto Sans KR' fontSize="5px" fontWeight="400">
-                                {moment(checkInTime, "HH:mm:ss").format("A h시 m분")}
+                                {momentCheckInTime}
                             </Typography>
                         </div>
 
@@ -162,7 +174,7 @@ export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedr
                                 CHECK OUT
                             </Typography>
                             <Typography fontFamily='Noto Sans KR' fontSize="5px" fontWeight="400">
-                                {moment(checkOutTime, "HH:mm:ss").format("A h시 m분")}
+                                {momentCheckOutTime}
                             </Typography>
                         </div>
                     </div>

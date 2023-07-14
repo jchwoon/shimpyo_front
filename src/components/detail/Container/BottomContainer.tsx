@@ -14,7 +14,7 @@ export default function BottomContainer({ reviewData, reviewIsLoading }: BottomC
 
   return (
     <>
-      <MainTitle>후기</MainTitle>
+      {reviewData && <MainTitle>후기</MainTitle>}
       <CommentCardContainer>
         {reviewData && reviewData.map((review, index) => {
           return (
