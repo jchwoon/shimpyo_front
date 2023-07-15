@@ -1,51 +1,115 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import ModalImageBox from './ModalImageBox';
 
-export default function ImageContainer() {
+interface ImageContainerProps {
+  images: Array<string>
+}
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  outline: "none"
+};
+
+export default function ImageContainer1({ images }: ImageContainerProps) {
+
+  const [open, setOpen] = useState(false);
+  const [modalPicture, setModalPicture] = useState(0)
+
+  const handleOpen = (value: number) => {
+    setModalPicture(value)
+    setOpen(true);
+  }
+  const handleClose = () => setOpen(false);
+
+  const newImage = new Image()
+  newImage.src = images[modalPicture]
+  const originalWidth = newImage.naturalWidth;
+  const originalHeight = newImage.naturalHeight;
+
+  const [windowWidth, setWindowWidth] = useState(0)
+  const [windowHeight, setWindowHeight] = useState(0)
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      setWindowHeight(window.innerHeight);
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
-    <ImageBox>
-      <MainImageBox>
-        <MainHoverDiv />
-        <MainImage
-          src="https://source.unsplash.com/random?wallpapers"
-        />
-      </MainImageBox>
-      <SideImageBox>
-        <SideImagePiece>
-          <HoverDiv />
-          <SideImage
-            src="https://source.unsplash.com/random?wallpapers"
+    <>
+      <ImageBox>
+        <MainImageBox>
+          <MainHoverDiv onClick={() => handleOpen(0)} />
+          <MainImage
+            src={images[0]}
           />
-        </SideImagePiece>
-        <div style={{ height: "5px", width: "100%" }} />
-        <SideImagePiece>
-          <HoverDiv />
-          <SideImage
-            src="https://source.unsplash.com/random?wallpapers"
-          />
-        </SideImagePiece>
-      </SideImageBox>
-      <SideImageBox>
-        <SideImagePiece>
-          <HoverDiv
-            style={{ borderRadius: "0 20px 0 0" }}
-          />
-          <SideImage
-            src="https://source.unsplash.com/random?wallpapers"
-            style={{ borderRadius: "0 20px 0 0" }}
-          />
-        </SideImagePiece>
-        <div style={{ height: "5px", width: "100%" }} />
-        <SideImagePiece>
-          <HoverDiv
-            style={{ borderRadius: "0 0 20px 0" }}
-          />
-          <SideImage
-            src="https://source.unsplash.com/random?wallpapers"
-            style={{ borderRadius: "0 0 20px 0" }}
-          />
-        </SideImagePiece>
-      </SideImageBox>
-    </ImageBox>
+        </MainImageBox>
+        <SideImageBox>
+          <SideImagePiece>
+            <HoverDiv onClick={() => handleOpen(1)} />
+            <SideImage
+              src={images[1]}
+            />
+          </SideImagePiece>
+          <div style={{ height: "5px", width: "100%" }} />
+          <SideImagePiece>
+            <HoverDiv onClick={() => handleOpen(2)} />
+            <SideImage
+              src={images[2]}
+            />
+          </SideImagePiece>
+        </SideImageBox>
+        <SideImageBox>
+          <SideImagePiece>
+            <HoverDiv
+              style={{ borderRadius: "0 20px 0 0" }}
+              onClick={() => handleOpen(3)}
+            />
+            <SideImage
+              src={images[3]}
+              style={{ borderRadius: "0 20px 0 0" }}
+            />
+          </SideImagePiece>
+          <div style={{ height: "5px", width: "100%" }} />
+          <SideImagePiece>
+            <HoverDiv
+              style={{ borderRadius: "0 0 20px 0" }}
+              onClick={() => handleOpen(4)}
+            />
+            <SideImage
+              src={images[4]}
+              style={{ borderRadius: "0 0 20px 0" }}
+            />
+          </SideImagePiece>
+        </SideImageBox>
+      </ImageBox>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div style={style}>
+          <ModalImageBox
+            imageList={images}
+            modalPicture={modalPicture}
+            width={windowWidth * 0.8 > originalWidth ? originalWidth : windowWidth * 0.8}
+            height={windowHeight * 0.9 > originalHeight ? originalHeight : windowHeight * 0.8} />
+        </div>
+      </Modal>
+    </>
   );
 }
 
@@ -91,7 +155,7 @@ const HoverDiv = styled.div`
 `
 
 const MainHoverDiv = styled.div`
-borderRadius: "20px 0 0 20px"
+border-radius: 20px 0px 0px 20px;
 z-index: 2;
 position: absolute;
 width:100%;
@@ -132,3 +196,9 @@ const SideImage = styled.img`
   cursor: pointer;
   object-fit: cover;
 `;
+
+const ModalImage = styled.img`
+  // width: 1080px;
+  // height: 1080px;
+  object-fit: cover;
+`

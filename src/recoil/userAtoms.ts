@@ -25,6 +25,11 @@ export const phoneValueAtom = atom<string>({
   default: '',
 });
 
+export const nameValueAtom = atom<string>({
+  key: 'nameValueAtom',
+  default: '',
+});
+
 export const accessTokenAtom = atom<string>({
   key: 'accessTokenAtom',
   default: '',

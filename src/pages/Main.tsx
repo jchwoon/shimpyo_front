@@ -18,9 +18,7 @@ import LoginModal from '../components/shared/Modal/LoginModal';
 import IdFindModal from '../components/Main/Modal/IdFindModal';
 import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
 import { useSearchParams } from 'react-router-dom';
-import { useSetRecoilState, useRecoilState } from 'recoil';
-import { loginModalAtom } from '../recoil/modalAtoms';
-
+import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
 import UserMenuItem from '../components/shared/UserMenu/UserMenuItem';
 
 import SearchBar from '../components/Main/Navbar/SearchBar';
@@ -34,30 +32,38 @@ import { CustomIcon } from '../components/shared/MobileFooter/CustomIcon';
 
 import { useNavigate } from 'react-router-dom';
 
+import { loginModalAtom, joinModalAtom } from '../recoil/modalAtoms';
+import { loginStateAtom } from '../recoil/userAtoms';
+
+import useLogout from '../hooks/useLogout';
+
 export default function Main() {
   const [searchParams] = useSearchParams();
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
   const setLoginModal = useSetRecoilState(loginModalAtom);
-  const [loginState, setLoginState] = useState(false);
+  // const [loginState, setLoginState] = useState(false);
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
   const [isToReservationCheck, setIsToReservationCheck] = useState(false);
   const navigate = useNavigate();
+  const setJoinModal = useSetRecoilState(joinModalAtom);
+  const loginState = useRecoilValue(loginStateAtom)
+  const { logoutHandler } = useLogout();
 
   const menuItems = (
     <div>
       {loginState ? (
         <div>
-          <UserMenuItem bold label="프로필" onClick={() => console.log('hi')} />
-          <UserMenuItem divide bold label="계정" onClick={() => console.log('hi')} />
-          <UserMenuItem divide label="언어 및 번역" onClick={() => console.log('hi')} />
-          <UserMenuItem label="게스트 모드로 전환" onClick={() => console.log('hi')} />
-          <UserMenuItem label="로그아웃" onClick={() => console.log('hi')} />
+          <UserMenuItem label="프로필" onClick={() => console.log('hi')} />
+          <UserMenuItem label="계정" onClick={() => navigate('/account-settings')} />
+          <UserMenuItem divide label="관심 숙소" onClick={() => navigate('/wishlists')} />
+          <UserMenuItem divide label="호스트가 되어보세요" onClick={() => navigate('/hosting')} />
+          <UserMenuItem label="로그아웃" onClick={() => logoutHandler()} />
         </div>
       ) : (
         <div>
           <UserMenuItem label="로그인" onClick={() => setLoginModal(true)} />
-          <UserMenuItem divide label="회원가입" onClick={() => console.log('hi')} />
-          <UserMenuItem label="호스트가 되어보세요" onClick={() => console.log('hi')} />
+          <UserMenuItem label="회원가입" onClick={() => setJoinModal(true)} />
+          <UserMenuItem label="예약내역" onClick={() => navigate('/check/non-member')} />
         </div>
       )}
     </div>
@@ -107,7 +113,7 @@ export default function Main() {
       )}
       <Cards />
       {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />}
-      <LoginModal isToReservationCheck={isToReservationCheck} />
+      <LoginModal isToReservationCheck={isToReservationCheck} redirectPath='/' />
       <JoinModal />
       <AdditionalInfoModal />
       <IdFindModal />

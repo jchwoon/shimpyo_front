@@ -15,6 +15,8 @@ import { MAIN_PAGE_HOME_LIST_API_PATH } from '../../../constants/api/homeListApi
 
 import { useEffect } from 'react'
 
+import { useNavigate } from 'react-router-dom';
+
 export default function Cards() {
 
     const [appbarheight, setAppBarHeight] = useRecoilState(Height);
@@ -25,21 +27,9 @@ export default function Cards() {
         setCustomDisplay(false)
         setChange(false);
     }
+    const navigate = useNavigate();
 
-    interface ResultData {
-        houseList: JSON;
-    }
 
-    const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
-
-    // useEffect(() => {
-    //     sendRequest({
-    //         url: `${MAIN_PAGE_HOME_LIST_API_PATH}`,
-    //         method: 'GET',
-    //     });
-    // }, [])
-
-    // console.log("responseData:", responseData)
 
     return (
         <>
@@ -49,6 +39,7 @@ export default function Cards() {
                         <Grid item key={card} xs={12} sm={6} md={4} lg={3}>
                             <CustomizedCard
                                 sx={{ height: '100%', display: 'flex', flexDirection: 'column', boxShadow: "none", borderRadius: 0 }}
+                                onClick={() => navigate('/detail')}
                             >
                                 <CardMedia
                                     component="div"

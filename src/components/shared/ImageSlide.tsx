@@ -66,10 +66,9 @@ const StyleProcess = styled.ul<{ imageLength: number; currentIdx: number }>`
   gap: 5px;
   transition: all 0.4s ease-in-out;
   transform: ${props =>
-    `${
-      props.currentIdx >= 2 &&
-      props.currentIdx <= props.imageLength - 3 &&
-      `translateX(-${(props.currentIdx - 2) * 12}px)`
+    `${props.currentIdx >= 2 &&
+    props.currentIdx <= props.imageLength - 3 &&
+    `translateX(-${(props.currentIdx - 2) * 12}px)`
     }`};
   transform: ${props =>
     `${props.currentIdx > props.imageLength - 3 && `translateX(-${(props.imageLength - 5) * 12}px)`}`};
