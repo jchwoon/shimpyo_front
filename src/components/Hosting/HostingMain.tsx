@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 
 import Main from '../layout/Main';
 
@@ -9,15 +8,14 @@ import useAuthorizedRequest from '../../hooks/useAuthorizedRequest';
 import { AccommodationType } from '../../constants/accommodationType';
 import { ACCOMMODATION_API } from '../../constants/api/accommodationApi';
 
-import AccommodationRegistrationButton from './AccommodationRegistrationButton';
-import { ACCOMMODATION_PAGE } from '../../constants/accommodation';
-import AccommodationList from './AccommodationList';
-import RoomList from './RoomList';
-import AccommodationFilter from './AccommodationFilter';
+import AccommodationRegistrationButton from './accommodation/AccommodationRegistrationButton';
+import AccommodationList from './accommodation/AccommodationList';
+import RoomList from './room/RoomList';
+import AccommodationFilter from './accommodation/AccommodationFilter';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { originalAccommodationListState, roomListTotalElementState } from '../../recoil/hostingAtoms';
-import RoomFilter from './RoomFilter';
-import RoomListPagination from './RoomListPagination';
+import RoomFilter from './room/RoomFilter';
+import RoomListPagination from './room/RoomListPagination';
 
 export interface AccommodationDataType {
   id: number;
@@ -47,12 +45,6 @@ export default function HostingMain() {
 
   const { responseData, sendRequest } = useAuthorizedRequest<any>({});
 
-  const navigate = useNavigate();
-
-  const moveAccommodationPage = () => {
-    navigate(ACCOMMODATION_PAGE);
-  };
-
   useEffect(() => {
     if (responseData) {
       setAccommodationList(responseData.result);
@@ -73,13 +65,15 @@ export default function HostingMain() {
       <StyledHostingContainer>
         <StyledTitle>숙소 관리</StyledTitle>
         <StyledFlexDiv>
-          <StyledSubTitle>등록된 숙소 ({accommodationList.length})</StyledSubTitle>
-          <AccommodationRegistrationButton onClick={moveAccommodationPage}>
-            숙소 새로 등록하기
-          </AccommodationRegistrationButton>
+          <StyledSubTitle>등록된 숙소 ({accommodationList?.length})</StyledSubTitle>
+          <AccommodationRegistrationButton>숙소 새로 등록하기</AccommodationRegistrationButton>
         </StyledFlexDiv>
         <AccommodationFilter setAccommodationList={setAccommodationList} setRoomList={setRoomList} />
-        <AccommodationList data={accommodationList} setRoomList={setRoomList} />
+        <AccommodationList
+          data={accommodationList}
+          setRoomList={setRoomList}
+          setAccommodationList={setAccommodationList}
+        />
 
         <StyledSubTitle>예약 객실 현황 ({roomListTotalElement})</StyledSubTitle>
         <RoomFilter setRoomList={setRoomList} />

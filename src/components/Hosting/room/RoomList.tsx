@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { RoomDataType } from './HostingMain';
+import { RoomDataType } from '../HostingMain';
 import RoomItem from './RoomItem';
 
 interface RoomListProps {

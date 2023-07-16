@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { STATUS } from '../../constants/accommodation';
+import { STATUS } from '../../../constants/accommodation';
 
 interface StatusBadgeProps {
   status: 'COMPLETE' | 'USING' | 'FINISHED';

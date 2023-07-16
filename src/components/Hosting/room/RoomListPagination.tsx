@@ -5,10 +5,10 @@ import {
   roomListTotalPageState,
   roomReservationStatusState,
   selectedAccommodationIdState,
-} from '../../recoil/hostingAtoms';
+} from '../../../recoil/hostingAtoms';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { RoomDataType } from './HostingMain';
-import useAuthorizedRequest from '../../hooks/useAuthorizedRequest';
+import { RoomDataType } from '../HostingMain';
+import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 
 interface RoomListPaginationProps {
   setRoomList: Dispatch<SetStateAction<RoomDataType[]>>;

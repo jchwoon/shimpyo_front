@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { AccommodationIconMap } from '../../constants/accommodationType';
+import { AccommodationIconMap } from '../../../constants/accommodationType';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -9,8 +9,8 @@ import {
   roomListTotalPageState,
   roomReservationStatusState,
   selectedAccommodationIdState,
-} from '../../recoil/hostingAtoms';
-import { AccommodationDataType, RoomDataType } from './HostingMain';
+} from '../../../recoil/hostingAtoms';
+import { AccommodationDataType, RoomDataType } from '../HostingMain';
 
 interface ButtonProps {
   active: boolean;
@@ -44,11 +44,14 @@ export default function AccommodationFilter({ setAccommodationList, setRoomList 
       setAccommodationList(originAccommodationList);
     } else {
       setActiveButton(accommodationType);
-      const newAccommodationList = [...originAccommodationList];
-      const filteredNewAccommodationList = newAccommodationList.filter(
-        accommodation => accommodation.houseType === accommodationType,
-      );
-      setAccommodationList(filteredNewAccommodationList);
+
+      if (originAccommodationList.length > 0) {
+        const newAccommodationList = [...originAccommodationList];
+        const filteredNewAccommodationList = newAccommodationList.filter(
+          accommodation => accommodation.houseType === accommodationType,
+        );
+        setAccommodationList(filteredNewAccommodationList);
+      }
     }
   };
 

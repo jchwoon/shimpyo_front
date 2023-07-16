@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import AccommodationItem from './AccommodationItem';
-import { AccommodationDataType, RoomDataType } from './HostingMain';
+import { AccommodationDataType, RoomDataType } from '../HostingMain';
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import useAuthorizedRequest from '../../hooks/useAuthorizedRequest';
+import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { useRecoilState } from 'recoil';
 import {
   originalRoomListState,
@@ -12,14 +12,15 @@ import {
   roomListTotalPageState,
   roomReservationStatusState,
   selectedAccommodationIdState,
-} from '../../recoil/hostingAtoms';
+} from '../../../recoil/hostingAtoms';
 
 interface AccommodationListProps {
   data: AccommodationDataType[];
   setRoomList: Dispatch<SetStateAction<RoomDataType[]>>;
+  setAccommodationList: Dispatch<SetStateAction<AccommodationDataType[]>>;
 }
 
-export default function AccommodationList({ data, setRoomList }: AccommodationListProps) {
+export default function AccommodationList({ data, setRoomList, setAccommodationList }: AccommodationListProps) {
   const { responseData: roomResponseData, sendRequest: roomRequest } = useAuthorizedRequest<any>({});
   const [originalRoomList, setOriginalRoomList] = useRecoilState(originalRoomListState);
   const [roomReservationStatus, setRoomReservationStatus] = useRecoilState(roomReservationStatusState);
@@ -54,13 +55,14 @@ export default function AccommodationList({ data, setRoomList }: AccommodationLi
 
   return (
     <>
-      {data && data.length > 1 ? (
+      {data && data.length >= 1 ? (
         <StyledAccommodationContainer>
           {data?.map((accommodation, idx) => {
             return (
               <AccommodationItem
                 key={`accommodation${idx}`}
                 data={accommodation}
+                setAccommodationList={setAccommodationList}
                 isSelected={selectedAccommodationId === accommodation.id}
                 onClick={getRoomInfo(accommodation.id)}
               ></AccommodationItem>

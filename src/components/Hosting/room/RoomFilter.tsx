@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import StatusBadge from './StatusBadge';
-import CheckMark from './CheckMark';
+import CheckMark from '../reuse/CheckMark';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -11,9 +11,9 @@ import {
   roomListTotalPageState,
   roomReservationStatusState,
   selectedAccommodationIdState,
-} from '../../recoil/hostingAtoms';
-import useAuthorizedRequest from '../../hooks/useAuthorizedRequest';
-import { RoomDataType } from './HostingMain';
+} from '../../../recoil/hostingAtoms';
+import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
+import { RoomDataType } from '../HostingMain';
 
 interface BadgeContainerProps {
   active: boolean;
