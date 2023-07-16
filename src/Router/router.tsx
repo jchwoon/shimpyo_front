@@ -6,6 +6,7 @@ import SocialLogin from '../pages/SocialLogin';
 import AuthCheck from '../components/AuthCheck/AuthCheck';
 
 const Hosting = lazy(() => import('../pages/Hosting'));
+const HostingManage = lazy(() => import('../pages/HostingManage'));
 const Main = lazy(() => import('../pages/Main'));
 const Detail = lazy(() => import('../pages/detail'));
 const Accommodation = lazy(() => import('../pages/Accommodation'));
@@ -51,6 +52,17 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: 'hosting/:houseId',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={onlyLogin}>
+              <HostingManage />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+
       {
         path: 'detail',
         element: (

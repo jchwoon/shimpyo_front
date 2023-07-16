@@ -35,5 +35,5 @@ export interface Accommodation {
 
 export interface ImageItem {
   image?: string;
-  isFocused: boolean;
+  isFocused?: boolean;
 }

@@ -66,12 +66,7 @@ export const imageDataState = atom<FormData>({
 
 export const imageListState = atom<ImageItem[]>({
   key: 'imageListState',
-  default: [
-    { image: '', isFocused: false },
-    { image: '', isFocused: false },
-    { image: '', isFocused: false },
-    { image: '', isFocused: false },
-  ],
+  default: [{ image: '', isFocused: false }],
 });
 
 export const roomImageListState = atom<string[][]>({
