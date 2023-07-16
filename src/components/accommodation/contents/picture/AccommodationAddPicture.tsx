@@ -37,18 +37,20 @@ export default function AccommodationAddPicture() {
           newImageList.push({ image: result, isFocused: false });
         }
 
-        if (newImageList[0].image?.length !== 0) {
-          setDisabled(false);
-        } else {
-          setDisabled(true);
-        }
-
         setImageList(newImageList);
       } catch (err) {
         console.log(err);
       }
     }
   };
+
+  useEffect(() => {
+    if (imageList.length < 5) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [imageList]);
 
   /**같은 이미지를 연속으로 업로드할때 필요한 함수 */
   const resetFileInput = () => {
@@ -62,8 +64,8 @@ export default function AccommodationAddPicture() {
       {imageList[0]?.image === '' && (
         <StyledContainer>
           <StyledImgIcon />
-          <StyledContentTitle>여기로 사진을 끌어다 놓으세요.</StyledContentTitle>
-          <StyledContentSubTitle>최대 5장의 사진을 선택하세요.</StyledContentSubTitle>
+          <StyledContentTitle>클릭해서 사진을 업로드하세요.</StyledContentTitle>
+          <StyledContentSubTitle>5장의 사진을 선택하세요.</StyledContentSubTitle>
           <StyledLabel htmlFor="file"></StyledLabel>
           <StyledInput onChange={handleOnChange} id="file" type="file" accept="image/*"></StyledInput>
         </StyledContainer>
