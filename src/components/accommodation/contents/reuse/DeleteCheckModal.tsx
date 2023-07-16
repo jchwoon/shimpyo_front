@@ -4,11 +4,12 @@ import styled, { keyframes } from 'styled-components';
 
 interface ModalProps {
   label?: string;
+  body?: string;
   onClose: () => void;
   handleOnButton: () => void;
 }
 
-export default function DeleteCheckModal({ label, onClose, handleOnButton }: ModalProps) {
+export default function DeleteCheckModal({ label, onClose, handleOnButton, body }: ModalProps) {
   const closeModalHandler = () => {
     onClose();
   };
@@ -20,6 +21,7 @@ export default function DeleteCheckModal({ label, onClose, handleOnButton }: Mod
           <StyledCloseIcon onClick={onClose} size={20} />
         </StyleModalHead>
         <ParentContainer>
+          <StyledModalBody>{body}</StyledModalBody>
           <StyledButtonDiv>
             <StyledButton onClick={onClose}>아니오</StyledButton>
             <StyledButton onClick={handleOnButton}>예</StyledButton>
@@ -79,6 +81,13 @@ const StyleModalHead = styled.div`
   padding: 1rem;
   border-bottom: 1px solid rgb(200, 200, 200);
   font-weight: bold;
+`;
+
+const StyledModalBody = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
 `;
 
 const ParentContainer = styled.div`
