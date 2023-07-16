@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import useAuthorizedRequest from '../../../../hooks/useAuthorizedRequest';
 import { accommodationState, imageDataState } from '../../../../recoil/accommodationAtoms';
 import Loading from '../reuse/Loading';
-import { ACCOMMODATION_CREATE_API } from '../../../../constants/api/accommodationApi';
+import { ACCOMMODATION_API } from '../../../../constants/api/accommodationApi';
 
 interface CompleteResult {
   isSuccess: boolean;
@@ -17,7 +17,7 @@ interface CompleteResult {
 export default function AccommodationCompleteContents() {
   const accommodation = useRecoilValue(accommodationState);
 
-  const { isLoading, sendRequest } = useAuthorizedRequest<CompleteResult>({});
+  const { isLoading, sendRequest, responseData } = useAuthorizedRequest<CompleteResult>({});
 
   const imageData = useRecoilValue(imageDataState);
   const accommodationData = new FormData();
@@ -27,16 +27,17 @@ export default function AccommodationCompleteContents() {
   accommodationData.append('houseReq', new Blob([JSON.stringify(accommodation)], { type: 'application/json' }));
 
   useEffect(() => {
+    if (responseData) return;
     const fetchData = async () => {
       await sendRequest({
-        url: `${ACCOMMODATION_CREATE_API}`,
+        url: `${ACCOMMODATION_API}`,
         method: 'POST',
         body: accommodationData,
         withCredentials: true,
       });
     };
     fetchData();
-  }, []);
+  }, [responseData]);
 
   return (
     <StyledFlexContainer>

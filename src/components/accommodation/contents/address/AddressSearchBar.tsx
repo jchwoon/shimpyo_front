@@ -57,10 +57,9 @@ export default function AddressSearchBar() {
         .getPlacePredictions(request)
         .then((predictions: any) => {
           setSearchResult(predictions);
-          console.log(predictions);
         })
         .catch((err: Error) => {
-          console.log(err);
+          console.log(err.message);
         });
     };
 
