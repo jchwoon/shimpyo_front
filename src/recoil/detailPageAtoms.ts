@@ -19,3 +19,8 @@ export const merchantUid = atom<string>({
     key: 'merchantUid',
     default: '',
 })
+
+export const swipePageState = atom<number>({
+    key: 'swipePageState',
+    default: 0,
+})

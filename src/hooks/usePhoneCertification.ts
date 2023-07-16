@@ -44,6 +44,7 @@ export default function usePhoneCertification({ phoneValue, codeValue, isUser }:
   };
 
   const handleValidityPhone = async () => {
+    console.log(phoneValue);
     if (phoneValue === undefined || !phoneRule.test(phoneValue)) {
       setPhoneError(true);
       setPhoneErrorMessage('휴대폰 번호를 올바르게 입력했는지 확인해주세요.');

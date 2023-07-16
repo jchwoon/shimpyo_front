@@ -28,7 +28,11 @@ const getLeftValue = (score: AverageScore) => {
   }
 };
 
-export default function ReviewManageModal() {
+interface ReviewManageModalProps {
+  getData: () => void;
+}
+
+export default function ReviewManageModal({ getData }: ReviewManageModalProps) {
   const [isReviewManageOpen, setIsReviewManageOpen] = useRecoilState(reviewManageModalAtom);
   const setModifiedAlarmOpen = useSetRecoilState(reviewModifiedAlarmAtoms);
   const setReviewModifyModal = useSetRecoilState(reviewManageModalAtom);
@@ -87,7 +91,7 @@ export default function ReviewManageModal() {
 
     if (deleteResponseData.isSuccess) {
       setReviewModifyModal(false);
-      window.location.reload();
+      getData();
     } else {
       setErrorMessage(deleteResponseData.message);
     }

@@ -7,6 +7,9 @@ import { useSearchParams } from 'react-router-dom';
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import usePagination from '../../../hooks/usePagination';
 import CategoryFooter from '../CategoryFooter';
+import ReviewModal from '../Modal/ReviewModal';
+import ReviewManageModal from '../Modal/ReviewManageModal';
+import ReservationDetailModal from '../../CheckReservationDetail/Modal/ReservationDetailModal';
 
 type State = 'COMPLETE' | 'USING' | 'FINISHED' | 'CANCEL';
 
@@ -54,18 +57,19 @@ export default function VisitedAccommodation() {
       setTotalPage(responseData.result.totalPage);
       setTotalItem(responseData.result.totalElements);
     }
-  }, [responseData, totalPage]);
+  }, [responseData]);
+
+  const getData = async () => {
+    if (!currentPage) return;
+    if (currentPage > totalPage || currentPage <= 0) return;
+
+    await sendRequest({ url: `/user/reservations?page=${currentPage - 1}&reservationStatus=FINISHED` });
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      if (!currentPage) return;
-      if (currentPage > totalPage || currentPage <= 0) return;
-      await sendRequest({ url: `/user/reservations?page=${currentPage - 1}&reservationStatus=FINISHED` });
-    };
-
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, totalPage]);
+  }, [currentPage]);
 
   const header = (
     <StyleHeaderBox>
@@ -90,7 +94,14 @@ export default function VisitedAccommodation() {
     />
   );
 
-  return <ReservationCategory header={header} main={main} footer={footer} />;
+  return (
+    <>
+      <ReservationCategory header={header} main={main} footer={footer} />
+      <ReviewModal getData={getData} />
+      <ReviewManageModal getData={getData} />
+      <ReservationDetailModal />
+    </>
+  );
 }
 
 const StyleGridBox = styled.div`

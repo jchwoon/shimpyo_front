@@ -6,27 +6,19 @@ import ImageBox from './ImageBox';
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 
 export type Item = {
-  id: number;
-  detailId: number;
-  mainImage: string;
+  houseId: number;
+  houseName: string;
+  type: string;
+  houseImages: string;
 };
 
-interface wishListData {
-  list: Item[];
-}
-
 export default function WishListMain() {
-  const { responseData, sendRequest } = useAuthorizedRequest<wishListData>({});
+  const { responseData, sendRequest } = useAuthorizedRequest<Item[]>({});
 
-  const [wishList, setWishList] = useState([
-    { id: 1, mainImage: '/images/image.png', detailId: 1 },
-    { id: 2, mainImage: '/images/image.png', detailId: 2 },
-    { id: 3, mainImage: '/images/image.png', detailId: 3 },
-    { id: 4, mainImage: '/images/image.png', detailId: 4 },
-  ]);
+  const [wishList, setWishList] = useState<Item[]>([]);
 
   const fetchWishListsData = async () => {
-    await sendRequest({ url: '/wishlists' });
+    await sendRequest({ url: '/user/wish' });
   };
 
   useEffect(() => {
@@ -38,16 +30,24 @@ export default function WishListMain() {
     if (!responseData) return;
 
     if (responseData.isSuccess) {
-      setWishList(responseData.result.list);
+      setWishList(responseData.result);
     }
   }, [responseData]);
   return (
     <>
       <Main>
         <StyleTitle>관심 숙소</StyleTitle>
+        {wishList.length === 0 && (
+          <StyleInfoMessage>
+            <h2 style={{ fontWeight: 'bold', fontSize: '20px' }}>관심이 가는 숙소를 저장해보세요</h2>
+            <span style={{ marginTop: '20px', display: 'block' }}>
+              검색 중에 마음에 드는 숙소를 관심숙소에 저장하려면 하트 아이콘을 클릭하세요.
+            </span>
+          </StyleInfoMessage>
+        )}
         <StyleGridBox>
           {wishList.map(item => (
-            <ImageBox fetchWishListsData={fetchWishListsData} key={item.id} item={item} />
+            <ImageBox fetchWishListsData={fetchWishListsData} key={item.houseId} item={item} />
           ))}
         </StyleGridBox>
       </Main>
@@ -65,6 +65,8 @@ const StyleTitle = styled.h1`
     margin-top: 100px;
   }
 `;
+
+const StyleInfoMessage = styled.div``;
 
 const StyleGridBox = styled.div`
   display: grid;

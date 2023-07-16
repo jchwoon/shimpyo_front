@@ -41,8 +41,10 @@ export default function ReservationCancelModal({ price, checkIn }: ReservationCa
         setIsOverCheckIn(true);
       } else {
         setIsOverCheckIn(false);
-        if (currentMilliValue - checkInMilliValue < oneDay) {
+        if (checkInMilliValue - currentMilliValue < oneDay) {
           setCommission(parseInt(price, 10) * 0.1);
+        } else {
+          setCommission(parseInt(price, 10) * 0);
         }
       }
     };

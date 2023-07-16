@@ -16,8 +16,9 @@ const SocialAddInfo = lazy(() => import('../pages/SocialAddInfo'));
 const CheckReservationDetail = lazy(() => import('../pages/CheckReservationDetail'));
 const WishList = lazy(() => import('../pages/WishList'));
 const Account = lazy(() => import('../pages/Account'));
-const Users = lazy(() => import('../pages/Users'));
+const UserProfile = lazy(() => import('../pages/UserProfile'));
 const CheckNonMember = lazy(() => import('../pages/CheckNonMember'));
+const NonMemberReservationDetail = lazy(() => import('../pages/NonMemberReservationDetail'));
 
 const onlyLogin = 'ONLY_LOGIN';
 const onlyLogout = 'ONLY_LOGOUT';
@@ -146,7 +147,7 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <AuthCheck option={null}>
-              <Users />
+              <UserProfile />
             </AuthCheck>
           </Suspense>
         ),
@@ -155,7 +156,7 @@ const router = createBrowserRouter([
         path: 'account-settings',
         element: (
           <Suspense fallback={<Loading />}>
-            <AuthCheck option={null}>
+            <AuthCheck option={onlyLogin}>
               <Account />
             </AuthCheck>
           </Suspense>
@@ -167,6 +168,16 @@ const router = createBrowserRouter([
           <Suspense fallback={<Loading />}>
             <AuthCheck option={onlyLogout}>
               <CheckNonMember />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'non-member/reservation-detail/:codeNumber',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={onlyLogout}>
+              <NonMemberReservationDetail />
             </AuthCheck>
           </Suspense>
         ),

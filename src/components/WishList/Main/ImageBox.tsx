@@ -34,23 +34,35 @@ export default function ImageBox({ item, fetchWishListsData }: ImageBoxProps) {
   };
   return (
     <>
-      <StyleImageBox
-        onClick={() => {
-          navigation(`/detail/${item.detailId}`);
-        }}
-        key={item.id}
-      >
-        <MainImage src={item.mainImage} />
-        <MdClose
-          onClick={(e: MouseEvent) => showDeleteComfirmModal(e, item.detailId)}
-          style={{ ...StyleCloseIcon }}
-          size={20}
-        />
-      </StyleImageBox>
-      {item.detailId === targetId && <WishListDeleteConfirmModal item={item} fetchWishListsData={fetchWishListsData} />}
+      <StyleWishContainer>
+        <StyleImageBox
+          onClick={() => {
+            navigation(`/detail/${item.houseId}`);
+          }}
+        >
+          <StyleMainImage src={item.houseImages} />
+
+          <MdClose
+            onClick={(e: MouseEvent) => showDeleteComfirmModal(e, item.houseId)}
+            style={{ ...StyleCloseIcon }}
+            size={35}
+          />
+        </StyleImageBox>
+        <StyleDetail>
+          <span>{item.houseName}</span>
+          <StyleDivide></StyleDivide>
+          <span>{item.type}</span>
+        </StyleDetail>
+      </StyleWishContainer>
+      {item.houseId === targetId && <WishListDeleteConfirmModal item={item} fetchWishListsData={fetchWishListsData} />}
     </>
   );
 }
+
+const StyleWishContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const StyleImageBox = styled.div`
   cursor: pointer;
@@ -58,10 +70,28 @@ const StyleImageBox = styled.div`
   height: 300px;
 `;
 
-const MainImage = styled.img`
+const StyleMainImage = styled.img`
   height: 100%;
   width: 100%;
   object-fit: cover;
   object-position: center;
   border-radius: 10px;
+`;
+
+const StyleDetail = styled.div`
+  margin-top: 10px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: row;
+  font-size: 18px;
+  font-weight: bold;
+  align-items: center;
+  gap: 5px;
+`;
+
+const StyleDivide = styled.span`
+  width: 4px;
+  height: 4px;
+  border-radius: 100%;
+  background-color: black;
 `;

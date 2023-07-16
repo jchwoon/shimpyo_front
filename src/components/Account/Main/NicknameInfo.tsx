@@ -5,13 +5,16 @@ import { FormEvent, useEffect, useState } from 'react';
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { useRecoilValue } from 'recoil';
 import { nicknameValueAtom } from '../../../recoil/userAtoms';
+import BlackButton from '../ReUse/UI/BlackButton';
+import { USER_NICKNAME_API_PATH } from '../../../constants/api/userApi';
 
 interface NicknameInfoProps extends Pick<AccountInfoListProps, 'infoContent'> {}
 
 export default function NicknameInfo({ infoContent }: NicknameInfoProps) {
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [currentNickname, setCurrentNickname] = useState(infoContent);
   const [isNicknameValid, setIsNicknameValid] = useState<boolean>(false);
-  const { responseData, sendRequest } = useAuthorizedRequest({});
+  const { responseData, sendRequest, isLoading } = useAuthorizedRequest({});
   const modifiedNickname = useRecoilValue(nicknameValueAtom);
 
   const getNicknameValid = (valid: boolean) => {
@@ -21,8 +24,9 @@ export default function NicknameInfo({ infoContent }: NicknameInfoProps) {
   const submitModifiedNickname = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isNicknameValid) return;
+    if (currentNickname === modifiedNickname) return;
 
-    await sendRequest({ url: '/user/modify-nickname', method: 'PATCH' });
+    await sendRequest({ url: `${USER_NICKNAME_API_PATH}`, method: 'PATCH', body: { nickname: modifiedNickname } });
   };
 
   useEffect(() => {
@@ -30,6 +34,7 @@ export default function NicknameInfo({ infoContent }: NicknameInfoProps) {
 
     if (responseData.isSuccess) {
       setCurrentNickname(modifiedNickname);
+      setIsEditMode(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);
@@ -40,24 +45,23 @@ export default function NicknameInfo({ infoContent }: NicknameInfoProps) {
         <NicknameInput getValid={getNicknameValid} />
       </StyleNicknameInputBox>
       <div style={{ marginBottom: '24px' }}>
-        <StyleSubmitButton type="submit">저장</StyleSubmitButton>
+        <BlackButton disabled={isLoading} buttonType="submit" label="저장" />
       </div>
     </form>
   );
-  return <AccountInfoList editComponent={editComponent} title="닉네임" infoContent={currentNickname} />;
+  return (
+    <AccountInfoList
+      isEditMode={isEditMode}
+      setIsEditMode={setIsEditMode}
+      editComponent={editComponent}
+      title="닉네임"
+      infoContent={infoContent}
+    />
+  );
 }
 
 const StyleNicknameInputBox = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
-`;
-
-const StyleSubmitButton = styled.button`
-  background-color: black;
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
-  padding: 14px 24px;
-  border-radius: 0.5rem;
 `;

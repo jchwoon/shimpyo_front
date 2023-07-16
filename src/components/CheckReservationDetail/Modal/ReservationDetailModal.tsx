@@ -67,11 +67,13 @@ export default function ReservationDetailModal() {
 
   useEffect(() => {
     const getData = async () => {
+      if (!reservationDetailModal) return;
       await sendRequest({ url: `/user/reservations/${searchParams.get('reservationId')}` });
     };
 
     getData();
-  }, [searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reservationDetailModal, searchParams]);
   const body = (
     <div>
       <StyleMainBox>

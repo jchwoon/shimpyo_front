@@ -46,7 +46,7 @@ const showAndOut = keyframes`
 
 const StyleAlarmBox = styled.div`
   animation: ${showAndOut} 0.1s ease-in-out forwards;
-  position: absolute;
+  position: fixed;
   top: -10%;
   z-index: 99999;
   border-radius: 0.3rem;
