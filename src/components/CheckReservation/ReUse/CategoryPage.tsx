@@ -1,7 +1,7 @@
 import { MouseEvent } from 'react';
 import styled from 'styled-components';
 
-interface CategoryFooterProps {
+interface CategoryPageProps {
   totalPage: number;
   currentPage: number;
   changePrevPage: () => void;
@@ -9,13 +9,13 @@ interface CategoryFooterProps {
   changeClickedPage: (e: MouseEvent<HTMLSpanElement>) => void;
 }
 
-export default function CategoryFooter({
+export default function CategoryPage({
   totalPage,
   currentPage,
   changePrevPage,
   changeNextPage,
   changeClickedPage,
-}: CategoryFooterProps) {
+}: CategoryPageProps) {
   return (
     <>
       {totalPage >= 1 && (

@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-interface HeaderContentsProps {
+interface CategoryTitleProps {
   title: string;
 }
 
-export default function HeaderContents({ title }: HeaderContentsProps) {
+export default function CategoryTitle({ title }: CategoryTitleProps) {
   return (
     <StyleFlexBox>
       <div style={{ display: 'flex' }}>

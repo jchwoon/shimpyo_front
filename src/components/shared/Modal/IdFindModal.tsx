@@ -1,12 +1,12 @@
 import { useRecoilState } from 'recoil';
-import Modal from '../../shared/Modal';
+import Modal from '../Modal';
 import { idFindModalAtom } from '../../../recoil/modalAtoms';
 import styled from 'styled-components';
-import Input from '../../shared/UI/Input';
-import { StyleBody } from '../../shared/Modal/JoinModal';
-import Button from '../../shared/UI/Button';
-import ColorButton from '../../shared/UI/ColorButton';
-import { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import Input from '../UI/Input';
+import { StyleBody } from './JoinModal';
+import Button from '../UI/Button';
+import ColorButton from '../UI/ColorButton';
+import { useState, useEffect, ChangeEvent } from 'react';
 import useHttpRequest from '../../../hooks/useHttpRequest';
 import { FIND_EMAIL_API_PATH } from '../../../constants/api/userApi';
 import usePhoneCertification from '../../../hooks/usePhoneCertification';
@@ -18,7 +18,6 @@ interface IEmailData {
 export default function IdFindModal() {
   const [phoneValue, setPhoneValue] = useState('');
   const [codeValue, setCodeValue] = useState('');
-
   const {
     codeNumberError,
     codeNumberErrorMessage,
@@ -36,15 +35,15 @@ export default function IdFindModal() {
   const [getEmailValue, setGetEmailValue] = useState('');
   const [isOkay, setIsOkay] = useState(false);
 
-  const onPhoneValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const onPhoneValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setPhoneValue(value);
-  }, []);
+  };
 
-  const onCodeValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const onCodeValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setCodeValue(value);
-  }, []);
+  };
 
   const handleSendConfrimNumber = async () => {
     handleValidityPhone();

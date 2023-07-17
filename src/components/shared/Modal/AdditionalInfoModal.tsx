@@ -1,12 +1,12 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import Modal from '../../shared/Modal';
+import Modal from '../Modal';
 import { useState, useEffect } from 'react';
 import { additionalInfoModalAtom, loginModalAtom } from '../../../recoil/modalAtoms';
 import { emailValueAtom, nicknameValueAtom, passwordValueAtom, phoneValueAtom } from '../../../recoil/userAtoms';
 import styled from 'styled-components';
-import NicknameInput from '../Input/NicknameInput';
-import ColorButton from '../../shared/UI/ColorButton';
-import PhoneInput from '../Input/PhoneInput';
+import NicknameInput from '../../Main/Input/NicknameInput';
+import ColorButton from '../UI/ColorButton';
+import PhoneInput from '../../Main/Input/PhoneInput';
 import useHttpRequest from '../../../hooks/useHttpRequest';
 import { JOIN_API_PATH } from '../../../constants/api/userApi';
 
@@ -60,6 +60,7 @@ export default function AdditionalInfoModal() {
   const body = (
     <StyleBody>
       <NicknameInput getValid={getNicknameValid} />
+      <span style={{ marginTop: '10px' }}></span>
       <PhoneInput getValid={getPhoneValid} />
       <ColorButton disabled={!isValid || isLoading} label="가입" onClick={handleSubmitUserInfo} />
     </StyleBody>

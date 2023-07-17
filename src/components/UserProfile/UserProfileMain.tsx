@@ -24,8 +24,7 @@ export default function UserProfileMain() {
   const setIsOpenEditProfileModal = useSetRecoilState(editprofileModalAtom);
   const { responseData, sendRequest } = useHttpRequest<UserProfileData>();
   const [userProfileData, setUserProfileData] = useState<UserProfileData>({
-    introduce:
-      '"배 님은 아직 프로필을 업데이트하지 않았습니다""배 님은 아직 프로필을 업데이트하지 않았습니다""배 님은 아직 프로필을 업데이트하지 않았습니다""배 님은 아직 프로필을 업데이트하지 않았습니다""배 님은 아직 프로필을 업데이트하지 않았습니다""배 님은 아직 프로필을 업데이트하지 않았습니다""배 님은 아직 프로필을 업데이트하지 않았습니다""배 님은 아직 프로필을 업데이트하지 않았습니다""배 님은 아직 프로필을 업데이트하지 않았습니다""배 님은 아직 프로필을 업데이트하지 않았습니다""배 님은 아직 프로필을 업데이트하지 않았습니다""배 님은 아직 프로필을 업데이트하지 않았습니다"',
+    introduce: '',
     profileImage: '',
     nickname: '',
   });
@@ -54,7 +53,7 @@ export default function UserProfileMain() {
             nickname={userProfileData.nickname}
             profileImage={userProfileData.profileImage || '/images/basicProfile.jpg'}
           />
-          {userId && +userId === myId && (
+          {userId && userId === myId && (
             <StyleEditButtonBox>
               <StyleEditButton onClick={() => setIsOpenEditProfileModal(true)}>
                 <span style={{ fontSize: '17px' }}>프로필 수정하기</span>

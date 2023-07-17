@@ -53,7 +53,7 @@ export default function UserProfileHeader() {
       <StyleMobileFlexBox>
         <IoIosArrowBack style={{ cursor: 'pointer' }} onClick={() => navigation(-1)} size={20} />
         <StyleChangeEditModeButtonBox>
-          {userId && +userId === myId && (
+          {userId && userId === myId && (
             <button onClick={() => setEditProfileModal(true)} style={{ cursor: 'pointer', padding: '0.3rem 0.5rem' }}>
               <span style={{ fontSize: '17px', textDecoration: 'underline' }}>수정</span>
             </button>

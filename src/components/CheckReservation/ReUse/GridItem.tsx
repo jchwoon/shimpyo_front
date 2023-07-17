@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import { ListType } from '../ReservationCategory/VisitedAccommodation';
+import { ListType } from '../Main/Category/VisitedAccommodation/VisitedAccommodation';
 import { BsDot } from 'react-icons/bs';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { reservationDetailModalAtom } from '../../../recoil/modalAtoms';
+import { changeDateType, formatDate } from '../../../utils/changeFormat';
 
 type ReservationState = 'COMPLETE' | 'USING' | 'FINISHED' | 'CANCEL';
 
@@ -27,11 +28,7 @@ function getStateMessage(state: ReservationState): string {
 }
 
 export default function GridItem({ item }: GridItemProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
-  //   const { responseData, sendRequest } = useAuthorizedRequest<targetReviewData[]>({});
-  //   const setContent = useSetRecoilState(reviewContentAtom);
-  //   const setAverageScore = useSetRecoilState(reviewAverageScoreAtom);
-  //   const setReviewId = useSetRecoilState(reviewIdAtom);
+  const [, setSearchParams] = useSearchParams();
   const setReservationDetailModal = useSetRecoilState(reservationDetailModalAtom);
   const navigation = useNavigate();
 
@@ -66,9 +63,9 @@ export default function GridItem({ item }: GridItemProps) {
             <span style={{ position: 'absolute', right: '-58px', top: '2px' }}>{item.houseType}</span>
           </div>
           <div>
-            <span>{`${item.checkInDate}`}</span>
+            <span>{`${formatDate(changeDateType(item.checkInDate))}`}</span>
             <span style={{ rotate: '90deg' }}>~</span>
-            <span>{`${item.checkOutDate}`}</span>
+            <span>{`${formatDate(changeDateType(item.checkOutDate))}`}</span>
           </div>
         </StyleContent>
       </StyleGridItem>
@@ -82,7 +79,7 @@ const StyleGridItem = styled.div`
   border: 1px solid rgb(220, 220, 220);
   overflow: hidden;
   background-color: white;
-  height: 290px;
+  height: 330px;
 
   display: flex;
   flex-direction: column;
@@ -107,7 +104,6 @@ const StyleContent = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.2rem;
   }
   h3 {
     font-weight: bold;

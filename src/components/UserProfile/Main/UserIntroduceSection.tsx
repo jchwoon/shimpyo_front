@@ -17,7 +17,7 @@ export default function UserIntroduceSection({ introduce, nickname }: UserIntrod
         <StyleIntroduce>
           <span>{isOpenIntroduce ? introduce : introduce.slice(0, 200)}</span>
           <StyleToggleButton onClick={() => setIsOpenIntroduce(prev => !prev)}>
-            {isOpenIntroduce ? '간략히' : '펼치기'}
+            {introduce.length > 200 ? (isOpenIntroduce ? '간략히' : '펼치기') : ''}
           </StyleToggleButton>
         </StyleIntroduce>
       </div>

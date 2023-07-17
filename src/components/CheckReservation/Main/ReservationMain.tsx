@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import Main from '../layout/Main';
-import Reservations from './ReservationCategory/Reservations';
-import VisitedAccommodation from './ReservationCategory/VisitedAccommodation';
-import ReservationCancel from './ReservationCategory/ReservationCancel';
+import Main from '../../layout/Main';
+import Reservations from './Category/Reservations';
+import VisitedAccommodation from './Category/VisitedAccommodation/VisitedAccommodation';
+import ReservationCancel from './Category/ReservationCancel';
 import { useSearchParams } from 'react-router-dom';
 
 export default function ReservationMain() {

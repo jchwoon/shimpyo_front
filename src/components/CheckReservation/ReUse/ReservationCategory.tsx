@@ -1,18 +1,18 @@
 import styled from 'styled-components';
 
 interface ReservationCategoryProps {
-  header: React.ReactElement;
-  main: React.ReactElement;
-  footer: React.ReactElement;
+  categoryTitle: React.ReactElement;
+  categoryList: React.ReactElement;
+  page: React.ReactElement;
 }
 
-export default function ReservationCategory({ header, main, footer }: ReservationCategoryProps) {
+export default function ReservationCategory({ categoryTitle, categoryList, page }: ReservationCategoryProps) {
   return (
     <StyleCategoryBox>
       <StyleFlexColumnBox>
-        <StyleCategorysHeaderBox>{header}</StyleCategorysHeaderBox>
-        <StyleCategoryMainBox>{main}</StyleCategoryMainBox>
-        <StyleCategoryFooterBox>{footer}</StyleCategoryFooterBox>
+        <StyleCategorysHeaderBox>{categoryTitle}</StyleCategorysHeaderBox>
+        <StyleCategoryMainBox>{categoryList}</StyleCategoryMainBox>
+        <StyleCategoryFooterBox>{page}</StyleCategoryFooterBox>
       </StyleFlexColumnBox>
     </StyleCategoryBox>
   );

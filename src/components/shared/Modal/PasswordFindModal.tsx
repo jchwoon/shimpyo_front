@@ -1,15 +1,15 @@
 import styled from 'styled-components';
-import Modal from '../../shared/Modal';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import Modal from '../Modal';
+import { useRecoilState } from 'recoil';
 import { confirmPasswordValueAtom, passwordValueAtom } from '../../../recoil/userAtoms';
 import { passwordFindModalAtom } from '../../../recoil/modalAtoms';
-import { StyleBody } from '../../shared/Modal/JoinModal';
-import Input from '../../shared/UI/Input';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import ColorButton from '../../shared/UI/ColorButton';
-import Button from '../../shared/UI/Button';
-import PasswordInput from '../Input/PasswordInput';
-import ConfirmPasswordInput from '../Input/ConfirmPasswordInput';
+import { StyleBody } from './JoinModal';
+import Input from '../UI/Input';
+import { ChangeEvent, useEffect, useState } from 'react';
+import ColorButton from '../UI/ColorButton';
+import Button from '../UI/Button';
+import PasswordInput from '../../Main/Input/PasswordInput';
+import ConfirmPasswordInput from '../../Main/Input/ConfirmPasswordInput';
 import useHttpRequest from '../../../hooks/useHttpRequest';
 import { RESET_PASSWORD_API_PATH } from '../../../constants/api/userApi';
 import usePhoneCertification from '../../../hooks/usePhoneCertification';
@@ -40,15 +40,15 @@ export default function PasswordFindModal() {
 
   const isValid = isPasswordValid && isConfirmPasswordValid;
 
-  const onPhoneValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const onPhoneValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setPhoneValue(value);
-  }, []);
+  };
 
-  const onCodeValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const onCodeValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setCodeValue(value);
-  }, []);
+  };
 
   const handleGetPasswordValid = (valid: boolean) => {
     setIsPasswordValid(valid);
