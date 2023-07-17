@@ -241,7 +241,9 @@ const StyledCloseIcon = styled(AiOutlineClose)`
 const StyledImageContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 90%;
+  height: 90%;
   padding: 20px;
   box-sizing: content-box;
   background-color: rgba(255, 255, 255, 0.7);

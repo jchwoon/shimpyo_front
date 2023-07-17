@@ -75,8 +75,10 @@ const StyledFlexDiv = styled.div`
 const StyledImageContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 90%;
   padding: 20px;
+  height: 90%;
   box-sizing: content-box;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 20px;

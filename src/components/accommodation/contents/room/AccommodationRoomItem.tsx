@@ -1,7 +1,8 @@
 import { useRef, ChangeEvent, useState, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { TbPhotoPlus } from 'react-icons/tb';
-import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { GrFormClose } from 'react-icons/gr';
 import { useRecoilState } from 'recoil';
 
 import { imageDataState, accommodationState, roomImageListState } from '../../../../recoil/accommodationAtoms';
@@ -213,7 +214,7 @@ const StyledContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  @media (min-width: 635px) {
+  @media (min-width: 680px) {
     flex-direction: row;
     align-items: normal;
   }
@@ -223,12 +224,13 @@ const StyledFlexDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  @media (min-width: 635px) {
+  @media (min-width: 680px) {
     flex-direction: row;
+    height: 400px;
   }
 `;
 
-const StyledCloseIcon = styled(AiOutlineClose)`
+const StyledCloseIcon = styled(GrFormClose)`
   padding: 10px;
   border-radius: 50%;
   cursor: pointer;
@@ -240,13 +242,15 @@ const StyledCloseIcon = styled(AiOutlineClose)`
 const StyledImageContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 90%;
   padding: 20px;
+  height: 80%;
   box-sizing: content-box;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 20px;
 
-  @media (min-width: 635px) {
+  @media (min-width: 680px) {
     width: 300px;
   }
 `;
@@ -256,7 +260,6 @@ const StyledNoImageContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
   z-index: 1;
   border: 2px dotted rgba(0, 0, 0, 0.2);
   &:hover {
@@ -313,7 +316,7 @@ const StyledPlusImageContainer = styled.div`
     border: 2px solid black;
   }
 
-  @media (min-width: 635px) {
+  @media (min-width: 680px) {
     width: 100px;
   }
 `;

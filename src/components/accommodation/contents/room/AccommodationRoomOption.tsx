@@ -170,7 +170,7 @@ const StyledRoomOptionContainer = styled.div`
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 20px;
 
-  @media (min-width: 635px) {
+  @media (min-width: 680px) {
     width: 50%;
   }
 `;
