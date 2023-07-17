@@ -21,6 +21,8 @@ import styled from '@emotion/styled';
 
 import { Typography } from '@mui/material';
 
+import { HiOutlineEmojiHappy, HiOutlineEmojiSad } from 'react-icons/hi'
+
 interface CardProps {
     cards: Array<any>
 }
@@ -63,8 +65,8 @@ export default function Cards({ cards }: CardProps) {
                                             {card.name}
                                         </CustomizedTitleTypography>
                                         <CustomizedPercentageRowBox>
-                                            <CustomizedThumbUpIcon />
-                                            <CustomizedPercentageTypography>
+                                            <HiOutlineEmojiHappy style={{ color: "#00adb5", height: "20px", width: "20px" }} />
+                                            <CustomizedPercentageTypography color="#00adb5">
                                                 Like%
                                             </CustomizedPercentageTypography>
                                         </CustomizedPercentageRowBox>

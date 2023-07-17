@@ -92,13 +92,14 @@ width: 35px;
 export const CustomizedPercentageTypography = styled(Typography)`
 font-size: 15px;
 font-weight: 500;
-margin-left: 5px;
+margin-left: 3px;
 `
 
 export const CustomizedTitleRowBox = styled(Box)`
 display: flex;
 flex-direction: row;
 justify-content: space-between;
+align-items:center;
 `
 
 export const CustomizedPercentageRowBox = styled(Box)`
