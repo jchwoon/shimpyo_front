@@ -18,7 +18,6 @@ interface IEmailData {
 export default function IdFindModal() {
   const [phoneValue, setPhoneValue] = useState('');
   const [codeValue, setCodeValue] = useState('');
-
   const {
     codeNumberError,
     codeNumberErrorMessage,

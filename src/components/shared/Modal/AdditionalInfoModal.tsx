@@ -60,6 +60,7 @@ export default function AdditionalInfoModal() {
   const body = (
     <StyleBody>
       <NicknameInput getValid={getNicknameValid} />
+      <span style={{ marginTop: '10px' }}></span>
       <PhoneInput getValid={getPhoneValid} />
       <ColorButton disabled={!isValid || isLoading} label="가입" onClick={handleSubmitUserInfo} />
     </StyleBody>
