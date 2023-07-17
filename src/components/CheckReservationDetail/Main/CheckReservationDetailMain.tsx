@@ -65,7 +65,6 @@ export default function CheckReservationDetailMain() {
     if (responseData.isSuccess) {
       setDetailData(responseData.result);
     } else {
-      // if (responseData.code === 3100)
       setIsValidReservationId(false);
     }
   }, [responseData]);
