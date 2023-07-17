@@ -1,4 +1,4 @@
-import SocialButton from '../Modal/Button/SocialButton';
+import SocialButton from '../../shared/Modal/Button/SocialButton';
 import { FcGoogle } from 'react-icons/fc';
 
 export default function GoogleSocialLogin() {

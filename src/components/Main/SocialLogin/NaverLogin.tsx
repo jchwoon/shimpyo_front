@@ -1,4 +1,4 @@
-import SocialButton from '../Modal/Button/SocialButton';
+import SocialButton from '../../shared/Modal/Button/SocialButton';
 import { SiNaver } from 'react-icons/si';
 
 export default function NaverLogin() {
