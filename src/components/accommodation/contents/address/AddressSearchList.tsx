@@ -69,7 +69,7 @@ export default function AddressSearchList({ searchResult, focus }: AddressSearch
         })}
         <StyledItem onClick={MoveAddressWrite}>
           <StyledFlexContainer>
-            {searchResult.predictions.length !== 0 && <StyledItemTitle>주소를 직접 입력하겠습니다.</StyledItemTitle>}
+            {searchResult.predictions && <StyledItemTitle>주소를 직접 입력하겠습니다.</StyledItemTitle>}
           </StyledFlexContainer>
         </StyledItem>
       </StyledListContainer>
