@@ -13,6 +13,10 @@ interface sizeProps {
 }
 
 export default function LocationMap({ latitude, longitude, width, height, radius }: LocationMapProps & sizeProps) {
+
+  console.log("latitude:", latitude)
+  console.log("longitude:", longitude)
+
   useEffect(() => {
     if (!latitude || !longitude) return;
 

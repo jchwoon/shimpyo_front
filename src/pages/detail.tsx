@@ -136,7 +136,7 @@ export default function Detail() {
 
 
   useEffect(() => {
-    if (nextReview) reviewSendRequest({ url: `${DETAIL_PAGE_REVIEWS_API_PATH}?page=${page}` })
+    if (nextReview) reviewSendRequest({ url: `${DETAIL_PAGE_REVIEWS_API_PATH}/${houseId}?page=${page}` })
     // if (nextReview) reviewSendRequest({ url: `${DETAIL_PAGE_REVIEWS_API_PATH}?page=4` })
   }, [page])
 

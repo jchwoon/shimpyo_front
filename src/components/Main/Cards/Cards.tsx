@@ -45,8 +45,8 @@ export default function Cards({ cards }: CardProps) {
         <>
             <Container sx={{ paddingTop: 13 }} maxWidth="xl">
                 <Grid container spacing={4}>
-                    {cards.map((card) => (
-                        <Grid item key={card} xs={12} sm={6} md={4} lg={3}>
+                    {cards.map((card, index) => (
+                        <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
                             <MainCustomizedCard
                                 onClick={() => navigate(`/detail/${card.houseId}`)}
                             >
