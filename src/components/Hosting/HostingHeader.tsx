@@ -53,9 +53,6 @@ export default function HostingHeader() {
     <Header>
       <FlexBox>
         <Logo height="25px" path="/hosting" width="50" />
-        <StyleHeaderMenuBox hidden>
-          <MotelManageMenu />
-        </StyleHeaderMenuBox>
         <UserMenu
           isOpen={isOpen}
           menuRef={menuRef}
