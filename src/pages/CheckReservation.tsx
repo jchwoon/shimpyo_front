@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
 import Alarm from '../components/shared/Alarm';
-import ReservationMain from '../components/CheckReservation/ReservationMain';
+import ReservationMain from '../components/CheckReservation/Main/ReservationMain';
 import ReservationHeader from '../components/CheckReservation/Header/ReservationHeader';
 import { reviewCompleteAlarmAtoms, reviewModifiedAlarmAtoms } from '../recoil/alarmAtoms';
 

@@ -19,7 +19,7 @@ interface ResultData {
   accessToken: string;
   nickname: string;
   profileImage: string;
-  userId: number;
+  userId: string;
 }
 
 interface LoginModalProps {

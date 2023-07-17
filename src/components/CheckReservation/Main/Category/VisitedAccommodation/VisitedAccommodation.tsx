@@ -1,18 +1,16 @@
 import { useEffect, useState } from 'react';
-import HeaderContents from '../HeaderContents';
-import ReservationCategory from '../ReservationCategory';
+import CategoryTitle from '../../../ReUse/CategoryTitle';
+import ReservationCategory from '../../../ReUse/ReservationCategory';
 import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
-import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
-import usePagination from '../../../hooks/usePagination';
-import CategoryFooter from '../CategoryFooter';
-import ReviewModal from '../Modal/ReviewModal';
-import ReviewManageModal from '../Modal/ReviewManageModal';
-import ReservationDetailModal from '../../CheckReservationDetail/Modal/ReservationDetailModal';
-import ColorButton from '../../shared/UI/ColorButton';
-import { reviewManageModalAtom, reviewModalAtom } from '../../../recoil/modalAtoms';
-import { useSetRecoilState } from 'recoil';
-import GridItem from '../ReUse/GridItem';
+import useAuthorizedRequest from '../../../../../hooks/useAuthorizedRequest';
+import usePagination from '../../../../../hooks/usePagination';
+import CategoryPage from '../../../ReUse/CategoryPage';
+import ReviewModal from '../../../Modal/ReviewModal';
+import ReviewManageModal from '../../../Modal/ReviewManageModal';
+import ReservationDetailModal from '../../../../CheckReservationDetail/Modal/ReservationDetailModal';
+import GridItem from '../../../ReUse/GridItem';
+import ReviewButton from './ReviewButton';
 
 type State = 'COMPLETE' | 'USING' | 'FINISHED' | 'CANCEL';
 
@@ -25,7 +23,7 @@ export type ListType = {
   checkInDate: string;
   checkOutDate: string;
   reservationStatus: State;
-  existReview: boolean;
+  existReview?: boolean;
 };
 
 interface IResultData {
@@ -37,12 +35,22 @@ interface IResultData {
 
 export default function VisitedAccommodation() {
   const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
-  const setIsReviewModalOpen = useSetRecoilState(reviewModalAtom);
-  const setIsReviewManageModalOpen = useSetRecoilState(reviewManageModalAtom);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [totalItem, setTotalItem] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [contentsArray, setContentsArray] = useState<ListType[]>([]);
+  const [contentsArray, setContentsArray] = useState<ListType[]>([
+    {
+      checkInDate: '2023.06.19.09',
+      checkOutDate: '2023.06.20.13',
+      existReview: true,
+      houseImageUrl: '/images/image.png',
+      houseName: '파주 하늘펜션',
+      houseOwnerName: '루비스',
+      houseType: '펜션',
+      reservationId: 15,
+      reservationStatus: 'FINISHED',
+    },
+  ]);
   const [searchParams, setSearchParams] = useSearchParams();
   const { changeClickedPage, changeNextPage, changePrevPage } = usePagination({
     category: 'visited',
@@ -52,24 +60,6 @@ export default function VisitedAccommodation() {
     setSearchParams,
     totalPage,
   });
-
-  const getReviewData = async () => {
-    await sendRequest({ url: '/user/reviews' });
-  };
-
-  const openModalHandler = (reservationId: number, modalType: 'write' | 'manage') => {
-    setSearchParams(searchParams => {
-      searchParams.set('reservationId', reservationId + '');
-      return searchParams;
-    });
-
-    if (modalType === 'manage') {
-      getReviewData();
-      setIsReviewManageModalOpen(true);
-    } else {
-      setIsReviewModalOpen(true);
-    }
-  };
 
   useEffect(() => {
     if (!responseData) return;
@@ -88,47 +78,31 @@ export default function VisitedAccommodation() {
     await sendRequest({ url: `/user/reservations?page=${currentPage - 1}&reservationStatus=FINISHED` });
   };
 
-  useEffect(() => {
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  // useEffect(() => {
+  //   getData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [currentPage]);
 
-  const header = (
+  const categoryTitle = (
     <StyleHeaderBox>
-      <HeaderContents title="이용 내역" />
+      <CategoryTitle title="이용 내역" />
       <span style={{ position: 'absolute', left: '130px', top: '18px' }}>{`(${totalItem})`}</span>
     </StyleHeaderBox>
   );
 
-  const main = (
+  const categoryList = (
     <StyleGridBox>
       {contentsArray.map(item => (
         <div key={item.reservationId}>
           <GridItem item={item} />
-          <StyleButtonBox>
-            {item.existReview ? (
-              <ColorButton
-                label="후기 수정하기"
-                onClick={() => {
-                  openModalHandler(item.reservationId, 'manage');
-                }}
-              />
-            ) : (
-              <ColorButton
-                label="후기 작성하기"
-                onClick={() => {
-                  openModalHandler(item.reservationId, 'write');
-                }}
-              />
-            )}
-          </StyleButtonBox>
+          <ReviewButton item={item} />
         </div>
       ))}
     </StyleGridBox>
   );
 
-  const footer = (
-    <CategoryFooter
+  const page = (
+    <CategoryPage
       changeClickedPage={changeClickedPage}
       changeNextPage={changeNextPage}
       changePrevPage={changePrevPage}
@@ -139,7 +113,7 @@ export default function VisitedAccommodation() {
 
   return (
     <>
-      <ReservationCategory header={header} main={main} footer={footer} />
+      <ReservationCategory categoryTitle={categoryTitle} categoryList={categoryList} page={page} />
       <ReviewModal getData={getData} />
       <ReviewManageModal getData={getData} />
       <ReservationDetailModal />
@@ -167,11 +141,4 @@ const StyleGridBox = styled.div`
 
 const StyleHeaderBox = styled.div`
   position: relative;
-`;
-
-const StyleButtonBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  margin-top: 0.3;
 `;
