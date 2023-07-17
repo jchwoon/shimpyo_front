@@ -40,6 +40,8 @@ import useLogout from '../hooks/useLogout';
 import useHttpRequest from '../hooks/useHttpRequest';
 import { MAIN_PAGE_HOME_LIST_API_PATH } from '../constants/api/homeListApi';
 
+import { objectPlaceholder } from '../recoil/navBarAtoms';
+
 export default function Main() {
   const [searchParams] = useSearchParams();
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
@@ -51,6 +53,9 @@ export default function Main() {
   const setJoinModal = useSetRecoilState(joinModalAtom);
   const loginState = useRecoilValue(loginStateAtom)
   const { logoutHandler } = useLogout();
+
+  const placeholder = useRecoilValue(objectPlaceholder)
+  console.log("placeholder:", placeholder)
 
   const menuItems = (
     <div>

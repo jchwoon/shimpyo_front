@@ -55,6 +55,8 @@ import MuiSearchField from './MuiSearchField';
 
 import CategoryTabs from "./Tabs"
 
+import { useNavigate } from 'react-router-dom';
+
 export default function Navbar() {
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
   const [customDisplay, setCustomDisplay] = useRecoilState(Display);
@@ -216,6 +218,18 @@ export default function Navbar() {
     //정상 순서에서 calendar가 나온 이후 button2에서 button3으로 active 변경
     handleButtonClick('button3');
   }
+
+  const navigate = useNavigate()
+
+  const address = ObjectPlaceholder.description
+  const addressArray = address.split(' ')
+  const district = addressArray.length === 3 ? addressArray[2] : null
+  const city = addressArray[1]
+
+  console.log("address:", address)
+  console.log("addressArray:", addressArray)
+  console.log("district:", district)
+  console.log("cityt:", city)
 
   return (
     <CustomizedSearchButtonWrapperDiv change={change.toString()}>
@@ -493,7 +507,7 @@ export default function Navbar() {
 
             </CustomizedGuestVerticalWrapperDiv>
             <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-              <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change.toString()}>
+              <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change.toString()} onClick={() => navigate(`/search/?city=${city}&distric=${district}`)}>
                 <CustomizedSearchIcon change={change.toString()} />
               </CustomizedAvatar>
             </div>
