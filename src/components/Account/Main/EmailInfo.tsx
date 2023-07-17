@@ -8,9 +8,11 @@ import { useRecoilValue } from 'recoil';
 import { emailValueAtom } from '../../../recoil/userAtoms';
 import { USER_EMAIL_API_PATH } from '../../../constants/api/userApi';
 
-interface EmailInfoProps extends Pick<AccountInfoListProps, 'infoContent'> {}
+interface EmailInfoProps extends Pick<AccountInfoListProps, 'infoContent'> {
+  fetchUserInfo: () => void;
+}
 
-export default function EmailInfo({ infoContent }: EmailInfoProps) {
+export default function EmailInfo({ infoContent, fetchUserInfo }: EmailInfoProps) {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [currentEmail, setCurrentEmail] = useState(infoContent);
   const { responseData, sendRequest, isLoading } = useAuthorizedRequest({});
@@ -35,6 +37,7 @@ export default function EmailInfo({ infoContent }: EmailInfoProps) {
     if (responseData.isSuccess) {
       setCurrentEmail(modifiedEmail);
       setIsEditMode(false);
+      fetchUserInfo();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);

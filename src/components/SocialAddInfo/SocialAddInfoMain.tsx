@@ -55,7 +55,6 @@ export default function SocialAddInfoMain() {
     if (!responseData) return;
 
     if (responseData.isSuccess) {
-      console.log('here');
       initialState();
       setAccessToken(responseData.result.accessToken);
       navigation('/');

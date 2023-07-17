@@ -8,9 +8,11 @@ import { nicknameValueAtom } from '../../../recoil/userAtoms';
 import BlackButton from '../ReUse/UI/BlackButton';
 import { USER_NICKNAME_API_PATH } from '../../../constants/api/userApi';
 
-interface NicknameInfoProps extends Pick<AccountInfoListProps, 'infoContent'> {}
+interface NicknameInfoProps extends Pick<AccountInfoListProps, 'infoContent'> {
+  fetchUserInfo: () => void;
+}
 
-export default function NicknameInfo({ infoContent }: NicknameInfoProps) {
+export default function NicknameInfo({ infoContent, fetchUserInfo }: NicknameInfoProps) {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [currentNickname, setCurrentNickname] = useState(infoContent);
   const [isNicknameValid, setIsNicknameValid] = useState<boolean>(false);
@@ -35,6 +37,7 @@ export default function NicknameInfo({ infoContent }: NicknameInfoProps) {
     if (responseData.isSuccess) {
       setCurrentNickname(modifiedNickname);
       setIsEditMode(false);
+      fetchUserInfo();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);

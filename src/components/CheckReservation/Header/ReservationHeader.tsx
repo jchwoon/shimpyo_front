@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components';
-import Header from '../layout/Header';
+import Header from '../../layout/Header';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import UserMenu from '../Hosting/Menu/UserMenu';
-import Logo from '../shared/Logo';
-import MenuItem from '../Hosting/Menu/MenuItem';
-import MenuBlock from '../Hosting/Menu/MenuBlock';
+import UserMenu from '../../Hosting/Menu/UserMenu';
+import Logo from '../../shared/Logo';
+import MenuItem from '../../Hosting/Menu/MenuItem';
+import MenuBlock from '../../Hosting/Menu/MenuBlock';
 import {
   BsFillHouseAddFill,
   BsHouseGearFill,
@@ -12,11 +12,11 @@ import {
   BsFillHouseDashFill,
   BsHouseHeartFill,
 } from 'react-icons/bs';
-import Button from '../shared/UI/Button';
+import Button from '../../shared/UI/Button';
 import { IoMdSettings } from 'react-icons/io';
 import { useRef } from 'react';
-import useMenuBar from '../../hooks/useMenuBar';
-import useLogout from '../../hooks/useLogout';
+import useMenuBar from '../../../hooks/useMenuBar';
+import useLogout from '../../../hooks/useLogout';
 
 export default function ReservationHeader() {
   const [searchParams, setSearchParams] = useSearchParams();
