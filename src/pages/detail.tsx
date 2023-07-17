@@ -32,7 +32,7 @@ import JoinModal from '../components/shared/Modal/JoinModal';
 import LoginModal from '../components/shared/Modal/LoginModal';
 
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 
 import CustomizedBottomNavigation from '../components/shared/MobileFooter/CustomizedBottomNavigaton';
@@ -48,6 +48,8 @@ import { DETAIL_PAGE_API_PATH, DETAIL_PAGE_REVIEWS_API_PATH } from '../constants
 import useLogout from '../hooks/useLogout';
 
 export default function Detail() {
+
+  const { houseId } = useParams()
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -111,7 +113,7 @@ export default function Detail() {
   const { responseData, sendRequest, errorMessage, isLoading } = useHttpRequest();
 
   useEffect(() => {
-    sendRequest({ url: DETAIL_PAGE_API_PATH })
+    sendRequest({ url: `${DETAIL_PAGE_API_PATH}/${houseId}` })
   }, [])
 
   const [data, setData] = useState<any>(null);

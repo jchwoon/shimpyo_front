@@ -109,7 +109,7 @@ export default function Main() {
   useEffect(() => {
     sendRequest({
       url: `${MAIN_PAGE_HOME_LIST_API_PATH}`,
-      method: "GET",
+      method: "POST",
       body: {
         page: 0
       }

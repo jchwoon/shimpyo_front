@@ -53,7 +53,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: 'detail',
+        path: 'detail/:houseId',
         element: (
           <Suspense fallback={<Loading />}>
             <AuthCheck option={null}>
