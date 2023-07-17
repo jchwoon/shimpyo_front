@@ -83,10 +83,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
         'profileImage',
         responseData.result.profileImage ? JSON.stringify(responseData.result.profileImage) : '',
       );
-      localStorage.setItem(
-        'userId',
-        responseData.result.userId ? JSON.stringify(responseData.result.profileImage) : '',
-      );
+      localStorage.setItem('userId', responseData.result.userId ? JSON.stringify(responseData.result.userId) : '');
       setUserProfileImage(responseData.result.profileImage || '/images/basicProfile.jpg');
       setUserNickname(responseData.result.nickname || '');
       setUserId(responseData.result.userId);

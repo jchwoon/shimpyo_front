@@ -52,9 +52,9 @@ export default function AccountMain() {
           프로필 정보 보기 &rarr;
         </StyleNavigationProfile>
         <StyleSubTitle>개인정보</StyleSubTitle>
-        <NicknameInfo infoContent={userInfoData.nickname} />
-        <EmailInfo infoContent={userInfoData.email} />
-        <PhoneInfo infoContent={userInfoData.phoneNumber} />
+        <NicknameInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.nickname} />
+        <EmailInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.email} />
+        <PhoneInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.phoneNumber} />
         <ChangePasswordInfo />
         <StyleSubTitle>쿠폰</StyleSubTitle>
         <CouponInfo />

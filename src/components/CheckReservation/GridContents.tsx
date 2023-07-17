@@ -22,7 +22,7 @@ type ListType = {
 
 interface GridContentsProps {
   contentsArray?: ListType[];
-  visited?: boolean;
+  children?: React.ReactNode;
 }
 
 type AverageScore = 'GOOD' | 'NORMAL' | 'BAD';
@@ -52,9 +52,7 @@ function getStateMessage(state: State): string {
   }
 }
 
-export default function GridContents({ contentsArray, visited }: GridContentsProps) {
-  const setIsReviewModalOpen = useSetRecoilState(reviewModalAtom);
-  const setIsReviewManageModalOpen = useSetRecoilState(reviewManageModalAtom);
+export default function GridContents({ contentsArray, children }: GridContentsProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { responseData, sendRequest } = useAuthorizedRequest<targetReviewData[]>({});
   const setContent = useSetRecoilState(reviewContentAtom);
@@ -62,24 +60,6 @@ export default function GridContents({ contentsArray, visited }: GridContentsPro
   const setReviewId = useSetRecoilState(reviewIdAtom);
   const setReservationDetailModal = useSetRecoilState(reservationDetailModalAtom);
   const navigation = useNavigate();
-
-  const getReviewData = async () => {
-    await sendRequest({ url: '/user/reviews' });
-  };
-
-  const openModalHandler = (reservationId: number, modalType: 'write' | 'manage') => {
-    setSearchParams(searchParams => {
-      searchParams.set('reservationId', reservationId + '');
-      return searchParams;
-    });
-
-    if (modalType === 'manage') {
-      getReviewData();
-      setIsReviewManageModalOpen(true);
-    } else {
-      setIsReviewModalOpen(true);
-    }
-  };
 
   const showDetailReservation = (reservationId: number, state: State) => {
     if (state === 'COMPLETE' || state === 'USING') {
@@ -138,25 +118,7 @@ export default function GridContents({ contentsArray, visited }: GridContentsPro
             </StyleContent>
           </StyleGridItem>
 
-          {visited && (
-            <StyleButtonBox>
-              {item.existReview ? (
-                <ColorButton
-                  label="후기 수정하기"
-                  onClick={() => {
-                    openModalHandler(item.reservationId, 'manage');
-                  }}
-                />
-              ) : (
-                <ColorButton
-                  label="후기 작성하기"
-                  onClick={() => {
-                    openModalHandler(item.reservationId, 'write');
-                  }}
-                />
-              )}
-            </StyleButtonBox>
-          )}
+          {children}
         </div>
       ))}
     </>
@@ -208,11 +170,4 @@ const StyleReservationStatus = styled.div`
   font-size: 15px;
   color: white;
   background-color: #009ca6;
-`;
-
-const StyleButtonBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  margin-top: 0.3;
 `;
