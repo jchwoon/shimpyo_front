@@ -11,7 +11,7 @@ import Cards from '../components/Main/Cards/Cards';
 import MobileNavbarTheme from '../components/Main/OverrideTheme/MobileNavbarTheme';
 import NewMobileFooter from '../components/shared/MobileFooter/NewMobileFooter';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import AdditionalInfoModal from '../components/Main/Modal/AdditionalInfoModal';
 import JoinModal from '../components/shared/Modal/JoinModal';
 import LoginModal from '../components/shared/Modal/LoginModal';
@@ -105,23 +105,78 @@ export default function Main() {
   //메인 페이지 데이터 요청
 
   const { responseData, sendRequest, errorMessage, isLoading } = useHttpRequest();
+  const [nextData, setNextData] = useState(true)
+  const [page, setPage] = useState(0);
+
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  // useEffect(() => {
+  //   sendRequest({
+  //     url: `${MAIN_PAGE_HOME_LIST_API_PATH}`,
+  //     method: "POST",
+  //     body: {
+  //       page: 0
+  //     }
+  //   })
+  // }, [])
 
   useEffect(() => {
-    sendRequest({
-      url: `${MAIN_PAGE_HOME_LIST_API_PATH}`,
-      method: "POST",
-      body: {
-        page: 0
-      }
-    })
-  }, [])
+    if (nextData)
+      sendRequest({
+        url: `${MAIN_PAGE_HOME_LIST_API_PATH}`,
+        method: "POST",
+        body: {
+          page: page
+        }
+      })
+  }, [page])
 
-  const [data, setData] = useState<any>(null);
+  useEffect(() => {
+
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      const entry = entries[0];
+      if (entry.isIntersecting && nextData) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      handleIntersection,
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1,
+      });
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [nextData]);
+
+  // const [data, setData] = useState<any>(null);
+
+  const [data, setData] = useState<any>([]);
+
+  // useEffect(() => {
+  //   if (!responseData) return;
+  //   if (responseData.result) {
+  //     setData(responseData.result);
+  //   }
+  // }, [responseData]);
 
   useEffect(() => {
     if (!responseData) return;
     if (responseData.result) {
-      setData(responseData.result);
+      const newData: any = responseData.result;
+      console.log("newData:", newData)
+      if (newData.length === 0) setNextData(false)
+      setData((prevData: Array<any>) => [...prevData, ...newData]);
     }
   }, [responseData]);
 
@@ -140,6 +195,7 @@ export default function Main() {
         </ThemeProvider>
       )}
       <Cards cards={data ? data : []} />
+      <div ref={observerRef} style={{ height: '10px' }} />
       {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />}
       <LoginModal isToReservationCheck={isToReservationCheck} redirectPath='/' />
       <JoinModal />

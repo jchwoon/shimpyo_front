@@ -67,7 +67,7 @@ export default function Cards({ cards }: CardProps) {
                                         <CustomizedPercentageRowBox>
                                             <HiOutlineEmojiHappy style={{ color: "#00adb5", height: "20px", width: "20px" }} />
                                             <CustomizedPercentageTypography color="#00adb5">
-                                                Like%
+                                                {Number(card.ratio).toFixed(1)}
                                             </CustomizedPercentageTypography>
                                         </CustomizedPercentageRowBox>
                                     </CustomizedTitleRowBox>
