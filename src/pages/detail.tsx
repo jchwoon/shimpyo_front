@@ -239,7 +239,6 @@ export default function Detail() {
           </Description>
           <ImageContainer
             images={data ? data.house.houseImages : []}
-          // images={["https://source.unsplash.com/random?wallpapers", "https://i.namu.wiki/i/OnaSlI8n5C7pATSH1A9ztgdn4t1lmRssYmw6XsfGlTUloiLzMnw7YpGvSP4UAaYuorD81rQBHDQWqROBFYen_Uf0zttLFSx2Oag9YHeRbEeC7SXHSTJWIUgHU72DNsTjxX3GTME2VEgyslR5DGJCjcnyyTeKIRyZ6vDS18O0svQ.svg", "https://source.unsplash.com/random?wallpapers", "https://source.unsplash.com/random?wallpapers", "https://shimpyo-image-bucket.s3.ap-northeast-2.amazonaws.com/230712/57929ed0-fb70-4481-9628-34c91bbdbe46.jpg"]}
           />
           <MainContainer
             houseName={data ? data.house.name : ''}
@@ -315,3 +314,4 @@ const CustomizedDarkDiv = styled.div<{ customDisplay: boolean }>`
   transition: 0.2s ease;
   z-index: 3;
 `;
+

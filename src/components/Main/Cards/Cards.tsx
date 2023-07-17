@@ -19,7 +19,13 @@ import { useNavigate } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
-export default function Cards() {
+import { Typography } from '@mui/material';
+
+interface CardProps {
+    cards: Array<any>
+}
+
+export default function Cards({ cards }: CardProps) {
 
     const [appbarheight, setAppBarHeight] = useRecoilState(Height);
     const [customDisplay, setCustomDisplay] = useRecoilState(Display);
@@ -40,7 +46,7 @@ export default function Cards() {
                     {cards.map((card) => (
                         <Grid item key={card} xs={12} sm={6} md={4} lg={3}>
                             <MainCustomizedCard
-                                onClick={() => navigate('/detail')}
+                                onClick={() => navigate(`/detail/${card.houseId}`)}
                             >
                                 <CardMedia
                                     component="div"
@@ -48,13 +54,13 @@ export default function Cards() {
                                         pt: '100%',
                                         borderRadius: 3
                                     }}
-                                    image="https://source.unsplash.com/random?wallpapers"
+                                    image={card.houseImages[0]}
                                 />
                                 <ToggleFavorite />
                                 <CustomizedCardContent sx={{ flexGrow: 1, paddingLeft: "0px", paddingRight: "0px", paddingBottom: "0px" }}>
                                     <CustomizedTitleRowBox>
                                         <CustomizedTitleTypography fontFamily='Noto Sans KR'>
-                                            Title
+                                            {card.name}
                                         </CustomizedTitleTypography>
                                         <CustomizedPercentageRowBox>
                                             <CustomizedThumbUpIcon />
@@ -63,16 +69,17 @@ export default function Cards() {
                                             </CustomizedPercentageTypography>
                                         </CustomizedPercentageRowBox>
                                     </CustomizedTitleRowBox>
-
-                                    <CustomizedExplainTypography>
-                                        Explaination
-                                    </CustomizedExplainTypography>
-                                    <CustomizedDateTypography>
-                                        From when to when
-                                    </CustomizedDateTypography>
-                                    <CustomizedPricePerNightTypography>
-                                        ₩ Price /night
-                                    </CustomizedPricePerNightTypography>
+                                    <Description>
+                                        {card.contents}
+                                    </Description>
+                                    <div style={{ display: "flex", justifyContent: "row", alignItems: "flex-end" }}>
+                                        <CustomizedPricePerNightTypography>
+                                            ₩ {card.price.toLocaleString()}
+                                        </CustomizedPricePerNightTypography>
+                                        <Typography fontFamily='Noto Sans KR' fontWeight="300" fontSize="12px">
+                                            /박
+                                        </Typography>
+                                    </div>
                                 </CustomizedCardContent>
                             </MainCustomizedCard>
                         </Grid>
@@ -92,3 +99,15 @@ padding-right:0px;
 }
 
 `
+
+const Description = styled.div`
+font-family:Noto Sans KR;
+font-size: 12px;
+font-weight:300;
+display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 1;
+word-break: break-all;
+overflow: hidden;
+text-overflow: ellipsis;
+`;

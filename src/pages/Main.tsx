@@ -139,7 +139,7 @@ export default function Main() {
           <MobileNavbar />
         </ThemeProvider>
       )}
-      <Cards />
+      <Cards cards={data ? data : []} />
       {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />}
       <LoginModal isToReservationCheck={isToReservationCheck} redirectPath='/' />
       <JoinModal />
