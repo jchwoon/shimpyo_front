@@ -29,6 +29,7 @@ export default function AccommodationContents() {
 const StyledContentsDiv = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 const StyledContentsContainer = styled.div`

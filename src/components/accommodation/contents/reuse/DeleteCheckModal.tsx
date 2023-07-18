@@ -21,7 +21,7 @@ export default function DeleteCheckModal({ label, onClose, handleOnButton, body 
           <StyledCloseIcon onClick={onClose} size={20} />
         </StyleModalHead>
         <ParentContainer>
-          <StyledModalBody>{body}</StyledModalBody>
+          {body && <StyledModalBody>{body}</StyledModalBody>}
           <StyledButtonDiv>
             <StyledButton onClick={onClose}>아니오</StyledButton>
             <StyledButton onClick={handleOnButton}>예</StyledButton>
@@ -63,8 +63,10 @@ const StyleModalBox = styled.div`
   animation: ${moveUp} 0.75s;
   border-radius: 1rem;
   z-index: 5;
+  padding-top: 70px;
 
   @media only screen and (min-width: 640px) {
+    padding-top: 0;
     background-color: white;
     height: auto;
     max-height: 600px;

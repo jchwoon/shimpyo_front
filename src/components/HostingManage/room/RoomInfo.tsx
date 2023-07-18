@@ -6,7 +6,7 @@ import RoomOption from './RoomOption';
 export default function RoomInfo() {
   const roomData = useRecoilValue(roomDataState);
   return (
-    <>
+    <div>
       {roomData.map((room, idx) => {
         return (
           <StyledRoomContentsContainer key={`room ${idx}`}>
@@ -35,7 +35,7 @@ export default function RoomInfo() {
           </StyledRoomContentsContainer>
         );
       })}
-    </>
+    </div>
   );
 }
 const StyledRoomContentsContainer = styled.div`
@@ -57,17 +57,14 @@ const StyledContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  @media (min-width: 635px) {
-    flex-direction: row;
-    align-items: normal;
-  }
 `;
 
 const StyledFlexDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  @media (min-width: 635px) {
+  width: 100%;
+  @media (min-width: 900px) {
     flex-direction: row;
   }
 `;
@@ -82,10 +79,6 @@ const StyledImageContainer = styled.div`
   box-sizing: content-box;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 20px;
-
-  @media (min-width: 635px) {
-    width: 300px;
-  }
 `;
 
 const StyledCoverImageContainer = styled.div`
@@ -111,17 +104,13 @@ const StyledPlusImageContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100%;
+  width: 100px;
   height: 90px;
   align-items: center;
   z-index: 10;
 
   &:hover {
     border: 2px solid black;
-  }
-
-  @media (min-width: 635px) {
-    width: 100px;
   }
 `;
 

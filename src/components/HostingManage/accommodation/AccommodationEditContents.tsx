@@ -82,14 +82,18 @@ const StyledEditContentsContainer = styled.div`
 `;
 const StyledTypeButtonContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  @media (min-width: 780px) {
+    flex-wrap: nowrap;
+  }
 `;
 
 const StyledContentsTitle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 5rem;
-  height: 2rem;
+  width: 80px;
+  height: 40px;
   background-color: #212121;
   color: white;
   border-radius: 10px;
@@ -169,5 +173,8 @@ const StyledTextBox = styled.textarea`
   &:focus {
     background-color: white;
     outline: 1.5px solid black;
+  }
+  @media (max-width: 580px) {
+    width: 70%;
   }
 `;

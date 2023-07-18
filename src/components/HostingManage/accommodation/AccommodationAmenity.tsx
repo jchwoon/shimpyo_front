@@ -26,14 +26,15 @@ export default function AccommodationAmenity() {
 
 const StyledAmenityContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  @media (min-width: 1075px) {
+    flex-wrap: nowrap;
+  }
 `;
 
 const StyledAmenityDiv = styled.div`
   padding: 5px;
-  width: 100%;
-  @media (min-width: 780px) {
-    width: 30%;
-  }
+  width: 50%;
 `;
 
 const StyledItem = styled.button`
@@ -49,13 +50,18 @@ const StyledItem = styled.button`
 `;
 
 const StyledTextContainer = styled.div`
-  width: 100px;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
 `;
 
 const StyledItemName = styled.span`
   font-size: 15px;
   font-weight: 500;
   text-align: left;
+
+  @media (max-width: 500px) {
+    font-size: 10px;
+    width: 50px;
+    margin-left: 10px;
+  }
 `;
