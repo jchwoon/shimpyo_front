@@ -72,14 +72,15 @@ export default function RoomOption({ idx }: RoomOptionProps) {
 const StyledRoomOptionContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
+  align-items: center;
   width: 90%;
   padding: 20px;
   box-sizing: content-box;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 20px;
 
-  @media (min-width: 635px) {
+  @media (min-width: 900px) {
     width: 50%;
   }
 `;
@@ -99,6 +100,10 @@ const StyledInput = styled.div`
   height: 100%;
   margin-top: 10px;
   box-sizing: border-box;
+
+  @media (max-width: 500px) {
+    width: 90px;
+  }
 `;
 
 const StyledFlexDiv = styled.div`

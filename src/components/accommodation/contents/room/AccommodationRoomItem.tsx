@@ -193,7 +193,7 @@ export default function AccommodationRoomItem({ idx, setIsClicked }: RoomDataPro
         <AccommodationRoomOption idx={idx} setIsClicked={setIsClicked} />
       </StyledFlexDiv>
 
-      <StyledCloseIcon onClick={openModal}></StyledCloseIcon>
+      <StyledCloseIcon size={38} onClick={openModal}></StyledCloseIcon>
 
       {isOpenModal && (
         <DeleteCheckModal

@@ -151,7 +151,8 @@ export default function AccommodationInfoItem({
 const StyledItemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 800px;
+  /* width: 800px; */
+  width: 100%;
   margin-bottom: 48px;
   padding-bottom: 48px;
   border-bottom: 1px solid rgb(235, 235, 235);

@@ -153,7 +153,6 @@ export default function RoomInfoItem({ Ref, label, children, editContents, house
 const StyledItemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 800px;
   margin-bottom: 48px;
   padding-bottom: 48px;
   border-bottom: 1px solid rgb(235, 235, 235);

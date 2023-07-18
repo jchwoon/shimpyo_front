@@ -15,7 +15,7 @@ export default function AccommodationPicture() {
 }
 
 const StyledImg = styled.img`
-  width: 200px;
+  width: 30%;
   border-radius: 10px;
 
   & + & {

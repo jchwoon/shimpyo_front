@@ -267,15 +267,18 @@ const StyledName = styled.h1`
 const StyledContentsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  @media (min-width: 780px) {
+
+  @media (min-width: 1075px) {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
   }
 `;
 
 const StyledMenu = styled.div`
   width: 100%;
-  @media (min-width: 780px) {
+  display: flex;
+  flex-direction: column;
+  @media (min-width: 1075px) {
     position: sticky;
     top: 80px;
     width: 200px;
@@ -295,42 +298,32 @@ const StyledSubName = styled.h2`
 `;
 
 const StyledUl = styled.ul`
-  display: flex;
-  @media (min-width: 780px) {
-    display: grid;
-    grid-template-columns: none;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    margin-left: 16px;
-    border-left: 0.833px solid rgba(0, 0, 0, 0.2);
-  }
+  display: grid;
+  grid-template-columns: none;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  margin-left: 16px;
+  border-left: 0.833px solid rgba(0, 0, 0, 0.2);
 `;
 
 const StyledLi = styled.li`
   cursor: pointer;
   box-sizing: border-box;
-  padding: 10px;
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
-
-  @media (min-width: 780px) {
-    padding: 12px 0;
-    padding-left: 20px;
-    transition: border-left 0.3s ease-in-out;
-  }
+  padding: 12px 0 12px 20px;
+  transition: border-left 0.3s ease-in-out;
 `;
 
 const StyledMoveBar = styled.div<MoveBarProps>`
-  @media (min-width: 780px) {
-    position: absolute;
-    width: 2px;
-    height: 15px;
-    background-color: black;
-    top: 0;
-    left: 16px;
-    transition: transform 300ms ease;
-    transform: ${({ selectedIndex }) => `translateY(${10 + 41 * selectedIndex}px)`};
-  }
+  position: absolute;
+  width: 2px;
+  height: 15px;
+  background-color: black;
+  top: 0;
+  left: 16px;
+  transition: transform 300ms ease;
+  transform: ${({ selectedIndex }) => `translateY(${10 + 50 * selectedIndex}px)`};
 `;
 
 const StyledInfo = styled.div`
@@ -338,4 +331,10 @@ const StyledInfo = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+
+  @media (min-width: 1075px) {
+    padding: 0;
+  }
 `;
