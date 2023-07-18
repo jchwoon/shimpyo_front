@@ -18,12 +18,16 @@ interface LogoButtonProp {
     fontSize: string;
 }
 
+function handleSearchNavigate(address: string): void {
+    window.location.href = address;
+}
+
 const LogoButton: React.FC<LogoButtonProp> = ({ path, imageHeight, fontSize }) => {
 
-    const Navigation = useNavigate()
+    // const Navigation = useNavigate()
 
     return (
-        <LogoNavigationButton disableRipple onClick={() => Navigation(path)}>
+        <LogoNavigationButton disableRipple onClick={() => handleSearchNavigate(path)}>
             <CustomIcon style={{ height: imageHeight, marginBottom: 5, color: "#00adb5" }} />
             <Typography sx={{ color: "#00ADB5", fontFamily: "sunflower", fontSize: fontSize }}>쉼표</Typography>
         </LogoNavigationButton>

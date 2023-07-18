@@ -44,6 +44,7 @@ interface StructuredFormatting {
 interface PlaceType {
     description: string;
     structured_formatting: StructuredFormatting;
+    types: string[]
 }
 
 interface MainTextMatchedSubstrings {
@@ -58,6 +59,7 @@ interface StructuredFormatting {
 interface PlaceType {
     description: string;
     structured_formatting: StructuredFormatting;
+    types: string[]
 }
 
 interface GoogleMapsProps {
@@ -114,10 +116,22 @@ const GoogleMaps: React.FC<GoogleMapsProps> = ({
                     (autocompleteService.current as any).getPlacePredictions(
                         {
                             ...request,
-                            types: ['geocode'],
+                            types: ['political'],
                             componentRestrictions: { country: 'kr' },
                         },
-                        callback,
+                        (results: PlaceType[]) => {
+                            if (results) {
+                                const filteredResults = results.filter(
+                                    (place: PlaceType) => !(
+                                        place.types.includes('sublocality_level_2') ||
+                                        place.types.includes('sublocality_level_3') ||
+                                        place.types.includes('sublocality_level_4'))
+                                );
+                                callback(filteredResults);
+                            } else {
+                                callback([]);
+                            }
+                        }
                     );
                 },
                 400,

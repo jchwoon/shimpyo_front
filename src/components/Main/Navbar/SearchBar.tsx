@@ -41,7 +41,8 @@ import {
   FirstPickedDate,
   SecondPickedDate,
   PlaceholderChanged,
-  objectPlaceholder
+  objectPlaceholder,
+  HouseType
 } from '../../../recoil/navBarAtoms';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
@@ -64,6 +65,7 @@ export default function Navbar() {
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
   const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
   const [ObjectPlaceholder, setObjectPlaceholder] = useRecoilState(objectPlaceholder);
+  const [value, setValue] = useRecoilState(HouseType)
 
   const handleClick = () => {
     setAppBarHeight('160px');
@@ -156,7 +158,8 @@ export default function Navbar() {
           main_text: "",
           secondary_text: "",
           main_text_matched_substrings: []
-        }
+        },
+        types: [""]
       }
     )
   };
@@ -224,12 +227,41 @@ export default function Navbar() {
   const address = ObjectPlaceholder.description
   const addressArray = address.split(' ')
   const district = addressArray.length === 3 ? addressArray[2] : null
-  const city = addressArray[1]
+  const city = addressArray[1] === undefined ? null : addressArray[1]
+  function houseType(val: number) {
+    var answer = null;
+    switch (val) {
+      case 0:
+        answer = null;
+        break;
+      case 1:
+        answer = "HOTEL";
+        break;
+      case 2:
+        answer = "MOTEL";
+        break;
+      case 3:
+        answer = "PENSION";
+        break;
+      case 4:
+        answer = "GUEST";
+        break;
+    }
+    return answer;
+  }
+
+  const houseTypeValue = houseType(value)
 
   console.log("address:", address)
   console.log("addressArray:", addressArray)
   console.log("district:", district)
   console.log("cityt:", city)
+
+  const searchNavigate = `/search/?city=${city}&district=${district}&firstpickeddate=${moment(firstPickedDate).format('YYYY-MM-DDTHH:mm:ss')}&secondpickeddate=${moment(secondPickedDate).format('YYYY-MM-DDTHH:mm:ss')}&totalguestnumber=${AdultGuestNumber + ChildGuestNumber + InfantGuestNumber}&housetype=${houseTypeValue}`
+
+  function handleSearchNavigate(address: string): void {
+    window.location.href = address;
+  }
 
   return (
     <CustomizedSearchButtonWrapperDiv change={change.toString()}>
@@ -507,7 +539,7 @@ export default function Navbar() {
 
             </CustomizedGuestVerticalWrapperDiv>
             <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-              <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change.toString()} onClick={() => navigate(`/search/?city=${city}&distric=${district}`)}>
+              <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change.toString()} onClick={() => handleSearchNavigate(searchNavigate)}>
                 <CustomizedSearchIcon change={change.toString()} />
               </CustomizedAvatar>
             </div>

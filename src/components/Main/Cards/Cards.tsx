@@ -39,7 +39,24 @@ export default function Cards({ cards }: CardProps) {
     }
     const navigate = useNavigate();
 
-
+    function houseType(val: string) {
+        let answer = ''
+        switch (val) {
+            case "MOTEL":
+                answer = "모텔";
+                break;
+            case "PENSION":
+                answer = "펜션";
+                break;
+            case "HOTEL":
+                answer = "호텔";
+                break;
+            case "GUEST":
+                answer = "게스트 하우스";
+                break;
+        }
+        return answer
+    }
 
     return (
         <>
@@ -71,9 +88,9 @@ export default function Cards({ cards }: CardProps) {
                                             </CustomizedPercentageTypography>
                                         </CustomizedPercentageRowBox>
                                     </CustomizedTitleRowBox>
-                                    <Description>
-                                        {card.contents}
-                                    </Description>
+                                    <Typography fontFamily='Noto Sans KR' fontWeight="300" fontSize="13px" color="#8d8d8d" sx={{ marginBottom: "5px" }}>
+                                        {card.sido + " " + card.sigungu + "의 " + houseType(card.type)}
+                                    </Typography>
                                     <div style={{ display: "flex", justifyContent: "row", alignItems: "flex-end" }}>
                                         <CustomizedPricePerNightTypography>
                                             ₩ {card.price.toLocaleString()}

@@ -17,7 +17,7 @@ import JoinModal from '../components/shared/Modal/JoinModal';
 import LoginModal from '../components/shared/Modal/LoginModal';
 import IdFindModal from '../components/Main/Modal/IdFindModal';
 import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
 import UserMenuItem from '../components/shared/UserMenu/UserMenuItem';
 
@@ -53,9 +53,6 @@ export default function Main() {
   const setJoinModal = useSetRecoilState(joinModalAtom);
   const loginState = useRecoilValue(loginStateAtom)
   const { logoutHandler } = useLogout();
-
-  const placeholder = useRecoilValue(objectPlaceholder)
-  console.log("placeholder:", placeholder)
 
   const menuItems = (
     <div>
@@ -107,6 +104,10 @@ export default function Main() {
     <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
   );
 
+  const location = useLocation();
+  const isSearchPage = location.pathname.includes('/search/');
+  console.log("isSearchPage:", isSearchPage)
+
   //메인 페이지 데이터 요청
 
   const { responseData, sendRequest, errorMessage, isLoading } = useHttpRequest();
@@ -126,7 +127,7 @@ export default function Main() {
   // }, [])
 
   useEffect(() => {
-    if (nextData)
+    if (nextData && !isSearchPage)
       sendRequest({
         url: `${MAIN_PAGE_HOME_LIST_API_PATH}`,
         method: "POST",
@@ -187,6 +188,36 @@ export default function Main() {
 
   console.log("data:", data)
 
+  //검색 데이터 요청
+
+
+
+  const city = searchParams.get('city')
+  const district = searchParams.get('district')
+  const firstPickedDate = searchParams.get('firstpickeddate')
+  const secondPickedDate = searchParams.get('secondpickeddate')
+  const totalguestnumber = searchParams.get('totalguestnumber')
+  const houseTypeValue = searchParams.get('housetype')
+
+  console.log("page:", page)
+
+  useEffect(() => {
+    if (nextData && isSearchPage)
+      sendRequest({
+        url: `${MAIN_PAGE_HOME_LIST_API_PATH}`,
+        method: "POST",
+        body: {
+          page: page,
+          city: city === "null" ? null : city,
+          district: district === "null" ? null : district,
+          checkin: firstPickedDate === "Invalid date" ? null : firstPickedDate,
+          checkout: secondPickedDate === "Invalid date" ? null : secondPickedDate,
+          people: totalguestnumber === "0" ? null : totalguestnumber,
+          type: houseTypeValue === "null" ? null : houseTypeValue
+        }
+      })
+  }, [page])
+
   return (
     <>
       <CssBaseline />
@@ -200,7 +231,7 @@ export default function Main() {
         </ThemeProvider>
       )}
       <Cards cards={data ? data : []} />
-      <div ref={observerRef} style={{ height: '10px' }} />
+      {nextData && <div ref={observerRef} style={{ height: '10px' }} />}
       {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />}
       <LoginModal isToReservationCheck={isToReservationCheck} redirectPath='/' />
       <JoinModal />
