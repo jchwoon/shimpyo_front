@@ -38,19 +38,7 @@ export default function VisitedAccommodation() {
   const [totalPage, setTotalPage] = useState<number>(1);
   const [totalItem, setTotalItem] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [contentsArray, setContentsArray] = useState<ListType[]>([
-    {
-      checkInDate: '2023.06.19.09',
-      checkOutDate: '2023.06.20.13',
-      existReview: true,
-      houseImageUrl: '/images/image.png',
-      houseName: '파주 하늘펜션',
-      houseOwnerName: '루비스',
-      houseType: '펜션',
-      reservationId: 15,
-      reservationStatus: 'FINISHED',
-    },
-  ]);
+  const [contentsArray, setContentsArray] = useState<ListType[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const { changeClickedPage, changeNextPage, changePrevPage } = usePagination({
     category: 'visited',
@@ -78,10 +66,10 @@ export default function VisitedAccommodation() {
     await sendRequest({ url: `/user/reservations?page=${currentPage - 1}&reservationStatus=FINISHED` });
   };
 
-  // useEffect(() => {
-  //   getData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [currentPage]);
+  useEffect(() => {
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
   const categoryTitle = (
     <StyleHeaderBox>
