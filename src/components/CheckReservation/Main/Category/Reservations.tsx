@@ -1,6 +1,6 @@
 import ReservationCategory from '../../ReUse/ReservationCategory';
 import CategoryTitle from '../../ReUse/CategoryTitle';
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
 import useAuthorizedRequest from '../../../../hooks/useAuthorizedRequest';
@@ -18,7 +18,7 @@ interface IResultData {
 
 export default function Reservations() {
   const { responseData, sendRequest } = useAuthorizedRequest<IResultData>({});
-
+  const { responseData: hardChangeResponse, sendRequest: hardChangeRequest } = useAuthorizedRequest({});
   const [totalPage, setTotalPage] = useState<number>(1);
   const [totalItem, setTotalItem] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -33,6 +33,18 @@ export default function Reservations() {
     totalPage,
   });
 
+  const hardChangeTocompleteStatusforTest = async (e: MouseEvent, reservationId: number) => {
+    e.stopPropagation();
+    await hardChangeRequest({ url: `/user/reservations/${reservationId}/status`, method: 'PATCH' });
+  };
+
+  const getData = async () => {
+    if (!currentPage) return;
+    if (currentPage > totalPage || currentPage <= 0) return;
+
+    await sendRequest({ url: `/user/reservations?reservationStatus=COMPLETE&page=${currentPage - 1}` });
+  };
+
   useEffect(() => {
     if (!responseData) return;
 
@@ -44,16 +56,18 @@ export default function Reservations() {
   }, [responseData]);
 
   useEffect(() => {
-    const getData = async () => {
-      if (!currentPage) return;
-      if (currentPage > totalPage || currentPage <= 0) return;
-
-      await sendRequest({ url: `/user/reservations?reservationStatus=COMPLETE&page=${currentPage - 1}` });
-    };
-
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
+
+  useEffect(() => {
+    if (!hardChangeResponse) return;
+
+    if (hardChangeResponse.isSuccess) {
+      getData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hardChangeResponse]);
 
   const categoryTitle = (
     <StyleHeaderBox>
@@ -64,7 +78,12 @@ export default function Reservations() {
   const categoryList = (
     <StyleGridBox>
       {contentsArray.map(item => (
-        <GridItem key={item.reservationId} item={item} />
+        <div key={item.reservationId} style={{ position: 'relative' }}>
+          <GridItem item={item} />
+          <StyleTestButton onClick={(e: MouseEvent) => hardChangeTocompleteStatusforTest(e, item.reservationId)}>
+            이용 완료 처리
+          </StyleTestButton>
+        </div>
       ))}
     </StyleGridBox>
   );
@@ -102,4 +121,15 @@ const StyleGridBox = styled.div`
 
 const StyleHeaderBox = styled.div`
   position: relative;
+`;
+
+const StyleTestButton = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #e7220c;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
 `;
