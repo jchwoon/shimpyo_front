@@ -44,6 +44,16 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: '/search',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={null}>
+              <Main />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+      {
         path: 'hosting',
         element: (
           <Suspense fallback={<Loading />}>
@@ -65,7 +75,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: 'detail',
+        path: 'detail/:houseId',
         element: (
           <Suspense fallback={<Loading />}>
             <AuthCheck option={null}>

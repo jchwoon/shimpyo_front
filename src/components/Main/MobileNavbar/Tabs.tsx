@@ -46,14 +46,16 @@ export default function CategoryTabs() {
     };
 
     return (
-        <Box sx={{ width: '100%' }}>
-            <CustomizedTabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
-                <CustomizedTab icon={<BiBuildingHouse />} iconPosition="start" label="전체" {...a11yProps(0)} />
-                <CustomizedTab icon={<LuBuilding />} iconPosition="start" label="호텔" {...a11yProps(1)} />
-                <CustomizedTab icon={<HiOutlineOfficeBuilding />} iconPosition="start" label="모텔" {...a11yProps(2)} />
-                <CustomizedTab icon={<BsHouses />} iconPosition="start" label="펜션" {...a11yProps(3)} />
-                <CustomizedTab icon={<BsHouse />} iconPosition="start" label="게스트하우스" {...a11yProps(4)} />
-            </CustomizedTabs>
-        </Box>
+        <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+            <Box sx={{ width: "85%" }}>
+                <CustomizedTabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="scrollable" scrollButtons={true} allowScrollButtonsMobile>
+                    <CustomizedTab iconPosition="start" label="전체" {...a11yProps(0)} />
+                    <CustomizedTab iconPosition="start" label="호텔" {...a11yProps(1)} />
+                    <CustomizedTab iconPosition="start" label="모텔" {...a11yProps(2)} />
+                    <CustomizedTab iconPosition="start" label="펜션" {...a11yProps(3)} />
+                    <CustomizedTab iconPosition="start" label="게스트하우스" {...a11yProps(4)} />
+                </CustomizedTabs>
+            </Box>
+        </div>
     );
 }

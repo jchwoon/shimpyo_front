@@ -50,6 +50,11 @@ export const PlaceholderChanged = atom<boolean>({
     default: false,
 });
 
+export const HouseType = atom<number>({
+    key: 'HouseType',
+    default: 0,
+});
+
 interface MainTextMatchedSubstrings {
     offset: number;
     length: number;
@@ -62,6 +67,7 @@ interface StructuredFormatting {
 interface PlaceType {
     description: string;
     structured_formatting: StructuredFormatting;
+    types: string[]
 }
 
 export const objectPlaceholder = atom<PlaceType>({
@@ -73,6 +79,7 @@ export const objectPlaceholder = atom<PlaceType>({
             secondary_text: '',
             main_text_matched_substrings: [],
         },
+        types: ['']
     },
 });
 

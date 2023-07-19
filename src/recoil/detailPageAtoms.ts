@@ -15,9 +15,19 @@ export const activeRoomName = atom<string>({
     default: '',
 });
 
+export const activeRoomNumber = atom<number>({
+    key: 'activeRoomNumber',
+    default: 0,
+});
+
 export const merchantUid = atom<string>({
     key: 'merchantUid',
     default: '',
+})
+
+export const couponList = atom<Array<any>>({
+    key: 'couponList',
+    default: [],
 })
 
 export const swipePageState = atom<number>({

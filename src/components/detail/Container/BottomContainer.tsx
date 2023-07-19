@@ -12,9 +12,11 @@ interface BottomContainerProps {
 
 export default function BottomContainer({ reviewData, reviewIsLoading }: BottomContainerProps) {
 
+  console.log("reviewData:", reviewData)
+
   return (
     <>
-      <MainTitle>후기</MainTitle>
+      {reviewData?.length ? <MainTitle>후기</MainTitle> : null}
       <CommentCardContainer>
         {reviewData && reviewData.map((review, index) => {
           return (

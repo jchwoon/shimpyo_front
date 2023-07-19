@@ -32,7 +32,7 @@ import JoinModal from '../components/shared/Modal/JoinModal';
 import LoginModal from '../components/shared/Modal/LoginModal';
 
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 
 import CustomizedBottomNavigation from '../components/shared/MobileFooter/CustomizedBottomNavigaton';
@@ -48,6 +48,8 @@ import { DETAIL_PAGE_API_PATH, DETAIL_PAGE_REVIEWS_API_PATH } from '../constants
 import useLogout from '../hooks/useLogout';
 
 export default function Detail() {
+
+  const { houseId } = useParams()
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -111,7 +113,7 @@ export default function Detail() {
   const { responseData, sendRequest, errorMessage, isLoading } = useHttpRequest();
 
   useEffect(() => {
-    sendRequest({ url: DETAIL_PAGE_API_PATH })
+    sendRequest({ url: `${DETAIL_PAGE_API_PATH}/${houseId}` })
   }, [])
 
   const [data, setData] = useState<any>(null);
@@ -134,7 +136,7 @@ export default function Detail() {
 
 
   useEffect(() => {
-    if (nextReview) reviewSendRequest({ url: `${DETAIL_PAGE_REVIEWS_API_PATH}?page=${page}` })
+    if (nextReview) reviewSendRequest({ url: `${DETAIL_PAGE_REVIEWS_API_PATH}/${houseId}?page=${page}` })
     // if (nextReview) reviewSendRequest({ url: `${DETAIL_PAGE_REVIEWS_API_PATH}?page=4` })
   }, [page])
 
@@ -237,7 +239,6 @@ export default function Detail() {
           </Description>
           <ImageContainer
             images={data ? data.house.houseImages : []}
-          // images={["https://source.unsplash.com/random?wallpapers", "https://i.namu.wiki/i/OnaSlI8n5C7pATSH1A9ztgdn4t1lmRssYmw6XsfGlTUloiLzMnw7YpGvSP4UAaYuorD81rQBHDQWqROBFYen_Uf0zttLFSx2Oag9YHeRbEeC7SXHSTJWIUgHU72DNsTjxX3GTME2VEgyslR5DGJCjcnyyTeKIRyZ6vDS18O0svQ.svg", "https://source.unsplash.com/random?wallpapers", "https://source.unsplash.com/random?wallpapers", "https://shimpyo-image-bucket.s3.ap-northeast-2.amazonaws.com/230712/57929ed0-fb70-4481-9628-34c91bbdbe46.jpg"]}
           />
           <MainContainer
             houseName={data ? data.house.name : ''}
@@ -248,6 +249,7 @@ export default function Detail() {
             lng={data ? data.house.lng : null}
             reviewData={reviewData ? reviewData : []}
             reviewIsLoading={reviewIsLoading}
+            houseId={houseId ? houseId : ''}
           />
         </Container>
       </div>
@@ -313,3 +315,4 @@ const CustomizedDarkDiv = styled.div<{ customDisplay: boolean }>`
   transition: 0.2s ease;
   z-index: 3;
 `;
+

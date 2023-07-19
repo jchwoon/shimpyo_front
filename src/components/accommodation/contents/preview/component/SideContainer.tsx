@@ -88,7 +88,7 @@ const OptionContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const HotelDescription = styled(Typography)<{ linelimit: number }>`
+const HotelDescription = styled(Typography) <{ linelimit: number }>`
   margin-top: 30px;
   display: -webkit-box;
   -webkit-box-orient: vertical;

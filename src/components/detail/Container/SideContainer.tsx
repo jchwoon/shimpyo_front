@@ -59,7 +59,10 @@ export default function SideContainer({ houseContents, options, rooms, lat, lng 
             checkOutTime={room.checkOut}
             price={room.price}
             onClick={() => handleCardClick(room.name)}
-            active={activeRecoilCard === room.name} />)
+            active={activeRecoilCard === room.name}
+            roomId={room.roomId}
+          />)
+
         }
       </RoomCardContainer>
       <Divider />

@@ -28,7 +28,7 @@ display: flex;
 align-items: center;
 text-align: center;
 margin-left:10px;
-margin-bottom: 20px;
+// margin-bottom: 20px;
 cursor: pointer;
 color:#acacac;
 &:hover{

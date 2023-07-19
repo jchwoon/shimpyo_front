@@ -16,7 +16,10 @@ import ListItemText from '@mui/material/ListItemText';
 import ColorButton from "../shared/UI/ColorButton";
 import Radio from '@mui/material/Radio';
 
-import { merchantUid, activeRoomName } from '../../recoil/detailPageAtoms';
+import {
+    merchantUid, activeRoomName, activeRoomNumber,
+    couponList
+} from '../../recoil/detailPageAtoms';
 import useAuthorizedRequest from "../../hooks/useAuthorizedRequest";
 import useHttpRequest from "../../hooks/useHttpRequest";
 import { accessTokenAtom, loginStateAtom, phoneValueAtom, nameValueAtom } from "../../recoil/userAtoms";
@@ -38,6 +41,9 @@ interface PaymentInfoBoxProp {
     checkInDate: string | null,
     checkOutDate: string | null,
     price: number | null
+    houseId: string,
+    GuestCount: number,
+    // couponListArray: Array<any>,
 }
 
 declare const window: typeof globalThis & {
@@ -116,20 +122,42 @@ export interface Iamport {
     ) => void;
 }
 
-const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, checkOutDate, price }) => {
+const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, checkOutDate, price, houseId, GuestCount }) => {
 
     const DaysDifference = moment(checkOutDate).diff(moment(checkInDate), "days")
     const TotalPrice = price ? price * DaysDifference : 0
 
-    const [couponRadioSelectedValue, setCouponRadioSelectedValue] = React.useState(0);
+    const [couponRadioSelectedValue, setCouponRadioSelectedValue] = React.useState('');
+    const [couponRadioSelectedDiscount, setCouponRadioSelectedDiscount] = React.useState(0);
     const [paymentRadioSelectedValue, setPaymentRadioSelectedValue] = React.useState('');
+    const [couponRadioId, setCouponRadioId] = React.useState(0);
 
-    const DiscountPrice = TotalPrice ? TotalPrice * couponRadioSelectedValue / 100 : 0
+    const DiscountPrice = TotalPrice ? TotalPrice * couponRadioSelectedDiscount / 100 : 0
 
-    const handleCouponRadio = (value: number) => {
-        if (value === 0) { setCouponRadioSelectedValue(value) }
-        else if (value === couponRadioSelectedValue) { setCouponRadioSelectedValue(0) }
+    const handleCouponRadio = (value: string) => {
+        if (value === '') { setCouponRadioSelectedValue(value) }
+        else if (value === couponRadioSelectedValue) {
+            setCouponRadioSelectedValue('')
+        }
         else { setCouponRadioSelectedValue(value) }
+    }
+
+    const handleCouponDiscountRadio = (value: number) => {
+        if (value === 0) { setCouponRadioSelectedDiscount(value) }
+        else if (value === couponRadioSelectedDiscount) { setCouponRadioSelectedDiscount(0) }
+        else { setCouponRadioSelectedDiscount(value) }
+    }
+
+    const handleCouponId = (value: number) => {
+        if (value === 0) { setCouponRadioId(value) }
+        else if (value === couponRadioId) { setCouponRadioId(0) }
+        else { setCouponRadioId(value) }
+    }
+
+    const handleRadioClick = (stringValue: string, numberValue: number, couponId: number) => {
+        handleCouponRadio(stringValue);
+        handleCouponDiscountRadio(numberValue);
+        handleCouponId(couponId);
     }
 
     const handlePaymentRadio = (value: string) => {
@@ -155,26 +183,30 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
     const { responseData: noneMemberPaymentResponseData, sendRequest: sendNoneMemberPaymentRequest } = useHttpRequest();
 
     const memberUid = useRecoilValue(merchantUid)
+    const couponListArray = useRecoilValue(couponList)
     const noneMemberUid = uuidv4()
 
     const Name = useRecoilValue(activeRoomName)
+    const roomId = useRecoilValue(activeRoomNumber)
 
     const nonMemberName = useRecoilValue(nameValueAtom);
     const nonMemberNumber = useRecoilValue(phoneValueAtom);
+
+    //회원 결제
 
     function memberRequestPay() {
         const { IMP } = window;
         IMP.init("imp62564523");
 
         const data = {
-            pg: "html5_inicis",
+            pg: paymentRadioSelectedValue === '신용카드' ? "html5_inicis" : "kakaopay.TC0ONETIME",
             pay_method: "card",
             merchant_uid: `${memberUid}`,
-            name: "회원구매",
-            amount: 100,
-            // amount: TotalPrice - DiscountPrice,
-            buyer_name: `${nonMemberName}`,
-            buyer_tel: `${nonMemberNumber}`,
+            name: `${houseName} / ${Name}`,
+            // amount: 100,
+            amount: TotalPrice - DiscountPrice,
+            // buyer_name: `${nonMemberName}`,
+            // buyer_tel: `${nonMemberNumber}`,
         }
 
         async function callback(response: RequestPayResponse) {
@@ -192,12 +224,13 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                     withCredentials: true,
                     body: {
                         impUid: imp_uid,
-                        roomId: 80001,
+                        roomId: roomId,
+                        couponId: couponRadioId,
                         merchantUid: merchant_uid,
-                        payMethod: "KGINICIS",
-                        peopleCount: 3,
-                        checkInDate: "2023.07.08",
-                        checkOutDate: "2023.07.09"
+                        payMethod: paymentRadioSelectedValue === '신용카드' ? "KGINICIS" : "KAKAO",
+                        peopleCount: GuestCount,
+                        checkInDate: moment(checkInDate).format('YYYY.MM.DD'),
+                        checkOutDate: moment(checkOutDate).format('YYYY.MM.DD')
                     }
                 });
             } else {
@@ -212,20 +245,21 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         if (memberPaymentResponseData.isSuccess) { navigation('/reservations?category=reservation'); }
     }, [memberPaymentResponseData])
 
+    //비회원 결제
 
     function noneMemberRequestPay() {
         const { IMP } = window;
         IMP.init("imp62564523");
 
         const data = {
-            pg: "html5_inicis",
+            pg: paymentRadioSelectedValue === '신용카드' ? "html5_inicis" : "kakaopay.TC0ONETIME",
             pay_method: "card",
             merchant_uid: `${noneMemberUid}`,
             name: `${houseName} / ${Name}`,
-            amount: 100,
-            // amount: TotalPrice - DiscountPrice,
-            buyer_name: "포트원 기술지원팀",
-            buyer_tel: "010-1234-5678",
+            // amount: 100,
+            amount: TotalPrice - DiscountPrice,
+            buyer_name: `${nonMemberName}`,
+            buyer_tel: `${nonMemberNumber}`,
         }
 
         async function callback(response: RequestPayResponse) {
@@ -242,14 +276,14 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                     method: "POST",
                     body: {
                         impUid: imp_uid,
-                        roomId: 80001,
+                        roomId: roomId,
                         merchantUid: merchant_uid,
-                        payMethod: "KGINICIS",
-                        name: "박현준",
-                        phoneNumber: "01029991157",
-                        peopleCount: 3,
-                        checkInDate: "2023.07.11",
-                        checkOutDate: "2023.07.12"
+                        payMethod: paymentRadioSelectedValue === '신용카드' ? "KGINICIS" : "KAKAO",
+                        name: `${nonMemberName}`,
+                        phoneNumber: `${nonMemberNumber}`,
+                        peopleCount: GuestCount,
+                        checkInDate: moment(checkInDate).format('YYYY.MM.DD'),
+                        checkOutDate: moment(checkOutDate).format('YYYY.MM.DD')
                     }
                 });
             } else {
@@ -263,6 +297,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         if (!noneMemberPaymentResponseData) return;
         if (noneMemberPaymentResponseData.isSuccess) { navigation('/check/non-member'); }
     }, [noneMemberPaymentResponseData])
+
+    console.log("coupongListArray:", couponListArray)
 
     return (
         <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
@@ -291,31 +327,51 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                             id="panel1a-header"
                         >
                             <Typography fontFamily='Noto Sans KR'>쿠폰 할인</Typography>
-                            <Typography fontFamily='Noto Sans KR' sx={{ marginRight: "10px", color: couponRadioSelectedValue === 0 ? "#d9d9d9" : "#000000" }}>₩ {couponRadioSelectedValue === 0 ? 0 : DiscountPrice.toLocaleString()}</Typography>
+                            <Typography fontFamily='Noto Sans KR' sx={{ marginRight: "10px", color: couponRadioSelectedValue === '' ? "#d9d9d9" : "#000000" }}>₩ {couponRadioSelectedValue === '' ? 0 : DiscountPrice.toLocaleString()}</Typography>
                         </CustomizedAccordionSummary>
                         <CustomizedAccordionDetails>
-                            <List>
-                                <ListItem disablePadding>
-                                    <CustomizedListItemButton onClick={() => handleCouponRadio(5)}>
-                                        <CustomizedRadio
-                                            checked={couponRadioSelectedValue === 5}
-                                            name="radio-buttons"
-                                            inputProps={{ 'aria-label': 'A' }}
-                                        />
-                                        <ListItemText primary="회원가입 5% 할인" />
-                                    </CustomizedListItemButton>
-                                </ListItem>
-                                <ListItem disablePadding>
-                                    <CustomizedListItemButton onClick={() => handleCouponRadio(3)}>
-                                        <CustomizedRadio
-                                            checked={couponRadioSelectedValue === 3}
-                                            name="radio-buttons"
-                                            inputProps={{ 'aria-label': 'B' }}
-                                        />
-                                        <ListItemText primary="리뷰 작성 3% 할인" />
-                                    </CustomizedListItemButton>
-                                </ListItem>
-                            </List>
+                            {
+                                couponListArray.length > 0
+                                    ?
+                                    <List>
+                                        {couponListArray.map((couponListItem, index) =>
+                                        (
+                                            <ListItem disablePadding key={index}>
+                                                <CustomizedListItemButton onClick={() => handleRadioClick(couponListItem.name, couponListItem.discount, couponListItem.couponId)}>
+                                                    <CustomizedRadio
+                                                        checked={couponRadioSelectedValue === couponListItem.name}
+                                                        name="radio-buttons"
+                                                        inputProps={{ 'aria-label': 'A' }}
+                                                    />
+                                                    <ListItemText
+                                                        primary={
+                                                            <Typography fontFamily='Noto Sans KR' >
+                                                                {couponListItem.name}
+                                                            </Typography>
+                                                        }
+                                                        secondary={
+                                                            <div style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "flex-start" }}>
+                                                                <Typography fontFamily='Noto Sans KR' fontSize="12px" fontWeight="300"  >
+                                                                    {couponListItem.discount}% 할인
+                                                                </Typography>
+                                                                <div style={{ width: "5%" }} />
+                                                                <Typography fontFamily='Noto Sans KR' fontSize="12px" fontWeight="300" >
+                                                                    {moment(couponListItem.expiredDate).format('M월 D일')} 만료
+                                                                </Typography>
+                                                            </div>
+                                                        } />
+                                                </CustomizedListItemButton>
+                                            </ListItem>
+                                        )
+                                        )}
+                                    </List>
+                                    :
+                                    <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                                        <Typography fontFamily='Noto Sans KR' sx={{ marginRight: "10px", color: "#d9d9d9" }} fontSize="14px">
+                                            사용 가능한 쿠폰이 없습니다
+                                        </Typography>
+                                    </div>
+                            }
                         </CustomizedAccordionDetails>
                     </CustomizedAccordion>
                     : null}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { Typography, Button, IconButton, Card } from '@mui/material';
@@ -45,7 +45,10 @@ import { RESERVATION_PREPARE_API_PATH } from '../../../constants/api/reservation
 import { accessTokenAtom, loginStateAtom } from "../../../recoil/userAtoms"
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { merchantUid } from '../../../recoil/detailPageAtoms';
+import {
+  merchantUid,
+  couponList
+} from '../../../recoil/detailPageAtoms';
 
 import NoneMemberPhoneInput from '../../Pay/NoneMemberPhoneInput';
 
@@ -53,14 +56,16 @@ import { swipePageState } from '../../../recoil/detailPageAtoms';
 
 interface NewSideBoxProps {
   houseName: string;
+  houseId: string;
 }
 
 interface ResultData {
   accessToken: string;
   merchantUid: string;
+  couponList: Array<any>;
 }
 
-export default function NewSideBox({ houseName }: NewSideBoxProps) {
+export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
   const room = useRecoilValue(activeRoom)
   const price = useRecoilValue(activeRoomPrice)
   const Name = useRecoilValue(activeRoomName)
@@ -72,6 +77,8 @@ export default function NewSideBox({ houseName }: NewSideBoxProps) {
   const [InfantGuestNumber, setInfantGuestNumber] = useRecoilState(InfantGuest);
 
   const [MerchantUid, setMerchantUid] = useRecoilState(merchantUid);
+  const [couponListArray, setCouponListArray] = useRecoilState(couponList);
+  // const [couponListArray, setCouponListArray] = useState<object[]>([]);
 
   const TotalGuestNumber = AdultGuestNumber + ChildGuestNumber;
   if (InfantGuestNumber > 0 && AdultGuestNumber === 0) {
@@ -81,6 +88,8 @@ export default function NewSideBox({ houseName }: NewSideBoxProps) {
     InfantGuestNumber === 0
       ? `게스트 ${TotalGuestNumber}명`
       : `게스트 ${TotalGuestNumber} 명, 유아 ${InfantGuestNumber}명 `;
+
+  const GuestCount = AdultGuestNumber + ChildGuestNumber + InfantGuestNumber;
 
   const DaysDifference = moment(secondPickedDate).diff(moment(firstPickedDate), "days")
   const TotalPrice = price ? price * DaysDifference : null
@@ -113,14 +122,20 @@ export default function NewSideBox({ houseName }: NewSideBoxProps) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = async () => {
-    // await sendRequest({ url: `${RESERVATION_PREPARE_API_PATH}`, withCredentials: true });
-
-    // if (responseData && responseData.result) {
-    //   setMerchantUid(responseData.result.merchantUid)
-    // }
+    if (isLoggedIn) {
+      await sendRequest({ url: `${RESERVATION_PREPARE_API_PATH}`, withCredentials: true });
+    }
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    if (!responseData) return
+    if (responseData.isSuccess) {
+      setCouponListArray(responseData.result.couponList)
+      setMerchantUid(responseData.result.merchantUid)
+    }
+  }, [responseData])
 
   const style = {
     position: 'absolute' as 'absolute',
@@ -147,6 +162,8 @@ export default function NewSideBox({ houseName }: NewSideBoxProps) {
   //   };
 
   const [swipePage, setSwipePage] = useRecoilState(swipePageState);
+
+  console.log("couponListArray:", couponListArray)
 
   return (
     <Main >
@@ -264,7 +281,14 @@ export default function NewSideBox({ houseName }: NewSideBoxProps) {
               backgroundColor: "white"
             }}>
               {isLoggedIn ? null : <NoneMemberPhoneInput setModalOpen={setOpen} />}
-              <PaymentInfoBox houseName={houseName} checkInDate={firstPickedDate} checkOutDate={secondPickedDate} price={price} />
+              <PaymentInfoBox
+                houseName={houseName}
+                checkInDate={firstPickedDate}
+                checkOutDate={secondPickedDate}
+                price={price} houseId={houseId}
+                GuestCount={GuestCount}
+              // couponListArray={couponListArray} 
+              />
             </div>
 
           </div>

@@ -36,13 +36,17 @@ import { GuestCountAdult, GuestCountChild, GuestCountInfant } from "./GuestCount
 import { Divider, Collapse } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 
+import CategoryTabs from "./Tabs";
+
 interface DrawerContentProps {
     activecard: string,
     setActiveCard: (value: string) => void;
     open: boolean;
+    searchNavigate: string;
+    handleSearchNavigate: (value: string) => void;
 }
 
-export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setActiveCard, open }) => {
+export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setActiveCard, open, searchNavigate, handleSearchNavigate }) => {
 
     const [GoogleMapsPlaceholder, setGoogleMapsPlaceholder] = useRecoilState(googleMapsPlaceholder)
     const [placeholderChanged, setPlaceholderChanged] = useRecoilState(PlaceholderChanged)
@@ -56,7 +60,8 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
                     main_text: "",
                     secondary_text: "",
                     main_text_matched_substrings: []
-                }
+                },
+                types: ['']
             }
         )
         setPlaceholderChanged(false)
@@ -95,6 +100,7 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
 
     return (
         <>
+            <CategoryTabs />
             <Collapse in={activecard === "card1"} collapsedSize={"90px"}>
                 <div style={{ position: "relative" }}>
                     {activecard === "card1" ?
@@ -231,7 +237,7 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({ activecard, setAct
                     </CustomizedCard3 >
                 </div>
             </Collapse>
-            <CustomizedFab color="primary" aria-label="add">
+            <CustomizedFab color="primary" aria-label="add" onClick={() => handleSearchNavigate(searchNavigate)}>
                 <SearchIcon />
             </CustomizedFab>
 

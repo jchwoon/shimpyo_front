@@ -13,7 +13,7 @@ import { BsPerson, BsPersonPlus } from 'react-icons/bs'
 import { Typography } from '@mui/material';
 
 import { useRecoilState } from "recoil";
-import { activeRoomPrice, activeRoomName } from '../../../recoil/detailPageAtoms';
+import { activeRoomPrice, activeRoomName, activeRoomNumber } from '../../../recoil/detailPageAtoms';
 import { useState, useEffect } from 'react';
 import moment from "moment";
 import 'moment/locale/ko'
@@ -35,17 +35,21 @@ interface RommCardProps {
     price: number;
     onClick: () => void;
     active: boolean;
+    roomId: number;
 }
 
 
-export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedroom, shower, minPerson, maxPerson, checkInTime, checkOutTime, price, onClick, active }) => {
+export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedroom, shower, minPerson, maxPerson, checkInTime, checkOutTime, price, onClick, active, roomId }) => {
 
     const [roomPrice, setRoomPrice] = useRecoilState(activeRoomPrice);
     const [roomName, setRoomName] = useRecoilState(activeRoomName);
+    const [roomNumber, setRoomNumber] = useRecoilState(activeRoomNumber);
+
     useEffect(() => {
         if (active) {
             setRoomPrice(price);
             setRoomName(name);
+            setRoomNumber(roomId);
         }
     }, [active]);
 
@@ -77,6 +81,18 @@ export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedr
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+    const momentCheckInTime = moment(checkInTime, "HH:mm:ss").format("A h시 m분").endsWith("0분")
+        ?
+        moment(checkInTime, "HH:mm:ss").format("A h시")
+        :
+        moment(checkInTime, "HH:mm:ss").format("A h시 m분")
+
+    const momentCheckOutTime = moment(checkOutTime, "HH:mm:ss").format("A h시 m분").endsWith("0분")
+        ?
+        moment(checkOutTime, "HH:mm:ss").format("A h시")
+        :
+        moment(checkOutTime, "HH:mm:ss").format("A h시 m분")
 
     return (
         <>
@@ -153,7 +169,7 @@ export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedr
                                 CHECK IN
                             </Typography>
                             <Typography fontFamily='Noto Sans KR' fontSize="5px" fontWeight="400">
-                                {moment(checkInTime, "HH:mm:ss").format("A h시 m분")}
+                                {momentCheckInTime}
                             </Typography>
                         </div>
 
@@ -162,7 +178,7 @@ export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedr
                                 CHECK OUT
                             </Typography>
                             <Typography fontFamily='Noto Sans KR' fontSize="5px" fontWeight="400">
-                                {moment(checkOutTime, "HH:mm:ss").format("A h시 m분")}
+                                {momentCheckOutTime}
                             </Typography>
                         </div>
                     </div>
