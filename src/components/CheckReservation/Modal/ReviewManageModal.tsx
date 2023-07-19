@@ -10,8 +10,6 @@ import { reviewAverageScoreAtom, reviewContentAtom, reviewIdAtom } from '../../.
 import { reviewModifiedAlarmAtoms } from '../../../recoil/alarmAtoms';
 import { AverageScore } from '../Main/Category/VisitedAccommodation/ReviewButton';
 
-// type AverageScore = 'GOOD' | 'NORMAL' | 'BAD';
-
 type StyleTargetMarkProps = {
   score: AverageScore;
 };
@@ -46,6 +44,7 @@ export default function ReviewManageModal({ getData }: ReviewManageModalProps) {
   const initialState = () => {
     setIsClickDeleteButton(false);
     setErrorMessage('');
+    setAverageScore('GOOD');
   };
 
   const checkOneMoreQuestion = () => {
@@ -197,7 +196,7 @@ const StyleTargetMark = styled.div<StyleTargetMarkProps>`
   border-radius: 100%;
   background-color: #1cc71c;
   position: absolute;
-  top: 65px;
+  top: 60px;
   transition: all 0.1s ease-in-out;
   left: ${({ score }) => getLeftValue(score)};
 `;
