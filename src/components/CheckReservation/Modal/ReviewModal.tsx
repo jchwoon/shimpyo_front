@@ -7,8 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { useSearchParams } from 'react-router-dom';
 import { reviewCompleteAlarmAtoms } from '../../../recoil/alarmAtoms';
-
-type AverageScore = 'GOOD' | 'NORMAL' | 'BAD';
+import { AverageScore } from '../Main/Category/VisitedAccommodation/ReviewButton';
 
 type StyleTargetMarkProps = {
   score: AverageScore;
@@ -18,10 +17,8 @@ const getLeftValue = (score: AverageScore) => {
   switch (score) {
     case 'GOOD':
       return '26px';
-    case 'NORMAL':
-      return '112px';
     case 'BAD':
-      return '198px';
+      return '111px';
     default:
       return '0';
   }
@@ -74,7 +71,6 @@ export default function ReviewModal({ getData }: ReviewModalProps) {
       <StyleTextarea ref={reviewInputRef} />
       <StyleReviewBox>
         <StyleReviewButton onClick={() => setAverageScore('GOOD')}>&#128516;</StyleReviewButton>
-        <StyleReviewButton onClick={() => setAverageScore('NORMAL')}>&#128528;</StyleReviewButton>
         <StyleReviewButton onClick={() => setAverageScore('BAD')}>&#128577;</StyleReviewButton>
         <StyleTargetMark score={averageScore}></StyleTargetMark>
       </StyleReviewBox>
@@ -138,7 +134,7 @@ const StyleTargetMark = styled.div<StyleTargetMarkProps>`
   border-radius: 100%;
   background-color: #1cc71c;
   position: absolute;
-  top: 55px;
+  top: 65px;
   transition: all 0.1s ease-in-out;
   left: ${({ score }) => getLeftValue(score)};
 `;

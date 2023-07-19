@@ -12,7 +12,7 @@ interface ReviewButtonProps {
   item: ListType;
 }
 
-type AverageScore = 'GOOD' | 'NORMAL' | 'BAD';
+export type AverageScore = 'GOOD' | 'BAD';
 
 interface targetReviewData {
   reservationId: number;
