@@ -12,11 +12,11 @@ import MobileNavbarTheme from '../components/Main/OverrideTheme/MobileNavbarThem
 import NewMobileFooter from '../components/shared/MobileFooter/NewMobileFooter';
 
 import { useState, useEffect, useRef } from 'react';
-import AdditionalInfoModal from '../components/Main/Modal/AdditionalInfoModal';
+import AdditionalInfoModal from '../components/shared/Modal/AdditionalInfoModal';
 import JoinModal from '../components/shared/Modal/JoinModal';
 import LoginModal from '../components/shared/Modal/LoginModal';
-import IdFindModal from '../components/Main/Modal/IdFindModal';
-import PasswordFindModal from '../components/Main/Modal/PasswordFindModal';
+import IdFindModal from '../components/shared/Modal/IdFindModal';
+import PasswordFindModal from '../components/shared/Modal/PasswordFindModal';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
 import UserMenuItem from '../components/shared/UserMenu/UserMenuItem';
@@ -51,7 +51,7 @@ export default function Main() {
   const [isToReservationCheck, setIsToReservationCheck] = useState(false);
   const navigate = useNavigate();
   const setJoinModal = useSetRecoilState(joinModalAtom);
-  const loginState = useRecoilValue(loginStateAtom)
+  const loginState = useRecoilValue(loginStateAtom);
   const { logoutHandler } = useLogout();
 
   const menuItems = (
@@ -233,7 +233,7 @@ export default function Main() {
       <Cards cards={data ? data : []} isLoading={isLoading} />
       {nextData && <div ref={observerRef} style={{ height: '10px' }} />}
       {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />}
-      <LoginModal isToReservationCheck={isToReservationCheck} redirectPath='/' />
+      <LoginModal isToReservationCheck={isToReservationCheck} redirectPath="/" />
       <JoinModal />
       <AdditionalInfoModal />
       <IdFindModal />

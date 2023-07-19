@@ -1,5 +1,5 @@
 import { ImBubble } from 'react-icons/im';
-import SocialButton from '../Modal/Button/SocialButton';
+import SocialButton from '../../shared/Modal/Button/SocialButton';
 
 export default function KakaoLogin() {
   const kakaoLoginClickHandler = () => {

@@ -1,3 +1,5 @@
+export const ACCOMMODATION_PAGE = '/accommodation';
+
 export const PAGE_NUMBERS = [5, 5, 2, 2];
 
 export const ALL_STEP_NUMBER = 14;
@@ -5,6 +7,8 @@ export const ALL_STEP_NUMBER = 14;
 export const NAME_TEXT_LIMIT = 32;
 
 export const CONTENTS_TEXT_LIMIT = 500;
+
+export const STATUS = { COMPLETE: '예약 완료', USING: '사용중', FINISHED: '이용 완료' };
 
 export interface Room {
   name: string;
@@ -31,5 +35,5 @@ export interface Accommodation {
 
 export interface ImageItem {
   image?: string;
-  isFocused: boolean;
+  isFocused?: boolean;
 }

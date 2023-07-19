@@ -5,7 +5,7 @@ export const reviewContentAtom = atom<string>({
   default: '',
 });
 
-type AverageScore = 'GOOD' | 'NORMAL' | 'BAD';
+type AverageScore = 'GOOD' | 'BAD';
 export const reviewAverageScoreAtom = atom<AverageScore>({
   key: 'reviewAverageScoreAtom',
   default: 'GOOD',

@@ -52,7 +52,7 @@ export const nicknameAtom = atom<string>({
 
 const storedUserId = localStorage.getItem('userId');
 const defaultUserId = storedUserId ? JSON.parse(storedUserId) : '';
-export const userIdAtom = atom<number>({
+export const userIdAtom = atom<string>({
   key: 'userIdAtom',
   default: defaultUserId,
 });

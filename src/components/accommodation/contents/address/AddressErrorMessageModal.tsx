@@ -37,7 +37,7 @@ export default function ErrorMessageModal() {
         </StyledButtonDiv>
       </StyledContentDiv>
       <div>
-        <StyledCloseIcon onClick={handleCloseModal} />
+        <StyledCloseIcon size={25} onClick={handleCloseModal} />
       </div>
     </StyledFlexDiv>
   );
@@ -65,7 +65,7 @@ const StyledFlexDiv = styled.div<ErrorMessageModalProps>`
   bottom: 140%;
 
   @media (min-width: 780px) {
-    width: 42%;
+    width: 45%;
     left: 30%;
   }
 `;

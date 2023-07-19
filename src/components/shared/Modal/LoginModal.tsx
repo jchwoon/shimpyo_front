@@ -19,7 +19,7 @@ interface ResultData {
   accessToken: string;
   nickname: string;
   profileImage: string;
-  userId: number;
+  userId: string;
 }
 
 interface LoginModalProps {
@@ -83,10 +83,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
         'profileImage',
         responseData.result.profileImage ? JSON.stringify(responseData.result.profileImage) : '',
       );
-      localStorage.setItem(
-        'userId',
-        responseData.result.userId ? JSON.stringify(responseData.result.profileImage) : '',
-      );
+      localStorage.setItem('userId', responseData.result.userId ? JSON.stringify(responseData.result.userId) : '');
       setUserProfileImage(responseData.result.profileImage || '/images/basicProfile.jpg');
       setUserNickname(responseData.result.nickname || '');
       setUserId(responseData.result.userId);
@@ -112,6 +109,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
     <>
       <StyleLoginBody onKeyUp={submitHandler}>
         <Input ref={emailRef} placeholder="이메일" type="text" />
+        <span style={{ marginTop: '10px' }}></span>
         <Input ref={passwordRef} placeholder="비밀번호" type="password" />
         {isLoginError && <StyleError>{loginErrorMessage}</StyleError>}
         <StyleAccountInfoFind>

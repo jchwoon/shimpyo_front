@@ -62,6 +62,7 @@ export default function JoinModal() {
     <>
       <StyleBody>
         <EmailInput getValid={handleGetEmailValid} />
+        <span style={{ marginTop: '10px' }}></span>
         <PasswordInput getValid={handleGetPasswordValid} />
         <ConfirmPasswordInput getValid={handleGetConfirmPasswordValid} />
         <ColorButton onClick={handleNextButtonClick} disabled={!isValid} label="계속" />

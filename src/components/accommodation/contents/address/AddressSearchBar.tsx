@@ -57,10 +57,9 @@ export default function AddressSearchBar() {
         .getPlacePredictions(request)
         .then((predictions: any) => {
           setSearchResult(predictions);
-          console.log(predictions);
         })
         .catch((err: Error) => {
-          console.log(err);
+          console.log(err.message);
         });
     };
 
@@ -142,6 +141,7 @@ const StyledInput = styled.input`
 const StyledCancelButton = styled.button`
   font-weight: bold;
   border: none;
+  width: 20px;
   border-radius: 50%;
   color: rgba(0, 0, 0, 0.5);
   background-color: rgba(0, 0, 0, 0.2);

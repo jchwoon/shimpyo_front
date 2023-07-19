@@ -8,9 +8,11 @@ import usePhoneCertification from '../../../hooks/usePhoneCertification';
 import Button from '../../shared/UI/Button';
 import { USER_PHONE_API_PATH } from '../../../constants/api/userApi';
 
-interface PhoneInfoProps extends Pick<AccountInfoListProps, 'infoContent'> {}
+interface PhoneInfoProps extends Pick<AccountInfoListProps, 'infoContent'> {
+  fetchUserInfo: () => void;
+}
 
-export default function PhoneInfo({ infoContent }: PhoneInfoProps) {
+export default function PhoneInfo({ infoContent, fetchUserInfo }: PhoneInfoProps) {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [currentPhone, setCurrentPhone] = useState(infoContent);
   const [phoneValue, setPhoneValue] = useState<string>('');
@@ -58,6 +60,7 @@ export default function PhoneInfo({ infoContent }: PhoneInfoProps) {
       setCurrentPhone(phoneValue);
       initialState();
       setIsEditMode(false);
+      fetchUserInfo();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);

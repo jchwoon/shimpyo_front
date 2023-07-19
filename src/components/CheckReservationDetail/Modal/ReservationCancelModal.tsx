@@ -25,7 +25,7 @@ export default function ReservationCancelModal({ price, checkIn }: ReservationCa
   const cancelReservationHandler = async () => {
     await sendRequest({
       url: `/user/reservations/${reservationId}`,
-      method: 'PATCH',
+      method: 'DELETE',
       body: { refundAmount: +price - commission },
     });
   };
@@ -35,7 +35,7 @@ export default function ReservationCancelModal({ price, checkIn }: ReservationCa
       if (!price || !checkIn) return;
       const checkInMilliValue = changeToMilliSeconds(checkIn);
       const currentMilliValue = new Date().getTime();
-      const oneDay = 24 * oneHour * 30;
+      const oneDay = 24 * oneHour;
 
       if (currentMilliValue >= checkInMilliValue) {
         setIsOverCheckIn(true);

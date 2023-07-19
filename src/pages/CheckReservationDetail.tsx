@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
-import CheckReservationDetailHeader from '../components/CheckReservationDetail/layout/CheckReservationDetailHeader';
-import CheckReservationDetailMain from '../components/CheckReservationDetail/layout/CheckReservationDetailMain';
+import CheckReservationDetailHeader from '../components/CheckReservationDetail/Header/CheckReservationDetailHeader';
+import CheckReservationDetailMain from '../components/CheckReservationDetail/Main/CheckReservationDetailMain';
 import Alarm from '../components/shared/Alarm';
 import { copyAddressAlarmAtoms } from '../recoil/alarmAtoms';
 
