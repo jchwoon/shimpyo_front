@@ -32,6 +32,7 @@ import { CustomIcon } from '../components/shared/MobileFooter/CustomIcon';
 
 import { useNavigate } from 'react-router-dom';
 
+
 import { loginModalAtom, joinModalAtom } from '../recoil/modalAtoms';
 import { loginStateAtom } from '../recoil/userAtoms';
 
