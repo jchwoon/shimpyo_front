@@ -249,6 +249,7 @@ export default function Detail() {
             lng={data ? data.house.lng : null}
             reviewData={reviewData ? reviewData : []}
             reviewIsLoading={reviewIsLoading}
+            houseId={houseId ? houseId : ''}
           />
         </Container>
       </div>

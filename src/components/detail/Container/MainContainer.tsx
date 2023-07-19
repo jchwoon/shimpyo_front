@@ -12,14 +12,15 @@ interface MainContainerProps {
   lng: number;
   reviewData?: Array<Object>;
   reviewIsLoading: boolean;
+  houseId: string;
 }
 
-export default function MainContainer({ houseName, houseContents, options, rooms, lat, lng, reviewData, reviewIsLoading }: MainContainerProps) {
+export default function MainContainer({ houseName, houseContents, options, rooms, lat, lng, reviewData, reviewIsLoading, houseId }: MainContainerProps) {
   return (
     <>
       <Main>
         <SideContainer houseContents={houseContents} options={options} rooms={rooms} lat={lat} lng={lng} />
-        <NewSideBox houseName={houseName} />
+        <NewSideBox houseName={houseName} houseId={houseId} />
       </Main>
       <BottomContainer reviewData={reviewData} reviewIsLoading={reviewIsLoading} />
     </>

@@ -65,17 +65,27 @@ export default function Cards({ cards }: CardProps) {
                     {cards.map((card, index) => (
                         <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
                             <MainCustomizedCard
-                                onClick={() => navigate(`/detail/${card.houseId}`)}
+                                onClick={
+                                    () => {
+                                        if (card.soldout) return
+                                        navigate(`/detail/${card.houseId}`)
+                                    }
+                                }
                             >
-                                <CardMedia
-                                    component="div"
-                                    sx={{
-                                        pt: '100%',
-                                        borderRadius: 3
-                                    }}
-                                    image={card.houseImages[0]}
-                                />
-                                <ToggleFavorite />
+                                <div style={{ position: "relative" }}>
+                                    {card.soldout && <HoverDiv>
+                                        <Typography fontFamily="Noto Sans KR" color="white" fontSize="15px" fontWeight="500">예약이 마감되었습니다</Typography>
+                                    </HoverDiv>}
+                                    <CardMedia
+                                        component="div"
+                                        sx={{
+                                            pt: '100%',
+                                            borderRadius: 3
+                                        }}
+                                        image={card.houseImages[0]}
+                                    />
+                                </div>
+                                <ToggleFavorite houseId={card.houseId} />
                                 <CustomizedCardContent sx={{ flexGrow: 1, paddingLeft: "0px", paddingRight: "0px", paddingBottom: "0px" }}>
                                     <CustomizedTitleRowBox>
                                         <CustomizedTitleTypography fontFamily='Noto Sans KR'>
@@ -130,3 +140,18 @@ word-break: break-all;
 overflow: hidden;
 text-overflow: ellipsis;
 `;
+
+const HoverDiv = styled.div`
+  z-index: 2;
+  position: absolute;
+  width:100%;
+  height:100%;
+  transition: 0.2s all ease;
+  opacity:0.5;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor:pointer;
+  border-radius: 12px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+`

@@ -13,7 +13,7 @@ import { BsPerson, BsPersonPlus } from 'react-icons/bs'
 import { Typography } from '@mui/material';
 
 import { useRecoilState } from "recoil";
-import { activeRoomPrice, activeRoomName } from '../../../recoil/detailPageAtoms';
+import { activeRoomPrice, activeRoomName, activeRoomNumber } from '../../../recoil/detailPageAtoms';
 import { useState, useEffect } from 'react';
 import moment from "moment";
 import 'moment/locale/ko'
@@ -35,17 +35,21 @@ interface RommCardProps {
     price: number;
     onClick: () => void;
     active: boolean;
+    roomId: number;
 }
 
 
-export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedroom, shower, minPerson, maxPerson, checkInTime, checkOutTime, price, onClick, active }) => {
+export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedroom, shower, minPerson, maxPerson, checkInTime, checkOutTime, price, onClick, active, roomId }) => {
 
     const [roomPrice, setRoomPrice] = useRecoilState(activeRoomPrice);
     const [roomName, setRoomName] = useRecoilState(activeRoomName);
+    const [roomNumber, setRoomNumber] = useRecoilState(activeRoomNumber);
+
     useEffect(() => {
         if (active) {
             setRoomPrice(price);
             setRoomName(name);
+            setRoomNumber(roomId);
         }
     }, [active]);
 
