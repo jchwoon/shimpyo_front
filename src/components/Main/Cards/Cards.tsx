@@ -13,21 +13,25 @@ import { Height, Display, Change } from '../../../recoil/navBarAtoms';
 import useHttpRequest from '../../../hooks/useHttpRequest';
 import { MAIN_PAGE_HOME_LIST_API_PATH } from '../../../constants/api/homeListApi'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
 import { Typography } from '@mui/material';
 
 import { HiOutlineEmojiHappy, HiOutlineEmojiSad } from 'react-icons/hi'
+import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
+
+
 
 interface CardProps {
-    cards: Array<any>
+    cards: Array<any>;
+    isLoading: boolean;
 }
 
-export default function Cards({ cards }: CardProps) {
+export default function Cards({ cards, isLoading }: CardProps) {
 
     const [appbarheight, setAppBarHeight] = useRecoilState(Height);
     const [customDisplay, setCustomDisplay] = useRecoilState(Display);
@@ -58,11 +62,28 @@ export default function Cards({ cards }: CardProps) {
         return answer
     }
 
+    const [windowWidth, setWindowWidth] = useState(0)
+    const [windowHeight, setWindowHeight] = useState(0)
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+            setWindowHeight(window.innerHeight);
+        };
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const location = useLocation();
+    const isSearchPage = location.pathname.includes('/search/');
+
     return (
         <>
             <Container sx={{ paddingTop: 13 }} maxWidth="xl">
                 <Grid container spacing={4}>
-                    {cards.map((card, index) => (
+                    {cards.length > 0 ? cards.map((card, index) => (
                         <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
                             <MainCustomizedCard
                                 onClick={
@@ -112,9 +133,34 @@ export default function Cards({ cards }: CardProps) {
                                 </CustomizedCardContent>
                             </MainCustomizedCard>
                         </Grid>
-                    ))}
+                    ))
+                        :
+                        isSearchPage
+                            ?
+                            <div style={{ width: "100%", height: windowHeight * 0.8, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                                <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", justifyContent: "center", width: "80%" }}>
+                                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", height: "100%", marginRight: "10px" }}>
+                                        <FaQuoteLeft size={10} color='#b3b3b3' />
+                                    </div>
+                                    <div>
+                                        <Typography fontFamily='Gowun Batang' fontSize="30px">좋은 여행자는 고정된 계획이 없고, 도착을 목적으로 가지지 않는다.</Typography>
+                                        <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                                            <Typography noWrap fontFamily='Gowun Batang' fontSize="20px">노자</Typography>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", marginLeft: "10px" }}>
+                                        <FaQuoteRight size={10} color='#b3b3b3' />
+                                    </div>
+
+                                </div>
+                                <StyledImg src="/images/paperplane.gif" alt="paper plane" style={{ width: "100px", marginBottom: "30px" }} />
+                                <Typography>원하시는 여행조건에 대한 결과는 없었지만</Typography>
+                                <Typography>기대하지 않았던 여행들이 당신을 기다리고 있습니다.</Typography>
+                            </div>
+                            : null
+                    }
                 </Grid>
-            </Container>
+            </Container >
             <CustomizedDarkDiv onClick={handleClick} customDisplay={customDisplay} />
         </>
     )
@@ -154,4 +200,8 @@ const HoverDiv = styled.div`
   display:flex;
   justify-content:center;
   align-items:center;
+`
+
+const StyledImg = styled.img`
+
 `

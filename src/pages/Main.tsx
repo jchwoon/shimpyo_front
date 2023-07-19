@@ -230,7 +230,7 @@ export default function Main() {
           <MobileNavbar />
         </ThemeProvider>
       )}
-      <Cards cards={data ? data : []} />
+      <Cards cards={data ? data : []} isLoading={isLoading} />
       {nextData && <div ref={observerRef} style={{ height: '10px' }} />}
       {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />}
       <LoginModal isToReservationCheck={isToReservationCheck} redirectPath='/' />
