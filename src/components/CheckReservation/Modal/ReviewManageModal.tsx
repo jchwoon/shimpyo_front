@@ -8,8 +8,9 @@ import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import Button from '../../shared/UI/Button';
 import { reviewAverageScoreAtom, reviewContentAtom, reviewIdAtom } from '../../../recoil/reviewAtoms';
 import { reviewModifiedAlarmAtoms } from '../../../recoil/alarmAtoms';
+import { AverageScore } from '../Main/Category/VisitedAccommodation/ReviewButton';
 
-type AverageScore = 'GOOD' | 'NORMAL' | 'BAD';
+// type AverageScore = 'GOOD' | 'NORMAL' | 'BAD';
 
 type StyleTargetMarkProps = {
   score: AverageScore;
@@ -19,10 +20,8 @@ const getLeftValue = (score: AverageScore) => {
   switch (score) {
     case 'GOOD':
       return '25px';
-    case 'NORMAL':
-      return '111px';
     case 'BAD':
-      return '197px';
+      return '111px';
     default:
       return '0';
   }
@@ -44,6 +43,11 @@ export default function ReviewManageModal({ getData }: ReviewManageModalProps) {
   const [errorMessage, setErrorMessage] = useState('');
   const [isClickDeleteButton, setIsClickDeleteButton] = useState(false);
 
+  const initialState = () => {
+    setIsClickDeleteButton(false);
+    setErrorMessage('');
+  };
+
   const checkOneMoreQuestion = () => {
     setIsClickDeleteButton(true);
   };
@@ -55,6 +59,7 @@ export default function ReviewManageModal({ getData }: ReviewManageModalProps) {
 
   const deleteReview = async () => {
     await deleteSendRequest({ url: `/user/reviews/${reviewId}`, method: 'DELETE' });
+    initialState();
   };
 
   const submitModifiedReview = async () => {
@@ -116,7 +121,6 @@ export default function ReviewManageModal({ getData }: ReviewManageModalProps) {
           <StyleTextarea value={content} onChange={changeReviewValue} />
           <StyleReviewBox>
             <StyleReviewButton onClick={() => setAverageScore('GOOD')}>&#128516;</StyleReviewButton>
-            <StyleReviewButton onClick={() => setAverageScore('NORMAL')}>&#128528;</StyleReviewButton>
             <StyleReviewButton onClick={() => setAverageScore('BAD')}>&#128577;</StyleReviewButton>
             <StyleTargetMark score={averageScore}></StyleTargetMark>
           </StyleReviewBox>
@@ -138,7 +142,10 @@ export default function ReviewManageModal({ getData }: ReviewManageModalProps) {
     <Modal
       title={isClickDeleteButton ? '정말로 삭제 하시겠어요?' : '후기를 작성해 주세요.'}
       label="Review"
-      onClose={() => setIsReviewManageOpen(false)}
+      onClose={() => {
+        initialState();
+        setIsReviewManageOpen(false);
+      }}
       body={body}
       isOpen={isReviewManageOpen}
     />
@@ -190,7 +197,7 @@ const StyleTargetMark = styled.div<StyleTargetMarkProps>`
   border-radius: 100%;
   background-color: #1cc71c;
   position: absolute;
-  top: 55px;
+  top: 65px;
   transition: all 0.1s ease-in-out;
   left: ${({ score }) => getLeftValue(score)};
 `;
