@@ -25,7 +25,7 @@ import useHttpRequest from "../../hooks/useHttpRequest";
 import { accessTokenAtom, loginStateAtom, phoneValueAtom, nameValueAtom } from "../../recoil/userAtoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { AxiosError } from 'axios';
-import { MEMBER_RESERVATION_API_PATH, NON_MEMBER_RESERVATION_API_PATH } from "../../constants/api/reservationApi";
+import { MEMBER_RESERVATION_API_PATH, NON_MEMBER_RESERVATION_API_PATH, NON_MEMBER_RESERVATION_TEXT_API_PATH } from "../../constants/api/reservationApi";
 
 import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from 'react'
@@ -196,6 +196,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
     const nonMemberName = useRecoilValue(nameValueAtom);
     const nonMemberNumber = useRecoilValue(phoneValueAtom);
 
+    const { responseData: noneMemberTextAfterPayResponseData, sendRequest: sendNoneMemberTextAfterPayRequest } = useHttpRequest();
+
     //회원 결제
 
     function memberRequestPay() {
@@ -289,8 +291,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                     method: "POST",
                     body: {
                         impUid: imp_uid,
-                        // roomId: roomId,
-                        roomId: 132132121,
+                        roomId: roomId,
                         merchantUid: merchant_uid,
                         payMethod: paymentRadioSelectedValue === '신용카드' ? "KGINICIS" : "KAKAO",
                         name: `${nonMemberName}`,
@@ -309,9 +310,27 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         IMP.request_pay(data, callback);
     }
 
+    const SendNoneMemberTextAfterPayRequestFunction = async (noneMemberPaymentResponseData: any) => {
+        try {
+            await sendNoneMemberTextAfterPayRequest({
+                url: `${NON_MEMBER_RESERVATION_TEXT_API_PATH}`,
+                method: "POST",
+                body: {
+                    phoneNumber: `${nonMemberNumber}`,
+                    reservationCode: `${noneMemberPaymentResponseData.result.reservationId}`
+                }
+            });
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         if (!noneMemberPaymentResponseData) return;
-        if (noneMemberPaymentResponseData.isSuccess) { navigation('/check/non-member'); }
+        if (noneMemberPaymentResponseData.isSuccess) {
+            SendNoneMemberTextAfterPayRequestFunction(noneMemberPaymentResponseData)
+            navigation('/check/non-member');
+        }
         else if (noneMemberPaymentResponseData.isSuccess === false) {
             setOpen(false)
             setAlertOpen(true)
@@ -319,7 +338,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         }
     }, [noneMemberPaymentResponseData])
 
-    console.log("coupongListArray:", couponListArray)
+    console.log("noneMemberTextAfterPayResponseData:", noneMemberTextAfterPayResponseData)
 
     return (
         <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
