@@ -74,18 +74,18 @@ export default function AddressSearchList({ searchResult, focus }: AddressSearch
         </StyledItem>
       </StyledListContainer>
     );
+  } else {
+    return (
+      <StyledListContainer focus={focus} searchResult={searchResult}>
+        <StyledItem onClick={getLocation}>
+          <FaLocationArrow />
+          <StyledFlexContainer>
+            <StyledItemTitle>현재 위치 사용</StyledItemTitle>
+          </StyledFlexContainer>
+        </StyledItem>
+      </StyledListContainer>
+    );
   }
-
-  return (
-    <StyledListContainer focus={focus} searchResult={searchResult}>
-      <StyledItem onClick={getLocation}>
-        <FaLocationArrow />
-        <StyledFlexContainer>
-          <StyledItemTitle>현재 위치 사용</StyledItemTitle>
-        </StyledFlexContainer>
-      </StyledItem>
-    </StyledListContainer>
-  );
 }
 
 const StyledListContainer = styled.ul<AddressSearchListProps>`

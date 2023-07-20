@@ -71,7 +71,7 @@ export default function AccommodationItem({ onClick, data, isSelected, setAccomm
   }, [accommdationResponseData]);
 
   return (
-    <>
+    <div>
       <StyledItemContainer onClick={onClick} aria-checked={isSelected}>
         {isSelected && <Dimmed />}
         {isSelected && <AccommodationOption onClick={openCloseDeleteCheckModal} houseId={data.id} />}
@@ -86,7 +86,7 @@ export default function AccommodationItem({ onClick, data, isSelected, setAccomm
           onClose={openCloseDeleteCheckModal}
         />
       )}
-    </>
+    </div>
   );
 }
 
