@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useResetRecoilState } from 'recoil';
 
 import Logo from '../shared/Logo';
 import Button from '../shared/UI/Button';
@@ -16,20 +17,56 @@ import MenuBlock from '../Hosting/Menu/MenuBlock';
 import { BsHouseHeartFill } from 'react-icons/bs';
 import { IoMdSettings } from 'react-icons/io';
 
+import {
+  accommodationState,
+  addressCheckState,
+  disabledState,
+  errorModalState,
+  imageDataState,
+  imageListState,
+  roomImageListState,
+  stepState,
+} from '../../recoil/accommodationAtoms';
+import { ACCOMMODATION_PAGE } from '../../constants/accommodation';
+import { selectedAccommodationIdState } from '../../recoil/hostingAtoms';
+
 export default function HostingHeader() {
-  const [searchParams, setSearchParams] = useSearchParams();
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
   const navigation = useNavigate();
   const { logoutHandler } = useLogout();
   const { isOpen, setIsOpen } = useMenuBar({ initialState: false, menuRef, buttonRef });
 
+  const navigate = useNavigate();
+  const resetStepState = useResetRecoilState(stepState);
+  const resetAccommodationState = useResetRecoilState(accommodationState);
+  const resetDisabledState = useResetRecoilState(disabledState);
+  const resetAddressCheckState = useResetRecoilState(addressCheckState);
+  const resetErrorModalState = useResetRecoilState(errorModalState);
+  const resetImageDataState = useResetRecoilState(imageDataState);
+  const resetImageListState = useResetRecoilState(imageListState);
+  const resetRoomImageListState = useResetRecoilState(roomImageListState);
+  const resetSelectedAccommodationId = useResetRecoilState(selectedAccommodationIdState);
+
+  const moveAccommodationPage = () => {
+    resetStepState();
+    resetAccommodationState();
+    resetDisabledState();
+    resetAddressCheckState();
+    resetErrorModalState();
+    resetImageDataState();
+    resetImageListState();
+    resetRoomImageListState();
+    resetSelectedAccommodationId();
+    navigate(ACCOMMODATION_PAGE);
+  };
+
   const menuItems = (
     <div>
       <MenuItem onClick={() => navigation('/reservations')} label="예약관리" bold={true} />
       <MenuItem onClick={() => navigation('/hosting')} label="숙소관리" bold={true} />
       <MenuItem onClick={() => navigation('/accommodation')} label="숙소등록" bold={true} />
-      <MenuItem onClick={() => navigation('/account')} label="계정" />
+      <MenuItem onClick={moveAccommodationPage} label="계정" />
       <Underline />
       <MenuItem onClick={() => logoutHandler()} label="로그아웃" />
     </div>
@@ -40,7 +77,7 @@ export default function HostingHeader() {
       <MenuBlock label="메뉴">
         <MenuItem onClick={() => navigation('/reservations')} icon={BsHouseHeartFill} bold label="예약관리" />
         <MenuItem onClick={() => navigation('/hosting')} icon={BsHouseHeartFill} bold label="숙소관리" />
-        <MenuItem onClick={() => navigation('/accommodation')} icon={BsHouseHeartFill} bold label="숙소등록" />
+        <MenuItem onClick={moveAccommodationPage} icon={BsHouseHeartFill} bold label="숙소등록" />
       </MenuBlock>
       <MenuBlock label="계정">
         <MenuItem onClick={() => navigation('/account')} icon={IoMdSettings} bold label="계정" />
@@ -52,7 +89,7 @@ export default function HostingHeader() {
   return (
     <Header>
       <FlexBox>
-        <Logo height="25px" path="/hosting" width="50" />
+        <Logo height="25px" path="/" width="50" />
         <UserMenu
           isOpen={isOpen}
           menuRef={menuRef}

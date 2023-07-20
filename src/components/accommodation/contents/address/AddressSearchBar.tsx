@@ -35,17 +35,17 @@ export default function AddressSearchBar() {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearchWord(searchWord);
-      const script = document.createElement('script');
-      scriptRef.current = script;
+    let autocompleteService;
+    const script = document.createElement('script');
+
+    const loadGoogleMapsAPI = () => {
       script.async = true;
       script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places&callback=initAutocomplete`;
-      document.head.appendChild(script);
-    }, 500);
+      scriptRef.current = script;
+    };
 
-    window.initAutocomplete = () => {
-      const autocomplete = new window.google.maps.places.AutocompleteService();
+    const handleAutocomplete = () => {
+      autocompleteService = new window.google.maps.places.AutocompleteService();
       const request = {
         input: searchWord,
         type: ['street_address', 'geocode'],
@@ -53,7 +53,7 @@ export default function AddressSearchBar() {
           country: 'KR',
         },
       };
-      autocomplete
+      autocompleteService
         .getPlacePredictions(request)
         .then((predictions: any) => {
           setSearchResult(predictions);
@@ -63,9 +63,20 @@ export default function AddressSearchBar() {
         });
     };
 
+    //디바운스 역할
+    const timer = setTimeout(() => {
+      setSearchWord(searchWord);
+    }, 500);
+
+    if (!window.google) {
+      loadGoogleMapsAPI();
+    } else {
+      handleAutocomplete();
+    }
+
     return () => {
       clearTimeout(timer);
-      delete window.initAutocomplete;
+
       if (scriptRef.current && scriptRef.current.parentNode) {
         scriptRef.current.parentNode.removeChild(scriptRef.current);
       }

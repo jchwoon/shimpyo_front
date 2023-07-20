@@ -8,6 +8,7 @@ import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { useSearchParams } from 'react-router-dom';
 import { reviewCompleteAlarmAtoms } from '../../../recoil/alarmAtoms';
 import { AverageScore } from '../Main/Category/VisitedAccommodation/ReviewButton';
+import { reviewAverageScoreAtom } from '../../../recoil/reviewAtoms';
 
 type StyleTargetMarkProps = {
   score: AverageScore;
@@ -34,9 +35,13 @@ export default function ReviewModal({ getData }: ReviewModalProps) {
   const [searchParams] = useSearchParams();
   const { responseData, sendRequest } = useAuthorizedRequest({});
   const [errorMessage, setErrorMessage] = useState('');
-  const [averageScore, setAverageScore] = useState<AverageScore>('GOOD');
+  const [averageScore, setAverageScore] = useRecoilState<AverageScore>(reviewAverageScoreAtom);
   const reviewInputRef = useRef<HTMLTextAreaElement>(null);
   const setReviewModal = useSetRecoilState(reviewModalAtom);
+
+  const initiaoState = () => {
+    setAverageScore('GOOD');
+  };
 
   const submitReviewHandler = async () => {
     const reviewValue = reviewInputRef.current?.value.trim();
@@ -82,7 +87,10 @@ export default function ReviewModal({ getData }: ReviewModalProps) {
     <Modal
       title="후기를 작성해 주세요."
       label="Review"
-      onClose={() => setIsReviewModalOpen(false)}
+      onClose={() => {
+        initiaoState();
+        setIsReviewModalOpen(false);
+      }}
       body={body}
       isOpen={isReviewModalOpen}
     />
@@ -134,7 +142,7 @@ const StyleTargetMark = styled.div<StyleTargetMarkProps>`
   border-radius: 100%;
   background-color: #1cc71c;
   position: absolute;
-  top: 65px;
+  top: 60px;
   transition: all 0.1s ease-in-out;
   left: ${({ score }) => getLeftValue(score)};
 `;

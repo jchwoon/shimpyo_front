@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { ListType } from '../Main/Category/VisitedAccommodation/VisitedAccommodation';
-import { BsDot } from 'react-icons/bs';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { reservationDetailModalAtom } from '../../../recoil/modalAtoms';
@@ -53,16 +52,19 @@ export default function GridItem({ item }: GridItemProps) {
         />
         <StyleContent>
           {item.reservationStatus && (
-            <StyleReservationStatus>
-              <span>{getStateMessage(item.reservationStatus)}</span>
-            </StyleReservationStatus>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+              <StyleReservationStatus>
+                <span>{getStateMessage(item.reservationStatus)}</span>
+              </StyleReservationStatus>
+              <StyleReservationStatus>
+                <span>{item.houseType}</span>
+              </StyleReservationStatus>
+            </div>
           )}
           <div style={{ position: 'relative' }}>
             <h3>{item.houseName}</h3>
-            <BsDot style={{ position: 'absolute', right: '-28px', top: '-2px' }} size={25} />
-            <span style={{ position: 'absolute', right: '-58px', top: '2px' }}>{item.houseType}</span>
           </div>
-          <div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <span>{`${formatDate(changeDateType(item.checkInDate))}`}</span>
             <span style={{ rotate: '90deg' }}>~</span>
             <span>{`${formatDate(changeDateType(item.checkOutDate))}`}</span>
@@ -100,11 +102,6 @@ const StyleContent = styled.div`
   padding: 0.5rem;
   height: 100%;
   font-family: Noto Sans KR;
-  div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
   h3 {
     font-weight: bold;
     font-size: 18px;
@@ -113,7 +110,7 @@ const StyleContent = styled.div`
 
 const StyleReservationStatus = styled.div`
   padding: 0.3rem;
-  border-radius: 5px;
+  border-radius: 3px;
   font-size: 15px;
   color: white;
   background-color: #009ca6;
