@@ -28,7 +28,7 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ isToReservationCheck, redirectPath }: LoginModalProps) {
-  const { isLoading, responseData, sendRequest, errorMessage } = useHttpRequest<ResultData>();
+  const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
   const location = useLocation();
   const navigation = useNavigate();
 
@@ -98,13 +98,6 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);
 
-  useEffect(() => {
-    if (errorMessage) {
-      setIsLoginError(true);
-      setLoginErrorMessage('이메일과 비밀번호를 다시 한번 확인해주세요.');
-    }
-  }, [errorMessage])
-
   const title = (
     <div>
       <img width={50} height={20} alt="logo" src="/images/logo.png" />
@@ -115,10 +108,10 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
   const body = (
     <>
       <StyleLoginBody onKeyUp={submitHandler}>
-        <Input ref={emailRef} placeholder="이메일" type="text" error={isLoginError} />
+        <Input ref={emailRef} placeholder="이메일" type="text" />
         <span style={{ marginTop: '10px' }}></span>
-        <Input ref={passwordRef} placeholder="비밀번호" type="password" error={isLoginError} errorMessage={loginErrorMessage} />
-        {/* {isLoginError && <StyleError>{loginErrorMessage}</StyleError>} */}
+        <Input ref={passwordRef} placeholder="비밀번호" type="password" />
+        {isLoginError && <StyleError>{loginErrorMessage}</StyleError>}
         <StyleAccountInfoFind>
           <span
             onClick={() => {

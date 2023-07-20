@@ -12,8 +12,8 @@ import { LuShowerHead } from 'react-icons/lu'
 import { BsPerson, BsPersonPlus } from 'react-icons/bs'
 import { Typography } from '@mui/material';
 
-import { useRecoilState } from "recoil";
-import { activeRoomPrice, activeRoomName, activeRoomNumber } from '../../../recoil/detailPageAtoms';
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { activeRoomPrice, activeRoomName, activeRoomNumber, activeMaxPerson } from '../../../recoil/detailPageAtoms';
 import { useState, useEffect } from 'react';
 import moment from "moment";
 import 'moment/locale/ko'
@@ -41,15 +41,17 @@ interface RommCardProps {
 
 export const RoomCard: React.FC<RommCardProps> = ({ image, name, doubleBed, bedroom, shower, minPerson, maxPerson, checkInTime, checkOutTime, price, onClick, active, roomId }) => {
 
-    const [roomPrice, setRoomPrice] = useRecoilState(activeRoomPrice);
-    const [roomName, setRoomName] = useRecoilState(activeRoomName);
-    const [roomNumber, setRoomNumber] = useRecoilState(activeRoomNumber);
+    const setRoomPrice = useSetRecoilState(activeRoomPrice);
+    const setRoomName = useSetRecoilState(activeRoomName);
+    const setRoomNumber = useSetRecoilState(activeRoomNumber);
+    const setMaxPerson = useSetRecoilState(activeMaxPerson);
 
     useEffect(() => {
         if (active) {
             setRoomPrice(price);
             setRoomName(name);
             setRoomNumber(roomId);
+            setMaxPerson(maxPerson)
         }
     }, [active]);
 

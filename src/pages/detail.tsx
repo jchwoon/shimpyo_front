@@ -30,6 +30,9 @@ import SearchBar from '../components/Main/Navbar/SearchBar';
 
 import JoinModal from '../components/shared/Modal/JoinModal';
 import LoginModal from '../components/shared/Modal/LoginModal';
+import AdditionalInfoModal from '../components/shared/Modal/AdditionalInfoModal';
+import IdFindModal from '../components/shared/Modal/IdFindModal';
+import PasswordFindModal from '../components/shared/Modal/PasswordFindModal';
 
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -257,8 +260,11 @@ export default function Detail() {
       {isLargeScreen ? null : (
         <NewMobileFooter defaultValue={null} Action0={value0} Action1={value1} Action2={value2} />
       )}
-      <LoginModal redirectPath='/detail' />
+      <LoginModal redirectPath={`/detail/${houseId}`} />
       <JoinModal />
+      <AdditionalInfoModal />
+      <IdFindModal />
+      <PasswordFindModal />
 
     </>
   );

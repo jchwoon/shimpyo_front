@@ -9,6 +9,7 @@ import {
   activeRoom,
   activeRoomPrice,
   activeRoomName,
+  activeMaxPerson
 } from '../../../recoil/detailPageAtoms';
 
 import {
@@ -69,6 +70,7 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
   const room = useRecoilValue(activeRoom)
   const price = useRecoilValue(activeRoomPrice)
   const Name = useRecoilValue(activeRoomName)
+  const [MaxPerson, setMaxPerson] = useRecoilState(activeMaxPerson)
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
   const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
 
@@ -90,6 +92,8 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
       : `게스트 ${TotalGuestNumber} 명, 유아 ${InfantGuestNumber}명 `;
 
   const GuestCount = AdultGuestNumber + ChildGuestNumber + InfantGuestNumber;
+
+  const GuestOverLimit = MaxPerson >= TotalGuestNumber ? false : true
 
   const DaysDifference = moment(secondPickedDate).diff(moment(firstPickedDate), "days")
   const TotalPrice = price ? price * DaysDifference : null
@@ -165,6 +169,8 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
 
   console.log("couponListArray:", couponListArray)
 
+  if (room === null) { setMaxPerson(99) }
+
   return (
     <Main >
       <MainTitle>예약</MainTitle>
@@ -220,7 +226,19 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
         >
           <div style={{ display: "flex", width: "100%", height: "50px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             <Typography fontFamily='Noto Sans KR' fontSize="12px" color="#a2a2a2">여행자</Typography>
-            <Typography fontFamily='Noto Sans KR'>{TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}</Typography>
+            {/* <Typography fontFamily='Noto Sans KR'>
+              {TotalGuestNumber > 0 ? !GuestOverLimit ? TotalGuestNumberCount : '최대인원을 넘습니다.' : '게스트 추가'}
+            </Typography> */}
+            {TotalGuestNumber > 0
+              ?
+              !GuestOverLimit
+                ?
+                <Typography fontFamily='Noto Sans KR'>{TotalGuestNumberCount}</Typography>
+                :
+                <Typography fontFamily='Noto Sans KR' color="#e80a00">최대 인원을 초과하였습니다</Typography>
+              :
+              <Typography fontFamily='Noto Sans KR'>게스트 추가</Typography>
+            }
           </div>
         </CutomizedGuestAccordionSummary>
         <CutomizedAccordionDetails sx={{ paddingTop: "25px" }}>
@@ -233,15 +251,15 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
               <CustomziedClearIcon />
             </CustomizedDeleteIconButton>
           ) : null}
-          <GuestCountAdult />
+          <GuestCountAdult GuestOverLimit={GuestOverLimit} />
           <Divider variant="middle" />
-          <GuestCountChild />
+          <GuestCountChild GuestOverLimit={GuestOverLimit} />
           <Divider variant="middle" />
-          <GuestCountInfant />
+          <GuestCountInfant GuestOverLimit={GuestOverLimit} />
         </CutomizedAccordionDetails>
       </CustomizedGuestAccordion>
 
-      <ColorButton disabled={!room || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} label="예약" />
+      <ColorButton disabled={!room || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0 || GuestOverLimit} onClick={handleOpen} label="예약" />
       {/* <BookingBtn disabled={!Name || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} >
         <Typography fontFamily='Noto Sans KR' fontSize="17px">예약</Typography>
       </BookingBtn> */}

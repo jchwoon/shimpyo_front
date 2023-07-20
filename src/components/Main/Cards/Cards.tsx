@@ -112,12 +112,13 @@ export default function Cards({ cards, isLoading }: CardProps) {
                                         <CustomizedTitleTypography fontFamily='Noto Sans KR'>
                                             {card.name}
                                         </CustomizedTitleTypography>
-                                        <CustomizedPercentageRowBox>
-                                            <HiOutlineEmojiHappy style={{ color: "#00adb5", height: "20px", width: "20px" }} />
-                                            <CustomizedPercentageTypography color="#00adb5">
-                                                {Number(card.ratio).toFixed(1)}
-                                            </CustomizedPercentageTypography>
-                                        </CustomizedPercentageRowBox>
+                                        {card.ratio > 0 ?
+                                            <CustomizedPercentageRowBox>
+                                                <HiOutlineEmojiHappy style={{ color: "#00adb5", height: "20px", width: "20px" }} />
+                                                <CustomizedPercentageTypography color="#00adb5">
+                                                    {Number(card.ratio).toFixed(1)}
+                                                </CustomizedPercentageTypography>
+                                            </CustomizedPercentageRowBox> : null}
                                     </CustomizedTitleRowBox>
                                     <Typography fontFamily='Noto Sans KR' fontWeight="300" fontSize="13px" color="#8d8d8d" sx={{ marginBottom: "5px" }}>
                                         {card.sido + " " + card.sigungu + "의 " + houseType(card.type)}
