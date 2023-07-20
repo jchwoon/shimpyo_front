@@ -539,7 +539,10 @@ export default function Navbar() {
 
             </CustomizedGuestVerticalWrapperDiv>
             <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-              <CustomizedAvatar sx={{ marginLeft: '15px' }} change={change.toString()} onClick={() => handleSearchNavigate(searchNavigate)}>
+              <CustomizedAvatar
+                sx={{ marginLeft: '15px' }}
+                change={change.toString()}
+                onClick={() => !change ? handleClick() : handleSearchNavigate(searchNavigate)}>
                 <CustomizedSearchIcon change={change.toString()} />
               </CustomizedAvatar>
             </div>

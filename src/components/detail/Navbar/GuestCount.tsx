@@ -6,7 +6,11 @@ import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { AdultGuest, ChildGuest, InfantGuest } from "../../../recoil/navBarAtoms";
 
-export function GuestCountAdult() {
+interface CountProps {
+    GuestOverLimit?: boolean
+}
+
+export function GuestCountAdult({ GuestOverLimit }: CountProps) {
     const [adultGuest, setAdultGuest] = useRecoilState(AdultGuest)
     const handleAddClick = () => {
         setAdultGuest((prevGuest) => prevGuest + 1);
@@ -26,7 +30,7 @@ export function GuestCountAdult() {
                     <RemoveIcon />
                 </IconButton>
                 {adultGuest}
-                <IconButton onClick={handleAddClick}>
+                <IconButton onClick={handleAddClick} disabled={GuestOverLimit}>
                     <AddIcon />
                 </IconButton>
             </div>
@@ -34,7 +38,7 @@ export function GuestCountAdult() {
     )
 }
 
-export function GuestCountChild() {
+export function GuestCountChild({ GuestOverLimit }: CountProps) {
 
     const [childGuest, setChildGuest] = useRecoilState(ChildGuest)
     const handleAddClick = () => {
@@ -55,7 +59,7 @@ export function GuestCountChild() {
                     <RemoveIcon />
                 </IconButton>
                 {childGuest}
-                <IconButton onClick={handleAddClick}>
+                <IconButton onClick={handleAddClick} disabled={GuestOverLimit}>
                     <AddIcon />
                 </IconButton>
             </div>
@@ -63,7 +67,7 @@ export function GuestCountChild() {
     )
 }
 
-export function GuestCountInfant() {
+export function GuestCountInfant({ GuestOverLimit }: CountProps) {
 
     const [infantGuest, setInfantGuest] = useRecoilState(InfantGuest)
     const handleAddClick = () => {
@@ -84,7 +88,7 @@ export function GuestCountInfant() {
                     <RemoveIcon />
                 </IconButton>
                 {infantGuest}
-                <IconButton onClick={handleAddClick}>
+                <IconButton onClick={handleAddClick} disabled={GuestOverLimit}>
                     <AddIcon />
                 </IconButton>
             </div>

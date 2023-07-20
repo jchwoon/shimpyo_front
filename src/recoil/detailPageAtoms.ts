@@ -20,6 +20,11 @@ export const activeRoomNumber = atom<number>({
     default: 0,
 });
 
+export const activeMaxPerson = atom<number>({
+    key: 'activeMaxPerson',
+    default: 99,
+});
+
 export const merchantUid = atom<string>({
     key: 'merchantUid',
     default: '',

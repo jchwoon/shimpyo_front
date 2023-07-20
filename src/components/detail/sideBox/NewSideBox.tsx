@@ -9,6 +9,7 @@ import {
   activeRoom,
   activeRoomPrice,
   activeRoomName,
+  activeMaxPerson
 } from '../../../recoil/detailPageAtoms';
 
 import {
@@ -36,15 +37,13 @@ import Fade from '@mui/material/Fade';
 import Backdrop from '@mui/material/Backdrop';
 import PaymentInfoBox from '../../Pay/PaymentInfoBox';
 
-import Box from '@mui/material/Box';
-
 import ColorButton from '../../shared/UI/ColorButton';
 
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { RESERVATION_PREPARE_API_PATH } from '../../../constants/api/reservationApi';
 import { accessTokenAtom, loginStateAtom } from "../../../recoil/userAtoms"
 import { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   merchantUid,
   couponList
@@ -54,9 +53,13 @@ import NoneMemberPhoneInput from '../../Pay/NoneMemberPhoneInput';
 
 import { swipePageState } from '../../../recoil/detailPageAtoms';
 
+import { Dispatch, SetStateAction } from 'react';
+
 interface NewSideBoxProps {
   houseName: string;
   houseId: string;
+  setAlertOpen: Dispatch<SetStateAction<boolean>>;
+  setAlertMessage: Dispatch<SetStateAction<string>>;
 }
 
 interface ResultData {
@@ -65,10 +68,11 @@ interface ResultData {
   couponList: Array<any>;
 }
 
-export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
-  const room = useRecoilValue(activeRoom)
-  const price = useRecoilValue(activeRoomPrice)
-  const Name = useRecoilValue(activeRoomName)
+export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertMessage }: NewSideBoxProps) {
+  const [room, setRoom] = useRecoilState(activeRoom)
+  const [price, setPrice] = useRecoilState(activeRoomPrice)
+  const [Name, setName] = useRecoilState(activeRoomName)
+  const [MaxPerson, setMaxPerson] = useRecoilState(activeMaxPerson)
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
   const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
 
@@ -90,6 +94,9 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
       : `게스트 ${TotalGuestNumber} 명, 유아 ${InfantGuestNumber}명 `;
 
   const GuestCount = AdultGuestNumber + ChildGuestNumber + InfantGuestNumber;
+
+  const GuestOverLimit = MaxPerson >= TotalGuestNumber ? false : true
+  const GuestOverLimitSameOver = MaxPerson <= TotalGuestNumber ? true : false
 
   const DaysDifference = moment(secondPickedDate).diff(moment(firstPickedDate), "days")
   const TotalPrice = price ? price * DaysDifference : null
@@ -137,33 +144,24 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
     }
   }, [responseData])
 
-  const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    // width: 400,
-    width: '360px',
-    overflow: 'hidden',
-    // bgcolor: 'background.paper',
-    // border: '2px solid #000',
-    // boxShadow: 24,
-    p: 4,
-    display: 'flex',
-    // flex-direction:'row'
-  };
-
-  const customizedSearchButton = document.getElementsByClassName("activeRoomCard")
-  // console.log("activeRoomCard:", customizedSearchButton[0].props.price)
-
-  // const [isPhoneValid, setIsPhoneValid] = useState(false);
-  //   const getPhoneValid = (valid: boolean) => {
-  //       setIsPhoneValid(valid);
-  //   };
 
   const [swipePage, setSwipePage] = useRecoilState(swipePageState);
 
-  console.log("couponListArray:", couponListArray)
+  if (room === null) { setMaxPerson(99) }
+
+  const location = useLocation()
+
+  useEffect(() => {
+    setRoom(null)
+    setPrice(null)
+    setName('')
+    setMaxPerson(99)
+    setFirstPickedDate('')
+    setSecondPickedDate('')
+    setAdultGuestNumber(0)
+    setChildGuestNumber(0)
+    setInfantGuestNumber(0)
+  }, [location])
 
   return (
     <Main >
@@ -220,7 +218,19 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
         >
           <div style={{ display: "flex", width: "100%", height: "50px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             <Typography fontFamily='Noto Sans KR' fontSize="12px" color="#a2a2a2">여행자</Typography>
-            <Typography fontFamily='Noto Sans KR'>{TotalGuestNumber > 0 ? TotalGuestNumberCount : '게스트 추가'}</Typography>
+            {/* <Typography fontFamily='Noto Sans KR'>
+              {TotalGuestNumber > 0 ? !GuestOverLimit ? TotalGuestNumberCount : '최대인원을 넘습니다.' : '게스트 추가'}
+            </Typography> */}
+            {TotalGuestNumber > 0
+              ?
+              !GuestOverLimit
+                ?
+                <Typography fontFamily='Noto Sans KR'>{TotalGuestNumberCount}</Typography>
+                :
+                <Typography fontFamily='Noto Sans KR' color="#e80a00">최대 인원을 초과하였습니다</Typography>
+              :
+              <Typography fontFamily='Noto Sans KR'>게스트 추가</Typography>
+            }
           </div>
         </CutomizedGuestAccordionSummary>
         <CutomizedAccordionDetails sx={{ paddingTop: "25px" }}>
@@ -233,15 +243,15 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
               <CustomziedClearIcon />
             </CustomizedDeleteIconButton>
           ) : null}
-          <GuestCountAdult />
+          <GuestCountAdult GuestOverLimit={GuestOverLimitSameOver} />
           <Divider variant="middle" />
-          <GuestCountChild />
+          <GuestCountChild GuestOverLimit={GuestOverLimitSameOver} />
           <Divider variant="middle" />
-          <GuestCountInfant />
+          <GuestCountInfant GuestOverLimit={GuestOverLimitSameOver} />
         </CutomizedAccordionDetails>
       </CustomizedGuestAccordion>
 
-      <ColorButton disabled={!room || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} label="예약" />
+      <ColorButton disabled={!room || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0 || GuestOverLimit} onClick={handleOpen} label="예약" />
       {/* <BookingBtn disabled={!Name || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} >
         <Typography fontFamily='Noto Sans KR' fontSize="17px">예약</Typography>
       </BookingBtn> */}
@@ -275,7 +285,6 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
             <div style={{
               display: "flex",
               position: "relative",
-              // right:"360px"
               right: swipePage === 2 ? "330px" : "0px",
               transition: "0.3s ease",
               backgroundColor: "white"
@@ -287,7 +296,9 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
                 checkOutDate={secondPickedDate}
                 price={price} houseId={houseId}
                 GuestCount={GuestCount}
-              // couponListArray={couponListArray} 
+                setOpen={setOpen}
+                setAlertOpen={setAlertOpen}
+                setAlertMessage={setAlertMessage}
               />
             </div>
 
