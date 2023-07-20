@@ -169,6 +169,7 @@ export default function Main() {
   // const [data, setData] = useState<any>(null);
 
   const [data, setData] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
 
   // useEffect(() => {
   //   if (!responseData) return;
@@ -184,6 +185,7 @@ export default function Main() {
       console.log("newData:", newData)
       if (newData.length === 0) setNextData(false)
       setData((prevData: Array<any>) => [...prevData, ...newData]);
+      setLoading(false)
     }
   }, [responseData]);
 
@@ -231,7 +233,7 @@ export default function Main() {
           <MobileNavbar />
         </ThemeProvider>
       )}
-      <Cards cards={data ? data : []} isLoading={isLoading} />
+      <Cards cards={data ? data : []} loading={loading} />
       {nextData && <div ref={observerRef} style={{ height: '10px' }} />}
       {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />}
       <LoginModal isToReservationCheck={isToReservationCheck} redirectPath="/" />
