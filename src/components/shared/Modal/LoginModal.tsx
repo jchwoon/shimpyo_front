@@ -14,7 +14,7 @@ import KakaoLogin from '../../Main/SocialLogin/KakaoLogin';
 import NaverLogin from '../../Main/SocialLogin/NaverLogin';
 import GoogleSocialLogin from '../../Main/SocialLogin/GoogleSocialLogin';
 import { useLocation, useNavigate } from 'react-router-dom';
-import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
+import useLogout from '../../../hooks/useLogout';
 
 interface ResultData {
   accessToken: string;
@@ -32,12 +32,12 @@ interface LoginModalProps {
   redirectPath?: string;
 }
 
-const JWT_EXPIRY_TIME = 120 * 1000;
+const JWT_EXPIRY_TIME = 3600 * 1000;
 
 export default function LoginModal({ isToReservationCheck, redirectPath }: LoginModalProps) {
   const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
   const { responseData: getAccessTokenResponse, sendRequest: getAccessTokenRequest } =
-    useAuthorizedRequest<RefreshResultData>({});
+    useHttpRequest<RefreshResultData>();
   const location = useLocation();
   const navigation = useNavigate();
   const emailRef = useRef<HTMLInputElement>(null);
@@ -53,6 +53,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
   const setUserNickname = useSetRecoilState(nicknameAtom);
   const setUserProfileImage = useSetRecoilState(profileImageAtom);
   const setUserId = useSetRecoilState(userIdAtom);
+  const { logoutHandler } = useLogout();
 
   const handleLoginButtonClick = async () => {
     const emailValue = emailRef.current?.value;
@@ -77,15 +78,21 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
   };
 
   const onSilentRefresh = async () => {
-    await getAccessTokenRequest({ url: `${REGENERATION_REFRESH_API_PATH}`, withCredentials: true });
+    await getAccessTokenRequest({ url: `${REGENERATION_REFRESH_API_PATH}`, withcredential: true });
+  };
+
+  const accessTokenTimeSetting = () => {
+    setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
   };
 
   useEffect(() => {
     if (!getAccessTokenResponse) return;
 
     if (getAccessTokenResponse.isSuccess) {
-      console.log(getAccessTokenResponse.result);
       setAccessToken(getAccessTokenResponse.result.accessToken);
+      accessTokenTimeSetting();
+    } else {
+      logoutHandler();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getAccessTokenResponse]);
@@ -95,7 +102,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
 
     if (responseData?.isSuccess) {
       setAccessToken(responseData.result.accessToken);
-      setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+      accessTokenTimeSetting();
       localStorage.setItem(
         'nickname',
         responseData.result.nickname ? JSON.stringify(responseData.result.nickname) : '',
