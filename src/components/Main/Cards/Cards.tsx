@@ -155,8 +155,9 @@ export default function Cards({ cards, isLoading }: CardProps) {
 
                                 </div>
                                 <StyledImg src="/images/paperplane.gif" alt="paper plane" style={{ width: "100px", marginBottom: "30px" }} />
-                                <Typography>원하시는 여행조건에 대한 결과는 없었지만</Typography>
-                                <Typography>기대하지 않았던 여행들이 당신을 기다리고 있습니다.</Typography>
+                                <Typography fontFamily='Gowun Batang' fontSize="15px">원하시는 여행조건에 대한 결과는 없었지만</Typography>
+                                <Typography fontFamily='Gowun Batang' fontSize="15px" style={{ marginBottom: "8px" }}>당신의 여행은 멈추지 않습니다.</Typography>
+                                <Typography fontFamily='Gowun Batang' fontSize="15px" fontWeight="1000" color="#00adb5">새로운 여행들을 찾아 떠나보세요.</Typography>
                             </div>
                             : null
                     }

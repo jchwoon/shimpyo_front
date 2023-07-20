@@ -32,18 +32,22 @@ import { useState } from 'react'
 
 import { v4 as uuidv4 } from 'uuid';
 
+import { Dispatch, SetStateAction } from 'react';
+
 interface ResultData {
     accessToken: string;
 }
 
 interface PaymentInfoBoxProp {
-    houseName: string,
-    checkInDate: string | null,
-    checkOutDate: string | null,
-    price: number | null
-    houseId: string,
-    GuestCount: number,
-    // couponListArray: Array<any>,
+    houseName: string;
+    checkInDate: string | null;
+    checkOutDate: string | null;
+    price: number | null;
+    houseId: string;
+    GuestCount: number;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+    setAlertOpen: Dispatch<SetStateAction<boolean>>;
+    setAlertMessage: Dispatch<SetStateAction<string>>;
 }
 
 declare const window: typeof globalThis & {
@@ -122,7 +126,7 @@ export interface Iamport {
     ) => void;
 }
 
-const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, checkOutDate, price, houseId, GuestCount }) => {
+const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, checkOutDate, price, houseId, GuestCount, setOpen, setAlertOpen, setAlertMessage }) => {
 
     const DaysDifference = moment(checkOutDate).diff(moment(checkInDate), "days")
     const TotalPrice = price ? price * DaysDifference : 0
@@ -212,6 +216,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         async function callback(response: RequestPayResponse) {
             const {
                 success,
+                error_code,
                 error_msg,
                 imp_uid,
                 merchant_uid,
@@ -234,7 +239,9 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                     }
                 });
             } else {
-                console.log("회원 INCISC 결제 실패")
+                setOpen(false)
+                setAlertOpen(true)
+                setAlertMessage(error_msg)
             }
         }
         IMP.request_pay(data, callback);
@@ -242,7 +249,12 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
 
     useEffect(() => {
         if (!memberPaymentResponseData) return;
-        if (memberPaymentResponseData.isSuccess) { navigation('/reservations?category=reservation'); }
+        if (memberPaymentResponseData.isSuccess === true) { navigation('/reservations?category=reservation'); }
+        else if (memberPaymentResponseData.isSuccess === false) {
+            setOpen(false)
+            setAlertOpen(true)
+            setAlertMessage(memberPaymentResponseData.message)
+        }
     }, [memberPaymentResponseData])
 
     //비회원 결제
@@ -265,6 +277,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         async function callback(response: RequestPayResponse) {
             const {
                 success,
+                error_code,
                 error_msg,
                 imp_uid,
                 merchant_uid,
@@ -276,7 +289,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                     method: "POST",
                     body: {
                         impUid: imp_uid,
-                        roomId: roomId,
+                        // roomId: roomId,
+                        roomId: 132132121,
                         merchantUid: merchant_uid,
                         payMethod: paymentRadioSelectedValue === '신용카드' ? "KGINICIS" : "KAKAO",
                         name: `${nonMemberName}`,
@@ -287,7 +301,9 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                     }
                 });
             } else {
-                alert(`결제 실패: ${error_msg}`);
+                setOpen(false)
+                setAlertOpen(true)
+                setAlertMessage(error_msg)
             }
         }
         IMP.request_pay(data, callback);
@@ -296,6 +312,11 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
     useEffect(() => {
         if (!noneMemberPaymentResponseData) return;
         if (noneMemberPaymentResponseData.isSuccess) { navigation('/check/non-member'); }
+        else if (noneMemberPaymentResponseData.isSuccess === false) {
+            setOpen(false)
+            setAlertOpen(true)
+            setAlertMessage(noneMemberPaymentResponseData.message)
+        }
     }, [noneMemberPaymentResponseData])
 
     console.log("coupongListArray:", couponListArray)

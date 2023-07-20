@@ -37,15 +37,13 @@ import Fade from '@mui/material/Fade';
 import Backdrop from '@mui/material/Backdrop';
 import PaymentInfoBox from '../../Pay/PaymentInfoBox';
 
-import Box from '@mui/material/Box';
-
 import ColorButton from '../../shared/UI/ColorButton';
 
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { RESERVATION_PREPARE_API_PATH } from '../../../constants/api/reservationApi';
 import { accessTokenAtom, loginStateAtom } from "../../../recoil/userAtoms"
 import { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   merchantUid,
   couponList
@@ -55,9 +53,13 @@ import NoneMemberPhoneInput from '../../Pay/NoneMemberPhoneInput';
 
 import { swipePageState } from '../../../recoil/detailPageAtoms';
 
+import { Dispatch, SetStateAction } from 'react';
+
 interface NewSideBoxProps {
   houseName: string;
   houseId: string;
+  setAlertOpen: Dispatch<SetStateAction<boolean>>;
+  setAlertMessage: Dispatch<SetStateAction<string>>;
 }
 
 interface ResultData {
@@ -66,10 +68,10 @@ interface ResultData {
   couponList: Array<any>;
 }
 
-export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
-  const room = useRecoilValue(activeRoom)
-  const price = useRecoilValue(activeRoomPrice)
-  const Name = useRecoilValue(activeRoomName)
+export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertMessage }: NewSideBoxProps) {
+  const [room, setRoom] = useRecoilState(activeRoom)
+  const [price, setPrice] = useRecoilState(activeRoomPrice)
+  const [Name, setName] = useRecoilState(activeRoomName)
   const [MaxPerson, setMaxPerson] = useRecoilState(activeMaxPerson)
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
   const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
@@ -94,6 +96,7 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
   const GuestCount = AdultGuestNumber + ChildGuestNumber + InfantGuestNumber;
 
   const GuestOverLimit = MaxPerson >= TotalGuestNumber ? false : true
+  const GuestOverLimitSameOver = MaxPerson <= TotalGuestNumber ? true : false
 
   const DaysDifference = moment(secondPickedDate).diff(moment(firstPickedDate), "days")
   const TotalPrice = price ? price * DaysDifference : null
@@ -141,35 +144,24 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
     }
   }, [responseData])
 
-  const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    // width: 400,
-    width: '360px',
-    overflow: 'hidden',
-    // bgcolor: 'background.paper',
-    // border: '2px solid #000',
-    // boxShadow: 24,
-    p: 4,
-    display: 'flex',
-    // flex-direction:'row'
-  };
-
-  const customizedSearchButton = document.getElementsByClassName("activeRoomCard")
-  // console.log("activeRoomCard:", customizedSearchButton[0].props.price)
-
-  // const [isPhoneValid, setIsPhoneValid] = useState(false);
-  //   const getPhoneValid = (valid: boolean) => {
-  //       setIsPhoneValid(valid);
-  //   };
 
   const [swipePage, setSwipePage] = useRecoilState(swipePageState);
 
-  console.log("couponListArray:", couponListArray)
-
   if (room === null) { setMaxPerson(99) }
+
+  const location = useLocation()
+
+  useEffect(() => {
+    setRoom(null)
+    setPrice(null)
+    setName('')
+    setMaxPerson(99)
+    setFirstPickedDate('')
+    setSecondPickedDate('')
+    setAdultGuestNumber(0)
+    setChildGuestNumber(0)
+    setInfantGuestNumber(0)
+  }, [location])
 
   return (
     <Main >
@@ -251,11 +243,11 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
               <CustomziedClearIcon />
             </CustomizedDeleteIconButton>
           ) : null}
-          <GuestCountAdult GuestOverLimit={GuestOverLimit} />
+          <GuestCountAdult GuestOverLimit={GuestOverLimitSameOver} />
           <Divider variant="middle" />
-          <GuestCountChild GuestOverLimit={GuestOverLimit} />
+          <GuestCountChild GuestOverLimit={GuestOverLimitSameOver} />
           <Divider variant="middle" />
-          <GuestCountInfant GuestOverLimit={GuestOverLimit} />
+          <GuestCountInfant GuestOverLimit={GuestOverLimitSameOver} />
         </CutomizedAccordionDetails>
       </CustomizedGuestAccordion>
 
@@ -293,7 +285,6 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
             <div style={{
               display: "flex",
               position: "relative",
-              // right:"360px"
               right: swipePage === 2 ? "330px" : "0px",
               transition: "0.3s ease",
               backgroundColor: "white"
@@ -305,7 +296,9 @@ export default function NewSideBox({ houseName, houseId }: NewSideBoxProps) {
                 checkOutDate={secondPickedDate}
                 price={price} houseId={houseId}
                 GuestCount={GuestCount}
-              // couponListArray={couponListArray} 
+                setOpen={setOpen}
+                setAlertOpen={setAlertOpen}
+                setAlertMessage={setAlertMessage}
               />
             </div>
 
