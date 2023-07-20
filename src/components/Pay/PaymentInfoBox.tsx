@@ -338,7 +338,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         }
     }, [noneMemberPaymentResponseData])
 
-    console.log("noneMemberTextAfterPayResponseData:", noneMemberTextAfterPayResponseData)
+    console.log("noneMemberTextAfterPayResponseData: ", noneMemberTextAfterPayResponseData)
 
     return (
         <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
