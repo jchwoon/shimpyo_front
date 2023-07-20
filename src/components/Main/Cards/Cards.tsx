@@ -138,8 +138,7 @@ export default function Cards({ cards, loading }: CardProps) {
                         :
                         isSearchPage
                             ?
-                            loading ?
-
+                            !loading ?
                                 <div style={{ width: "100%", height: windowHeight * 0.8, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
                                     <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", justifyContent: "center", width: "80%" }}>
                                         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", height: "100%", marginRight: "10px" }}>
