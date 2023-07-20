@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import SideContainer from './SideContainer';
 import BottomContainer from './BottomContainer';
 import NewSideBox from '../sideBox/NewSideBox';
+import { Dispatch, SetStateAction } from 'react';
 
 interface MainContainerProps {
   houseName: string,
@@ -13,14 +14,16 @@ interface MainContainerProps {
   reviewData?: Array<Object>;
   reviewIsLoading: boolean;
   houseId: string;
+  setAlertOpen: Dispatch<SetStateAction<boolean>>
+  setAlertMessage: Dispatch<SetStateAction<string>>
 }
 
-export default function MainContainer({ houseName, houseContents, options, rooms, lat, lng, reviewData, reviewIsLoading, houseId }: MainContainerProps) {
+export default function MainContainer({ houseName, houseContents, options, rooms, lat, lng, reviewData, reviewIsLoading, houseId, setAlertOpen, setAlertMessage }: MainContainerProps) {
   return (
     <>
       <Main>
         <SideContainer houseContents={houseContents} options={options} rooms={rooms} lat={lat} lng={lng} />
-        <NewSideBox houseName={houseName} houseId={houseId} />
+        <NewSideBox houseName={houseName} houseId={houseId} setAlertOpen={setAlertOpen} setAlertMessage={setAlertMessage} />
       </Main>
       <BottomContainer reviewData={reviewData} reviewIsLoading={reviewIsLoading} />
     </>

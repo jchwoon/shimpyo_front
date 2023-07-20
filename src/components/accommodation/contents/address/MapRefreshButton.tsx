@@ -6,18 +6,18 @@ import { IoMdRefreshCircle } from 'react-icons/io';
 import { useState } from 'react';
 
 interface StyledMapRefreshButtonProps {
-  isSelect?: boolean;
+  select?: 'true' | 'false';
 }
 
 export default function MapRefreshButton() {
   const [accommodation, setAccommodation] = useRecoilState(accommodationState);
-  const [isSelect, setIsSelect] = useState<boolean>(false);
+  const [isSelect, setIsSelect] = useState<'true' | 'false'>('false');
 
   const newAccommodation = { ...accommodation };
 
   const RefreshButton = async () => {
     try {
-      setIsSelect(true);
+      setIsSelect('true');
       const latlng = await getLatLngFromAddress(newAccommodation.address.fullAddress);
 
       newAccommodation.address = {
@@ -30,11 +30,11 @@ export default function MapRefreshButton() {
     } catch (err) {
       console.log(err);
     } finally {
-      setIsSelect(false);
+      setIsSelect('false');
     }
   };
 
-  return <StyledMapRefreshButton isSelect={isSelect} size={'40px'} onClick={RefreshButton}></StyledMapRefreshButton>;
+  return <StyledMapRefreshButton select={isSelect} size={'40px'} onClick={RefreshButton}></StyledMapRefreshButton>;
 }
 
 const StyledMapRefreshButton = styled(IoMdRefreshCircle)<StyledMapRefreshButtonProps>`
@@ -45,8 +45,8 @@ const StyledMapRefreshButton = styled(IoMdRefreshCircle)<StyledMapRefreshButtonP
     color: rgba(0, 0, 0, 0.4);
   }
 
-  ${({ isSelect }) =>
-    !isSelect &&
+  ${({ select }) =>
+    select === 'false' &&
     `
     transform: scale(1.2);
     transition: transform 0.5s ease-in-out;

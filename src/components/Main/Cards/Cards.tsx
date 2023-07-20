@@ -28,10 +28,10 @@ import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
 
 interface CardProps {
     cards: Array<any>;
-    isLoading: boolean;
+    loading: boolean;
 }
 
-export default function Cards({ cards, isLoading }: CardProps) {
+export default function Cards({ cards, loading }: CardProps) {
 
     const [appbarheight, setAppBarHeight] = useRecoilState(Height);
     const [customDisplay, setCustomDisplay] = useRecoilState(Display);
@@ -112,12 +112,13 @@ export default function Cards({ cards, isLoading }: CardProps) {
                                         <CustomizedTitleTypography fontFamily='Noto Sans KR'>
                                             {card.name}
                                         </CustomizedTitleTypography>
-                                        <CustomizedPercentageRowBox>
-                                            <HiOutlineEmojiHappy style={{ color: "#00adb5", height: "20px", width: "20px" }} />
-                                            <CustomizedPercentageTypography color="#00adb5">
-                                                {Number(card.ratio).toFixed(1)}
-                                            </CustomizedPercentageTypography>
-                                        </CustomizedPercentageRowBox>
+                                        {card.ratio > 0 ?
+                                            <CustomizedPercentageRowBox>
+                                                <HiOutlineEmojiHappy style={{ color: "#00adb5", height: "20px", width: "20px" }} />
+                                                <CustomizedPercentageTypography color="#00adb5">
+                                                    {Number(card.ratio).toFixed(1)}
+                                                </CustomizedPercentageTypography>
+                                            </CustomizedPercentageRowBox> : null}
                                     </CustomizedTitleRowBox>
                                     <Typography fontFamily='Noto Sans KR' fontWeight="300" fontSize="13px" color="#8d8d8d" sx={{ marginBottom: "5px" }}>
                                         {card.sido + " " + card.sigungu + "의 " + houseType(card.type)}
@@ -137,26 +138,29 @@ export default function Cards({ cards, isLoading }: CardProps) {
                         :
                         isSearchPage
                             ?
-                            <div style={{ width: "100%", height: windowHeight * 0.8, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-                                <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", justifyContent: "center", width: "80%" }}>
-                                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", height: "100%", marginRight: "10px" }}>
-                                        <FaQuoteLeft size={10} color='#b3b3b3' />
-                                    </div>
-                                    <div>
-                                        <Typography fontFamily='Gowun Batang' fontSize="30px">좋은 여행자는 고정된 계획이 없고, 도착을 목적으로 가지지 않는다.</Typography>
-                                        <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                                            <Typography noWrap fontFamily='Gowun Batang' fontSize="20px">노자</Typography>
+                            !loading ?
+                                <div style={{ width: "100%", height: windowHeight * 0.8, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                                    <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", justifyContent: "center", width: "80%" }}>
+                                        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", height: "100%", marginRight: "10px" }}>
+                                            <FaQuoteLeft size={10} color='#b3b3b3' />
                                         </div>
-                                    </div>
-                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", marginLeft: "10px" }}>
-                                        <FaQuoteRight size={10} color='#b3b3b3' />
-                                    </div>
+                                        <div>
+                                            <Typography fontFamily='Gowun Batang' fontSize="30px">좋은 여행자는 고정된 계획이 없고, 도착을 목적으로 가지지 않는다.</Typography>
+                                            <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                                                <Typography noWrap fontFamily='Gowun Batang' fontSize="20px">노자</Typography>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", marginLeft: "10px" }}>
+                                            <FaQuoteRight size={10} color='#b3b3b3' />
+                                        </div>
 
+                                    </div>
+                                    <StyledImg src="/images/paperplane.gif" alt="paper plane" style={{ width: "100px", marginBottom: "30px" }} />
+                                    <Typography fontFamily='Gowun Batang' fontSize="15px">원하시는 여행조건에 대한 결과는 없었지만</Typography>
+                                    <Typography fontFamily='Gowun Batang' fontSize="15px" style={{ marginBottom: "8px" }}>당신의 여행은 멈추지 않습니다.</Typography>
+                                    <Typography fontFamily='Gowun Batang' fontSize="15px" fontWeight="1000" color="#00adb5">새로운 여행들을 찾아 떠나보세요.</Typography>
                                 </div>
-                                <StyledImg src="/images/paperplane.gif" alt="paper plane" style={{ width: "100px", marginBottom: "30px" }} />
-                                <Typography>원하시는 여행조건에 대한 결과는 없었지만</Typography>
-                                <Typography>기대하지 않았던 여행들이 당신을 기다리고 있습니다.</Typography>
-                            </div>
+                                : null
                             : null
                     }
                 </Grid>

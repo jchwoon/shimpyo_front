@@ -25,25 +25,29 @@ import useHttpRequest from "../../hooks/useHttpRequest";
 import { accessTokenAtom, loginStateAtom, phoneValueAtom, nameValueAtom } from "../../recoil/userAtoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { AxiosError } from 'axios';
-import { MEMBER_RESERVATION_API_PATH, NON_MEMBER_RESERVATION_API_PATH } from "../../constants/api/reservationApi";
+import { MEMBER_RESERVATION_API_PATH, NON_MEMBER_RESERVATION_API_PATH, NON_MEMBER_RESERVATION_TEXT_API_PATH } from "../../constants/api/reservationApi";
 
 import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from 'react'
 
 import { v4 as uuidv4 } from 'uuid';
 
+import { Dispatch, SetStateAction } from 'react';
+
 interface ResultData {
     accessToken: string;
 }
 
 interface PaymentInfoBoxProp {
-    houseName: string,
-    checkInDate: string | null,
-    checkOutDate: string | null,
-    price: number | null
-    houseId: string,
-    GuestCount: number,
-    // couponListArray: Array<any>,
+    houseName: string;
+    checkInDate: string | null;
+    checkOutDate: string | null;
+    price: number | null;
+    houseId: string;
+    GuestCount: number;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+    setAlertOpen: Dispatch<SetStateAction<boolean>>;
+    setAlertMessage: Dispatch<SetStateAction<string>>;
 }
 
 declare const window: typeof globalThis & {
@@ -122,7 +126,7 @@ export interface Iamport {
     ) => void;
 }
 
-const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, checkOutDate, price, houseId, GuestCount }) => {
+const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, checkOutDate, price, houseId, GuestCount, setOpen, setAlertOpen, setAlertMessage }) => {
 
     const DaysDifference = moment(checkOutDate).diff(moment(checkInDate), "days")
     const TotalPrice = price ? price * DaysDifference : 0
@@ -192,6 +196,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
     const nonMemberName = useRecoilValue(nameValueAtom);
     const nonMemberNumber = useRecoilValue(phoneValueAtom);
 
+    const { responseData: noneMemberTextAfterPayResponseData, sendRequest: sendNoneMemberTextAfterPayRequest } = useHttpRequest();
+
     //회원 결제
 
     function memberRequestPay() {
@@ -212,6 +218,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         async function callback(response: RequestPayResponse) {
             const {
                 success,
+                error_code,
                 error_msg,
                 imp_uid,
                 merchant_uid,
@@ -234,7 +241,9 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                     }
                 });
             } else {
-                console.log("회원 INCISC 결제 실패")
+                setOpen(false)
+                setAlertOpen(true)
+                setAlertMessage(error_msg)
             }
         }
         IMP.request_pay(data, callback);
@@ -242,7 +251,12 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
 
     useEffect(() => {
         if (!memberPaymentResponseData) return;
-        if (memberPaymentResponseData.isSuccess) { navigation('/reservations?category=reservation'); }
+        if (memberPaymentResponseData.isSuccess === true) { navigation('/reservations?category=reservation'); }
+        else if (memberPaymentResponseData.isSuccess === false) {
+            setOpen(false)
+            setAlertOpen(true)
+            setAlertMessage(memberPaymentResponseData.message)
+        }
     }, [memberPaymentResponseData])
 
     //비회원 결제
@@ -265,6 +279,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         async function callback(response: RequestPayResponse) {
             const {
                 success,
+                error_code,
                 error_msg,
                 imp_uid,
                 merchant_uid,
@@ -287,18 +302,43 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                     }
                 });
             } else {
-                alert(`결제 실패: ${error_msg}`);
+                setOpen(false)
+                setAlertOpen(true)
+                setAlertMessage(error_msg)
             }
         }
         IMP.request_pay(data, callback);
     }
 
+    const SendNoneMemberTextAfterPayRequestFunction = async (noneMemberPaymentResponseData: any) => {
+        try {
+            await sendNoneMemberTextAfterPayRequest({
+                url: `${NON_MEMBER_RESERVATION_TEXT_API_PATH}`,
+                method: "POST",
+                body: {
+                    phoneNumber: `${nonMemberNumber}`,
+                    reservationCode: `${noneMemberPaymentResponseData.result.reservationId}`
+                }
+            });
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         if (!noneMemberPaymentResponseData) return;
-        if (noneMemberPaymentResponseData.isSuccess) { navigation('/check/non-member'); }
+        if (noneMemberPaymentResponseData.isSuccess) {
+            SendNoneMemberTextAfterPayRequestFunction(noneMemberPaymentResponseData)
+            navigation('/check/non-member');
+        }
+        else if (noneMemberPaymentResponseData.isSuccess === false) {
+            setOpen(false)
+            setAlertOpen(true)
+            setAlertMessage(noneMemberPaymentResponseData.message)
+        }
     }, [noneMemberPaymentResponseData])
 
-    console.log("coupongListArray:", couponListArray)
+    console.log("noneMemberTextAfterPayResponseData:", noneMemberTextAfterPayResponseData)
 
     return (
         <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>

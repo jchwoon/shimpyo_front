@@ -1,11 +1,19 @@
-import { startTransition } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 
 import { buttonConstants } from '../../../constants/buttonContent';
 import buttonContent from '../../../constants/buttonContent';
-import { accommodationState, addressCheckState, errorModalState, stepState } from '../../../recoil/accommodationAtoms';
+import {
+  accommodationState,
+  addressCheckState,
+  disabledState,
+  errorModalState,
+  imageDataState,
+  imageListState,
+  roomImageListState,
+  stepState,
+} from '../../../recoil/accommodationAtoms';
 
 interface buttonProps {
   step: keyof buttonConstants;
@@ -19,6 +27,26 @@ export default function MoveButton({ step, isDisabled }: buttonProps) {
   const [errorModal, setErrorModal] = useRecoilState(errorModalState);
 
   const navigate = useNavigate();
+  const resetStepState = useResetRecoilState(stepState);
+  const resetAccommodationState = useResetRecoilState(accommodationState);
+  const resetDisabledState = useResetRecoilState(disabledState);
+  const resetAddressCheckState = useResetRecoilState(addressCheckState);
+  const resetErrorModalState = useResetRecoilState(errorModalState);
+  const resetImageDataState = useResetRecoilState(imageDataState);
+  const resetImageListState = useResetRecoilState(imageListState);
+  const resetRoomImageListState = useResetRecoilState(roomImageListState);
+
+  const moveAccommodationPage = () => {
+    resetStepState();
+    resetAccommodationState();
+    resetDisabledState();
+    resetAddressCheckState();
+    resetErrorModalState();
+    resetImageDataState();
+    resetImageListState();
+    resetRoomImageListState();
+    navigate('/hosting');
+  };
 
   const handleOnClick = () => {
     if (step === 'START' || step === 'NEXT') {
@@ -30,9 +58,7 @@ export default function MoveButton({ step, isDisabled }: buttonProps) {
     }
 
     if (step === 'FIN') {
-      startTransition(() => {
-        navigate('/hosting');
-      });
+      moveAccommodationPage();
     }
   };
 
@@ -52,54 +78,62 @@ export default function MoveButton({ step, isDisabled }: buttonProps) {
       };
 
       return setAccommodation(newAccommodation);
-    }
+    } else {
+      const script = document.createElement('script');
 
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places&callback=initCheckAddress`;
-    document.head.appendChild(script);
+      const loadGoogleMapsAPI = () => {
+        script.async = true;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places&callback=initCheckAddress`;
+        document.head.appendChild(script);
+      };
 
-    const removeScript = () => {
-      script.remove();
-      delete window.initCheckAddress;
-    };
+      const removeScript = () => {
+        script.remove();
+      };
 
-    window.initCheckAddress = () => {
-      const geocode = new window.google.maps.Geocoder();
-      const request = { address: accommodation.address.fullAddress };
-      geocode
-        .geocode(request)
-        .then((response: any) => {
-          if (
-            accommodation.address.postCode ===
-            response.results[0].address_components[response.results[0].address_components.length - 1].long_name
-          ) {
-            const newAccommodation = { ...accommodation };
-            newAccommodation.address = {
-              ...newAccommodation.address,
-              lat: response.results[0].geometry.location.lat(),
-              lng: response.results[0].geometry.location.lng(),
-            };
+      const handleCheckAddress = () => {
+        const geocode = new window.google.maps.Geocoder();
+        const request = { address: accommodation.address.fullAddress };
+        geocode
+          .geocode(request)
+          .then((response: any) => {
+            if (
+              accommodation.address.postCode ===
+              response.results[0].address_components[response.results[0].address_components.length - 1].long_name
+            ) {
+              const newAccommodation = { ...accommodation };
+              newAccommodation.address = {
+                ...newAccommodation.address,
+                lat: response.results[0].geometry.location.lat(),
+                lng: response.results[0].geometry.location.lng(),
+              };
 
-            setAccommodation(newAccommodation);
+              setAccommodation(newAccommodation);
 
-            setStepNumber(preState => preState + 1);
-            setAddressCheck(true);
-            setErrorModal(false);
-            removeScript();
-          } else {
+              setStepNumber(preState => preState + 1);
+              setAddressCheck(true);
+              setErrorModal(false);
+              removeScript();
+            } else {
+              setAddressCheck(false);
+              setErrorModal(true);
+              removeScript();
+            }
+          })
+          .catch((err: Error) => {
+            console.log(err);
             setAddressCheck(false);
             setErrorModal(true);
             removeScript();
-          }
-        })
-        .catch((err: Error) => {
-          console.log(err);
-          setAddressCheck(false);
-          setErrorModal(true);
-          removeScript();
-        });
-    };
+          });
+      };
+
+      if (!window.google) {
+        loadGoogleMapsAPI();
+      } else {
+        handleCheckAddress();
+      }
+    }
   };
 
   if (stepNumber === 4) {

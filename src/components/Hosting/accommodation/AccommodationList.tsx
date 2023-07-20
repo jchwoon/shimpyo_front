@@ -85,7 +85,7 @@ const StyledAccommodationContainer = styled.div`
   padding: 25px;
   gap: 25px;
   width: 100%;
-  height: 300px;
+  height: 330px;
   overflow-y: auto;
   background-color: rgba(0, 0, 0, 0.05);
   margin-bottom: 50px;
@@ -97,6 +97,9 @@ const StyledAccommodationContainer = styled.div`
   }
   @media (min-width: 780px) {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media (min-width: 1300px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 `;
 

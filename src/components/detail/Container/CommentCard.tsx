@@ -18,11 +18,13 @@ interface CommentCardProps {
 
 export default function CommentCard({ image, name, contents, date, rating }: CommentCardProps) {
 
+    console.log("image:", image)
+
     return (
         <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", paddingTop: "10px", paddingBottom: "10px", marginBottom: "20px" }}>
             <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                 <div style={{ marginRight: "10px", display: "flex", alignItems: "center" }}>
-                    <UserImg src={image ? image : "./images/basicProfile.jpg"} />
+                    <UserImg src={image ? image : "/images/basicProfile.jpg"} />
                     {/* <UserImg src={"./images/basicProfile.jpg"} /> */}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", marginRight: "20px" }}>
