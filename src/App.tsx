@@ -1,6 +1,6 @@
 import './App.css';
 import './fonts.css';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { Outlet } from 'react-router-dom';
 import { useEffect } from 'react';
 import { REGENERATION_REFRESH_API_PATH } from './constants/api/userApi';
@@ -14,8 +14,9 @@ interface ResultData {
 
 function App() {
   const { logoutHandler } = useLogout();
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginStateAtom);
+  const setAccessToken = useSetRecoilState(accessTokenAtom);
+  const setIsLoggedIn = useSetRecoilState(loginStateAtom);
+
 
   const { responseData, sendRequest } = useHttpRequest<ResultData>();
 
@@ -36,8 +37,10 @@ function App() {
     } else {
       logoutHandler();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken, isLoggedIn]);
+  }, [responseData]);
+
   return <Outlet />;
 }
 
