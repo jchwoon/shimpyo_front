@@ -1,43 +1,41 @@
 import './App.css';
 import './fonts.css';
 import { useRecoilState } from 'recoil';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { useEffect } from 'react';
-import { AxiosError } from 'axios';
-import useAuthorizedRequest from './hooks/useAuthorizedRequest';
 import { REGENERATION_REFRESH_API_PATH } from './constants/api/userApi';
 import { accessTokenAtom, loginStateAtom } from './recoil/userAtoms';
+import useHttpRequest from './hooks/useHttpRequest';
+import useLogout from './hooks/useLogout';
 
 interface ResultData {
   accessToken: string;
 }
 
 function App() {
-  const navigation = useNavigate();
+  const { logoutHandler } = useLogout();
   const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginStateAtom);
 
-  //권한 없을때 발생하는 함수
-  const handleUnAutorization = (error: AxiosError) => {
-    setIsLoggedIn(false);
-    navigation('/');
-    console.error(error.message);
+  const { responseData, sendRequest } = useHttpRequest<ResultData>();
+
+  const sendRefreshToken = async () => {
+    await sendRequest({ url: `${REGENERATION_REFRESH_API_PATH}`, withcredential: true });
   };
 
-  const { responseData, sendRequest } = useAuthorizedRequest<ResultData>({
-    onUnauthorized: handleUnAutorization,
-  });
+  useEffect(() => {
+    sendRefreshToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    const sendRefreshToken = async () => {
-      await sendRequest({ url: `${REGENERATION_REFRESH_API_PATH}`, withCredentials: true });
-
-      if (responseData && responseData.result) {
-        setAccessToken(responseData.result.accessToken);
-        setIsLoggedIn(true);
-      }
-    };
-    sendRefreshToken();
+    if (!responseData) return;
+    if (responseData.isSuccess) {
+      setAccessToken(responseData.result.accessToken);
+      setIsLoggedIn(true);
+    } else {
+      logoutHandler();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, isLoggedIn]);
   return <Outlet />;
