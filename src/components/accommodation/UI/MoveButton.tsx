@@ -1,11 +1,19 @@
-import { startTransition } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 
 import { buttonConstants } from '../../../constants/buttonContent';
 import buttonContent from '../../../constants/buttonContent';
-import { accommodationState, addressCheckState, errorModalState, stepState } from '../../../recoil/accommodationAtoms';
+import {
+  accommodationState,
+  addressCheckState,
+  disabledState,
+  errorModalState,
+  imageDataState,
+  imageListState,
+  roomImageListState,
+  stepState,
+} from '../../../recoil/accommodationAtoms';
 
 interface buttonProps {
   step: keyof buttonConstants;
@@ -19,6 +27,26 @@ export default function MoveButton({ step, isDisabled }: buttonProps) {
   const [errorModal, setErrorModal] = useRecoilState(errorModalState);
 
   const navigate = useNavigate();
+  const resetStepState = useResetRecoilState(stepState);
+  const resetAccommodationState = useResetRecoilState(accommodationState);
+  const resetDisabledState = useResetRecoilState(disabledState);
+  const resetAddressCheckState = useResetRecoilState(addressCheckState);
+  const resetErrorModalState = useResetRecoilState(errorModalState);
+  const resetImageDataState = useResetRecoilState(imageDataState);
+  const resetImageListState = useResetRecoilState(imageListState);
+  const resetRoomImageListState = useResetRecoilState(roomImageListState);
+
+  const moveAccommodationPage = () => {
+    resetStepState();
+    resetAccommodationState();
+    resetDisabledState();
+    resetAddressCheckState();
+    resetErrorModalState();
+    resetImageDataState();
+    resetImageListState();
+    resetRoomImageListState();
+    navigate('/hosting');
+  };
 
   const handleOnClick = () => {
     if (step === 'START' || step === 'NEXT') {
@@ -30,9 +58,7 @@ export default function MoveButton({ step, isDisabled }: buttonProps) {
     }
 
     if (step === 'FIN') {
-      startTransition(() => {
-        navigate('/hosting');
-      });
+      moveAccommodationPage();
     }
   };
 

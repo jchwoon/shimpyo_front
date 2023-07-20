@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import AccommodationItem from './AccommodationItem';
 import { AccommodationDataType, RoomDataType } from '../HostingMain';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { useRecoilState } from 'recoil';
 import {
@@ -30,9 +30,11 @@ export default function AccommodationList({ data, setRoomList, setAccommodationL
   const [roomListPageNumber, setRoomListPageNumber] = useRecoilState(roomListPageState);
 
   const [selectedAccommodationId, setSelectedAccommodationId] = useRecoilState(selectedAccommodationIdState);
+  const [selectedId, setSelectedId] = useState<number>(0);
 
   const getRoomInfo = (id: number) => async () => {
     setSelectedAccommodationId(id);
+    setSelectedId(id);
     setRoomReservationStatus('USING');
     try {
       await roomRequest({ url: `user/reservations/houses/${id}?page=0/reservationStatus=USING` });
@@ -63,7 +65,7 @@ export default function AccommodationList({ data, setRoomList, setAccommodationL
                 key={`accommodation${idx}`}
                 data={accommodation}
                 setAccommodationList={setAccommodationList}
-                isSelected={selectedAccommodationId === accommodation.id}
+                isSelected={selectedId === accommodation.id}
                 onClick={getRoomInfo(accommodation.id)}
               ></AccommodationItem>
             );
@@ -85,7 +87,7 @@ const StyledAccommodationContainer = styled.div`
   padding: 25px;
   gap: 25px;
   width: 100%;
-  height: 300px;
+  height: 330px;
   overflow-y: auto;
   background-color: rgba(0, 0, 0, 0.05);
   margin-bottom: 50px;
@@ -97,6 +99,9 @@ const StyledAccommodationContainer = styled.div`
   }
   @media (min-width: 780px) {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media (min-width: 1300px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 `;
 
