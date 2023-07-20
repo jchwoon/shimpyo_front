@@ -78,54 +78,62 @@ export default function MoveButton({ step, isDisabled }: buttonProps) {
       };
 
       return setAccommodation(newAccommodation);
-    }
+    } else {
+      const script = document.createElement('script');
 
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places&callback=initCheckAddress`;
-    document.head.appendChild(script);
+      const loadGoogleMapsAPI = () => {
+        script.async = true;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places&callback=initCheckAddress`;
+        document.head.appendChild(script);
+      };
 
-    const removeScript = () => {
-      script.remove();
-      delete window.initCheckAddress;
-    };
+      const removeScript = () => {
+        script.remove();
+      };
 
-    window.initCheckAddress = () => {
-      const geocode = new window.google.maps.Geocoder();
-      const request = { address: accommodation.address.fullAddress };
-      geocode
-        .geocode(request)
-        .then((response: any) => {
-          if (
-            accommodation.address.postCode ===
-            response.results[0].address_components[response.results[0].address_components.length - 1].long_name
-          ) {
-            const newAccommodation = { ...accommodation };
-            newAccommodation.address = {
-              ...newAccommodation.address,
-              lat: response.results[0].geometry.location.lat(),
-              lng: response.results[0].geometry.location.lng(),
-            };
+      const handleCheckAddress = () => {
+        const geocode = new window.google.maps.Geocoder();
+        const request = { address: accommodation.address.fullAddress };
+        geocode
+          .geocode(request)
+          .then((response: any) => {
+            if (
+              accommodation.address.postCode ===
+              response.results[0].address_components[response.results[0].address_components.length - 1].long_name
+            ) {
+              const newAccommodation = { ...accommodation };
+              newAccommodation.address = {
+                ...newAccommodation.address,
+                lat: response.results[0].geometry.location.lat(),
+                lng: response.results[0].geometry.location.lng(),
+              };
 
-            setAccommodation(newAccommodation);
+              setAccommodation(newAccommodation);
 
-            setStepNumber(preState => preState + 1);
-            setAddressCheck(true);
-            setErrorModal(false);
-            removeScript();
-          } else {
+              setStepNumber(preState => preState + 1);
+              setAddressCheck(true);
+              setErrorModal(false);
+              removeScript();
+            } else {
+              setAddressCheck(false);
+              setErrorModal(true);
+              removeScript();
+            }
+          })
+          .catch((err: Error) => {
+            console.log(err);
             setAddressCheck(false);
             setErrorModal(true);
             removeScript();
-          }
-        })
-        .catch((err: Error) => {
-          console.log(err);
-          setAddressCheck(false);
-          setErrorModal(true);
-          removeScript();
-        });
-    };
+          });
+      };
+
+      if (!window.google) {
+        loadGoogleMapsAPI();
+      } else {
+        handleCheckAddress();
+      }
+    }
   };
 
   if (stepNumber === 4) {
