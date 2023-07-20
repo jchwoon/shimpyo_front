@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import { MdOutlineArrowForwardIos, MdOutlineArrowBackIos, MdArrowBack } from 'react-icons/md';
+import { MdOutlineArrowForwardIos, MdOutlineArrowBackIos } from 'react-icons/md';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useImageSlide from '../../../../hooks/useImageSlide';
 import ImageSlide from '../../../shared/ImageSlide';
+import { HiArrowSmLeft } from 'react-icons/hi';
 
 interface ImageBoxProps {
   imageList: string[];
@@ -14,9 +15,13 @@ const iconStyle = {
   position: 'absolute' as const,
   backgroundColor: 'white',
   borderRadius: '100%',
-  padding: '0.5rem',
+  width: '30px',
+  height: '30px',
   cursor: 'pointer',
   boxShadow: '3px 3px 6px -1px rgb(0 0 0 / 0.3)',
+  display: 'flex',
+
+  alignItems: 'center',
 };
 
 export default function ImageBox({ imageList, isOver }: ImageBoxProps) {
@@ -28,39 +33,24 @@ export default function ImageBox({ imageList, isOver }: ImageBoxProps) {
     <StyleImageContainer>
       <ImageSlide currentIdx={currentIdx} imageList={imageList} processRef={processRef} />
       {!isOver && (
-        <MdArrowBack
+        <div
           onClick={() => {
             navigation(-1);
           }}
-          style={{
-            ...iconStyle,
-            top: '20px',
-            left: '20px',
-          }}
-          size={15}
-        />
+          style={{ ...iconStyle, top: '20px', left: '20px' }}
+        >
+          <HiArrowSmLeft style={{ width: '100%' }} size={15} />
+        </div>
       )}
       {imageList.length > 1 && (
-        <MdOutlineArrowBackIos
-          onClick={prevImage}
-          style={{
-            ...iconStyle,
-            bottom: '20px',
-            left: '20px',
-          }}
-          size={15}
-        />
+        <div onClick={prevImage} style={{ ...iconStyle, bottom: '20px', left: '20px' }}>
+          <MdOutlineArrowBackIos style={{ width: '100%' }} size={15} />
+        </div>
       )}
       {imageList.length > 1 && (
-        <MdOutlineArrowForwardIos
-          onClick={nextImage}
-          style={{
-            ...iconStyle,
-            bottom: '20px',
-            right: '20px',
-          }}
-          size={15}
-        />
+        <div onClick={nextImage} style={{ ...iconStyle, bottom: '20px', right: '20px' }}>
+          <MdOutlineArrowForwardIos style={{ width: '100%' }} size={15} />
+        </div>
       )}
     </StyleImageContainer>
   );
