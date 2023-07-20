@@ -317,7 +317,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                 method: "POST",
                 body: {
                     phoneNumber: `${nonMemberNumber}`,
-                    reservationCode: `${noneMemberPaymentResponseData.result.reservationId}`
+                    reservationCode: `${noneMemberPaymentResponseData.result.merchantUid}`
                 }
             });
         } catch (error) {
