@@ -9,11 +9,12 @@ import ColorButton from '../UI/ColorButton';
 import useHttpRequest from '../../../hooks/useHttpRequest';
 import Input from '../UI/Input';
 
-import { LOGIN_API_PATH } from '../../../constants/api/userApi';
+import { LOGIN_API_PATH, REGENERATION_REFRESH_API_PATH } from '../../../constants/api/userApi';
 import KakaoLogin from '../../Main/SocialLogin/KakaoLogin';
 import NaverLogin from '../../Main/SocialLogin/NaverLogin';
 import GoogleSocialLogin from '../../Main/SocialLogin/GoogleSocialLogin';
 import { useLocation, useNavigate } from 'react-router-dom';
+import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 
 interface ResultData {
   accessToken: string;
@@ -22,22 +23,27 @@ interface ResultData {
   userId: string;
 }
 
+interface RefreshResultData {
+  accessToken: string;
+}
+
 interface LoginModalProps {
   isToReservationCheck?: boolean;
   redirectPath?: string;
 }
 
+const JWT_EXPIRY_TIME = 120 * 1000;
+
 export default function LoginModal({ isToReservationCheck, redirectPath }: LoginModalProps) {
   const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
+  const { responseData: getAccessTokenResponse, sendRequest: getAccessTokenRequest } =
+    useAuthorizedRequest<RefreshResultData>({});
   const location = useLocation();
   const navigation = useNavigate();
-
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-
   const [isLoginError, setIsLoginError] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
-
   const setIsLoggedIn = useSetRecoilState(loginStateAtom);
   const [isLoginModalOpen, setIsLoginModalOpen] = useRecoilState(loginModalAtom);
   const setIsIdFindModalOpen = useSetRecoilState(idFindModalAtom);
@@ -70,11 +76,26 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
     setLoginErrorMessage('');
   };
 
+  const onSilentRefresh = async () => {
+    await getAccessTokenRequest({ url: `${REGENERATION_REFRESH_API_PATH}`, withCredentials: true });
+  };
+
+  useEffect(() => {
+    if (!getAccessTokenResponse) return;
+
+    if (getAccessTokenResponse.isSuccess) {
+      console.log(getAccessTokenResponse.result);
+      setAccessToken(getAccessTokenResponse.result.accessToken);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getAccessTokenResponse]);
+
   useEffect(() => {
     if (!responseData) return;
 
     if (responseData?.isSuccess) {
       setAccessToken(responseData.result.accessToken);
+      setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
       localStorage.setItem(
         'nickname',
         responseData.result.nickname ? JSON.stringify(responseData.result.nickname) : '',
