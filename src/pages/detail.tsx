@@ -35,7 +35,7 @@ import IdFindModal from '../components/shared/Modal/IdFindModal';
 import PasswordFindModal from '../components/shared/Modal/PasswordFindModal';
 
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 
 import CustomizedBottomNavigation from '../components/shared/MobileFooter/CustomizedBottomNavigaton';
@@ -223,7 +223,8 @@ export default function Detail() {
   }
 
   //결제 에러 메시지
-
+  const [searchParams] = useSearchParams();
+  const response_message = searchParams.get('response_message');
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
@@ -241,6 +242,14 @@ export default function Detail() {
 
     setAlertOpen(false);
   };
+
+  useEffect(() => {
+    if (response_message) {
+      setAlertOpen(true)
+      setAlertMessage(response_message)
+    }
+  }, [response_message])
+
 
   return (
     <>
