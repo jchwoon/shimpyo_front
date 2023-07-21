@@ -3,7 +3,7 @@ import { SiNaver } from 'react-icons/si';
 
 export default function NaverLogin() {
   const naverButtonClickHandler = () => {
-    window.location.href = 'http://shimpyo-api.p-e.kr:8081/oauth2/authorization/naver';
+    window.location.href = 'https://shimpyo-api.p-e.kr:8081/oauth2/authorization/naver';
   };
   return (
     <>

@@ -3,7 +3,7 @@ import SocialButton from '../../shared/Modal/Button/SocialButton';
 
 export default function KakaoLogin() {
   const kakaoLoginClickHandler = () => {
-    window.location.href = 'http://shimpyo-api.p-e.kr:8081/oauth2/authorization/kakao';
+    window.location.href = 'https://shimpyo-api.p-e.kr:8081/oauth2/authorization/kakao';
   };
   return (
     <SocialButton
