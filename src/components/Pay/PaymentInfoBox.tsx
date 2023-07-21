@@ -131,8 +131,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
     const DaysDifference = moment(checkOutDate).diff(moment(checkInDate), "days")
     const TotalPrice = price ? price * DaysDifference : 0
 
-    const [couponRadioSelectedValue, setCouponRadioSelectedValue] = React.useState('');
-    const [couponRadioSelectedDiscount, setCouponRadioSelectedDiscount] = React.useState(0);
+    const [couponRadioSelectedValue, setCouponRadioSelectedValue] = useState('');
+    const [couponRadioSelectedDiscount, setCouponRadioSelectedDiscount] = useState(0);
     const [paymentRadioSelectedValue, setPaymentRadioSelectedValue] = useRecoilState(paymentRadioSelected);
     const [couponRadioId, setCouponRadioId] = useRecoilState(couponRadio);
 
@@ -188,7 +188,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
 
     const memberUid = useRecoilValue(merchantUid)
     const couponListArray = useRecoilValue(couponList)
-    const noneMemberUid = uuidv4()
+    const noneMemberMerchantUid = uuidv4()
+    const noneMemberCustomerUid = uuidv4()
 
     const Name = useRecoilValue(activeRoomName)
     const roomId = useRecoilValue(activeRoomNumber)
@@ -197,6 +198,18 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
     const nonMemberNumber = useRecoilValue(phoneValueAtom);
 
     const { responseData: noneMemberTextAfterPayResponseData, sendRequest: sendNoneMemberTextAfterPayRequest } = useHttpRequest();
+
+    const [mobile, setMobile] = useState(false);
+    useEffect(()=>{
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+    // mobile
+    setMobile(true);
+  } else {
+    // desktop
+    setMobile(false);
+  }
+    },[])
 
     //회원 결제
 
@@ -208,6 +221,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             pg: paymentRadioSelectedValue === '신용카드' ? "html5_inicis" : "kakaopay.TC0ONETIME",
             pay_method: "card",
             merchant_uid: `${memberUid}`,
+            customer_uid: mobile ?`${noneMemberCustomerUid}`: null,
             name: `${houseName} / ${Name}`,
             amount: TotalPrice - DiscountPrice,
             m_redirect_url: `https://shimpyo.o-r.kr/member-mobile-order-complete/${houseId}`
@@ -266,14 +280,16 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         const data = {
             pg: paymentRadioSelectedValue === '신용카드' ? "html5_inicis" : "kakaopay.TC0ONETIME",
             pay_method: "card",
-            merchant_uid: `${noneMemberUid}`,
+            merchant_uid:`${noneMemberMerchantUid}`,
+            customer_uid: mobile ?`${noneMemberCustomerUid}`: null,
             name: `${houseName} / ${Name}`,
             amount: TotalPrice - DiscountPrice,
             buyer_name: `${nonMemberName}`,
             buyer_tel: `${nonMemberNumber}`,
-            m_redirect_url: `https://shimpyo.o-r.kr/none-member-mobile-order-complete/${houseId}`
-            // m_redirect_url: `http://localhost:3000/none-member-mobile-order-complete/${houseId}`
+            m_redirect_url: `http://localhost:3000/none-member-mobile-order-complete/${houseId}`,
         }
+
+        console.log("data:", data)
 
         async function callback(response: RequestPayResponse) {
             const {
@@ -283,7 +299,6 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                 imp_uid,
                 merchant_uid,
             } = response;
-
             if (success) {
                 await sendNoneMemberPaymentRequest({
                     url: `${NON_MEMBER_RESERVATION_API_PATH}`,
@@ -337,7 +352,6 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         }
     }, [noneMemberPaymentResponseData])
 
-    console.log("noneMemberTextAfterPayResponseData: ", noneMemberTextAfterPayResponseData)
 
     return (
         <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>

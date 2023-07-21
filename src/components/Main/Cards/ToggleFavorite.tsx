@@ -13,13 +13,14 @@ interface ResultData {
 }
 
 interface ToggleFavoriteProps {
-    houseId: number
+    houseId: number;
+    wished:boolean;
 }
 
-const ToggleFavorite = ({ houseId }: ToggleFavoriteProps) => {
+const ToggleFavorite = ({ houseId, wished }: ToggleFavoriteProps) => {
     const navigation = useNavigate()
     const [loginState, setLoginState] = useRecoilState(loginStateAtom)
-    const [favorite, setFavorite] = useState(false);
+    const [favorite, setFavorite] = useState(wished);
     const setLoginModal = useSetRecoilState(loginModalAtom);
 
     const handleUnAutorization = (error: AxiosError) => {
