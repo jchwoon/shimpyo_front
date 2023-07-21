@@ -211,6 +211,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             name: `${houseName} / ${Name}`,
             amount: TotalPrice - DiscountPrice,
             m_redirect_url: `https://shimpyo.o-r.kr/member-mobile-order-complete/${houseId}`
+            // m_redirect_url: `http://localhost:3000/member-mobile-order-complete/${houseId}`
         }
 
         async function callback(response: RequestPayResponse) {
@@ -271,8 +272,9 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             amount: TotalPrice - DiscountPrice,
             buyer_name: `${nonMemberName}`,
             buyer_tel: `${nonMemberNumber}`,
-            m_redirect_url: `https://shimpyo.o-r.kr/none-member-mobile-order-complete/${houseId}`
+            // m_redirect_url: `https://shimpyo.o-r.kr/none-member-mobile-order-complete/${houseId}`
             // m_redirect_url: `http://localhost:3000/none-member-mobile-order-complete/${houseId}`
+            m_redirect_url: 'http://localhost:3000/none-member-mobile-order-complete'
         }
 
         async function callback(response: RequestPayResponse) {

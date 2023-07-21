@@ -81,25 +81,26 @@ export default function MemberMobileOrderComplete() {
             navigation(`/detail/${houseId}?response_message=${error_msg}`)
         }
     }, [imp_success])
-    // if (imp_success === "true") {
-    //     sendMemberPaymentRequest({
-    //         url: `${MEMBER_RESERVATION_API_PATH}`,
-    //         method: "POST",
-    //         withCredentials: true,
-    //         body: {
-    //             impUid: imp_uid,
-    //             roomId: roomId,
-    //             couponId: couponRadioId,
-    //             merchantUid: merchant_uid,
-    //             payMethod: paymentRadioSelectedValue === '신용카드' ? "KGINICIS" : "KAKAO",
-    //             peopleCount: GuestCount,
-    //             checkInDate: moment(checkInDate).format('YYYY.MM.DD'),
-    //             checkOutDate: moment(checkOutDate).format('YYYY.MM.DD')
-    //         }
-    //     });
-    // } else if (imp_success === "false") {
-    //     navigation(`/detail/${houseId}?response_message=${error_msg}`)
-    // }
+
+    if (imp_success === "true") {
+        sendMemberPaymentRequest({
+            url: `${MEMBER_RESERVATION_API_PATH}`,
+            method: "POST",
+            withCredentials: true,
+            body: {
+                impUid: imp_uid,
+                roomId: roomId,
+                couponId: couponRadioId,
+                merchantUid: merchant_uid,
+                payMethod: paymentRadioSelectedValue === '신용카드' ? "KGINICIS" : "KAKAO",
+                peopleCount: GuestCount,
+                checkInDate: moment(checkInDate).format('YYYY.MM.DD'),
+                checkOutDate: moment(checkOutDate).format('YYYY.MM.DD')
+            }
+        });
+    } else if (imp_success === "false") {
+        navigation(`/detail/${houseId}?response_message=${error_msg}`)
+    }
 
     useEffect(() => {
         if (!memberPaymentResponseData) return;
