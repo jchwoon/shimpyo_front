@@ -4,6 +4,7 @@ import { FaLocationArrow } from 'react-icons/fa';
 import { useRecoilState } from 'recoil';
 import { accommodationState, stepState } from '../../../../recoil/accommodationAtoms';
 import { getAddressFromLatLng } from '../../../../utils/getAddressFromLatLng';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface Prediction {
   description: string;
@@ -17,14 +18,23 @@ export interface Prediction {
 export interface AddressSearchListProps {
   searchResult: { predictions?: Prediction[] };
   focus?: boolean;
+  setNoDataCheck?: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function AddressSearchList({ searchResult, focus }: AddressSearchListProps) {
+export default function AddressSearchList({ setNoDataCheck, searchResult, focus }: AddressSearchListProps) {
   const [stepNumber, setStepNumber] = useRecoilState(stepState);
   const [accommodation, setAccommodation] = useRecoilState(accommodationState);
 
   const MoveAddressWrite = () => {
     setStepNumber(preState => preState + 1);
+  };
+
+  const noDataOnFocus = () => {
+    if (setNoDataCheck) setNoDataCheck(true);
+  };
+
+  const noDataOnBlur = () => {
+    if (setNoDataCheck) setNoDataCheck(false);
   };
 
   const getLocation = async () => {
@@ -74,18 +84,18 @@ export default function AddressSearchList({ searchResult, focus }: AddressSearch
         </StyledItem>
       </StyledListContainer>
     );
+  } else {
+    return (
+      <StyledListContainer focus={focus} searchResult={searchResult}>
+        <StyledItem onClick={getLocation} onMouseOver={noDataOnFocus} onMouseLeave={noDataOnBlur}>
+          <FaLocationArrow />
+          <StyledFlexContainer>
+            <StyledItemTitle>현재 위치 사용</StyledItemTitle>
+          </StyledFlexContainer>
+        </StyledItem>
+      </StyledListContainer>
+    );
   }
-
-  return (
-    <StyledListContainer focus={focus} searchResult={searchResult}>
-      <StyledItem onClick={getLocation}>
-        <FaLocationArrow />
-        <StyledFlexContainer>
-          <StyledItemTitle>현재 위치 사용</StyledItemTitle>
-        </StyledFlexContainer>
-      </StyledItem>
-    </StyledListContainer>
-  );
 }
 
 const StyledListContainer = styled.ul<AddressSearchListProps>`

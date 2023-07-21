@@ -323,7 +323,7 @@ const StyledMoveBar = styled.div<MoveBarProps>`
   top: 0;
   left: 16px;
   transition: transform 300ms ease;
-  transform: ${({ selectedIndex }) => `translateY(${15 + 40 * selectedIndex}px)`};
+  transform: ${({ selectedIndex }) => `translateY(${15 + 48 * selectedIndex}px)`};
 `;
 
 const StyledInfo = styled.div`

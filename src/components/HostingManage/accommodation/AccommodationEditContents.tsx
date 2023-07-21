@@ -25,9 +25,9 @@ export default function AccommodationEditContents() {
 
   const changeText = debounce((e: ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.name === 'name') {
-      const newAccommodation = { ...accommodationData, name: e.target.value };
+      const newAccommodation = { ...accommodationData, name: e.target.value.replace(/\r\n|\r|\n/g, ' ') };
       setAccommodationData(newAccommodation);
-      const newPatchHouseReq = { ...patchHouseReq, name: e.target.value };
+      const newPatchHouseReq = { ...patchHouseReq, name: e.target.value.replace(/\r\n|\r|\n/g, ' ') };
       setPatchHouseReq(newPatchHouseReq);
     }
 

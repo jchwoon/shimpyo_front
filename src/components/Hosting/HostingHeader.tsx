@@ -89,7 +89,7 @@ export default function HostingHeader() {
   return (
     <Header>
       <FlexBox>
-        <Logo height="25px" path="/" width="50" />
+        <Logo height="25px" path="/" width="50" onClick={moveAccommodationPage('/')} />
         <UserMenu
           isOpen={isOpen}
           menuRef={menuRef}

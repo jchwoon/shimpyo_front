@@ -9,6 +9,7 @@ export default function AddressSearchBar() {
   const [searchResult, setSearchResult] = useState({});
 
   const [focus, setFocus] = useState<boolean>(false);
+  const [noDataCheck, setNoDataCheck] = useState<boolean>(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
@@ -29,9 +30,9 @@ export default function AddressSearchBar() {
   };
 
   const handleOnBlur = () => {
-    setTimeout(() => {
+    if (!noDataCheck && Object.keys(searchResult).length === 0) {
       setFocus(false);
-    }, 100);
+    }
   };
 
   useEffect(() => {
@@ -101,7 +102,7 @@ export default function AddressSearchBar() {
         </StyledFlexDiv>
         {searchWord.length > 0 && <StyledCancelButton onClick={handleOnClick}>X</StyledCancelButton>}
       </StyledBarContainer>
-      <AddressSearchList searchResult={searchResult} focus={focus} />
+      <AddressSearchList setNoDataCheck={setNoDataCheck} searchResult={searchResult} focus={focus} />
     </StyledPositionDiv>
   );
 }

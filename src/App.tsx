@@ -17,6 +17,7 @@ function App() {
   const setAccessToken = useSetRecoilState(accessTokenAtom);
   const setIsLoggedIn = useSetRecoilState(loginStateAtom);
 
+
   const { responseData, sendRequest } = useHttpRequest<ResultData>();
 
   const sendRefreshToken = async () => {
@@ -39,6 +40,7 @@ function App() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);
+
   return <Outlet />;
 }
 
