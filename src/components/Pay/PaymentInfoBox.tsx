@@ -18,7 +18,7 @@ import Radio from '@mui/material/Radio';
 
 import {
     merchantUid, activeRoomName, activeRoomNumber,
-    couponList
+    couponList, paymentRadioSelected, couponRadio
 } from '../../recoil/detailPageAtoms';
 import useAuthorizedRequest from "../../hooks/useAuthorizedRequest";
 import useHttpRequest from "../../hooks/useHttpRequest";
@@ -133,8 +133,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
 
     const [couponRadioSelectedValue, setCouponRadioSelectedValue] = React.useState('');
     const [couponRadioSelectedDiscount, setCouponRadioSelectedDiscount] = React.useState(0);
-    const [paymentRadioSelectedValue, setPaymentRadioSelectedValue] = React.useState('');
-    const [couponRadioId, setCouponRadioId] = React.useState(0);
+    const [paymentRadioSelectedValue, setPaymentRadioSelectedValue] = useRecoilState(paymentRadioSelected);
+    const [couponRadioId, setCouponRadioId] = useRecoilState(couponRadio);
 
     const DiscountPrice = TotalPrice ? TotalPrice * couponRadioSelectedDiscount / 100 : 0
 
@@ -210,7 +210,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             merchant_uid: `${memberUid}`,
             name: `${houseName} / ${Name}`,
             amount: TotalPrice - DiscountPrice,
-            m_redirect_url: 'https://shimpyo.o-r.kr/member-mobile-order-complete'
+            m_redirect_url: `https://shimpyo.o-r.kr/member-mobile-order-complete/${houseId}`
         }
 
         async function callback(response: RequestPayResponse) {
@@ -271,7 +271,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             amount: TotalPrice - DiscountPrice,
             buyer_name: `${nonMemberName}`,
             buyer_tel: `${nonMemberNumber}`,
-            m_redirect_url: 'https://shimpyo.o-r.kr/none-member-mobile-order-complete'
+            m_redirect_url: `https://shimpyo.o-r.kr/none-member-mobile-order-complete/${houseId}`
+            // m_redirect_url: `http://localhost:3000/none-member-mobile-order-complete/${houseId}`
         }
 
         async function callback(response: RequestPayResponse) {
@@ -325,7 +326,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
 
     useEffect(() => {
         if (!noneMemberPaymentResponseData) return;
-        if (noneMemberPaymentResponseData.isSuccess) {
+        if (noneMemberPaymentResponseData.isSuccess === true) {
             SendNoneMemberTextAfterPayRequestFunction(noneMemberPaymentResponseData)
             navigation('/check/non-member');
         }

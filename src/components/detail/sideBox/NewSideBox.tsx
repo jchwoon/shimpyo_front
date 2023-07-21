@@ -294,7 +294,8 @@ export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertM
                 houseName={houseName}
                 checkInDate={firstPickedDate}
                 checkOutDate={secondPickedDate}
-                price={price} houseId={houseId}
+                price={price}
+                houseId={houseId}
                 GuestCount={GuestCount}
                 setOpen={setOpen}
                 setAlertOpen={setAlertOpen}

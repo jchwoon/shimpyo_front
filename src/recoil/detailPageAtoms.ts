@@ -39,3 +39,13 @@ export const swipePageState = atom<number>({
     key: 'swipePageState',
     default: 0,
 })
+
+export const paymentRadioSelected = atom<string>({
+    key: 'paymentRadioSelected',
+    default: '',
+})
+
+export const couponRadio = atom<number>({
+    key: 'couponRadio',
+    default: 0,
+})
