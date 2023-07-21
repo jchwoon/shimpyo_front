@@ -35,7 +35,7 @@ interface LoginModalProps {
 const JWT_EXPIRY_TIME = 30 * 60 * 1000;
 
 export default function LoginModal({ isToReservationCheck, redirectPath }: LoginModalProps) {
-  const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
+  const { isLoading, responseData, sendRequest, errorMessage } = useHttpRequest<ResultData>();
   const { responseData: getAccessTokenResponse, sendRequest: getAccessTokenRequest } =
     useHttpRequest<RefreshResultData>();
   const location = useLocation();
@@ -96,7 +96,6 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getAccessTokenResponse]);
-
   useEffect(() => {
     if (!responseData) return;
 
@@ -139,7 +138,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
         <Input ref={emailRef} placeholder="이메일" type="text" />
         <span style={{ marginTop: '10px' }}></span>
         <Input ref={passwordRef} placeholder="비밀번호" type="password" />
-        {isLoginError && <StyleError>{loginErrorMessage}</StyleError>}
+        {errorMessage && <StyleError>{errorMessage}</StyleError>}
         <StyleAccountInfoFind>
           <span
             onClick={() => {
