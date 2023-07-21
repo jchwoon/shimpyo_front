@@ -210,7 +210,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             merchant_uid: `${memberUid}`,
             name: `${houseName} / ${Name}`,
             amount: TotalPrice - DiscountPrice,
-            m_redirect_url: 'https://shimpyo.o-r.kr//member-mobile-order-complete'
+            m_redirect_url: 'https://shimpyo.o-r.kr/member-mobile-order-complete'
         }
 
         async function callback(response: RequestPayResponse) {
@@ -271,7 +271,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             amount: TotalPrice - DiscountPrice,
             buyer_name: `${nonMemberName}`,
             buyer_tel: `${nonMemberNumber}`,
-            m_redirect_url: 'https://shimpyo.o-r.kr//none-member-mobile-order-complete'
+            m_redirect_url: 'https://shimpyo.o-r.kr/none-member-mobile-order-complete'
         }
 
         async function callback(response: RequestPayResponse) {
