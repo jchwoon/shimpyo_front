@@ -9,8 +9,8 @@ import LoginModal from '../../shared/Modal/LoginModal';
 export type Item = {
   houseId: number;
   houseName: string;
-  type: string;
-  houseImages: string;
+  houseType: string;
+  houseImage: string;
 };
 
 export default function WishListMain() {
