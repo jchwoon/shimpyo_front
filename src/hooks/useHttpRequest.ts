@@ -39,14 +39,11 @@ export default function useHttpRequest<T>() {
       setResponseData(response.data);
     } catch (error: any) {
       if (error.response) {
-        console.error(error.response);
-        setErrorMessage(error.message);
+        setErrorMessage(error.response.data.message);
       } else if (error.request) {
-        console.error(error.request);
         setErrorMessage(error.message);
       }
-      setErrorMessage(error.message);
-      console.error(error.message);
+      setErrorMessage(error.response.data.message);
     } finally {
       setIsLoading(false);
     }

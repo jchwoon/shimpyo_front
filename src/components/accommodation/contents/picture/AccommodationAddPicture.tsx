@@ -1,4 +1,4 @@
-import { useRef, ChangeEvent, useEffect } from 'react';
+import { useRef, ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TbPhotoPlus } from 'react-icons/tb';
 import { AiOutlinePicture, AiOutlinePlus } from 'react-icons/ai';
@@ -15,32 +15,48 @@ export default function AccommodationAddPicture() {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files;
-    if (file?.[0]) {
+  const [isDragOver, setIsDragOver] = useState<boolean>(false);
+
+  const handleOnChange = async (e: ChangeEvent<HTMLInputElement> | React.DragEvent) => {
+    const files = 'dataTransfer' in e ? e.dataTransfer?.files : e.target?.files;
+
+    if (files && files?.length + imageList.length > 5) {
+      alert('이미지는 최대 5장까지 업로드 가능합니다.');
+      return;
+    }
+
+    if (files && files?.length > 0) {
+      const newImageList = [...imageList];
       const newImageData = new FormData();
+
       imageData.forEach((value, key) => {
         newImageData.append(key, value);
       });
 
-      newImageData.append('houseImages', file[0]);
-      setImageData(newImageData);
-
-      try {
-        const result = (await imageReader(file[0])) as string;
-        const newImageList = [...imageList];
-
-        if (newImageList.some(item => item.image === '')) {
-          const index = newImageList.findIndex(item => item.image === '');
-          newImageList.splice(index, 1, { image: result, isFocused: false });
-        } else {
-          newImageList.push({ image: result, isFocused: false });
+      for (const file of files) {
+        if (!['image/png', 'image/jpg', 'image/jpeg'].includes(file.type)) {
+          alert('이미지 형식 파일을 업로드해주세요.');
+          return;
         }
 
-        setImageList(newImageList);
-      } catch (err) {
-        console.log(err);
+        try {
+          const result = (await imageReader(file)) as string;
+
+          newImageData.append('houseImages', file);
+
+          if (newImageList.some(item => item.image === '')) {
+            const index = newImageList.findIndex(item => item.image === '');
+            newImageList.splice(index, 1, { image: result, isFocused: false });
+          } else {
+            newImageList.push({ image: result, isFocused: false });
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
+
+      setImageData(newImageData);
+      setImageList(newImageList);
     }
   };
 
@@ -59,18 +75,67 @@ export default function AccommodationAddPicture() {
     }
   };
 
+  const handleOnDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (imageList.length === 5) return setIsDragOver(false);
+    if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsDragOver(true);
+    }
+  };
+
+  const handleOnDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (imageList.length === 5) {
+      setIsDragOver(false);
+    } else {
+      setIsDragOver(true);
+    }
+  };
+
+  const handleOnDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    if (imageList.length === 5) {
+      return;
+    }
+    handleOnChange(e);
+  };
+
+  const handleOnDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsDragOver(false);
+    }
+  };
+
   return (
-    <StyledFlexDiv>
-      {imageList[0]?.image === '' && (
-        <StyledContainer>
+    <StyledFlexDiv
+      onDrop={handleOnDrop}
+      onDragOver={handleOnDragOver}
+      onDragEnter={handleOnDragEnter}
+      onDragLeave={handleOnDragLeave}
+    >
+      {isDragOver && imageList.length < 5 && (
+        <StyledUploadContainer>
+          <StyledUploadImgIcon />
+        </StyledUploadContainer>
+      )}
+      {!isDragOver && imageList[0]?.image === '' && (
+        <StyledContainer onDragOver={handleOnDragOver} onDragEnter={handleOnDragEnter} onDragLeave={handleOnDragLeave}>
           <StyledImgIcon />
-          <StyledContentTitle>클릭해서 사진을 업로드하세요.</StyledContentTitle>
+          <StyledContentTitle>이미지 파일 드래그 또는 클릭을 통해 사진을 업로드하세요.</StyledContentTitle>
           <StyledContentSubTitle>5장의 사진을 선택하세요.</StyledContentSubTitle>
           <StyledLabel htmlFor="file"></StyledLabel>
-          <StyledInput onChange={handleOnChange} id="file" type="file" accept="image/*"></StyledInput>
+          <StyledInput onChange={handleOnChange} id="file" type="file" accept="image/*" multiple></StyledInput>
         </StyledContainer>
       )}
-      {imageList[0]?.image !== '' &&
+      {!isDragOver &&
+        imageList[0]?.image !== '' &&
         imageList.map((item, idx) => {
           if (idx === 0) {
             return (
@@ -81,29 +146,14 @@ export default function AccommodationAddPicture() {
             );
           } else {
             return (
-              <div key={idx}>
-                {item.image === '' ? (
-                  <StyledPlusContainer>
-                    <StyledPlusImgIcon />
-                    <StyledPlusLabel htmlFor={`file${idx}`}></StyledPlusLabel>
-                    <StyledPlusInput
-                      onChange={handleOnChange}
-                      id={`file${idx}`}
-                      type="file"
-                      accept="image/*"
-                    ></StyledPlusInput>
-                  </StyledPlusContainer>
-                ) : (
-                  <StyledPlusContainer>
-                    <ImageOption index={idx} setImageList={setImageList} imageList={imageList} />
-                    <StyledImage src={item.image} alt="이미지" />
-                  </StyledPlusContainer>
-                )}
-              </div>
+              <StyledPlusContainer key={idx}>
+                <ImageOption index={idx} setImageList={setImageList} imageList={imageList} />
+                <StyledImage src={item.image} alt="이미지" />
+              </StyledPlusContainer>
             );
           }
         })}
-      {imageList[0]?.image !== '' && imageList.length < 5 && (
+      {!isDragOver && imageList[0]?.image !== '' && imageList.length < 5 && (
         <StyledPlusContainer>
           <StyledLastImgIcon />
           <StyledPlusLabel htmlFor="fileLast"></StyledPlusLabel>
@@ -114,6 +164,7 @@ export default function AccommodationAddPicture() {
             type="file"
             accept="image/*"
             onClick={resetFileInput}
+            multiple
           ></StyledPlusInput>
           <StyledLastContentSubTitle>추가</StyledLastContentSubTitle>
         </StyledPlusContainer>
@@ -125,6 +176,7 @@ export default function AccommodationAddPicture() {
 const StyledFlexDiv = styled.div`
   display: flex;
   width: 100%;
+  height: 100%;
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 20px;
@@ -149,6 +201,21 @@ const StyledContainer = styled.div`
   }
 `;
 
+const StyledUploadContainer = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 330px;
+  border: 5px dotted rgba(0, 0, 0, 0.5);
+  z-index: 1;
+
+  &:hover {
+    border: 2px solid black;
+  }
+`;
+
 const StyledLabel = styled.label`
   z-index: 10;
   width: 600px;
@@ -162,6 +229,13 @@ const StyledInput = styled.input`
 const StyledImgIcon = styled(TbPhotoPlus)`
   position: absolute;
   top: 100px;
+  font-size: 80px;
+  z-index: -1;
+`;
+
+const StyledUploadImgIcon = styled(TbPhotoPlus)`
+  position: absolute;
+  top: 120px;
   font-size: 80px;
   z-index: -1;
 `;

@@ -1,6 +1,6 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import Modal from '../Modal';
-import { useRef, useEffect, useState, KeyboardEvent } from 'react';
+import { useRef, useEffect, KeyboardEvent } from 'react';
 import { idFindModalAtom, joinModalAtom, loginModalAtom, passwordFindModalAtom } from '../../../recoil/modalAtoms';
 import { loginStateAtom, accessTokenAtom, nicknameAtom, profileImageAtom, userIdAtom } from '../../../recoil/userAtoms';
 import styled from 'styled-components';
@@ -32,18 +32,18 @@ interface LoginModalProps {
   redirectPath?: string;
 }
 
-const JWT_EXPIRY_TIME = 3600 * 1000;
+const JWT_EXPIRY_TIME = 30 * 60 * 1000;
 
 export default function LoginModal({ isToReservationCheck, redirectPath }: LoginModalProps) {
-  const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
+  const { isLoading, responseData, sendRequest, errorMessage } = useHttpRequest<ResultData>();
   const { responseData: getAccessTokenResponse, sendRequest: getAccessTokenRequest } =
     useHttpRequest<RefreshResultData>();
   const location = useLocation();
   const navigation = useNavigate();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [isLoginError, setIsLoginError] = useState(false);
-  const [loginErrorMessage, setLoginErrorMessage] = useState('');
+  // const [isLoginError, setIsLoginError] = useState(false);
+  // const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const setIsLoggedIn = useSetRecoilState(loginStateAtom);
   const [isLoginModalOpen, setIsLoginModalOpen] = useRecoilState(loginModalAtom);
   const setIsIdFindModalOpen = useSetRecoilState(idFindModalAtom);
@@ -72,10 +72,10 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
     handleLoginButtonClick();
   };
 
-  const initialState = () => {
-    setIsLoginError(false);
-    setLoginErrorMessage('');
-  };
+  // const initialState = () => {
+  //   setIsLoginError(false);
+  //   setLoginErrorMessage('');
+  // };
 
   const onSilentRefresh = async () => {
     await getAccessTokenRequest({ url: `${REGENERATION_REFRESH_API_PATH}`, withcredential: true });
@@ -96,7 +96,6 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getAccessTokenResponse]);
-
   useEffect(() => {
     if (!responseData) return;
 
@@ -119,9 +118,6 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
       setIsLoginModalOpen(false);
       window.history.replaceState(null, '', '/');
       navigation(location?.state?.redirectedFrom?.pathname || redirectPath || '/');
-    } else {
-      setIsLoginError(true);
-      setLoginErrorMessage('이메일과 비밀번호를 다시 한번 확인해주세요.');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);
@@ -139,7 +135,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
         <Input ref={emailRef} placeholder="이메일" type="text" />
         <span style={{ marginTop: '10px' }}></span>
         <Input ref={passwordRef} placeholder="비밀번호" type="password" />
-        {isLoginError && <StyleError>{loginErrorMessage}</StyleError>}
+        {errorMessage && <StyleError>{errorMessage}</StyleError>}
         <StyleAccountInfoFind>
           <span
             onClick={() => {
@@ -195,7 +191,6 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
         label="로그인"
         onClose={() => {
           setIsLoginModalOpen(false);
-          initialState();
         }}
         title={title}
         body={body}
