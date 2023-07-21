@@ -101,7 +101,7 @@ const StyledListContainer = styled.ul<AddressSearchListProps>`
 
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
   height: ${props => props.searchResult.predictions && props.searchResult.predictions.length > 1 && '200px'};
-  visibility: ${props => (props.focus === false ? 'hidden' : 'visible')};
+  /* visibility: ${props => (props.focus === false ? 'hidden' : 'visible')}; */
 `;
 
 const StyledItem = styled.li`
