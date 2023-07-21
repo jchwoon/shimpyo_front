@@ -8,7 +8,7 @@ import useResponseToViewPort from '../../../hooks/useResponseToViewPort';
 import { useSetRecoilState } from 'recoil';
 import { loginModalAtom } from '../../../recoil/modalAtoms';
 
-export default function LogoutStateNavi({ intersectionWidthValue }: { intersectionWidthValue: number }) {
+export default function LogoutStateNavi({ intersectionWidthValue, currentValue }: { intersectionWidthValue: number, currentValue?: number }) {
   const navigation = useNavigate();
   const { viewPortWidth } = useResponseToViewPort();
   const setLoginModal = useSetRecoilState(loginModalAtom);
@@ -26,10 +26,12 @@ export default function LogoutStateNavi({ intersectionWidthValue }: { intersecti
   const loginNavi = (
     <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
   );
+
+  console.log("currentValue:", currentValue)
   return (
     <div>
       {viewPortWidth <= intersectionWidthValue && (
-        <NewMobileFooter defaultValue={0} Action0={homeNavi} Action1={reservationNavi} Action2={loginNavi} />
+        <NewMobileFooter defaultValue={currentValue !== undefined ? currentValue : null} Action0={homeNavi} Action1={reservationNavi} Action2={loginNavi} />
       )}
     </div>
   );

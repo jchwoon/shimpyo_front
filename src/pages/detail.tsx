@@ -54,6 +54,9 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { forwardRef } from 'react';
 
+import LoginStateNavi from '../components/shared/MobileFooter/LoginStateNavi';
+import LogoutStateNavi from '../components/shared/MobileFooter/LogoutStateNavi';
+
 
 export default function Detail() {
 
@@ -284,9 +287,7 @@ export default function Detail() {
         </Container>
       </div>
       <div ref={observerRef} style={{ height: '10px' }} />
-      {isLargeScreen ? null : (
-        <NewMobileFooter defaultValue={null} Action0={value0} Action1={value1} Action2={value2} />
-      )}
+      {loginState ? <LoginStateNavi intersectionWidthValue={750} /> : <LogoutStateNavi intersectionWidthValue={750} />}
       <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {alertMessage}
@@ -309,11 +310,11 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   @media screen and (max-width: 749px) {
-    padding: 70px 24px 0px 24px;
+    padding: 70px 24px 50px 24px;
     width: 100%;
   }
   @media screen and (max-width: 599px) {
-    padding: 70px 16px 0px 16px;
+    padding: 70px 16px 50px 16px;
     width: 100%;
   }
 `;

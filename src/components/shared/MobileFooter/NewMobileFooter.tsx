@@ -86,25 +86,25 @@ export default function MobileFooter({ defaultValue, Action0, Action1, Action2, 
 
   const Action3WithClick = Action3
     ? cloneElement(Action3, {
-        onClick: (event: React.MouseEvent) => {
-          if (Action3.props.onClick) {
-            Action3.props.onClick(event);
-          }
-          handleAction3Click();
-          setValueNullTimeout();
-        },
-        label: (
-          <Typography fontFamily="Noto Sans KR" fontWeight="500" fontSize="12px">
-            {Action3.props.label}{' '}
-          </Typography>
-        ),
-      })
+      onClick: (event: React.MouseEvent) => {
+        if (Action3.props.onClick) {
+          Action3.props.onClick(event);
+        }
+        handleAction3Click();
+        setValueNullTimeout();
+      },
+      label: (
+        <Typography fontFamily="Noto Sans KR" fontWeight="500" fontSize="12px">
+          {Action3.props.label}{' '}
+        </Typography>
+      ),
+    })
     : null;
 
   return (
     <>
       <Box sx={{ width: 500 }}>
-        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 3 }} elevation={3}>
           <ThemeProvider theme={MobileNavbarTheme}>
             <BottomNavigation
               showLabels
