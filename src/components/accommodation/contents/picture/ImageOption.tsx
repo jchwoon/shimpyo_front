@@ -37,7 +37,7 @@ export default function ImageOption({ index, setImageList, imageList }: ImageOpt
     newImageList.splice(index, 1);
     imageDataValues.splice(index, 1);
 
-    if (newImageList.length < 4) {
+    if (newImageList.length === 0) {
       newImageList.push({ image: '', isFocused: false });
     }
 
