@@ -18,7 +18,7 @@ import Radio from '@mui/material/Radio';
 
 import {
     merchantUid, activeRoomName, activeRoomNumber,
-    couponList
+    couponList, paymentRadioSelected, couponRadio
 } from '../../recoil/detailPageAtoms';
 import useAuthorizedRequest from "../../hooks/useAuthorizedRequest";
 import useHttpRequest from "../../hooks/useHttpRequest";
@@ -133,8 +133,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
 
     const [couponRadioSelectedValue, setCouponRadioSelectedValue] = React.useState('');
     const [couponRadioSelectedDiscount, setCouponRadioSelectedDiscount] = React.useState(0);
-    const [paymentRadioSelectedValue, setPaymentRadioSelectedValue] = React.useState('');
-    const [couponRadioId, setCouponRadioId] = React.useState(0);
+    const [paymentRadioSelectedValue, setPaymentRadioSelectedValue] = useRecoilState(paymentRadioSelected);
+    const [couponRadioId, setCouponRadioId] = useRecoilState(couponRadio);
 
     const DiscountPrice = TotalPrice ? TotalPrice * couponRadioSelectedDiscount / 100 : 0
 
@@ -209,10 +209,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             pay_method: "card",
             merchant_uid: `${memberUid}`,
             name: `${houseName} / ${Name}`,
-            // amount: 100,
             amount: TotalPrice - DiscountPrice,
-            // buyer_name: `${nonMemberName}`,
-            // buyer_tel: `${nonMemberNumber}`,
+            m_redirect_url: `https://shimpyo.o-r.kr/member-mobile-order-complete/${houseId}`
         }
 
         async function callback(response: RequestPayResponse) {
@@ -270,10 +268,11 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             pay_method: "card",
             merchant_uid: `${noneMemberUid}`,
             name: `${houseName} / ${Name}`,
-            // amount: 100,
             amount: TotalPrice - DiscountPrice,
             buyer_name: `${nonMemberName}`,
             buyer_tel: `${nonMemberNumber}`,
+            m_redirect_url: `https://shimpyo.o-r.kr/none-member-mobile-order-complete/${houseId}`
+            // m_redirect_url: `http://localhost:3000/none-member-mobile-order-complete/${houseId}`
         }
 
         async function callback(response: RequestPayResponse) {
@@ -317,7 +316,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                 method: "POST",
                 body: {
                     phoneNumber: `${nonMemberNumber}`,
-                    reservationCode: `${noneMemberPaymentResponseData.result.reservationId}`
+                    reservationCode: `${noneMemberPaymentResponseData.result.merchantUid}`
                 }
             });
         } catch (error) {
@@ -327,7 +326,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
 
     useEffect(() => {
         if (!noneMemberPaymentResponseData) return;
-        if (noneMemberPaymentResponseData.isSuccess) {
+        if (noneMemberPaymentResponseData.isSuccess === true) {
             SendNoneMemberTextAfterPayRequestFunction(noneMemberPaymentResponseData)
             navigation('/check/non-member');
         }
@@ -338,7 +337,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         }
     }, [noneMemberPaymentResponseData])
 
-    console.log("noneMemberTextAfterPayResponseData:", noneMemberTextAfterPayResponseData)
+    console.log("noneMemberTextAfterPayResponseData: ", noneMemberTextAfterPayResponseData)
 
     return (
         <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
