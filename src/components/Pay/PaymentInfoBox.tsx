@@ -209,10 +209,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             pay_method: "card",
             merchant_uid: `${memberUid}`,
             name: `${houseName} / ${Name}`,
-            // amount: 100,
             amount: TotalPrice - DiscountPrice,
-            // buyer_name: `${nonMemberName}`,
-            // buyer_tel: `${nonMemberNumber}`,
+            m_redirect_url: 'https://shimpyo.o-r.kr//member-mobile-order-complete'
         }
 
         async function callback(response: RequestPayResponse) {
@@ -270,10 +268,10 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             pay_method: "card",
             merchant_uid: `${noneMemberUid}`,
             name: `${houseName} / ${Name}`,
-            // amount: 100,
             amount: TotalPrice - DiscountPrice,
             buyer_name: `${nonMemberName}`,
             buyer_tel: `${nonMemberNumber}`,
+            m_redirect_url: 'https://shimpyo.o-r.kr//none-member-mobile-order-complete'
         }
 
         async function callback(response: RequestPayResponse) {
@@ -317,7 +315,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
                 method: "POST",
                 body: {
                     phoneNumber: `${nonMemberNumber}`,
-                    reservationCode: `${noneMemberPaymentResponseData.result.reservationId}`
+                    reservationCode: `${noneMemberPaymentResponseData.result.merchantUid}`
                 }
             });
         } catch (error) {
@@ -338,7 +336,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
         }
     }, [noneMemberPaymentResponseData])
 
-    console.log("noneMemberTextAfterPayResponseData:", noneMemberTextAfterPayResponseData)
+    console.log("noneMemberTextAfterPayResponseData: ", noneMemberTextAfterPayResponseData)
 
     return (
         <div style={{ width: "330px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
