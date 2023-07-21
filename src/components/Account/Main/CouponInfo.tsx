@@ -61,6 +61,7 @@ export default function CouponInfo() {
 
 const StyleCouponBox = styled.div`
   margin-top: 30px;
+  margin-bottom: 30px;
 `;
 
 const StyleCouponButton = styled.div`

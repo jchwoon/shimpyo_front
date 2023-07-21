@@ -6,8 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { CustomIcon } from '../../shared/MobileFooter/CustomIcon';
 import { HiPaperAirplane } from 'react-icons/hi';
 import useResponseToViewPort from '../../../hooks/useResponseToViewPort';
+interface LoginStateNaviProps {
+  intersectionWidthValue: number;
+  defaultValue: number;
+}
 
-export default function LoginStateNavi({ intersectionWidthValue }: { intersectionWidthValue: number }) {
+export default function LoginStateNavi({ intersectionWidthValue, defaultValue }: LoginStateNaviProps) {
   const navigation = useNavigate();
   const { viewPortWidth } = useResponseToViewPort();
 
@@ -32,7 +36,7 @@ export default function LoginStateNavi({ intersectionWidthValue }: { intersectio
     <div>
       {viewPortWidth <= intersectionWidthValue && (
         <NewMobileFooter
-          defaultValue={0}
+          defaultValue={defaultValue}
           Action0={homeNavi}
           Action1={wishNavi}
           Action2={reservationNavi}

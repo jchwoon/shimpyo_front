@@ -8,7 +8,12 @@ import useResponseToViewPort from '../../../hooks/useResponseToViewPort';
 import { useSetRecoilState } from 'recoil';
 import { loginModalAtom } from '../../../recoil/modalAtoms';
 
-export default function LogoutStateNavi({ intersectionWidthValue }: { intersectionWidthValue: number }) {
+interface LogoutStateNaviProps {
+  intersectionWidthValue: number;
+  defaultValue: number;
+}
+
+export default function LogoutStateNavi({ intersectionWidthValue, defaultValue }: LogoutStateNaviProps) {
   const navigation = useNavigate();
   const { viewPortWidth } = useResponseToViewPort();
   const setLoginModal = useSetRecoilState(loginModalAtom);
@@ -19,7 +24,7 @@ export default function LogoutStateNavi({ intersectionWidthValue }: { intersecti
     <BottomNavigationAction
       icon={<HiPaperAirplane size={25} />}
       label="예약 내역"
-      onClick={() => setLoginModal(true)}
+      onClick={() => navigation('/reservations?category=reservation')}
     />
   );
 
@@ -29,7 +34,7 @@ export default function LogoutStateNavi({ intersectionWidthValue }: { intersecti
   return (
     <div>
       {viewPortWidth <= intersectionWidthValue && (
-        <NewMobileFooter defaultValue={0} Action0={homeNavi} Action1={reservationNavi} Action2={loginNavi} />
+        <NewMobileFooter defaultValue={defaultValue} Action0={homeNavi} Action1={reservationNavi} Action2={loginNavi} />
       )}
     </div>
   );
