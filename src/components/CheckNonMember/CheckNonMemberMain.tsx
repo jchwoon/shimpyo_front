@@ -20,6 +20,7 @@ export default function CheckNonMemberMain() {
       <StyleMainBox>
         <StyleForm onSubmit={(e: FormEvent<HTMLFormElement>) => handleCheckNonMemberInfo(e)}>
           <StyleTitle>비회원 예약 내역 조회</StyleTitle>
+          <span style={{ marginTop: '10px' }}></span>
           <Input onChange={e => setReservationCodeNumber(e.target.value)} placeholder="예약 번호" type="text" />
           <ColorButton label="조회하기" onClick={() => {}} />
         </StyleForm>
