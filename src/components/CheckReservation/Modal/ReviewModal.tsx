@@ -51,7 +51,7 @@ export default function ReviewModal({ getData }: ReviewModalProps) {
       url: '/user/reviews',
       body: {
         reservationId: Number(searchParams.get('reservationId')),
-        contents: reviewValue,
+        contents: reviewValue.split('\n').join(''),
         reviewRating: averageScore,
       },
       method: 'POST',

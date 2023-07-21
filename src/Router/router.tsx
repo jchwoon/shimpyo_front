@@ -19,6 +19,8 @@ const Account = lazy(() => import('../pages/Account'));
 const UserProfile = lazy(() => import('../pages/UserProfile'));
 const CheckNonMember = lazy(() => import('../pages/CheckNonMember'));
 const NonMemberReservationDetail = lazy(() => import('../pages/NonMemberReservationDetail'));
+const NoneMemberMobileOrderComplete = lazy(() => import('../pages/NoneMemberMobileOrderComplete'));
+const MemberMobileOrderComplete = lazy(() => import('../pages/MemberMobileOrderComplete'));
 
 const onlyLogin = 'ONLY_LOGIN';
 const onlyLogout = 'ONLY_LOGOUT';
@@ -188,6 +190,26 @@ const router = createBrowserRouter([
           <Suspense fallback={<Loading />}>
             <AuthCheck option={onlyLogout}>
               <NonMemberReservationDetail />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'none-member-mobile-order-complete/:houseId',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={onlyLogout}>
+              <NoneMemberMobileOrderComplete />
+            </AuthCheck>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'member-mobile-order-complete/:houseId',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AuthCheck option={onlyLogin}>
+              <MemberMobileOrderComplete />
             </AuthCheck>
           </Suspense>
         ),

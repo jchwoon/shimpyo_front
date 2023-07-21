@@ -35,7 +35,7 @@ import IdFindModal from '../components/shared/Modal/IdFindModal';
 import PasswordFindModal from '../components/shared/Modal/PasswordFindModal';
 
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 
 import CustomizedBottomNavigation from '../components/shared/MobileFooter/CustomizedBottomNavigaton';
@@ -53,6 +53,9 @@ import useLogout from '../hooks/useLogout';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { forwardRef } from 'react';
+
+import LoginStateNavi from '../components/shared/MobileFooter/LoginStateNavi';
+import LogoutStateNavi from '../components/shared/MobileFooter/LogoutStateNavi';
 
 
 export default function Detail() {
@@ -220,7 +223,8 @@ export default function Detail() {
   }
 
   //결제 에러 메시지
-
+  const [searchParams] = useSearchParams();
+  const response_message = searchParams.get('response_message');
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
@@ -238,6 +242,14 @@ export default function Detail() {
 
     setAlertOpen(false);
   };
+
+  useEffect(() => {
+    if (response_message) {
+      setAlertOpen(true)
+      setAlertMessage(response_message)
+    }
+  }, [response_message])
+
 
   return (
     <>
@@ -284,9 +296,7 @@ export default function Detail() {
         </Container>
       </div>
       <div ref={observerRef} style={{ height: '10px' }} />
-      {isLargeScreen ? null : (
-        <NewMobileFooter defaultValue={null} Action0={value0} Action1={value1} Action2={value2} />
-      )}
+      {loginState ? <LoginStateNavi intersectionWidthValue={750} defaultValue={null} /> : <LogoutStateNavi intersectionWidthValue={750} defaultValue={null} />}
       <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {alertMessage}
@@ -309,11 +319,11 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   @media screen and (max-width: 749px) {
-    padding: 70px 24px 0px 24px;
+    padding: 70px 24px 50px 24px;
     width: 100%;
   }
   @media screen and (max-width: 599px) {
-    padding: 70px 16px 0px 16px;
+    padding: 70px 16px 50px 16px;
     width: 100%;
   }
 `;

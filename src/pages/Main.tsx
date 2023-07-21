@@ -43,11 +43,13 @@ import { MAIN_PAGE_HOME_LIST_API_PATH } from '../constants/api/homeListApi';
 
 import { objectPlaceholder } from '../recoil/navBarAtoms';
 
+import LoginStateNavi from '../components/shared/MobileFooter/LoginStateNavi';
+import LogoutStateNavi from '../components/shared/MobileFooter/LogoutStateNavi';
+
 export default function Main() {
   const [searchParams] = useSearchParams();
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
   const setLoginModal = useSetRecoilState(loginModalAtom);
-  // const [loginState, setLoginState] = useState(false);
   const [appbarheight, setAppBarHeight] = useRecoilState(Height);
   const [isToReservationCheck, setIsToReservationCheck] = useState(false);
   const navigate = useNavigate();
@@ -235,7 +237,9 @@ export default function Main() {
       )}
       <Cards cards={data ? data : []} loading={loading} />
       {nextData && <div ref={observerRef} style={{ height: '10px' }} />}
-      {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />}
+      {/* {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />} */}
+      {loginState ? <LoginStateNavi intersectionWidthValue={750} defaultValue={0} /> : <LogoutStateNavi intersectionWidthValue={750} defaultValue={0} />}
+
       <LoginModal isToReservationCheck={isToReservationCheck} redirectPath="/" />
       <JoinModal />
       <AdditionalInfoModal />

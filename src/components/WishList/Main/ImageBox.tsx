@@ -40,18 +40,18 @@ export default function ImageBox({ item, fetchWishListsData }: ImageBoxProps) {
             navigation(`/detail/${item.houseId}`);
           }}
         >
-          <StyleMainImage src={item.houseImages} />
+          <StyleMainImage src={item.houseImage} />
 
           <MdClose
             onClick={(e: MouseEvent) => showDeleteComfirmModal(e, item.houseId)}
             style={{ ...StyleCloseIcon }}
-            size={35}
+            size={15}
           />
         </StyleImageBox>
         <StyleDetail>
           <span>{item.houseName}</span>
           <StyleDivide></StyleDivide>
-          <span>{item.type}</span>
+          <span>{item.houseType}</span>
         </StyleDetail>
       </StyleWishContainer>
       {item.houseId === targetId && <WishListDeleteConfirmModal item={item} fetchWishListsData={fetchWishListsData} />}
