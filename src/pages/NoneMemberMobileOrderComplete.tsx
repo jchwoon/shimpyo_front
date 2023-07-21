@@ -43,7 +43,7 @@ export default function NonneMemberMobileOrderComplete() {
 
     const navigation = useNavigate();
 
-    // const { houseId } = useParams()
+    const { houseId } = useParams()
 
     console.log("imp_success:", imp_success)
 
@@ -65,31 +65,9 @@ export default function NonneMemberMobileOrderComplete() {
                 }
             });
         } else if (imp_success === "false") {
-            // navigation(`/detail/${houseId}?response_message=${error_msg}`)
-            navigation(`/detail/42?response_message=${error_msg}`)
+            navigation(`/detail/${houseId}?response_message=${error_msg}`)
         }
     }, [imp_success])
-
-    if (imp_success === "true") {
-        sendNoneMemberPaymentRequest({
-            url: `${NON_MEMBER_RESERVATION_API_PATH}`,
-            method: "POST",
-            body: {
-                impUid: imp_uid,
-                roomId: roomId,
-                merchantUid: merchant_uid,
-                payMethod: paymentRadioSelectedValue === '신용카드' ? "KGINICIS" : "KAKAO",
-                name: `${nonMemberName}`,
-                phoneNumber: `${nonMemberNumber}`,
-                peopleCount: GuestCount,
-                checkInDate: moment(checkInDate).format('YYYY.MM.DD'),
-                checkOutDate: moment(checkOutDate).format('YYYY.MM.DD')
-            }
-        });
-    } else if (imp_success === "false") {
-        // navigation(`/detail/${houseId}?response_message=${error_msg}`)
-        navigation(`/detail/42?response_message=${error_msg}`)
-    }
 
     const SendNoneMemberTextAfterPayRequestFunction = async (noneMemberPaymentResponseData: any) => {
         try {
@@ -112,8 +90,7 @@ export default function NonneMemberMobileOrderComplete() {
             SendNoneMemberTextAfterPayRequestFunction(noneMemberPaymentResponseData)
             navigation('/check/non-member');
         } else if (noneMemberPaymentResponseData.isSuccess === false) {
-            // navigation(`/detail/${houseId}?response_message=${noneMemberPaymentResponseData.message}`)
-            navigation(`/detail/42?response_message=${noneMemberPaymentResponseData.message}`)
+            navigation(`/detail/${houseId}?response_message=${noneMemberPaymentResponseData.message}`)
         }
     }, [noneMemberPaymentResponseData])
 

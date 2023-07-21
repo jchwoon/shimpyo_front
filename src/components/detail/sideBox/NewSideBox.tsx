@@ -289,7 +289,12 @@ export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertM
               transition: "0.3s ease",
               backgroundColor: "white"
             }}>
+              
+
+              
               {isLoggedIn ? null : <NoneMemberPhoneInput setModalOpen={setOpen} />}
+
+
               <PaymentInfoBox
                 houseName={houseName}
                 checkInDate={firstPickedDate}

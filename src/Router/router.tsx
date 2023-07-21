@@ -194,18 +194,8 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      // {
-      //   path: 'none-member-mobile-order-complete/:houseId',
-      //   element: (
-      //     <Suspense fallback={<Loading />}>
-      //       <AuthCheck option={onlyLogout}>
-      //         <NoneMemberMobileOrderComplete />
-      //       </AuthCheck>
-      //     </Suspense>
-      //   ),
-      // },
       {
-        path: 'none-member-mobile-order-complete',
+        path: 'none-member-mobile-order-complete/:houseId',
         element: (
           <Suspense fallback={<Loading />}>
             <AuthCheck option={onlyLogout}>
@@ -214,6 +204,16 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      // {
+      //   path: 'none-member-mobile-order-complete',
+      //   element: (
+      //     <Suspense fallback={<Loading />}>
+      //       <AuthCheck option={onlyLogout}>
+      //         <NoneMemberMobileOrderComplete />
+      //       </AuthCheck>
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: 'member-mobile-order-complete/:houseId',
         element: (
