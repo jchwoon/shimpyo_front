@@ -32,7 +32,7 @@ interface LoginModalProps {
   redirectPath?: string;
 }
 
-const JWT_EXPIRY_TIME = 3600 * 1000;
+const JWT_EXPIRY_TIME = 30 * 60 * 1000;
 
 export default function LoginModal({ isToReservationCheck, redirectPath }: LoginModalProps) {
   const { isLoading, responseData, sendRequest } = useHttpRequest<ResultData>();
