@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react';
 
 import ImageBox from './ImageBox';
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
+import LoginModal from '../../shared/Modal/LoginModal';
 
 export type Item = {
   houseId: number;
   houseName: string;
-  type: string;
-  houseImages: string;
+  houseType: string;
+  houseImage: string;
 };
 
 export default function WishListMain() {
@@ -51,6 +52,7 @@ export default function WishListMain() {
           ))}
         </StyleGridBox>
       </Main>
+      <LoginModal />
     </>
   );
 }

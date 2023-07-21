@@ -10,6 +10,15 @@ import { useNavigate } from 'react-router-dom';
 import DeactivationAccount from './DeactivationAccount';
 import { USER_INFO_API_PATH } from '../../../constants/api/userApi';
 import CouponInfo from './CouponInfo';
+import useResponseToViewPort from '../../../hooks/useResponseToViewPort';
+import SectionMenuListBox from '../../CheckReservationDetail/ReUse/SectionMenuListBox';
+import { BsHouseGearFill } from 'react-icons/bs';
+import { CgProfile } from 'react-icons/cg';
+import Button from '../../shared/UI/Button';
+import useLogout from '../../../hooks/useLogout';
+import DeactivationModal from '../Modal/DeactivationModal';
+import { accountDeActivationModalAtom } from '../../../recoil/modalAtoms';
+import { useSetRecoilState } from 'recoil';
 
 interface ResultUserInfoData {
   userId: number;
@@ -20,6 +29,9 @@ interface ResultUserInfoData {
 
 export default function AccountMain() {
   const navigation = useNavigate();
+  const setAccountDeactivationModal = useSetRecoilState(accountDeActivationModalAtom);
+  const { logoutHandler } = useLogout();
+  const { viewPortWidth } = useResponseToViewPort();
   const { responseData, sendRequest } = useAuthorizedRequest<ResultUserInfoData>({});
   const [userInfoData, setUserInfoData] = useState<ResultUserInfoData>({
     userId: 0,
@@ -47,19 +59,47 @@ export default function AccountMain() {
   return (
     <Main>
       <StyleAccountBox>
-        <StyleTitle>계정</StyleTitle>
-        <StyleNavigationProfile onClick={() => navigation(`/users/${userInfoData.userId}`)}>
-          프로필 정보 보기 &rarr;
-        </StyleNavigationProfile>
-        <StyleSubTitle>개인정보</StyleSubTitle>
-        <NicknameInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.nickname} />
-        <EmailInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.email} />
-        <PhoneInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.phoneNumber} />
-        <ChangePasswordInfo />
-        <StyleSubTitle>쿠폰</StyleSubTitle>
-        <CouponInfo />
-        <DeactivationAccount />
+        {viewPortWidth > 764 ? (
+          <>
+            <StyleTitle>계정</StyleTitle>
+            <StyleNavigationProfile onClick={() => navigation(`/users/${userInfoData.userId}`)}>
+              프로필 정보 보기 &rarr;
+            </StyleNavigationProfile>
+            <StyleSubTitle>개인정보</StyleSubTitle>
+            <NicknameInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.nickname} />
+            <EmailInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.email} />
+            <PhoneInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.phoneNumber} />
+            <ChangePasswordInfo />
+            <StyleSubTitle>쿠폰</StyleSubTitle>
+            <CouponInfo />
+            <DeactivationAccount />
+          </>
+        ) : (
+          <>
+            <StyleTitle>프로필</StyleTitle>
+            <SectionMenuListBox
+              onClick={() => navigation(`/users/${userInfoData.userId}`)}
+              content="프로필 정보 보기"
+              icon={CgProfile}
+            />
+            <StyleLine />
+            <StyleSubTitle>호스팅</StyleSubTitle>
+            <SectionMenuListBox onClick={() => navigation('/hosting')} content="숙소 관리" icon={BsHouseGearFill} />
+            <StyleLine />
+            <StyleSubTitle>개인정보</StyleSubTitle>
+            <NicknameInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.nickname} />
+            <EmailInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.email} />
+            <PhoneInfo fetchUserInfo={fetchUserInfo} infoContent={userInfoData.phoneNumber} />
+            <ChangePasswordInfo />
+            <StyleSubTitle>쿠폰</StyleSubTitle>
+            <CouponInfo />
+            <StyleLine />
+            <Button label="로그아웃" onClick={() => logoutHandler()} />
+            <Button label="계정 비활성화" onClick={() => setAccountDeactivationModal(true)} />
+          </>
+        )}
       </StyleAccountBox>
+      <DeactivationModal />
     </Main>
   );
 }
@@ -77,7 +117,7 @@ const StyleTitle = styled.h1`
 const StyleSubTitle = styled.h2`
   font-size: 20px;
   font-weight: bold;
-  margin-top: 50px;
+  margin-top: 30px;
 `;
 
 const StyleNavigationProfile = styled.div`
@@ -105,4 +145,9 @@ const StyleAccountBox = styled.div`
     padding-left: 300px;
     padding-right: 300px;
   }
+`;
+
+const StyleLine = styled.div`
+  margin-top: 10px;
+  border-bottom: 1px solid rgb(235, 235, 235);
 `;
