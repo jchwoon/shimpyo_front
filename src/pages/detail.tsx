@@ -287,7 +287,7 @@ export default function Detail() {
         </Container>
       </div>
       <div ref={observerRef} style={{ height: '10px' }} />
-      {loginState ? <LoginStateNavi intersectionWidthValue={750} /> : <LogoutStateNavi intersectionWidthValue={750} />}
+      {loginState ? <LoginStateNavi intersectionWidthValue={750} defaultValue={null} /> : <LogoutStateNavi intersectionWidthValue={750} defaultValue={null} />}
       <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {alertMessage}

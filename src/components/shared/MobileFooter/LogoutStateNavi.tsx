@@ -10,7 +10,7 @@ import { loginModalAtom } from '../../../recoil/modalAtoms';
 
 interface LogoutStateNaviProps {
   intersectionWidthValue: number;
-  defaultValue: number;
+  defaultValue: number | null;
 }
 
 export default function LogoutStateNavi({ intersectionWidthValue, defaultValue }: LogoutStateNaviProps) {
@@ -32,7 +32,6 @@ export default function LogoutStateNavi({ intersectionWidthValue, defaultValue }
     <BottomNavigationAction icon={<AccountCircleIcon />} label="로그인" onClick={() => setLoginModal(true)} />
   );
 
-  console.log("currentValue:", currentValue)
   return (
     <div>
       {viewPortWidth <= intersectionWidthValue && (

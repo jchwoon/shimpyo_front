@@ -238,7 +238,7 @@ export default function Main() {
       <Cards cards={data ? data : []} loading={loading} />
       {nextData && <div ref={observerRef} style={{ height: '10px' }} />}
       {/* {isLargeScreen ? null : <NewMobileFooter defaultValue={0} Action0={value0} Action1={value1} Action2={value2} />} */}
-      {loginState ? <LoginStateNavi intersectionWidthValue={750} currentValue={0} /> : <LogoutStateNavi intersectionWidthValue={750} currentValue={0} />}
+      {loginState ? <LoginStateNavi intersectionWidthValue={750} defaultValue={0} /> : <LogoutStateNavi intersectionWidthValue={750} defaultValue={0} />}
 
       <LoginModal isToReservationCheck={isToReservationCheck} redirectPath="/" />
       <JoinModal />

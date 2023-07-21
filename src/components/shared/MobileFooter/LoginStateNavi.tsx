@@ -8,7 +8,7 @@ import { HiPaperAirplane } from 'react-icons/hi';
 import useResponseToViewPort from '../../../hooks/useResponseToViewPort';
 interface LoginStateNaviProps {
   intersectionWidthValue: number;
-  defaultValue: number;
+  defaultValue: number | null;
 }
 
 export default function LoginStateNavi({ intersectionWidthValue, defaultValue }: LoginStateNaviProps) {
@@ -34,7 +34,6 @@ export default function LoginStateNavi({ intersectionWidthValue, defaultValue }:
     <BottomNavigationAction disableRipple icon={<AccountCircleIcon />} label="계정" onClick={() => navigation('/account-settings')} />
   );
 
-  console.log("currentValue:", currentValue)
   return (
     <div>
       {viewPortWidth <= intersectionWidthValue && (
