@@ -27,7 +27,7 @@ import {
   roomImageListState,
   stepState,
 } from '../../recoil/accommodationAtoms';
-import { ACCOMMODATION_PAGE } from '../../constants/accommodation';
+
 import { selectedAccommodationIdState } from '../../recoil/hostingAtoms';
 
 export default function HostingHeader() {
@@ -48,7 +48,7 @@ export default function HostingHeader() {
   const resetRoomImageListState = useResetRecoilState(roomImageListState);
   const resetSelectedAccommodationId = useResetRecoilState(selectedAccommodationIdState);
 
-  const moveAccommodationPage = () => {
+  const moveAccommodationPage = (url: string) => () => {
     resetStepState();
     resetAccommodationState();
     resetDisabledState();
@@ -58,15 +58,15 @@ export default function HostingHeader() {
     resetImageListState();
     resetRoomImageListState();
     resetSelectedAccommodationId();
-    navigate(ACCOMMODATION_PAGE);
+    navigate(url);
   };
 
   const menuItems = (
     <div>
-      <MenuItem onClick={() => navigation('/reservations')} label="예약관리" bold={true} />
-      <MenuItem onClick={() => navigation('/hosting')} label="숙소관리" bold={true} />
-      <MenuItem onClick={() => navigation('/accommodation')} label="숙소등록" bold={true} />
-      <MenuItem onClick={moveAccommodationPage} label="계정" />
+      <MenuItem onClick={moveAccommodationPage('/reservations')} label="예약관리" bold={true} />
+      <MenuItem onClick={moveAccommodationPage('/hosting')} label="숙소관리" bold={true} />
+      <MenuItem onClick={moveAccommodationPage('/accommodation')} label="숙소등록" bold={true} />
+      <MenuItem onClick={moveAccommodationPage('/account-settings')} label="계정" />
       <Underline />
       <MenuItem onClick={() => logoutHandler()} label="로그아웃" />
     </div>
@@ -75,12 +75,12 @@ export default function HostingHeader() {
   const slideMenuItems = (
     <>
       <MenuBlock label="메뉴">
-        <MenuItem onClick={() => navigation('/reservations')} icon={BsHouseHeartFill} bold label="예약관리" />
-        <MenuItem onClick={() => navigation('/hosting')} icon={BsHouseHeartFill} bold label="숙소관리" />
-        <MenuItem onClick={moveAccommodationPage} icon={BsHouseHeartFill} bold label="숙소등록" />
+        <MenuItem onClick={moveAccommodationPage('/reservations')} icon={BsHouseHeartFill} bold label="예약관리" />
+        <MenuItem onClick={moveAccommodationPage('/hosting')} icon={BsHouseHeartFill} bold label="숙소관리" />
+        <MenuItem onClick={moveAccommodationPage('/accommodation')} icon={BsHouseHeartFill} bold label="숙소등록" />
       </MenuBlock>
       <MenuBlock label="계정">
-        <MenuItem onClick={() => navigation('/account')} icon={IoMdSettings} bold label="계정" />
+        <MenuItem onClick={moveAccommodationPage('/account-settings')} icon={IoMdSettings} bold label="계정" />
       </MenuBlock>
       <Button onClick={() => logoutHandler()} label="로그아웃" />
     </>
@@ -89,7 +89,7 @@ export default function HostingHeader() {
   return (
     <Header>
       <FlexBox>
-        <Logo height="25px" path="/" width="50" />
+        <Logo height="25px" path="/" width="50" onClick={moveAccommodationPage('/')} />
         <UserMenu
           isOpen={isOpen}
           menuRef={menuRef}

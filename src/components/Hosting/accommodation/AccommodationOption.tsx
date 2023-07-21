@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import DeleteCheckModal from '../../accommodation/contents/reuse/DeleteCheckModal';
-import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 
 interface AccommodationOptionProps {
   houseId: number;

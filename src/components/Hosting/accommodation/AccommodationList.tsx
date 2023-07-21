@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import AccommodationItem from './AccommodationItem';
 import { AccommodationDataType, RoomDataType } from '../HostingMain';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { useRecoilState } from 'recoil';
 import {
@@ -30,11 +30,9 @@ export default function AccommodationList({ data, setRoomList, setAccommodationL
   const [roomListPageNumber, setRoomListPageNumber] = useRecoilState(roomListPageState);
 
   const [selectedAccommodationId, setSelectedAccommodationId] = useRecoilState(selectedAccommodationIdState);
-  const [selectedId, setSelectedId] = useState<number>(0);
 
   const getRoomInfo = (id: number) => async () => {
     setSelectedAccommodationId(id);
-    setSelectedId(id);
     setRoomReservationStatus('USING');
     try {
       await roomRequest({ url: `user/reservations/houses/${id}?page=0/reservationStatus=USING` });
@@ -65,7 +63,7 @@ export default function AccommodationList({ data, setRoomList, setAccommodationL
                 key={`accommodation${idx}`}
                 data={accommodation}
                 setAccommodationList={setAccommodationList}
-                isSelected={selectedId === accommodation.id}
+                isSelected={selectedAccommodationId === accommodation.id}
                 onClick={getRoomInfo(accommodation.id)}
               ></AccommodationItem>
             );

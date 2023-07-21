@@ -33,7 +33,8 @@ const StyledContentsDiv = styled.div`
 `;
 
 const StyledContentsContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
   align-items: center;
   width: 100%;
   padding-bottom: 50px;
@@ -47,8 +48,8 @@ const StyledContentsTitle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 5rem;
-  height: 2rem;
+  width: 80px;
+  height: 70px;
   background-color: #212121;
   color: white;
   border-radius: 10px;
