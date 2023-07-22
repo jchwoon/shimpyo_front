@@ -67,7 +67,7 @@ border-radius: 50%;
     color: #ffffff;
 }
 &.clicked.soldout {
-    background-color:red;
+    background-color:#e80a00;
 }
 `
 
