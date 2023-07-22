@@ -42,8 +42,6 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
   const navigation = useNavigate();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  // const [isLoginError, setIsLoginError] = useState(false);
-  // const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const setIsLoggedIn = useSetRecoilState(loginStateAtom);
   const [isLoginModalOpen, setIsLoginModalOpen] = useRecoilState(loginModalAtom);
   const setIsIdFindModalOpen = useSetRecoilState(idFindModalAtom);
@@ -71,11 +69,6 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
 
     handleLoginButtonClick();
   };
-
-  // const initialState = () => {
-  //   setIsLoginError(false);
-  //   setLoginErrorMessage('');
-  // };
 
   const onSilentRefresh = async () => {
     await getAccessTokenRequest({ url: `${REGENERATION_REFRESH_API_PATH}`, withcredential: true });
