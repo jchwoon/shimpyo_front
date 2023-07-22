@@ -125,7 +125,7 @@ export default function HostingManageMain() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await sendRequest({ url: `/api/houses/${houseId}` });
+      await sendRequest({ url: `/api/houses/${houseId}`, method: 'POST' });
     };
     fetchData();
   }, []);
