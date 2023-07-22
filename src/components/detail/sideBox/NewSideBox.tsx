@@ -208,9 +208,14 @@ useEffect(()=>{
 if(soldoutData === null || Name === null) return
 if (soldoutData !== null) {
   const soldout = soldoutData.rooms.find((room:Room) => room.name === Name).soldout
+  console.log("soldoutdata:", soldoutData)
+  console.log("Name:", Name)
+  console.log("soldout:", soldout)
   if (soldout === true) {
   setSoldOutCheck(true)
-  } else return
+  } else {
+    setSoldOutCheck(false)
+  }
 }
 },[soldoutData, Name])
 
