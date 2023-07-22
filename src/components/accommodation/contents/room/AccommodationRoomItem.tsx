@@ -1,8 +1,9 @@
-import { useRef, ChangeEvent, useState, Dispatch, SetStateAction } from 'react';
+import { useRef, ChangeEvent, useState, Dispatch, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
 import { TbPhotoPlus } from 'react-icons/tb';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { GrFormClose } from 'react-icons/gr';
+import { MdDeleteForever } from 'react-icons/md';
 import { useRecoilState } from 'recoil';
 
 import { imageDataState, accommodationState, roomImageListState } from '../../../../recoil/accommodationAtoms';
@@ -21,8 +22,10 @@ export default function AccommodationRoomItem({ idx, setIsClicked }: RoomDataPro
   const [roomImageList, setRoomImageList] = useRecoilState(roomImageListState);
 
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>();
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
 
   const openModal = () => {
     setIsClicked(true);
@@ -146,6 +149,75 @@ export default function AccommodationRoomItem({ idx, setIsClicked }: RoomDataPro
     }
   };
 
+  const deleteCheck = (index: number) => (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setSelectedImageIndex(index);
+  };
+
+  const deleteRoomImage = (index: number) => (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+
+    const newRoomImageList = [...roomImageList.map(arr => [...arr])];
+
+    const newImageData = new FormData();
+    imageData.forEach((value, key) => {
+      newImageData.append(key, value);
+    });
+
+    if (idx > 0) {
+      let deleteStartIndex = 0;
+
+      for (let i = 0; i < idx; i++) {
+        deleteStartIndex += newRoomImageList[i].length;
+      }
+
+      const imageDataValue = newImageData.getAll('roomImages');
+
+      imageDataValue.splice(deleteStartIndex + index, 1);
+
+      newImageData.delete('roomImages');
+      imageDataValue.forEach(value => {
+        newImageData.append('roomImages', value);
+      });
+    } else {
+      const imageDataValue = newImageData.getAll('roomImages');
+
+      imageDataValue.splice(index, 1);
+
+      newImageData.delete('roomImages');
+      imageDataValue.forEach(value => {
+        newImageData.append('roomImages', value);
+      });
+    }
+    newRoomImageList[idx].splice(index, 1);
+
+    const newAccommodation = { ...accommodation };
+    const newRooms = { ...newAccommodation.rooms[idx], imageCount: newAccommodation.rooms[idx].imageCount - 1 };
+    newAccommodation.rooms = [
+      ...newAccommodation.rooms.slice(0, idx),
+      newRooms,
+      ...newAccommodation.rooms.slice(idx + 1),
+    ];
+
+    setAccommodation(newAccommodation);
+    setImageData(newImageData);
+    setRoomImageList(newRoomImageList);
+    setSelectedImageIndex(9999);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e: Event) => {
+      if (divRef.current && !divRef.current.contains(e.target as Node)) {
+        setSelectedImageIndex(9999);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
     <StyledContainer>
       <StyledFlexDiv>
@@ -157,7 +229,12 @@ export default function AccommodationRoomItem({ idx, setIsClicked }: RoomDataPro
               <StyledInput onChange={handleOnChange} id="file" type="file" accept="image/*"></StyledInput>
             </StyledNoImageContainer>
           ) : (
-            <StyledCoverImageContainer>
+            <StyledCoverImageContainer onClick={deleteCheck(0)}>
+              {selectedImageIndex === 0 && (
+                <StyledDeleteImageDimmed ref={divRef} onClick={deleteRoomImage(0)}>
+                  <MdDeleteForever size={50}></MdDeleteForever>
+                </StyledDeleteImageDimmed>
+              )}
               <StyledImage src={roomImageList[idx][0]} alt="이미지" />
             </StyledCoverImageContainer>
           )}
@@ -167,7 +244,12 @@ export default function AccommodationRoomItem({ idx, setIsClicked }: RoomDataPro
                 return null;
               } else {
                 return (
-                  <StyledPlusImageContainer key={`image ${index}`}>
+                  <StyledPlusImageContainer key={`image ${index}`} onClick={deleteCheck(index)}>
+                    {selectedImageIndex === index && (
+                      <StyledDeleteImageDimmed ref={divRef} onClick={deleteRoomImage(index)}>
+                        <MdDeleteForever size={50}></MdDeleteForever>
+                      </StyledDeleteImageDimmed>
+                    )}
                     <StyledImage src={item} alt="이미지" />
                   </StyledPlusImageContainer>
                 );
@@ -245,7 +327,7 @@ const StyledImageContainer = styled.div`
   justify-content: center;
   width: 90%;
   padding: 20px;
-  height: 80%;
+  height: 82%;
   box-sizing: content-box;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 20px;
@@ -299,7 +381,7 @@ const StyledImgIcon = styled(TbPhotoPlus)`
 
 const StyledCarouselDiv = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
 const StyledPlusImageContainer = styled.div`
@@ -318,6 +400,22 @@ const StyledPlusImageContainer = styled.div`
 
   @media (min-width: 680px) {
     width: 100px;
+  }
+`;
+
+const StyledDeleteImageDimmed = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  border: 3px dashed black;
+
+  &:hover {
+    border: none;
   }
 `;
 
