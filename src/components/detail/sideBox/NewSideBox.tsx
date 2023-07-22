@@ -55,6 +55,10 @@ import { swipePageState } from '../../../recoil/detailPageAtoms';
 
 import { Dispatch, SetStateAction } from 'react';
 
+import useHttpRequest from '../../../hooks/useHttpRequest';
+
+import { DETAIL_PAGE_API_PATH } from '../../../constants/api/homeListApi';
+
 interface NewSideBoxProps {
   houseName: string;
   houseId: string;
@@ -66,6 +70,10 @@ interface ResultData {
   accessToken: string;
   merchantUid: string;
   couponList: Array<any>;
+}
+
+interface Room {
+  name:string
 }
 
 export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertMessage }: NewSideBoxProps) {
@@ -163,6 +171,49 @@ export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertM
     setInfantGuestNumber(0)
   }, [location])
 
+  const { responseData:soldOutResponseData, sendRequest:soldOutSendRequest, errorMessage, isLoading } = useHttpRequest();
+
+  const [soldoutData, setSoldOutData] = useState<any>(null);
+  const [soldoutCheck, setSoldOutCheck] = useState(false);
+
+  useEffect(()=> {
+ if(firstPickedDate === '' || secondPickedDate === '' || room === null) {
+  if(soldoutData !== null) {
+    setSoldOutData(null)
+    setSoldOutCheck(false)
+  } else {
+    return
+  }
+ }
+ else {
+  soldOutSendRequest({ 
+    url: `${DETAIL_PAGE_API_PATH}/${houseId}`,
+    method:"POST",
+    body:{
+      checkin:moment(firstPickedDate).format('YYYY-MM-DDTHH:mm:ss'),
+      checkout:moment(secondPickedDate).format('YYYY-MM-DDTHH:mm:ss')
+    }
+  })
+ }
+  }, [firstPickedDate, secondPickedDate, room])
+
+useEffect(()=>{
+  if(!soldOutResponseData) return
+  if(soldOutResponseData) {
+    setSoldOutData(soldOutResponseData.result)
+  }
+},[soldOutResponseData])
+
+useEffect(()=>{
+if(soldoutData === null || Name === null) return
+if (soldoutData !== null) {
+  const soldout = soldoutData.rooms.find((room:Room) => room.name === Name).soldout
+  if (soldout === true) {
+  setSoldOutCheck(true)
+  } else return
+}
+},[soldoutData, Name])
+
   return (
     <Main >
       <MainTitle>예약</MainTitle>
@@ -187,11 +238,19 @@ export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertM
           <div style={{ display: "flex", width: "100%", height: "100%" }}>
             <div style={{ width: "50%", height: "50px", borderBottom: "solid 1px #c5c5c5", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
               <Typography fontFamily='Noto Sans KR' fontSize="12px" color="#a2a2a2">체크인</Typography>
-              <Typography fontFamily='Noto Sans KR'>{firstPickedDate ? moment(firstPickedDate).format('M월 D일') : "날짜 추가"}</Typography>
+              {!soldoutCheck ? 
+              <Typography fontFamily='Noto Sans KR'>{firstPickedDate ? moment(firstPickedDate).format('M월 D일') : "날짜 추가"}</Typography> 
+              : 
+              <Typography fontFamily='Noto Sans KR' color="#e80a00">예약 마감</Typography>
+              }
             </div>
             <div style={{ width: "50%", height: "50px", border: "solid 1px #c5c5c5", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
               <Typography fontFamily='Noto Sans KR' fontSize="12px" color="#a2a2a2">체크아웃</Typography>
-              <Typography fontFamily='Noto Sans KR'>{secondPickedDate ? moment(secondPickedDate).format('M월 D일') : "날짜 추가"}</Typography>
+              {!soldoutCheck ? 
+                <Typography fontFamily='Noto Sans KR'>{secondPickedDate ? moment(secondPickedDate).format('M월 D일') : "날짜 추가"}</Typography>
+              :
+              <Typography fontFamily='Noto Sans KR' color="#e80a00">예약 마감</Typography>
+              }
             </div>
           </div>
         </CutomizedCheckInOutAccordionSummary>
@@ -202,13 +261,14 @@ export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertM
                 onClick={resetFunction}
                 top={55}
                 left={5}
+                soldoutCheck={soldoutCheck ? true : false}
               >
                 <CustomziedClearIcon />
               </CustomizedDeleteIconButton>
               :
               null
           }
-          <Calendar />
+          <Calendar soldoutCheck={soldoutCheck ? true: false}/>
         </AccordionDetails>
       </CustomizedCheckInOutAccordion>
       <CustomizedGuestAccordion elevation={0}>
@@ -251,7 +311,7 @@ export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertM
         </CutomizedAccordionDetails>
       </CustomizedGuestAccordion>
 
-      <ColorButton disabled={!room || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0 || GuestOverLimit} onClick={handleOpen} label="예약" />
+      <ColorButton disabled={!room || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0 || GuestOverLimit || soldoutCheck} onClick={handleOpen} label="예약" />
       {/* <BookingBtn disabled={!Name || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} >
         <Typography fontFamily='Noto Sans KR' fontSize="17px">예약</Typography>
       </BookingBtn> */}
@@ -346,12 +406,14 @@ display:none
 }
 `;
 
-const CustomizedDeleteIconButton = styled(IconButton) <{ top: number, left: number }>`
-background-color : #00adb5;
+const CustomizedDeleteIconButton = styled(IconButton) <{ top: number, left: number, soldoutCheck?:boolean }>`
+// background-color : #00adb5;
+background-color : ${props => props.soldoutCheck ? "#e80a00" : "#00adb5"};
 width: 30px;
 height: 30px;
 :hover {
-  background-color: #00c5cf;
+  background-color:  ${props => props.soldoutCheck ? "#ff3e36" : "#00adb5"};
+
 }
 top: ${props => props.top}px;
 left: ${props => props.left}px;
