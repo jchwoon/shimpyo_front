@@ -1,8 +1,10 @@
 import styled from 'styled-components';
-import { MdOutlineArrowForwardIos, MdOutlineArrowBackIos, MdArrowBack } from 'react-icons/md';
-import { useEffect, useRef, useState } from 'react';
+import { MdOutlineArrowForwardIos, MdOutlineArrowBackIos } from 'react-icons/md';
+import { HiArrowSmLeft } from 'react-icons/hi';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { State } from '../../NonMemberReservationDetailMain';
+import useImageSlide from '../../../../hooks/useImageSlide';
 
 interface ImageBoxProps {
   imageList: string[];
@@ -35,33 +37,9 @@ function getStateMessage(state: State): string {
 
 export default function ImageBox({ imageList, reservationStatus }: ImageBoxProps) {
   const processRef = useRef<HTMLDivElement>(null);
+  const { nextImage, prevImage, currentIdx } = useImageSlide({ imageList, processRef });
   const reservationStatuseRef = useRef<HTMLDivElement>(null);
-  const [currentIdx, setCurrentIdx] = useState(0);
   const navigation = useNavigate();
-
-  const nextImage = () => {
-    if (currentIdx === imageList.length - 1) {
-      setCurrentIdx(0);
-    } else {
-      setCurrentIdx(prev => prev + 1);
-    }
-  };
-
-  const prevImage = () => {
-    if (currentIdx === 0) {
-      setCurrentIdx(imageList.length - 1);
-    } else {
-      setCurrentIdx(prev => prev - 1);
-    }
-  };
-
-  useEffect(() => {
-    if (processRef.current) {
-      const width = processRef.current.offsetWidth;
-      const left = `calc(50% - ${width / 2}px)`;
-      processRef.current.style.left = left;
-    }
-  }, []);
 
   useEffect(() => {
     if (reservationStatuseRef.current) {
@@ -86,35 +64,24 @@ export default function ImageBox({ imageList, reservationStatus }: ImageBoxProps
           ))}
         </StyleProcess>
       </StyleProcessContainer>
-      <MdArrowBack
+      <div
         onClick={() => {
           navigation(-1);
         }}
-        style={{
-          ...iconStyle,
-          top: '20px',
-          left: '20px',
-        }}
-        size={15}
-      />
-      <MdOutlineArrowBackIos
-        onClick={prevImage}
-        style={{
-          ...iconStyle,
-          bottom: '20px',
-          left: '20px',
-        }}
-        size={15}
-      />
-      <MdOutlineArrowForwardIos
-        onClick={nextImage}
-        style={{
-          ...iconStyle,
-          bottom: '20px',
-          right: '20px',
-        }}
-        size={15}
-      />
+        style={{ ...iconStyle, top: '20px', left: '20px' }}
+      >
+        <HiArrowSmLeft style={{ width: '100%' }} size={15} />
+      </div>
+      {imageList.length > 1 && (
+        <div onClick={prevImage} style={{ ...iconStyle, bottom: '20px', left: '20px' }}>
+          <MdOutlineArrowBackIos style={{ width: '100%' }} size={15} />
+        </div>
+      )}
+      {imageList.length > 1 && (
+        <div onClick={nextImage} style={{ ...iconStyle, bottom: '20px', right: '20px' }}>
+          <MdOutlineArrowForwardIos style={{ width: '100%' }} size={15} />
+        </div>
+      )}
       <StyleReservationStatus ref={reservationStatuseRef}>{getStateMessage(reservationStatus)}</StyleReservationStatus>
     </StyleImageContainer>
   );
