@@ -12,14 +12,18 @@ const StyledCalendarDiv = styled.div`
 padding:10px;
 `
 
-export const Calendar = () => {
+interface CalendarProps {
+    soldoutCheck?: boolean
+}
+
+export const Calendar = ({soldoutCheck}:CalendarProps) => {
     const [currentDate, setCurrentDate] = useState(moment().format());
 
     return (
         <StyledCalendarDiv>
             <Header currentDate={currentDate} setCurrentDate={setCurrentDate} />
             <Days />
-            <Cells currentDate={currentDate} />
+            <Cells currentDate={currentDate} soldoutCheck={soldoutCheck} />
         </StyledCalendarDiv>
     )
 }

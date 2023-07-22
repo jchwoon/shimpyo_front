@@ -124,7 +124,10 @@ export default function Detail() {
   const { responseData, sendRequest, errorMessage, isLoading } = useHttpRequest();
 
   useEffect(() => {
-    sendRequest({ url: `${DETAIL_PAGE_API_PATH}/${houseId}` })
+    sendRequest({ 
+      url: `${DETAIL_PAGE_API_PATH}/${houseId}`,
+      method:"POST"
+    })
   }, [])
 
   const [data, setData] = useState<any>(null);
@@ -249,7 +252,6 @@ export default function Detail() {
       setAlertMessage(response_message)
     }
   }, [response_message])
-
 
   return (
     <>

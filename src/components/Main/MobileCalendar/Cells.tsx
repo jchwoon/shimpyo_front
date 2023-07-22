@@ -8,6 +8,7 @@ import { FirstPickedDate, SecondPickedDate } from "../../../recoil/navBarAtoms";
 
 interface HeaderProps {
     currentDate: string;
+    soldoutCheck?:boolean;
 }
 
 const StyledCellsDiv = styled.div`
@@ -65,9 +66,12 @@ border-radius: 50%;
     background-color: #00adb5;
     color: #ffffff;
 }
+&.clicked.soldout {
+    background-color:red;
+}
 `
 
-export const Cells: React.FC<HeaderProps> = ({ currentDate }) => {
+export const Cells: React.FC<HeaderProps> = ({ currentDate, soldoutCheck }) => {
 
     const monthStart = moment(currentDate).startOf('month').format()
     const monthEnd = moment(currentDate).endOf('month').format()
@@ -143,6 +147,7 @@ export const Cells: React.FC<HeaderProps> = ({ currentDate }) => {
                                 "blur"
                             }
                 ${moment(cloneDay).isSame(moment(firstClicked)) || moment(cloneDay).isSame(moment(secondClicked)) ? "clicked" : null}
+                ${soldoutCheck ? "soldout":null}
                 `}>
                         {formattedDate}
                     </StyledDaysRoundDiv>
