@@ -35,9 +35,14 @@ export default function RoomInfoItem({ Ref, label, children, editContents, house
   const [patchRoomData, setPatchRoomData] = useRecoilState(patchRoomReqState);
 
   const openCloseEditComponent = () => {
-    setRoomData(originalRoomData);
-    setCurrentRoomDataIndex(0);
-    setIsOpen(preState => !preState);
+    if (isOpen) {
+      setRoomData(originalRoomData);
+      setCurrentRoomDataIndex(0);
+      setIsOpen(false);
+    } else {
+      setCurrentRoomDataIndex(0);
+      setIsOpen(true);
+    }
   };
 
   const prevMove = () => {
@@ -75,7 +80,7 @@ export default function RoomInfoItem({ Ref, label, children, editContents, house
 
     newFormData.delete('patchRoomReq');
     newFormData.append('patchRoomReq', new Blob([JSON.stringify(newPatchRoomReq)], { type: 'application/json' }));
-
+    setPatchRoomData(newPatchRoomReq);
     try {
       await sendRequest({
         url: `/user/rooms/${roomData[currentRoomDataIndex].roomId}`,
@@ -92,7 +97,7 @@ export default function RoomInfoItem({ Ref, label, children, editContents, house
 
     const fetchData = async () => {
       try {
-        await editedSendRequest({ url: `/api/houses/${houseId}` });
+        await editedSendRequest({ url: `/api/houses/${houseId}`, method: 'POST' });
       } catch (err) {
         console.log(err);
       }
@@ -100,8 +105,13 @@ export default function RoomInfoItem({ Ref, label, children, editContents, house
 
     if (responseData.isSuccess) {
       fetchData();
-      alert('객실 수정이 완료되었습니다.');
+      setOriginalRoomData(roomData);
 
+      const newPatchRoomReq = { ...patchRoomData };
+      newPatchRoomReq.patchImageReqs = [];
+      setPatchRoomData(newPatchRoomReq);
+
+      alert('객실 수정이 완료되었습니다.');
       setIsOpen(preState => !preState);
     } else {
       alert('객실 수정을 하지못했습니다.');
@@ -126,7 +136,7 @@ export default function RoomInfoItem({ Ref, label, children, editContents, house
         <StyledEditContainer>
           <StyledEditHeader>
             <div />
-            <StyledCloseIcon onClick={openCloseEditComponent} />
+            <StyledCloseIcon size={40} onClick={openCloseEditComponent} />
           </StyledEditHeader>
           <>{editContents}</>
           <StyledEditFooter>
