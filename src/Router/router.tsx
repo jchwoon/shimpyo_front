@@ -198,27 +198,17 @@ const router = createBrowserRouter([
         path: 'none-member-mobile-order-complete/:houseId',
         element: (
           <Suspense fallback={<Loading />}>
-            <AuthCheck option={onlyLogout}>
+            <AuthCheck option={null}>
               <NoneMemberMobileOrderComplete />
             </AuthCheck>
           </Suspense>
         ),
       },
-      // {
-      //   path: 'none-member-mobile-order-complete',
-      //   element: (
-      //     <Suspense fallback={<Loading />}>
-      //       <AuthCheck option={onlyLogout}>
-      //         <NoneMemberMobileOrderComplete />
-      //       </AuthCheck>
-      //     </Suspense>
-      //   ),
-      // },
       {
         path: 'member-mobile-order-complete/:houseId',
         element: (
           <Suspense fallback={<Loading />}>
-            <AuthCheck option={onlyLogin}>
+            <AuthCheck option={null}>
               <MemberMobileOrderComplete />
             </AuthCheck>
           </Suspense>

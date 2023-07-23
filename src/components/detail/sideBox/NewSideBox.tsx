@@ -356,7 +356,7 @@ if (soldoutData !== null) {
             }}>
               
 
-              
+
               {isLoggedIn ? null : <NoneMemberPhoneInput setModalOpen={setOpen} />}
 
 
