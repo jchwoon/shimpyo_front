@@ -275,9 +275,9 @@ export default function Detail() {
               </Title>
               <DescriptionLocation>{data ? data.house.sido + " " + data.house.sigungu + "의 " + houseType(data.house.type) : null}</DescriptionLocation >
             </TitleWrapper>
-            <ToggleButtonWrapper>
+            {/* <ToggleButtonWrapper>
               <ToggleFavorite />
-            </ToggleButtonWrapper>
+            </ToggleButtonWrapper> */}
           </Description>
           <ImageContainer
             images={data ? data.house.houseImages : []}
