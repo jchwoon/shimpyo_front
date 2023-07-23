@@ -11,7 +11,7 @@ import Avatar from '../../shared/Avatar';
 interface EditProfileModalProps {
   userProfileData: {
     profileImage: string;
-    introduce: string;
+    selfIntroduce: string;
   };
   fetchUserProfileData: () => void;
 }
@@ -19,7 +19,7 @@ interface EditProfileModalProps {
 export default function EditProfileModal({ userProfileData, fetchUserProfileData }: EditProfileModalProps) {
   const { responseData, sendRequest } = useAuthorizedRequest({});
   const [isOpenEditProfileModal, setIsOpenEditProfileModal] = useRecoilState(editprofileModalAtom);
-  const [introduceValue, setIntroduceValue] = useState<string>(userProfileData.introduce);
+  const [introduceValue, setIntroduceValue] = useState<string>(userProfileData.selfIntroduce);
   const [fileImage, setFileImage] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,7 +51,7 @@ export default function EditProfileModal({ userProfileData, fetchUserProfileData
 
   const initialState = () => {
     setFileImage('');
-    setIntroduceValue(userProfileData.introduce);
+    setIntroduceValue(userProfileData.selfIntroduce);
   };
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function EditProfileModal({ userProfileData, fetchUserProfileData
           <StyleTextBox>
             <div style={{ width: '100%' }}>
               <StyleIntroduceEditMode value={introduceValue} onChange={onChangeIntroduce} autoComplete="off">
-                {userProfileData.introduce}
+                {userProfileData.selfIntroduce}
               </StyleIntroduceEditMode>
             </div>
           </StyleTextBox>
