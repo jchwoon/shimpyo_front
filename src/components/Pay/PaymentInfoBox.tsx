@@ -286,7 +286,7 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             amount: TotalPrice - DiscountPrice,
             buyer_name: `${nonMemberName}`,
             buyer_tel: `${nonMemberNumber}`,
-            m_redirect_url: `https://shimpyo.o-r.kr/none-member-mobile-order-complete/${houseId}`,
+            m_redirect_url: paymentRadioSelectedValue === '신용카드' ? `https://shimpyo.o-r.kr/none-member-mobile-order-complete/${houseId}`: null,
         }
 
         console.log("data:", data)
