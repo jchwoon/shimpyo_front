@@ -59,6 +59,10 @@ export default function CheckReservationDetailMain() {
     minPeople: 0,
   });
 
+  const getData = async () => {
+    await sendRequest({ url: `/user/reservations/${reservationId}` });
+  };
+
   useEffect(() => {
     if (!responseData) return;
 
@@ -70,10 +74,6 @@ export default function CheckReservationDetailMain() {
   }, [responseData]);
 
   useEffect(() => {
-    const getData = async () => {
-      await sendRequest({ url: `/user/reservations/${reservationId}` });
-    };
-
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -108,6 +108,7 @@ export default function CheckReservationDetailMain() {
         </StyleFlexBox>
       </StyleMainBox>
       <GuestManageModal
+        getData={getData}
         minPeople={detailData.minPeople}
         maxPeople={detailData.maxPeople}
         peopleCount={detailData.peopleCount}
