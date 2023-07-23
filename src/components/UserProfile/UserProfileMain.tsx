@@ -14,7 +14,7 @@ import UserIntroduceSection from './Main/UserIntroduceSection';
 
 interface UserProfileData {
   profileImage: string;
-  introduce: string;
+  selfIntroduce: string;
   nickname: string;
 }
 
@@ -24,7 +24,7 @@ export default function UserProfileMain() {
   const setIsOpenEditProfileModal = useSetRecoilState(editprofileModalAtom);
   const { responseData, sendRequest } = useHttpRequest<UserProfileData>();
   const [userProfileData, setUserProfileData] = useState<UserProfileData>({
-    introduce: '',
+    selfIntroduce: '',
     profileImage: '',
     nickname: '',
   });
@@ -60,7 +60,7 @@ export default function UserProfileMain() {
               </StyleEditButton>
             </StyleEditButtonBox>
           )}
-          <UserIntroduceSection nickname={userProfileData.nickname} introduce={userProfileData.introduce} />
+          <UserIntroduceSection nickname={userProfileData.nickname} introduce={userProfileData.selfIntroduce} />
         </StyleContainer>
       </Main>
       <LoginModal redirectPath={`/users/${userId}`} />
