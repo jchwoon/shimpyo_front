@@ -66,6 +66,10 @@ export default function NonMemberReservationDetailMain() {
     reservationId: 0,
   });
 
+  const getData = async () => {
+    await sendRequest({ url: `/api/non-member-reservations/${codeNumber}` });
+  };
+
   useEffect(() => {
     if (!responseData) return;
 
@@ -78,10 +82,6 @@ export default function NonMemberReservationDetailMain() {
   }, [responseData]);
 
   useEffect(() => {
-    const getData = async () => {
-      await sendRequest({ url: `/api/non-member-reservations/${codeNumber}` });
-    };
-
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -124,6 +124,7 @@ export default function NonMemberReservationDetailMain() {
         </StyleFlexBox>
       </StyleMainBox>
       <GuestManageModal
+        getData={getData}
         minPeople={detailData.minPeople}
         maxPeople={detailData.maxPeople}
         peopleCount={detailData.peopleCount}

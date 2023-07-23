@@ -1,6 +1,6 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import Modal from '../Modal';
-import { useRef, useEffect, KeyboardEvent } from 'react';
+import { useRef, useEffect, KeyboardEvent, useState } from 'react';
 import { idFindModalAtom, joinModalAtom, loginModalAtom, passwordFindModalAtom } from '../../../recoil/modalAtoms';
 import { loginStateAtom, accessTokenAtom, nicknameAtom, profileImageAtom, userIdAtom } from '../../../recoil/userAtoms';
 import styled from 'styled-components';
@@ -38,6 +38,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
   const { isLoading, responseData, sendRequest, errorMessage } = useHttpRequest<ResultData>();
   const { responseData: getAccessTokenResponse, sendRequest: getAccessTokenRequest } =
     useHttpRequest<RefreshResultData>();
+  const [isError, setError] = useState(true);
   const location = useLocation();
   const navigation = useNavigate();
   const emailRef = useRef<HTMLInputElement>(null);
@@ -54,6 +55,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
   const { logoutHandler } = useLogout();
 
   const handleLoginButtonClick = async () => {
+    setError(true);
     const emailValue = emailRef.current?.value;
     const passwordValue = passwordRef.current?.value;
     await sendRequest({
@@ -128,7 +130,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
         <Input ref={emailRef} placeholder="이메일" type="text" />
         <span style={{ marginTop: '10px' }}></span>
         <Input ref={passwordRef} placeholder="비밀번호" type="password" />
-        {errorMessage && <StyleError>{errorMessage}</StyleError>}
+        {isError && errorMessage && <StyleError>{errorMessage}</StyleError>}
         <StyleAccountInfoFind>
           <span
             onClick={() => {
@@ -184,6 +186,7 @@ export default function LoginModal({ isToReservationCheck, redirectPath }: Login
         label="로그인"
         onClose={() => {
           setIsLoginModalOpen(false);
+          setError(false);
         }}
         title={title}
         body={body}

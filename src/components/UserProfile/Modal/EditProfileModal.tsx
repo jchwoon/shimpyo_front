@@ -22,6 +22,7 @@ export default function EditProfileModal({ userProfileData, fetchUserProfileData
   const [introduceValue, setIntroduceValue] = useState<string>(userProfileData.selfIntroduce);
   const [fileImage, setFileImage] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [sendFileData, setSendFileData] = useState<Blob>();
 
   const onChangeIntroduce = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setIntroduceValue(e.target.value);
@@ -31,6 +32,7 @@ export default function EditProfileModal({ userProfileData, fetchUserProfileData
     if (!e.target.files) return;
     const file = e.target.files[0];
 
+    setSendFileData(file);
     setFileImage(URL.createObjectURL(file));
   };
 
@@ -43,7 +45,10 @@ export default function EditProfileModal({ userProfileData, fetchUserProfileData
   const editProfileInfo = async () => {
     const formData = new FormData();
 
-    formData.append('profileImage', fileImage);
+    if (sendFileData) {
+      formData.append('profileImage', sendFileData);
+    }
+
     formData.append('selfIntroduce', new Blob([JSON.stringify(introduceValue)], { type: 'application/json' }));
 
     await sendRequest({ url: '/user/change-profile', method: 'PATCH', body: formData });

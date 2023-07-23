@@ -18,9 +18,10 @@ interface GuestManageModalProps {
   maxPeople: number;
   minPeople: number;
   peopleCount: number;
+  getData: () => void;
 }
 
-export default function GuestManageModal({ peopleCount, minPeople, maxPeople }: GuestManageModalProps) {
+export default function GuestManageModal({ peopleCount, minPeople, maxPeople, getData }: GuestManageModalProps) {
   const { codeNumber } = useParams();
   const [guestModalState, setGuestModalState] = useRecoilState(guestManageModalAtom);
   const [guestCount, setGuestCount] = useState(peopleCount);
@@ -55,7 +56,7 @@ export default function GuestManageModal({ peopleCount, minPeople, maxPeople }: 
 
     if (responseData.isSuccess) {
       setGuestModalState(false);
-      window.location.reload();
+      getData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [responseData]);
