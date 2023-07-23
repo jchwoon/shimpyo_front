@@ -14,7 +14,7 @@ import UserMenu from '../Hosting/Menu/UserMenu';
 import MenuItem from '../Hosting/Menu/MenuItem';
 import MenuBlock from '../Hosting/Menu/MenuBlock';
 
-import { BsHouseHeartFill } from 'react-icons/bs';
+import { BsHouseGearFill, BsFillHouseAddFill, BsHouseCheckFill } from 'react-icons/bs';
 import { IoMdSettings } from 'react-icons/io';
 
 import {
@@ -75,9 +75,9 @@ export default function HostingHeader() {
   const slideMenuItems = (
     <>
       <MenuBlock label="메뉴">
-        <MenuItem onClick={moveAccommodationPage('/reservations')} icon={BsHouseHeartFill} bold label="예약관리" />
-        <MenuItem onClick={moveAccommodationPage('/hosting')} icon={BsHouseHeartFill} bold label="숙소관리" />
-        <MenuItem onClick={moveAccommodationPage('/accommodation')} icon={BsHouseHeartFill} bold label="숙소등록" />
+        <MenuItem onClick={moveAccommodationPage('/reservations')} icon={BsHouseCheckFill} bold label="예약관리" />
+        <MenuItem onClick={moveAccommodationPage('/hosting')} icon={BsHouseGearFill} bold label="숙소관리" />
+        <MenuItem onClick={moveAccommodationPage('/accommodation')} icon={BsFillHouseAddFill} bold label="숙소등록" />
       </MenuBlock>
       <MenuBlock label="계정">
         <MenuItem onClick={moveAccommodationPage('/account-settings')} icon={IoMdSettings} bold label="계정" />

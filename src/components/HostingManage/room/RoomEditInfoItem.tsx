@@ -3,6 +3,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai';
 import { TbPhotoPlus } from 'react-icons/tb';
+import { MdDeleteForever } from 'react-icons/md';
 
 import {
   accommodationDataState,
@@ -37,8 +38,10 @@ export default function RoomEditInfoItem({ idx }: RoomEditInfoItemProps) {
 
   const [isClicked, setIsClicked] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>();
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
 
   const openModal = () => {
     setIsClicked(true);
@@ -61,19 +64,19 @@ export default function RoomEditInfoItem({ idx }: RoomEditInfoItemProps) {
     if (!responseData) return;
     const fetchData = async () => {
       try {
-        await accommodationSendRequest({ url: `/api/houses/${accommodationData.houseId}` });
+        await accommodationSendRequest({ url: `/api/houses/${accommodationData.houseId}`, method: 'POST' });
       } catch (err) {
         console.log(err);
       }
     };
 
     if (responseData.isSuccess) {
-      alert('객실 삭제가 완료되었습니다.');
       fetchData();
+      setOriginalRoomData(roomData);
+      alert('객실 삭제가 완료되었습니다.');
       setIsOpenModal(false);
     } else {
       alert('객실 삭제가 완료되지않았습니다.');
-      setIsOpenModal(false);
     }
   }, [responseData]);
 
@@ -107,7 +110,7 @@ export default function RoomEditInfoItem({ idx }: RoomEditInfoItemProps) {
 
         imageDataValues.push(file[0]);
         newPatchRoomReq.patchImageReqs.push({
-          imageCount: newRoomData[idx].roomImages.length,
+          imageCount: newRoomData[idx].roomImages.length - 1,
           imageStatus: 'ADD',
         });
 
@@ -130,6 +133,54 @@ export default function RoomEditInfoItem({ idx }: RoomEditInfoItemProps) {
     }
   };
 
+  const deleteCheck = (index: number) => (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setSelectedImageIndex(index);
+  };
+
+  const deleteRoomImage = (index: number) => (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+
+    const newRoomData = [...roomData];
+    const newRoom = { ...newRoomData[idx] };
+    newRoom.roomImages = [...newRoom.roomImages];
+    newRoom.roomImages.splice(index, 1);
+    newRoomData[idx] = newRoom;
+
+    const newPatchRoomReq = { ...patchRoomReq };
+    newPatchRoomReq.patchImageReqs = [...newPatchRoomReq.patchImageReqs];
+
+    newPatchRoomReq.patchImageReqs.push({
+      imageCount: index,
+      imageStatus: 'DELETE',
+    });
+
+    setRoomData(newRoomData);
+    setPatchRoomReq(newPatchRoomReq);
+    setSelectedImageIndex(9999);
+
+    const newFormData = new FormData();
+    formData.forEach((value, key) => {
+      newFormData.append(key, value);
+    });
+
+    newFormData.delete('roomImages');
+    setFormData(newFormData);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e: Event) => {
+      if (divRef.current && !divRef.current.contains(e.target as Node)) {
+        setSelectedImageIndex(9999);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
     <StyledRoomContentsContainer>
       <StyledContainer>
@@ -142,7 +193,12 @@ export default function RoomEditInfoItem({ idx }: RoomEditInfoItemProps) {
                 <StyledInput onChange={handleOnChange} id="file" type="file" accept="image/*"></StyledInput>
               </StyledNoImageContainer>
             ) : (
-              <StyledCoverImageContainer>
+              <StyledCoverImageContainer onClick={deleteCheck(0)}>
+                {selectedImageIndex === 0 && (
+                  <StyledDeleteImageDimmed ref={divRef} onClick={deleteRoomImage(0)}>
+                    <MdDeleteForever size={50}></MdDeleteForever>
+                  </StyledDeleteImageDimmed>
+                )}
                 <StyledImage src={roomData[idx].roomImages[0]} alt="이미지" />
               </StyledCoverImageContainer>
             )}
@@ -152,7 +208,12 @@ export default function RoomEditInfoItem({ idx }: RoomEditInfoItemProps) {
                   return null;
                 } else {
                   return (
-                    <StyledPlusImageContainer key={`image ${index}`}>
+                    <StyledPlusImageContainer key={`image ${index}`} onClick={deleteCheck(index)}>
+                      {selectedImageIndex === index && (
+                        <StyledDeleteImageDimmed ref={divRef} onClick={deleteRoomImage(index)}>
+                          <MdDeleteForever size={50}></MdDeleteForever>
+                        </StyledDeleteImageDimmed>
+                      )}
                       <StyledImage src={item} alt="이미지" />
                     </StyledPlusImageContainer>
                   );
@@ -178,7 +239,7 @@ export default function RoomEditInfoItem({ idx }: RoomEditInfoItemProps) {
           <RoomEditOption idx={idx} />
         </StyledFlexDiv>
 
-        <StyledCloseIcon onClick={openModal}></StyledCloseIcon>
+        <StyledCloseIcon size={40} onClick={openModal}></StyledCloseIcon>
 
         {isOpenModal && (
           <DeleteCheckModal
@@ -318,6 +379,22 @@ const StyledPlusImageContainer = styled.div`
 
   @media (min-width: 635px) {
     width: 100px;
+  }
+`;
+
+const StyledDeleteImageDimmed = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  border: 3px dashed black;
+
+  &:hover {
+    border: none;
   }
 `;
 

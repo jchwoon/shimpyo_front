@@ -4,12 +4,7 @@ import styled from 'styled-components';
 
 import imageReader from '../../../utils/imageReader';
 import { useRecoilState } from 'recoil';
-import {
-  accommodationDataState,
-  formDataState,
-  lastDeleteIndexState,
-  patchHouseReqState,
-} from '../../../recoil/hostingManageAtoms';
+import { accommodationDataState, formDataState, patchHouseReqState } from '../../../recoil/hostingManageAtoms';
 
 interface ImageOptionProps {
   index: number;
@@ -23,7 +18,6 @@ export default function ImageOption({ index }: ImageOptionProps) {
   const [formData, setFormData] = useRecoilState(formDataState);
 
   const divRef = useRef<HTMLDivElement>(null);
-  const [lastDeleteIndex, setLastDeleteIndex] = useRecoilState(lastDeleteIndexState);
 
   const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -33,12 +27,6 @@ export default function ImageOption({ index }: ImageOptionProps) {
   const deleteImage = (index: number) => () => {
     setIsClicked(false);
 
-    const imageDataValues = Array.from(formData.getAll('houseImages'));
-    const newFormData = new FormData();
-    formData.forEach((value, key) => {
-      newFormData.append(key, value);
-    });
-
     const newAccommodationData = { ...accommodationData };
     newAccommodationData.houseImages = [...newAccommodationData.houseImages];
 
@@ -46,12 +34,14 @@ export default function ImageOption({ index }: ImageOptionProps) {
     newPatchHouseReq.patchImageReqs = [...newPatchHouseReq.patchImageReqs];
 
     newAccommodationData.houseImages.splice(index, 1);
-    imageDataValues.splice(index, 1);
     newPatchHouseReq.patchImageReqs.push({ imageCount: index, imageStatus: 'DELETE' });
-    setLastDeleteIndex(index);
+
+    const newFormData = new FormData();
+    formData.forEach((value, key) => {
+      newFormData.append(key, value);
+    });
 
     newFormData.delete('houseImages');
-    imageDataValues.forEach(value => newFormData.append('houseImages', value));
 
     setFormData(newFormData);
     setAccommodationData(newAccommodationData);
