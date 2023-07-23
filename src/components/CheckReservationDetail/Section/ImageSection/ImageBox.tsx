@@ -20,7 +20,6 @@ const iconStyle = {
   cursor: 'pointer',
   boxShadow: '3px 3px 6px -1px rgb(0 0 0 / 0.3)',
   display: 'flex',
-
   alignItems: 'center',
 };
 
