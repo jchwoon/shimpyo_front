@@ -224,7 +224,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             customer_uid: mobile ?`${noneMemberCustomerUid}`: null,
             name: `${houseName} / ${Name}`,
             amount: TotalPrice - DiscountPrice,
-            m_redirect_url: `https://shimpyo.o-r.kr/member-mobile-order-complete/${houseId}`
+            // m_redirect_url: `https://shimpyo.o-r.kr/member-mobile-order-complete/${houseId}`
+            m_redirect_url: `http://192.168.35.189:3000/member-mobile-order-complete/${houseId}?roomId=${roomId}&couponId=${couponRadioId}&payMethod=${paymentRadioSelectedValue}&peopleCount=${GuestCount}&checkInDate=${moment(checkInDate).format('YYYY.MM.DD')}&checkOutDate=${moment(checkOutDate).format('YYYY.MM.DD')}`,
         }
 
         async function callback(response: RequestPayResponse) {
@@ -286,7 +287,8 @@ const PaymentInfoBox: React.FC<PaymentInfoBoxProp> = ({ houseName, checkInDate, 
             amount: TotalPrice - DiscountPrice,
             buyer_name: `${nonMemberName}`,
             buyer_tel: `${nonMemberNumber}`,
-            m_redirect_url: paymentRadioSelectedValue === '신용카드' ? `https://shimpyo.o-r.kr/none-member-mobile-order-complete/${houseId}`: null,
+            // m_redirect_url: `https://shimpyo.o-r.kr/none-member-mobile-order-complete/${houseId}?ROOMID=1992`,
+            m_redirect_url: `http://192.168.35.189:3000/none-member-mobile-order-complete/${houseId}?roomId=${roomId}&payMethod=${paymentRadioSelectedValue}&name=${nonMemberName}&phoneNumber=${nonMemberNumber}&peopleCount=${GuestCount}&checkInDate=${moment(checkInDate).format('YYYY.MM.DD')}&checkOutDate=${moment(checkOutDate).format('YYYY.MM.DD')}`,
         }
 
         console.log("data:", data)
