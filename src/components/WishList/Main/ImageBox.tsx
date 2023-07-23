@@ -19,7 +19,11 @@ const StyleCloseIcon = {
   backgroundColor: 'white',
   padding: '0.5rem',
   borderRadius: '100%',
+  width: '30px',
+  height: '30px',
   boxShadow: '3px 3px 6px -1px rgb(0 0 0 / 0.3)',
+  display: 'flex',
+  alignItems: 'center',
 };
 
 export default function ImageBox({ item, fetchWishListsData }: ImageBoxProps) {
@@ -41,12 +45,9 @@ export default function ImageBox({ item, fetchWishListsData }: ImageBoxProps) {
           }}
         >
           <StyleMainImage src={item.houseImage} />
-
-          <MdClose
-            onClick={(e: MouseEvent) => showDeleteComfirmModal(e, item.houseId)}
-            style={{ ...StyleCloseIcon }}
-            size={15}
-          />
+          <div onClick={(e: MouseEvent) => showDeleteComfirmModal(e, item.houseId)} style={{ ...StyleCloseIcon }}>
+            <MdClose size={15} />
+          </div>
         </StyleImageBox>
         <StyleDetail>
           <span>{item.houseName}</span>
