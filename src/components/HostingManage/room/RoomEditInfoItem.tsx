@@ -52,7 +52,9 @@ export default function RoomEditInfoItem({ idx }: RoomEditInfoItemProps) {
     }
   };
 
-  const deleteRoomItem = async () => {
+  const deleteRoomItem = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
     try {
       await sendRequest({ url: `/user/rooms/${roomData[idx].roomId}`, method: 'DELETE' });
     } catch (err) {
