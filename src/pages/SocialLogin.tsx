@@ -3,7 +3,7 @@ import useHttpRequest from '../hooks/useHttpRequest';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SOCIAL_SILENT_LOGIN_API_PATH } from '../constants/api/userApi';
 import { useSetRecoilState } from 'recoil';
-import { accessTokenAtom } from '../recoil/userAtoms';
+import { accessTokenAtom, loginStateAtom } from '../recoil/userAtoms';
 
 interface IResultData {
   accessToken: string;
@@ -13,6 +13,7 @@ export default function SocialLogin() {
   const { responseData, sendRequest } = useHttpRequest<IResultData>();
   const [searchParams] = useSearchParams();
   const navigation = useNavigate();
+  const setIsLoggedIn = useSetRecoilState(loginStateAtom);
   const setAccessToken = useSetRecoilState(accessTokenAtom);
 
   const getSilentToken = async () => {
@@ -24,6 +25,7 @@ export default function SocialLogin() {
     if (!responseData) return;
 
     if (responseData.isSuccess) {
+      setIsLoggedIn(true);
       setAccessToken(responseData.result.accessToken);
       navigation('/');
     }
