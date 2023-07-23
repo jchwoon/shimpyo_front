@@ -44,7 +44,7 @@ export default function EditProfileModal({ userProfileData, fetchUserProfileData
     const formData = new FormData();
 
     formData.append('profileImage', fileImage);
-    formData.append('selfIntroduce', introduceValue);
+    formData.append('selfIntroduce', new Blob([JSON.stringify(introduceValue)], { type: 'application/json' }));
 
     await sendRequest({ url: '/user/change-profile', method: 'PATCH', body: formData });
   };
