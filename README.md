@@ -11,11 +11,16 @@
 
 # 👋 프로젝트 개요
 
+<div align="center">
+<img width="329" alt="image" src="https://user-images.githubusercontent.com/50205887/207568862-cdc9e2c0-b03c-43ff-bf46-3ba79a110d0c.png">
+
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FVoluntain-SKKU%2FVoluntain-2nd&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+
+</div>
+
 #### 쉼표는 숙소를 직접 등록하거나 예약할 수 있는 통합 숙박예약 서비스입니다.
 
 ### [쉼표 바로가기](http://shimpyo.o-r.kr/)
-
-* 비용 문제로 인하여 xxxx.xx.xx 까지 운영됩니다.
 
 # 📅 프로젝트 기간
 
@@ -29,26 +34,13 @@
 | 이호석 | 팀원  | 배포 자동화, JSON 응답 모듈화, 예약, 결제, 리뷰 |
 | 한재민 | 팀원  | DB설계, 회원(JWT , SMS 인증, 소셜 로그인)  |
 
-# 💻 개발 환경
-
-### Architecture
-
-![development_map](https://github.com/Project-Shimpyo/backend/assets/119032680/89dc4c0b-9515-43ee-9250-b0a2c1c2c77c)
-
-### ERD
-
-![KakaoTalk_20230717_170522640](https://github.com/Project-Shimpyo/backend/assets/47111722/610b6480-d23d-496b-9564-8a1a0d3ab376)
-
-### API
-
-[API 명세서 바로가기](https://docs.google.com/spreadsheets/d/1lcUy45KENA28HkA6w2CRJwkndWbBS591vnjQbwSXX9s/edit?usp=sharing)
-
 # 🔧 기술 스택
 
-- Java 11
-- Spring Boot 2.7, Spring Security, Spring Data JPA, Querydsl
-- MySQL, Git, GitHub, GitHub Actions
-- AWS EC2, AWS RDS, AWS S3, AWS CodeDeploy
+- Core:React18, TypeScript, Recoil
+- CSS: Styled-Component, MaterialUI
+- Code Management:Git, GitHub, 
+- DevOps:AWS EC2, NGINX, GitHub Actions
+- Communication: Slack, GoogleDocs 
 
 # 💻 주요 기능 및 상세
 
