@@ -46,7 +46,7 @@
 # 💻 주요 기능 및 상세
 
 ## 📌 주요 기능
-#### 로그인 - <a href="https://github.com/Project-Shimpyo/front.wiki.git" >상세보기 - WIKI 이동</a>
+#### 로그인 - <a href="https://github.com/Project-Shimpyo/front/wiki/%EC%8B%A0%EC%84%B1%EC%9A%B0" >상세보기 - WIKI 이동</a>
 - DB값 검증
 - ID찾기, PW찾기
 - 로그인 시 쿠키(Cookie) 및 세션(Session) 생성
