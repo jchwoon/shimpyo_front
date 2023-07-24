@@ -9,10 +9,10 @@
 - [기술 스택](#-기술-스택)
 - [주요 기능 및 상세](#-주요-기능-및-상세)
 
-# 👋 프로젝트 개요
+# 👋 프로젝트 소개
 
 <div align="center">
-  <img width="200" alt="image" src="https://github.com/Project-Shimpyo/front/assets/75010360/54b83a66-854b-442b-b57f-ac282af26425">
+  <img width="200" alt="image" src="./public/images/logo2.svg">
 </div>
 <div align="center">
 <img width="150" alt="title" src="https://github.com/Project-Shimpyo/backend/assets/75010360/d942775d-9552-4e6f-a44a-598cdde4bc3a">
@@ -21,7 +21,11 @@
   
 #### 쉼표는 숙소를 직접 등록하거나 예약할 수 있는 통합 숙박예약 서비스입니다.
 
-### [쉼표 바로가기](http://shimpyo.o-r.kr/)
+### [쉼표 바로가기](https://shimpyo.o-r.kr/)
+
+### [쉼표 시연영상](https://www.youtube.com/watch?v=RbrhiM4ybgI)
+
+<br/>
 
 # 📅 프로젝트 기간
 
