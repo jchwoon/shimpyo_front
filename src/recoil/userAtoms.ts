@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 
 export const passwordValueAtom = atom<string>({
   key: 'PasswordValueState',
@@ -57,7 +57,7 @@ export const userIdAtom = atom<string>({
   default: defaultUserId,
 });
 
-export const loginStateAtom = atom<boolean>({
+export const loginStateAtom = selector<boolean>({
   key: 'loginStateAtom',
-  default: false,
+  get: ({ get }) => !!get(accessTokenAtom),
 });

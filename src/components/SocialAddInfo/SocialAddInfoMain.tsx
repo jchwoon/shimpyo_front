@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { SOCIAL_ADDITIONAL_INFO_API_PATH } from '../../constants/api/userApi';
 import Button from '../shared/UI/Button';
-import { accessTokenAtom, loginStateAtom, nicknameValueAtom, phoneValueAtom } from '../../recoil/userAtoms';
+import { accessTokenAtom, nicknameValueAtom, phoneValueAtom } from '../../recoil/userAtoms';
 
 interface IResultData {
   accessToken: string;
@@ -21,7 +21,6 @@ export default function SocialAddInfoMain() {
   const { isLoading, responseData, sendRequest } = useHttpRequest<IResultData>();
   const [isPhoneValid, setIsPhoneValid] = useState(false);
   const [isNicknameValid, setIsNicknameValid] = useState(false);
-  const setIsLoggedIn = useSetRecoilState(loginStateAtom);
   const [nicknameValue, setNicknameValue] = useRecoilState(nicknameValueAtom);
   const [phoneValue, setPhoneValue] = useRecoilState(phoneValueAtom);
   const setAccessToken = useSetRecoilState(accessTokenAtom);
@@ -57,7 +56,6 @@ export default function SocialAddInfoMain() {
     if (responseData.isSuccess) {
       initialState();
       setAccessToken(responseData.result.accessToken);
-      setIsLoggedIn(true);
       navigation('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
