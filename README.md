@@ -50,44 +50,37 @@
 
 ## 📌 주요 기능
 #### 로그인 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
-- DB값 검증
+- 소셜로그인
 - ID찾기, PW찾기
-- 로그인 시 쿠키(Cookie) 및 세션(Session) 생성
-#### 회원가입 - <a href="https://github.com/chaehyuenwoo/SpringBoot-Project-MEGABOX/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(Member)" >상세보기 - WIKI 이동</a>
-- 주소 API 연동
-- ID 중복 체크
-#### 계정 페이지 - <a href="https://github.com/chaehyuenwoo/SpringBoot-Project-MEGABOX/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(Member)" >상세보기 - WIKI 이동</a>
-- 주소 API 연동
+- 로그인 시 access, refresh 토큰 발급
+#### 회원가입 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
+- ID, 패스워드, 닉네임 유효성 검사
+- ID, 닉네임 중복체크
+#### 계정 페이지 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
+- 회원 탈퇴
 - 회원정보 변경
-
-#### 메인페이지 - <a href="https://github.com/chaehyuenwoo/SpringBoot-Project-MEGABOX/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(%EC%98%81%ED%99%94-%EC%98%88%EB%A7%A4)" >상세보기 - WIKI 이동</a>
-- 영화 선택(날짜 지정)
-- 영화관 선택(대분류/소분류 선택) 및 시간 선택
-- 좌석 선택
-- 결제 페이지
-- 예매 완료
-#### 상세 페이지 - <a href="https://github.com/chaehyuenwoo/SpringBoot-Project-MEGABOX/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(%EB%A9%94%EC%9D%B8-Page)" >상세보기 - WIKI 이동</a>
-- YouTube API 연동
-- 메인 포스터(영화) 이미지 슬라이드(CSS)
-#### 숙소 관리 페이지 - <a href="" >상세보기 - WIKI 이동</a> 
-- 글 작성, 읽기, 수정, 삭제(CRUD)
-
+#### 예약내역 페이지 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
+- 예약내역, 이용내역, 취소내역 카테고리 화
+- 페이지 네이션
+- 이용내역에 대한 리뷰 작성
+#### 예약상세 페이지 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
+- 해당 숙소에 대한 상세 조회
+- 인원 수정, 예약 취소,
+- 이미지 슬라이드
+#### 관심 숙소 페이지 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
+- 관심 숙소 조회 및 삭제
+- 숙소 클릭시 해당 숙소의 detail페이지로 이동
+- 최대 20개 제한
+#### 메인페이지 
+- 검색을 통한 숙소 필터링
+- ❤ 클릭시 관심 숙소 저장
+#### 상세 페이지 
+- 해당 숙소 예약
+- 해당 숙소에 대한 세부 조회
+#### 숙소 관리 페이지
+- 등록한 숙소에 대한 수정, 삭제
+- 해당 숙소에 예약된 건수 확인
 #### 숙소 등록 페이지 
-- 영화관 추가(대분류, 소분류)
-- 영화 추가(상영시간 및 상영관 설정)
-
+- 단계에 따른 숙소 등록(사진, 숙소 기본 정보, 편의 시설, 위치, 객실)
 #### 숙소 수정 페이지 
-- 영화관 추가(대분류, 소분류)
-- 영화 추가(상영시간 및 상영관 설정)
-
-#### 예약내역 페이지 
-- 영화관 추가(대분류, 소분류)
-- 영화 추가(상영시간 및 상영관 설정)
-
-#### 예약상세 페이지 
-- 영화관 추가(대분류, 소분류)
-- 영화 추가(상영시간 및 상영관 설정)
-
-#### 관심 숙소 페이지 
-- 영화관 추가(대분류, 소분류)
-- 영화 추가(상영시간 및 상영관 설정)
+- 사진, 숙소 기본 정보, 편의 시설, 위치, 객실을 각각 수정 가능
