@@ -49,7 +49,7 @@
 # 💻 주요 기능 및 상세
 
 ## 📌 주요 기능
-#### 로그인 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
+#### 로그인 - <a href="https://github.com/jchwoon/shimpyo_front/wiki/Login" >상세보기 - WIKI 이동</a>
 - 소셜로그인
 - ID찾기, PW찾기
 - 로그인 시 access, refresh 토큰 발급
