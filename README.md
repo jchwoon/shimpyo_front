@@ -1,4 +1,4 @@
-# Shimpyo back-end
+# Shimpyo front-end
 
 # 📑 목차
 
