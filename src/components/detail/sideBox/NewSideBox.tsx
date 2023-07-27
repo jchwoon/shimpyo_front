@@ -4,21 +4,10 @@ import 'moment/locale/ko';
 import { Typography, Button, IconButton, Card } from '@mui/material';
 import styled from '@emotion/styled';
 
-import { useRecoilValue, useRecoilState } from "recoil";
-import {
-  activeRoom,
-  activeRoomPrice,
-  activeRoomName,
-  activeMaxPerson
-} from '../../../recoil/detailPageAtoms';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import { activeRoom, activeRoomPrice, activeRoomName, activeMaxPerson } from '../../../recoil/detailPageAtoms';
 
-import {
-  AdultGuest,
-  ChildGuest,
-  InfantGuest,
-  FirstPickedDate,
-  SecondPickedDate,
-} from '../../../recoil/navBarAtoms';
+import { AdultGuest, ChildGuest, InfantGuest, FirstPickedDate, SecondPickedDate } from '../../../recoil/navBarAtoms';
 
 import { Calendar } from '../../Main/MobileCalendar/Calendar';
 
@@ -41,13 +30,10 @@ import ColorButton from '../../shared/UI/ColorButton';
 
 import useAuthorizedRequest from '../../../hooks/useAuthorizedRequest';
 import { RESERVATION_PREPARE_API_PATH } from '../../../constants/api/reservationApi';
-import { accessTokenAtom, loginStateAtom } from "../../../recoil/userAtoms"
+import { accessTokenAtom, loginStateAtom } from '../../../recoil/userAtoms';
 import { AxiosError } from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-import {
-  merchantUid,
-  couponList
-} from '../../../recoil/detailPageAtoms';
+import { merchantUid, couponList } from '../../../recoil/detailPageAtoms';
 
 import NoneMemberPhoneInput from '../../Pay/NoneMemberPhoneInput';
 
@@ -73,14 +59,14 @@ interface ResultData {
 }
 
 interface Room {
-  name:string
+  name: string;
 }
 
 export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertMessage }: NewSideBoxProps) {
-  const [room, setRoom] = useRecoilState(activeRoom)
-  const [price, setPrice] = useRecoilState(activeRoomPrice)
-  const [Name, setName] = useRecoilState(activeRoomName)
-  const [MaxPerson, setMaxPerson] = useRecoilState(activeMaxPerson)
+  const [room, setRoom] = useRecoilState(activeRoom);
+  const [price, setPrice] = useRecoilState(activeRoomPrice);
+  const [Name, setName] = useRecoilState(activeRoomName);
+  const [MaxPerson, setMaxPerson] = useRecoilState(activeMaxPerson);
   const [firstPickedDate, setFirstPickedDate] = useRecoilState(FirstPickedDate);
   const [secondPickedDate, setSecondPickedDate] = useRecoilState(SecondPickedDate);
 
@@ -103,14 +89,15 @@ export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertM
 
   const GuestCount = AdultGuestNumber + ChildGuestNumber + InfantGuestNumber;
 
-  const GuestOverLimit = MaxPerson >= TotalGuestNumber ? false : true
-  const GuestOverLimitSameOver = MaxPerson <= TotalGuestNumber ? true : false
+  const GuestOverLimit = MaxPerson >= TotalGuestNumber ? false : true;
+  const GuestOverLimitSameOver = MaxPerson <= TotalGuestNumber ? true : false;
 
-  const DaysDifference = moment(secondPickedDate).diff(moment(firstPickedDate), "days")
-  const TotalPrice = price ? price * DaysDifference : null
+  const DaysDifference = moment(secondPickedDate).diff(moment(firstPickedDate), 'days');
+  const TotalPrice = price ? price * DaysDifference : null;
 
   const navigation = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginStateAtom);
+  const setAccessToken = useSetRecoilState(accessTokenAtom);
+  const isLoggedIn = useRecoilValue(loginStateAtom);
 
   const resetFunction = () => {
     setFirstPickedDate('');
@@ -124,11 +111,10 @@ export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertM
   };
 
   const handleUnAutorization = (error: AxiosError) => {
-    setIsLoggedIn(false);
+    setAccessToken('');
     navigation('/');
     console.error(error.message);
   };
-
 
   const { responseData, sendRequest } = useAuthorizedRequest<ResultData>({
     onUnauthorized: handleUnAutorization,
@@ -141,168 +127,201 @@ export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertM
       await sendRequest({ url: `${RESERVATION_PREPARE_API_PATH}`, withCredentials: true });
     }
     setOpen(true);
-  }
+  };
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    if (!responseData) return
+    if (!responseData) return;
     if (responseData.isSuccess) {
-      setCouponListArray(responseData.result.couponList)
-      setMerchantUid(responseData.result.merchantUid)
+      setCouponListArray(responseData.result.couponList);
+      setMerchantUid(responseData.result.merchantUid);
     }
-  }, [responseData])
-
+  }, [responseData]);
 
   const [swipePage, setSwipePage] = useRecoilState(swipePageState);
 
-  if (room === null) { setMaxPerson(99) }
+  if (room === null) {
+    setMaxPerson(99);
+  }
 
-  const location = useLocation()
+  const location = useLocation();
 
   useEffect(() => {
-    setRoom(null)
-    setPrice(null)
-    setName('')
-    setMaxPerson(99)
-    setFirstPickedDate('')
-    setSecondPickedDate('')
-    setAdultGuestNumber(0)
-    setChildGuestNumber(0)
-    setInfantGuestNumber(0)
-  }, [location])
+    setRoom(null);
+    setPrice(null);
+    setName('');
+    setMaxPerson(99);
+    setFirstPickedDate('');
+    setSecondPickedDate('');
+    setAdultGuestNumber(0);
+    setChildGuestNumber(0);
+    setInfantGuestNumber(0);
+  }, [location]);
 
-  const { responseData:soldOutResponseData, sendRequest:soldOutSendRequest, errorMessage, isLoading } = useHttpRequest();
+  const {
+    responseData: soldOutResponseData,
+    sendRequest: soldOutSendRequest,
+    errorMessage,
+    isLoading,
+  } = useHttpRequest();
 
   const [soldoutData, setSoldOutData] = useState<any>(null);
   const [soldoutCheck, setSoldOutCheck] = useState(false);
 
-  useEffect(()=> {
- if(firstPickedDate === '' || secondPickedDate === '' || room === null) {
-  if(soldoutData !== null) {
-    setSoldOutData(null)
-    setSoldOutCheck(false)
-  } else {
-    return
-  }
- }
- else {
-  soldOutSendRequest({ 
-    url: `${DETAIL_PAGE_API_PATH}/${houseId}`,
-    method:"POST",
-    body:{
-      checkin:moment(firstPickedDate).format('YYYY-MM-DDTHH:mm:ss'),
-      checkout:moment(secondPickedDate).format('YYYY-MM-DDTHH:mm:ss')
+  useEffect(() => {
+    if (firstPickedDate === '' || secondPickedDate === '' || room === null) {
+      if (soldoutData !== null) {
+        setSoldOutData(null);
+        setSoldOutCheck(false);
+      } else {
+        return;
+      }
+    } else {
+      soldOutSendRequest({
+        url: `${DETAIL_PAGE_API_PATH}/${houseId}`,
+        method: 'POST',
+        body: {
+          checkin: moment(firstPickedDate).format('YYYY-MM-DDTHH:mm:ss'),
+          checkout: moment(secondPickedDate).format('YYYY-MM-DDTHH:mm:ss'),
+        },
+      });
     }
-  })
- }
-  }, [firstPickedDate, secondPickedDate, room])
+  }, [firstPickedDate, secondPickedDate, room]);
 
-useEffect(()=>{
-  if(!soldOutResponseData) return
-  if(soldOutResponseData) {
-    setSoldOutData(soldOutResponseData.result)
-  }
-},[soldOutResponseData])
+  useEffect(() => {
+    if (!soldOutResponseData) return;
+    if (soldOutResponseData) {
+      setSoldOutData(soldOutResponseData.result);
+    }
+  }, [soldOutResponseData]);
 
-useEffect(()=>{
-if(soldoutData === null || Name === null) return
-if (soldoutData !== null) {
-  const room = soldoutData.rooms.find((room:Room) => room.name === Name)
-  if(room && room.soldout !== undefined)
-{ if (room.soldout === true) {
-  setSoldOutCheck(true)
-  } else {
-    setSoldOutCheck(false)
-  }}
-}
-},[soldoutData, Name])
+  useEffect(() => {
+    if (soldoutData === null || Name === null) return;
+    if (soldoutData !== null) {
+      const room = soldoutData.rooms.find((room: Room) => room.name === Name);
+      if (room && room.soldout !== undefined) {
+        if (room.soldout === true) {
+          setSoldOutCheck(true);
+        } else {
+          setSoldOutCheck(false);
+        }
+      }
+    }
+  }, [soldoutData, Name]);
 
   return (
-    <Main >
+    <Main>
       <MainTitle>예약</MainTitle>
-      <div style={{ paddingBottom: "15px" }}>
-        {room ?
+      <div style={{ paddingBottom: '15px' }}>
+        {room ? (
           <RoomInfo>
-            <Typography fontFamily='Noto Sans KR'>{Name}</Typography>
-            <div style={{ display: "flex", alignItems: "flex-end" }}>
-              <Typography fontFamily='Noto Sans KR' fontWeight="500">₩ {price ? price.toLocaleString() : null}</Typography>
-              <Typography fontFamily='Noto Sans KR' fontWeight="300" fontSize="12px">/박</Typography>
+            <Typography fontFamily="Noto Sans KR">{Name}</Typography>
+            <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+              <Typography fontFamily="Noto Sans KR" fontWeight="500">
+                ₩ {price ? price.toLocaleString() : null}
+              </Typography>
+              <Typography fontFamily="Noto Sans KR" fontWeight="300" fontSize="12px">
+                /박
+              </Typography>
             </div>
           </RoomInfo>
-          :
-          <Typography fontFamily='Noto Sans KR'>객실을 선택해주세요</Typography>}
+        ) : (
+          <Typography fontFamily="Noto Sans KR">객실을 선택해주세요</Typography>
+        )}
       </div>
 
-      <CustomizedCheckInOutAccordion elevation={0} >
-        <CutomizedCheckInOutAccordionSummary sx={{ border: "solid 1px #c5c5c5" }}
+      <CustomizedCheckInOutAccordion elevation={0}>
+        <CutomizedCheckInOutAccordionSummary
+          sx={{ border: 'solid 1px #c5c5c5' }}
           aria-controls="panel1a-content"
           id="panel1a-header1"
         >
-          <div style={{ display: "flex", width: "100%", height: "100%" }}>
-            <div style={{ width: "50%", height: "50px", borderBottom: "solid 1px #c5c5c5", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <Typography fontFamily='Noto Sans KR' fontSize="12px" color="#a2a2a2">체크인</Typography>
-              {!soldoutCheck ? 
-              <Typography fontFamily='Noto Sans KR'>{firstPickedDate ? moment(firstPickedDate).format('M월 D일') : "날짜 추가"}</Typography> 
-              : 
-              <Typography fontFamily='Noto Sans KR' color="#e80a00">예약 마감</Typography>
-              }
+          <div style={{ display: 'flex', width: '100%', height: '100%' }}>
+            <div
+              style={{
+                width: '50%',
+                height: '50px',
+                borderBottom: 'solid 1px #c5c5c5',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Typography fontFamily="Noto Sans KR" fontSize="12px" color="#a2a2a2">
+                체크인
+              </Typography>
+              <Typography fontFamily="Noto Sans KR">
+                {firstPickedDate ? moment(firstPickedDate).format('M월 D일') : '날짜 추가'}
+              </Typography>
             </div>
-            <div style={{ width: "50%", height: "50px", border: "solid 1px #c5c5c5", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <Typography fontFamily='Noto Sans KR' fontSize="12px" color="#a2a2a2">체크아웃</Typography>
-              {!soldoutCheck ? 
-                <Typography fontFamily='Noto Sans KR'>{secondPickedDate ? moment(secondPickedDate).format('M월 D일') : "날짜 추가"}</Typography>
-              :
-              <Typography fontFamily='Noto Sans KR' color="#e80a00">예약 마감</Typography>
-              }
+            <div
+              style={{
+                width: '50%',
+                height: '50px',
+                border: 'solid 1px #c5c5c5',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Typography fontFamily="Noto Sans KR" fontSize="12px" color="#a2a2a2">
+                체크아웃
+              </Typography>
+              <Typography fontFamily="Noto Sans KR">
+                {secondPickedDate ? moment(secondPickedDate).format('M월 D일') : '날짜 추가'}
+              </Typography>
             </div>
           </div>
         </CutomizedCheckInOutAccordionSummary>
         <AccordionDetails>
-          {
-            firstPickedDate ?
-              <CustomizedDeleteIconButton
-                onClick={resetFunction}
-                top={55}
-                left={5}
-                soldoutCheck={soldoutCheck ? true : false}
-              >
-                <CustomziedClearIcon />
-              </CustomizedDeleteIconButton>
-              :
-              null
-          }
-          <Calendar soldoutCheck={soldoutCheck ? true: false}/>
+          {firstPickedDate ? (
+            <CustomizedDeleteIconButton onClick={resetFunction} top={55} left={5}>
+              <CustomziedClearIcon />
+            </CustomizedDeleteIconButton>
+          ) : null}
+          <Calendar />
         </AccordionDetails>
       </CustomizedCheckInOutAccordion>
       <CustomizedGuestAccordion elevation={0}>
-        <CutomizedGuestAccordionSummary sx={{ border: "solid 1px #c5c5c5" }}
+        <CutomizedGuestAccordionSummary
+          sx={{ border: 'solid 1px #c5c5c5' }}
           aria-controls="panel1a-content"
           id="panel1a-header2"
         >
-          <div style={{ display: "flex", width: "100%", height: "50px", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-            <Typography fontFamily='Noto Sans KR' fontSize="12px" color="#a2a2a2">여행자</Typography>
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              height: '50px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Typography fontFamily="Noto Sans KR" fontSize="12px" color="#a2a2a2">
+              여행자
+            </Typography>
             {/* <Typography fontFamily='Noto Sans KR'>
               {TotalGuestNumber > 0 ? !GuestOverLimit ? TotalGuestNumberCount : '최대인원을 넘습니다.' : '게스트 추가'}
             </Typography> */}
-            {TotalGuestNumber > 0
-              ?
-              !GuestOverLimit
-                ?
-                <Typography fontFamily='Noto Sans KR'>{TotalGuestNumberCount}</Typography>
-                :
-                <Typography fontFamily='Noto Sans KR' color="#e80a00">최대 인원을 초과하였습니다</Typography>
-              :
-              <Typography fontFamily='Noto Sans KR'>게스트 추가</Typography>
-            }
+            {TotalGuestNumber > 0 ? (
+              !GuestOverLimit ? (
+                <Typography fontFamily="Noto Sans KR">{TotalGuestNumberCount}</Typography>
+              ) : (
+                <Typography fontFamily="Noto Sans KR" color="#e80a00">
+                  최대 인원을 초과하였습니다
+                </Typography>
+              )
+            ) : (
+              <Typography fontFamily="Noto Sans KR">게스트 추가</Typography>
+            )}
           </div>
         </CutomizedGuestAccordionSummary>
-        <CutomizedAccordionDetails sx={{ paddingTop: "25px" }}>
+        <CutomizedAccordionDetails sx={{ paddingTop: '25px' }}>
           {TotalGuestNumber > 0 ? (
-            <CustomizedDeleteIconButton
-              onClick={guestCountReset}
-              top={55}
-              left={5}
-            >
+            <CustomizedDeleteIconButton onClick={guestCountReset} top={55} left={5}>
               <CustomziedClearIcon />
             </CustomizedDeleteIconButton>
           ) : null}
@@ -314,7 +333,11 @@ if (soldoutData !== null) {
         </CutomizedAccordionDetails>
       </CustomizedGuestAccordion>
 
-      <ColorButton disabled={!room || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0 || GuestOverLimit || soldoutCheck} onClick={handleOpen} label="예약" />
+      <ColorButton
+        disabled={!room || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0 || GuestOverLimit}
+        onClick={handleOpen}
+        label="예약"
+      />
       {/* <BookingBtn disabled={!Name || !firstPickedDate || !secondPickedDate || TotalGuestNumber <= 0} onClick={handleOpen} >
         <Typography fontFamily='Noto Sans KR' fontSize="17px">예약</Typography>
       </BookingBtn> */}
@@ -331,32 +354,31 @@ if (soldoutData !== null) {
           },
         }}
       >
-
         <Fade in={open}>
           {/* <Box sx={style}> */}
-          <div style={{
-            position: 'absolute' as 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '330px',
-            height: 'auto',
-            overflow: 'hidden',
-            borderRadius: "10px",
-            display: 'flex'
-          }}>
-            <div style={{
-              display: "flex",
-              position: "relative",
-              right: swipePage === 2 ? "330px" : "0px",
-              transition: "0.3s ease",
-              backgroundColor: "white"
-            }}>
-              
-
-
+          <div
+            style={{
+              position: 'absolute' as 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '330px',
+              height: 'auto',
+              overflow: 'hidden',
+              borderRadius: '10px',
+              display: 'flex',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                position: 'relative',
+                right: swipePage === 2 ? '330px' : '0px',
+                transition: '0.3s ease',
+                backgroundColor: 'white',
+              }}
+            >
               {isLoggedIn ? null : <NoneMemberPhoneInput setModalOpen={setOpen} />}
-
 
               <PaymentInfoBox
                 houseName={houseName}
@@ -370,19 +392,19 @@ if (soldoutData !== null) {
                 setAlertMessage={setAlertMessage}
               />
             </div>
-
           </div>
           {/* </Box> */}
         </Fade>
-
       </Modal>
 
-      {
-        price ? DaysDifference ?
+      {price ? (
+        DaysDifference ? (
           <BookingInfo>
             <BookingNotice>예약 확정 전에는 요금이 청구되지 않습니다.</BookingNotice>
             <BookingLine>
-              <BookingDetail>₩ {price.toLocaleString()} x {DaysDifference}박</BookingDetail>
+              <BookingDetail>
+                ₩ {price.toLocaleString()} x {DaysDifference}박
+              </BookingDetail>
             </BookingLine>
             <Divider />
             <BookingTotal>
@@ -390,12 +412,9 @@ if (soldoutData !== null) {
               <TotalAmount>₩ {TotalPrice ? TotalPrice.toLocaleString() : null}</TotalAmount>
             </BookingTotal>
           </BookingInfo>
-          :
-          null
-          :
-          null
-      }
-    </Main >
+        ) : null
+      ) : null}
+    </Main>
   );
 }
 
@@ -405,69 +424,67 @@ const MainTitle = styled(Typography)`
   font-weight: 600;
   font-family: Noto Sans KR;
   @media screen and (min-width: 750px) {
-display:none  
-}
+    display: none;
+  }
 `;
 
-const CustomizedDeleteIconButton = styled(IconButton) <{ top: number, left: number, soldoutCheck?:boolean }>`
-// background-color : #00adb5;
-background-color : ${props => props.soldoutCheck ? "#e80a00" : "#00adb5"};
-width: 30px;
-height: 30px;
-:hover {
-  background-color:  ${props => props.soldoutCheck ? "#ff3e36" : "#00adb5"};
-
-}
-top: ${props => props.top}px;
-left: ${props => props.left}px;
-position: absolute;
-`
+const CustomizedDeleteIconButton = styled(IconButton)<{ top: number; left: number }>`
+  background-color: #00adb5;
+  width: 30px;
+  height: 30px;
+  :hover {
+    background-color: #00c5cf;
+  }
+  top: ${props => props.top}px;
+  left: ${props => props.left}px;
+  position: absolute;
+`;
 
 const CustomziedClearIcon = styled(ClearIcon)`
-width: 15px;
-height: 15px;
-color:white;
-`
+  width: 15px;
+  height: 15px;
+  color: white;
+`;
 
 const CustomizedCheckInOutAccordion = styled(Accordion)`
-:before {
-    background-color:white;
-}
-`
+  :before {
+    background-color: white;
+  }
+`;
 
 const CutomizedCheckInOutAccordionSummary = styled(AccordionSummary)`
-height: 50px;
-&.Mui-expanded {
-    min-height: 50px; 
+  height: 50px;
+  &.Mui-expanded {
+    min-height: 50px;
   }
-overflow: hidden;
-border-radius: 15px 15px 0px 0px;
-padding: 0px;
-`
+  overflow: hidden;
+  border-radius: 15px 15px 0px 0px;
+  padding: 0px;
+`;
 const CustomizedGuestAccordion = styled(Accordion)`
-:before {
-    background-color:white;
-}
-`
-const CutomizedGuestAccordionSummary = styled(AccordionSummary)`
-height: 50px;
-&.Mui-expanded {
-    min-height: 50px; 
+  :before {
+    background-color: white;
   }
-overflow: hidden;
-border-radius: 0px 0px 15px 15px;
-padding: 0px;
-`
+`;
+const CutomizedGuestAccordionSummary = styled(AccordionSummary)`
+  height: 50px;
+  &.Mui-expanded {
+    min-height: 50px;
+  }
+  overflow: hidden;
+  border-radius: 0px 0px 15px 15px;
+  padding: 0px;
+`;
 
 const CutomizedAccordionDetails = styled(AccordionDetails)`
-padding-left: 0px;
-padding-right:0px;
-`
+  padding-left: 0px;
+  padding-right: 0px;
+`;
 
 const Main = styled(Card)`
-display:flex;
-flex-direction: column;
-align-self:flex-start;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
   position: sticky;
   width: 330px;
   top: 100px;
@@ -484,14 +501,14 @@ align-self:flex-start;
 `;
 
 const RoomInfo = styled.div`
-display:flex;
-flex-direction:row;
-justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 const BookingBtn = styled(Button)`
-background-color:#00adb5;
-color: #ffffff;
+  background-color: #00adb5;
+  color: #ffffff;
   width: 100%;
   height: 50px;
   display: flex;
@@ -503,9 +520,9 @@ color: #ffffff;
   :hover {
     background-color: #00c5cf;
   }
-  &:disabled{
+  &:disabled {
     background-color: #00959c;
-    color:#d9d9d9;
+    color: #d9d9d9;
   }
 `;
 
@@ -527,7 +544,6 @@ const BookingDetail = styled(Typography)`
   text-decoration: underline;
   font-family: 'Noto Sans KR';
 `;
-
 
 const BookingTotal = styled(Typography)`
   display: flex;
