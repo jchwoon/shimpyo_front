@@ -124,7 +124,10 @@ export default function Detail() {
   const { responseData, sendRequest, errorMessage, isLoading } = useHttpRequest();
 
   useEffect(() => {
-    sendRequest({ url: `${DETAIL_PAGE_API_PATH}/${houseId}` })
+    sendRequest({ 
+      url: `${DETAIL_PAGE_API_PATH}/${houseId}`,
+      method:"POST"
+    })
   }, [])
 
   const [data, setData] = useState<any>(null);
@@ -250,7 +253,6 @@ export default function Detail() {
     }
   }, [response_message])
 
-
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -273,9 +275,9 @@ export default function Detail() {
               </Title>
               <DescriptionLocation>{data ? data.house.sido + " " + data.house.sigungu + "의 " + houseType(data.house.type) : null}</DescriptionLocation >
             </TitleWrapper>
-            <ToggleButtonWrapper>
+            {/* <ToggleButtonWrapper>
               <ToggleFavorite />
-            </ToggleButtonWrapper>
+            </ToggleButtonWrapper> */}
           </Description>
           <ImageContainer
             images={data ? data.house.houseImages : []}

@@ -41,6 +41,10 @@ import { swipePageState } from '../../../recoil/detailPageAtoms';
 
 import { Dispatch, SetStateAction } from 'react';
 
+import useHttpRequest from '../../../hooks/useHttpRequest';
+
+import { DETAIL_PAGE_API_PATH } from '../../../constants/api/homeListApi';
+
 interface NewSideBoxProps {
   houseName: string;
   houseId: string;
@@ -52,6 +56,10 @@ interface ResultData {
   accessToken: string;
   merchantUid: string;
   couponList: Array<any>;
+}
+
+interface Room {
+  name: string;
 }
 
 export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertMessage }: NewSideBoxProps) {
@@ -149,6 +157,57 @@ export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertM
     setChildGuestNumber(0);
     setInfantGuestNumber(0);
   }, [location]);
+
+  const {
+    responseData: soldOutResponseData,
+    sendRequest: soldOutSendRequest,
+    errorMessage,
+    isLoading,
+  } = useHttpRequest();
+
+  const [soldoutData, setSoldOutData] = useState<any>(null);
+  const [soldoutCheck, setSoldOutCheck] = useState(false);
+
+  useEffect(() => {
+    if (firstPickedDate === '' || secondPickedDate === '' || room === null) {
+      if (soldoutData !== null) {
+        setSoldOutData(null);
+        setSoldOutCheck(false);
+      } else {
+        return;
+      }
+    } else {
+      soldOutSendRequest({
+        url: `${DETAIL_PAGE_API_PATH}/${houseId}`,
+        method: 'POST',
+        body: {
+          checkin: moment(firstPickedDate).format('YYYY-MM-DDTHH:mm:ss'),
+          checkout: moment(secondPickedDate).format('YYYY-MM-DDTHH:mm:ss'),
+        },
+      });
+    }
+  }, [firstPickedDate, secondPickedDate, room]);
+
+  useEffect(() => {
+    if (!soldOutResponseData) return;
+    if (soldOutResponseData) {
+      setSoldOutData(soldOutResponseData.result);
+    }
+  }, [soldOutResponseData]);
+
+  useEffect(() => {
+    if (soldoutData === null || Name === null) return;
+    if (soldoutData !== null) {
+      const room = soldoutData.rooms.find((room: Room) => room.name === Name);
+      if (room && room.soldout !== undefined) {
+        if (room.soldout === true) {
+          setSoldOutCheck(true);
+        } else {
+          setSoldOutCheck(false);
+        }
+      }
+    }
+  }, [soldoutData, Name]);
 
   return (
     <Main>
@@ -320,6 +379,7 @@ export default function NewSideBox({ houseName, houseId, setAlertOpen, setAlertM
               }}
             >
               {isLoggedIn ? null : <NoneMemberPhoneInput setModalOpen={setOpen} />}
+
               <PaymentInfoBox
                 houseName={houseName}
                 checkInDate={firstPickedDate}

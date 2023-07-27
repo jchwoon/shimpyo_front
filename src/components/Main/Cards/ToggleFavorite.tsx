@@ -14,9 +14,10 @@ interface ResultData {
 
 interface ToggleFavoriteProps {
   houseId: number;
+  wished: boolean;
 }
 
-const ToggleFavorite = ({ houseId }: ToggleFavoriteProps) => {
+const ToggleFavorite = ({ houseId, wished }: ToggleFavoriteProps) => {
   const navigation = useNavigate();
   const setAccessToken = useSetRecoilState(accessTokenAtom);
   const loginState = useRecoilValue(loginStateAtom);

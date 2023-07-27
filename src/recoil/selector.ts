@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import { accessTokenAtom, passwordValueAtom } from './userAtoms';
+import { passwordValueAtom } from './userAtoms';
 import { stepState } from './accommodationAtoms';
 import { PAGE_NUMBERS } from '../constants/accommodation';
 
@@ -34,9 +34,4 @@ export const stepGaugeSelector = selector({
 
     return [currentPage, currentStep, PAGE_NUMBERS[currentPage - 1]];
   },
-});
-
-export const isLoggedInSelector = selector({
-  key: 'isLoggedInSelector',
-  get: ({ get }) => !!get(accessTokenAtom),
 });

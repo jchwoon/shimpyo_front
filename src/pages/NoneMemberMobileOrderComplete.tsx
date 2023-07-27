@@ -18,12 +18,20 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function NonneMemberMobileOrderComplete() {
     const [searchParams] = useSearchParams();
     const imp_uid = searchParams.get('imp_uid');
+    const roomId = searchParams.get('roomId');
     const imp_success = searchParams.get('imp_success');
     const merchant_uid = searchParams.get('merchant_uid');
+    const payMethod = searchParams.get('payMethod');
+    const name = searchParams.get('name');
+    const phoneNumber = searchParams.get('phoneNumber');
+    const peopleCount = searchParams.get('peopleCount');
+    const checkInDate = searchParams.get('checkInDate');
+    const checkOutDate = searchParams.get('checkOutDate');
+    
     const error_code = searchParams.get('error_code');
     const error_msg = searchParams.get('error_msg');
 
-    const roomId = useRecoilValue(activeRoomNumber)
+    // const roomId = useRecoilValue(activeRoomNumber)
     const paymentRadioSelectedValue = useRecoilValue(paymentRadioSelected)
 
     const nonMemberName = useRecoilValue(nameValueAtom)
@@ -35,8 +43,8 @@ export default function NonneMemberMobileOrderComplete() {
 
     const GuestCount = AdultGuestNumber + ChildGuestNumber + InfantGuestNumber;
 
-    const checkInDate = useRecoilValue(FirstPickedDate);
-    const checkOutDate = useRecoilValue(SecondPickedDate);
+    // const checkInDate = useRecoilValue(FirstPickedDate);
+    // const checkOutDate = useRecoilValue(SecondPickedDate);
 
     const { responseData: noneMemberPaymentResponseData, sendRequest: sendNoneMemberPaymentRequest } = useHttpRequest();
     const { responseData: noneMemberTextAfterPayResponseData, sendRequest: sendNoneMemberTextAfterPayRequest } = useHttpRequest();
@@ -47,6 +55,28 @@ export default function NonneMemberMobileOrderComplete() {
 
     console.log("imp_success:", imp_success)
 
+    // useEffect(() => {
+    //     if (imp_success === "true") {
+    //         sendNoneMemberPaymentRequest({
+    //             url: `${NON_MEMBER_RESERVATION_API_PATH}`,
+    //             method: "POST",
+    //             body: {
+    //                 impUid: imp_uid,
+    //                 roomId: roomId,
+    //                 merchantUid: merchant_uid,
+    //                 payMethod: paymentRadioSelectedValue === '신용카드' ? "KGINICIS" : "KAKAO",
+    //                 name: `${nonMemberName}`,
+    //                 phoneNumber: `${nonMemberNumber}`,
+    //                 peopleCount: GuestCount,
+    //                 checkInDate: moment(checkInDate).format('YYYY.MM.DD'),
+    //                 checkOutDate: moment(checkOutDate).format('YYYY.MM.DD')
+    //             }
+    //         });
+    //     } else if (imp_success === "false") {
+    //         navigation(`/detail/${houseId}?response_message=${error_msg}`)
+    //     }
+    // }, [imp_success])
+
     useEffect(() => {
         if (imp_success === "true") {
             sendNoneMemberPaymentRequest({
@@ -56,12 +86,12 @@ export default function NonneMemberMobileOrderComplete() {
                     impUid: imp_uid,
                     roomId: roomId,
                     merchantUid: merchant_uid,
-                    payMethod: paymentRadioSelectedValue === '신용카드' ? "KGINICIS" : "KAKAO",
-                    name: `${nonMemberName}`,
-                    phoneNumber: `${nonMemberNumber}`,
-                    peopleCount: GuestCount,
-                    checkInDate: moment(checkInDate).format('YYYY.MM.DD'),
-                    checkOutDate: moment(checkOutDate).format('YYYY.MM.DD')
+                    payMethod: payMethod === '신용카드' ? "KGINICIS" : "KAKAO",
+                    name: `${name}`,
+                    phoneNumber: phoneNumber,
+                    peopleCount: peopleCount,
+                    checkInDate: checkInDate,
+                    checkOutDate: checkOutDate
                 }
             });
         } else if (imp_success === "false") {
@@ -69,33 +99,13 @@ export default function NonneMemberMobileOrderComplete() {
         }
     }, [imp_success])
 
-    // if (imp_success === "true") {
-    //     sendNoneMemberPaymentRequest({
-    //         url: `${NON_MEMBER_RESERVATION_API_PATH}`,
-    //         method: "POST",
-    //         body: {
-    //             impUid: imp_uid,
-    //             roomId: roomId,
-    //             merchantUid: merchant_uid,
-    //             payMethod: paymentRadioSelectedValue === '신용카드' ? "KGINICIS" : "KAKAO",
-    //             name: `${nonMemberName}`,
-    //             phoneNumber: `${nonMemberNumber}`,
-    //             peopleCount: GuestCount,
-    //             checkInDate: moment(checkInDate).format('YYYY.MM.DD'),
-    //             checkOutDate: moment(checkOutDate).format('YYYY.MM.DD')
-    //         }
-    //     });
-    // } else if (imp_success === "false") {
-    //     navigation(`/detail/${houseId}?response_message=${error_msg}`)
-    // }
-
     const SendNoneMemberTextAfterPayRequestFunction = async (noneMemberPaymentResponseData: any) => {
         try {
             await sendNoneMemberTextAfterPayRequest({
                 url: `${NON_MEMBER_RESERVATION_TEXT_API_PATH}`,
                 method: "POST",
                 body: {
-                    phoneNumber: `${nonMemberNumber}`,
+                    phoneNumber: phoneNumber,
                     reservationCode: `${noneMemberPaymentResponseData.result.merchantUid}`
                 }
             });

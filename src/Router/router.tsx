@@ -198,7 +198,7 @@ const router = createBrowserRouter([
         path: 'none-member-mobile-order-complete/:houseId',
         element: (
           <Suspense fallback={<Loading />}>
-            <AuthCheck option={onlyLogout}>
+            <AuthCheck option={null}>
               <NoneMemberMobileOrderComplete />
             </AuthCheck>
           </Suspense>
@@ -208,7 +208,7 @@ const router = createBrowserRouter([
         path: 'member-mobile-order-complete/:houseId',
         element: (
           <Suspense fallback={<Loading />}>
-            <AuthCheck option={onlyLogin}>
+            <AuthCheck option={null}>
               <MemberMobileOrderComplete />
             </AuthCheck>
           </Suspense>

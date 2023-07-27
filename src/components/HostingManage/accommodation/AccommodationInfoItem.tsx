@@ -78,7 +78,7 @@ export default function AccommodationInfoItem({
 
     const fetchData = async () => {
       try {
-        await editedSendRequest({ url: `/api/houses/${houseId}` });
+        await editedSendRequest({ url: `/api/houses/${houseId}`, method: 'POST' });
       } catch (err) {
         console.log(err);
       }
@@ -87,7 +87,7 @@ export default function AccommodationInfoItem({
     if (responseData.isSuccess) {
       fetchData();
       alert('숙소 수정이 완료되었습니다.');
-
+      setOriginalAccommodationData(accommodationData);
       setIsOpen(preState => !preState);
     } else {
       alert('숙소 수정을 하지못했습니다.');

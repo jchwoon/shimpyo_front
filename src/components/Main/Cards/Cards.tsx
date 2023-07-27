@@ -106,7 +106,7 @@ export default function Cards({ cards, loading }: CardProps) {
                                         image={card.houseImages[0]}
                                     />
                                 </div>
-                                <ToggleFavorite houseId={card.houseId} />
+                                <ToggleFavorite houseId={card.houseId} wished={card.wished} />
                                 <CustomizedCardContent sx={{ flexGrow: 1, paddingLeft: "0px", paddingRight: "0px", paddingBottom: "0px" }}>
                                     <CustomizedTitleRowBox>
                                         <CustomizedTitleTypography fontFamily='Noto Sans KR'>
