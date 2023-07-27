@@ -36,13 +36,13 @@
 |-----|-----|---------------------------------|
 | 박현준 | 팀원  | 숙소 목록 조회, 숙소 단건 세부사항 조회, 관심 숙소, 결제 |
 | 신성우 | 팀원  | 숙소등록, 수정, 삭제 |
-| 정채운 | 팀원  | AWS EC2 서버 구축, 배포 자동화 |
+| 정채운 | 팀원  | AWS EC2 서버 구축, 배포 자동화, SSL/TLS 인증서,코드 스플릿팅 ,사용자 인증 및 계정 관리, 예약내역, 내 정보, 관심숙소 페이지 |
 
 # 🔧 기술 스택
 
 - Core:React18, TypeScript, Recoil
 - CSS: Styled-Component, MaterialUI
-- Code Management:Git, GitHub, 
+- Code Management:Git, GitHub
 - DevOps:AWS EC2, NGINX, GitHub Actions
 - Communication: Slack, GoogleDocs 
 
