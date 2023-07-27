@@ -14,7 +14,7 @@
   <img width="200" alt="image" src="./public/images/logo2.svg">
 </div>
 <div align="center">
-<img width="150" alt="title" src="https://github.com/Project-Shimpyo/backend/assets/75010360/d942775d-9552-4e6f-a44a-598cdde4bc3a">
+<img width="150" alt="title" src="./public/images/shimpyoTitle.png">
 </div>
 <br></br>
   
