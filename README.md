@@ -53,10 +53,10 @@
 - 소셜로그인
 - ID찾기, PW찾기
 - 로그인 시 access, refresh 토큰 발급
-#### 회원가입 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
+#### 회원가입 - <a href="https://github.com/jchwoon/shimpyo_front/wiki/Member" >상세보기 - WIKI 이동</a>
 - ID, 패스워드, 닉네임 유효성 검사
 - ID, 닉네임 중복체크
-#### 계정 페이지 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
+#### 계정 페이지 - <a href="https://github.com/jchwoon/shimpyo_front/wiki/Member" >상세보기 - WIKI 이동</a>
 - 회원 탈퇴
 - 회원정보 변경
 #### 예약내역 페이지 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
