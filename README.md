@@ -59,11 +59,11 @@
 #### 계정 페이지 - <a href="https://github.com/jchwoon/shimpyo_front/wiki/Member" >상세보기 - WIKI 이동</a>
 - 회원 탈퇴
 - 회원정보 변경
-#### 예약내역 페이지 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
+#### 예약내역 페이지 - <a href="https://github.com/jchwoon/shimpyo_front/wiki/Reservation" >상세보기 - WIKI 이동</a>
 - 예약내역, 이용내역, 취소내역 카테고리 화
 - 페이지 네이션
 - 이용내역에 대한 리뷰 작성
-#### 예약상세 페이지 - <a href="https://github.com/Project-Shimpyo/front/wiki/Login" >상세보기 - WIKI 이동</a>
+#### 예약상세 페이지 - <a href="https://github.com/jchwoon/shimpyo_front/wiki/Reservation" >상세보기 - WIKI 이동</a>
 - 해당 숙소에 대한 상세 조회
 - 인원 수정, 예약 취소,
 - 이미지 슬라이드
