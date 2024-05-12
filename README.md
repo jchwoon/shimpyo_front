@@ -20,7 +20,7 @@
   
 #### 쉼표는 숙소를 직접 등록하거나 예약할 수 있는 통합 숙박예약 서비스입니다.
 
-### [쉼표 바로가기](https://shimpyo.o-r.kr/)
+### [쉼표 바로가기](https://shimpyo.o-r.kr/) (현재 서버 비용 문제로 인해 닫게 되었습니다.)
 
 ### [쉼표 시연영상](https://www.youtube.com/watch?v=RbrhiM4ybgI)
 
